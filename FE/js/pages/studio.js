@@ -9,7 +9,8 @@
     selectedCategory: null,
     selectedMaterial: null,
     materialPrice: '15 triệu',
-    materialLabel: 'Vàng 18K'
+    materialLabel: 'Vàng 18K',
+    materialPriceVnd: 15000000
   };
 
   /* ─────────────────────────────────────────────────
@@ -54,6 +55,16 @@
     /* Sync step 3 prices on enter */
     if (n === 3 && typeof recalcPrice === 'function') {
       recalcPrice();
+    }
+
+    /* Sync step 4 engraving fee on enter */
+    if (n === 4 && typeof updateEngrave === 'function') {
+      updateEngrave();
+    }
+
+    /* Build order summary on step 5 */
+    if (n === 5 && typeof buildOrderSummary === 'function') {
+      buildOrderSummary();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -123,6 +134,10 @@
         colorOverlay.style.background = color;
       }
 
+      /* Update numeric material price */
+      state.materialPriceVnd = parseInt(option.dataset.priceVnd, 10) || 15000000;
+      PRICES.material = state.materialPriceVnd;
+
       /* Update price summary */
       updatePriceSummary(state.materialPrice, state.materialLabel);
     });
@@ -162,8 +177,8 @@
      Step 3 — Gemstone customization
   ───────────────────────────────────────────────── */
   var PRICES = {
-    mount:    4000000,   /* Heritage Mount Phôi */
-    material: 8000000    /* 18K White Gold (from step 2) */
+    mount:    4000000,
+    material: state.materialPriceVnd  /* updated when user picks material in step 2 */
   };
 
   var stoneState = {
@@ -228,6 +243,144 @@
       stoneState.carat = parseFloat(caratInput.value);
       recalcPrice();
     });
+  }
+
+  /* ─────────────────────────────────────────────────
+     Step 4 — Engraving customization
+  ───────────────────────────────────────────────── */
+  var engraveInput   = document.getElementById('engrave-input');
+  var engraveCounter = document.getElementById('engrave-counter');
+  var engraveFee     = document.getElementById('engrave-fee');
+  var fontSelector   = document.getElementById('font-selector');
+  var engraveGallery = document.getElementById('engrave-gallery');
+
+  var engraveState = { text: '', font: 'serif-italic' };
+  var FEE_PER_CHAR = 50000;
+
+  function updateEngrave() {
+    var len = engraveState.text.length;
+    var extra = len > 10 ? len - 10 : 0;
+    var fee = extra * FEE_PER_CHAR;
+    if (engraveCounter) engraveCounter.textContent = len + ' / 25 KÝ TỰ';
+    if (engraveFee) engraveFee.textContent = fee.toLocaleString('vi-VN') + ' VNĐ';
+  }
+
+  if (engraveInput) {
+    engraveInput.addEventListener('input', function () {
+      engraveState.text = engraveInput.value;
+      updateEngrave();
+    });
+  }
+
+  if (fontSelector) {
+    fontSelector.addEventListener('click', function (e) {
+      var btn = e.target.closest('.font-btn');
+      if (!btn) return;
+      fontSelector.querySelectorAll('.font-btn').forEach(function (b) {
+        b.classList.remove('is-selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('is-selected');
+      btn.setAttribute('aria-pressed', 'true');
+      engraveState.font = btn.dataset.font;
+    });
+  }
+
+  if (engraveGallery) {
+    var mainImg = document.getElementById('engrave-main-img');
+    engraveGallery.addEventListener('click', function (e) {
+      var thumb = e.target.closest('.engrave-gallery__thumb');
+      if (!thumb) return;
+      engraveGallery.querySelectorAll('.engrave-gallery__thumb').forEach(function (t) {
+        t.classList.remove('is-selected');
+        t.setAttribute('aria-pressed', 'false');
+      });
+      thumb.classList.add('is-selected');
+      thumb.setAttribute('aria-pressed', 'true');
+      var thumbImg = thumb.querySelector('img');
+      if (mainImg && thumbImg) {
+        mainImg.src = thumbImg.src;
+        mainImg.alt = thumbImg.alt;
+      }
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     Step 5 — Order summary
+  ───────────────────────────────────────────────── */
+  var CRAFT_FEE = 5000000;
+
+  function formatVi(n) {
+    return n.toLocaleString('vi-VN') + '₫';
+  }
+
+  function buildOrderSummary() {
+    var items = [];
+
+    /* Material */
+    items.push({
+      name: state.materialLabel + '\n(Heritage)',
+      price: state.materialPriceVnd
+    });
+
+    /* Stone (skip if "none") */
+    if (stoneState.stoneKey !== 'none') {
+      var stonePrice = Math.round(stoneState.stonePricePerCarat * stoneState.carat);
+      items.push({
+        name: stoneState.stoneLabel + ' ' + stoneState.carat.toFixed(1) + 'ct',
+        price: stonePrice
+      });
+    }
+
+    /* Mount */
+    items.push({
+      name: 'Heritage Mount Phôi',
+      price: PRICES.mount
+    });
+
+    /* Craft fee */
+    items.push({
+      name: 'Công chế tác thủ công',
+      price: CRAFT_FEE
+    });
+
+    /* Engraving surcharge */
+    var engraveLen = engraveState.text.length;
+    var engravingSurcharge = engraveLen > 10 ? (engraveLen - 10) * FEE_PER_CHAR : 0;
+    if (engravingSurcharge > 0) {
+      items.push({
+        name: 'Khắc chữ (' + engraveLen + ' ký tự)',
+        price: engravingSurcharge
+      });
+    }
+
+    /* Compute total */
+    var total = 0;
+    for (var i = 0; i < items.length; i++) {
+      total += items[i].price;
+    }
+
+    /* Render rows */
+    var itemsEl = document.getElementById('order-items');
+    if (itemsEl) {
+      itemsEl.innerHTML = items.map(function (item) {
+        var nameParts = item.name.split('\n');
+        var nameHtml = nameParts.length > 1
+          ? nameParts[0] + '<br><span style="font-size:14px">' + nameParts[1] + '</span>'
+          : item.name;
+        return '<div class="order-item">' +
+          '<span class="order-item__name">' + nameHtml + '</span>' +
+          '<span class="order-item__price">' + formatVi(item.price) + '</span>' +
+          '</div>';
+      }).join('');
+    }
+
+    /* Render total */
+    var totalEl = document.getElementById('order-total');
+    if (totalEl) totalEl.textContent = formatVi(total);
+
+    /* Sync bottom price summary */
+    updatePriceSummary(Math.round(total / 1000000) + ' triệu', 'Tổng giá trị');
   }
 
   /* ─────────────────────────────────────────────────

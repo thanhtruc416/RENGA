@@ -793,6 +793,449 @@
 }
 
 /* ═══════════════════════════════════════════════════
+   STEP 4 — Engraving customization
+════════════════════════════════════════════════════ */
+
+.studio-config--engrave {
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+}
+
+/* ── Left: product gallery ───────────────────────── */
+.engrave-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.engrave-gallery__main {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background: var(--color-bg-card);
+}
+
+.engrave-gallery__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.engrave-gallery__controls {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  gap: 8px;
+}
+
+.engrave-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.engrave-gallery__thumb {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.55;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+.engrave-gallery__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.engrave-gallery__thumb.is-selected {
+  border: 2px solid var(--color-black);
+  opacity: 1;
+}
+
+.engrave-gallery__thumb:hover {
+  opacity: 0.85;
+}
+
+/* ── Right: engraving panel ─────────────────────── */
+.engrave-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: 80px;
+}
+
+.engrave-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.engrave-panel__section-header {
+  display: flex;
+  align-items: center;
+}
+
+.engrave-panel__section-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+
+.engrave-panel__input {
+  width: 100%;
+  border: 1px solid var(--color-black);
+  padding: 19px 13px;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--color-dark);
+  background: var(--color-white);
+  outline: none;
+  transition: box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.engrave-panel__input::placeholder {
+  color: var(--color-border);
+}
+
+.engrave-panel__input:focus {
+  box-shadow: 0 0 0 2px rgba(196, 96, 126, 0.22);
+}
+
+.engrave-panel__input-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.engrave-panel__counter {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.engrave-panel__free-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a3f5c;
+}
+
+/* Font selector */
+.font-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.font-btn {
+  padding: 18px 16px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.font-btn.is-selected {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.font-btn:hover:not(.is-selected) {
+  background: #ede0e5;
+}
+
+/* Extra fee row */
+.engrave-panel__fee {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
+}
+
+.engrave-panel__fee-label {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+}
+
+.engrave-panel__fee-amount {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--color-black);
+}
+
+/* Confirm + back */
+.engrave-panel__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.engrave-panel__confirm {
+  width: 267px;
+  padding: 20px;
+  font-size: 16px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════
+   STEP 5 — Order confirmation & checkout
+════════════════════════════════════════════════════ */
+
+.studio-config--order {
+  grid-template-columns: 1fr 1.3fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── Left: product preview ───────────────────────── */
+.order-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.order-preview__image-wrap {
+  background: #e7e1e4;
+  border: 1px solid var(--color-black);
+  width: 100%;
+  overflow: hidden;
+}
+
+.order-preview__image {
+  width: 100%;
+  aspect-ratio: 1 / 0.75;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ── Right: order panel ─────────────────────────── */
+.order-panel {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+/* Price analysis card */
+.order-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-black);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  padding: 33px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.order-card__heading {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 17px;
+}
+
+.order-card__heading-text {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+
+/* Price rows */
+.order-card__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 80px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 19px 0;
+}
+
+.order-item + .order-item {
+  border-top: 1px solid rgba(196, 199, 199, 0.4);
+}
+
+.order-item__name {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.order-item__price {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--color-black);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-left: 16px;
+}
+
+/* Total */
+.order-card__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 2px solid var(--color-black);
+  padding-top: 24px;
+}
+
+.order-card__total-label {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+
+.order-card__total-amount {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1;
+  color: #9a3f5c;
+}
+
+/* CTA buttons */
+.order-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.order-card__cta {
+  width: 100%;
+  padding: 20px;
+  font-size: 16px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.order-card__cta img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  filter: invert(1);
+  flex-shrink: 0;
+}
+
+.order-card__cart {
+  width: 100%;
+  padding: 21px;
+  font-size: 16px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* Secondary action buttons */
+.order-secondary {
+  display: flex;
+  margin-top: 8px;
+}
+
+.order-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 25px 24px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  flex: 1;
+  transition: background 0.15s;
+}
+
+.order-action-btn + .order-action-btn {
+  border-left: none;
+  overflow: hidden;
+}
+
+.order-action-btn:hover {
+  background: var(--color-bg-card);
+}
+
+.order-action-btn__icon {
+  width: 17px;
+  height: 19px;
+  object-fit: contain;
+  display: block;
+}
+
+.order-action-btn__label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: -0.6px;
+  text-transform: uppercase;
+  color: #1a1c1c;
+  white-space: nowrap;
+}
+
+.order-action-btn__badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #9a3f5c;
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 8px;
+  line-height: 12px;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════
    CHAT FAB
 ════════════════════════════════════════════════════ */
 .chat-fab {

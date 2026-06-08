@@ -1,0 +1,273 @@
+/* ===== TRA CỨU ĐƠN HÀNG (ORDER LOOKUP) PAGE ===== */
+
+/* ── Page shell ──────────────────────────────────── */
+.order-lookup-page {
+  background: var(--color-white);
+}
+
+/* ── Breadcrumb ──────────────────────────────────── */
+.lookup-breadcrumb-wrap {
+  padding: 0 var(--container-px);
+}
+
+.lookup-breadcrumb-wrap__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 0 0;
+}
+
+.lookup-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lookup-breadcrumb__item {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #444748;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.lookup-breadcrumb__item:hover {
+  color: var(--color-primary);
+}
+
+.lookup-breadcrumb__item--current {
+  color: var(--color-black);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.lookup-breadcrumb__sep {
+  width: 27px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+/* ── Centered content column ─────────────────────── */
+.lookup-center {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 56px var(--container-px) 80px;
+}
+
+/* ── Hero: title + subtitle ──────────────────────── */
+.lookup-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.lookup-hero__title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 80px;
+  letter-spacing: -1.28px;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.lookup-hero__sub {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  font-style: italic;
+  color: #444748;
+  opacity: 0.8;
+}
+
+/* ── Form card ───────────────────────────────────── */
+.lookup-card {
+  background: var(--color-primary-light);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 49px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 64px;
+}
+
+/* Atmospheric blur decoration (top-right corner) */
+.lookup-card::before {
+  content: '';
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  background: rgba(154, 63, 92, 0.05);
+  border-radius: 9999px;
+  filter: blur(32px);
+  right: -64px;
+  top: -64px;
+  pointer-events: none;
+}
+
+/* ── Lookup form ─────────────────────────────────── */
+.lookup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.lookup-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Field group ─────────────────────────────────── */
+.lookup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lookup-field__label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 1.8px;
+  color: var(--color-black);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.lookup-field__input {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 20px;
+  color: #1a1c1c;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-black);
+  outline: none;
+  padding: 10px 0 12px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.lookup-field__input::placeholder {
+  color: rgba(99, 99, 99, 0.5);
+}
+
+.lookup-field__input:focus {
+  border-bottom-color: var(--color-primary);
+}
+
+/* ── Submit button ───────────────────────────────── */
+.lookup-form__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 32px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.lookup-form__submit:hover {
+  background: #9a3f5c;
+}
+
+.lookup-form__submit-arrow {
+  width: 12.5px;
+  height: 12.5px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ── Help link ───────────────────────────────────── */
+.lookup-card__help {
+  text-align: center;
+}
+
+.lookup-card__help-link {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #444748;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.lookup-card__help-link:hover {
+  color: var(--color-primary);
+}
+
+/* ── Decorative images ───────────────────────────── */
+.lookup-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  height: 192px;
+}
+
+.lookup-image {
+  position: relative;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+
+.lookup-image img {
+  position: absolute;
+  width: 100%;
+  height: 136.46%;
+  top: -18.23%;
+  left: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.lookup-image__desaturate {
+  position: absolute;
+  inset: 0;
+  background: var(--color-white);
+  mix-blend-mode: saturation;
+  pointer-events: none;
+}
+
+/* ── Chat FAB ────────────────────────────────────── */
+.chat-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+}
+
+.chat-fab img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  display: block;
+}

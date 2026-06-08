@@ -4,5 +4,6 @@
 @import './base/reset.css';
 @import './base/typography.css';
 @import './layout/header.css';
+@import './layout/footer.css';
 @import './components/button.css';
 @import './components/step-progress.css';

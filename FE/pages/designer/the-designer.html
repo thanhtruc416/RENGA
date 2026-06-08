@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Designer — Chọn nhà thiết kế | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/pages/designer.css" />
+</head>
+<body class="designer-page">
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <div class="site-header__top">
+        <a href="../../index.html" class="site-header__logo">
+          <img class="site-header__logo-icon"
+            src="https://www.figma.com/api/mcp/asset/db9f5413-c95d-4747-96ff-b6ffe984aec3"
+            alt="RENGA icon" />
+          <img class="site-header__logo-wordmark"
+            src="https://www.figma.com/api/mcp/asset/db9f5413-c95d-4747-96ff-b6ffe984aec3"
+            alt="RENGA" />
+        </a>
+
+        <div class="site-header__actions">
+          <a href="../order/gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
+            <img src="https://www.figma.com/api/mcp/asset/ae16693e-49e0-48a2-84aa-13fa3fdc91e5" alt="Giỏ hàng" />
+          </a>
+          <a href="../order/lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
+            <img src="https://www.figma.com/api/mcp/asset/54691232-fafc-4e91-bb08-77576fd18b23" alt="Đơn hàng" />
+          </a>
+          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
+            <img class="site-header__avatar"
+              src="https://www.figma.com/api/mcp/asset/49d3e6d0-0dc4-4dda-b085-a38ecf228683"
+              alt="Tài khoản" />
+          </a>
+        </div>
+      </div>
+
+      <div class="site-header__bottom">
+        <nav class="site-header__nav" aria-label="Menu chính">
+          <div class="site-header__nav-item">
+            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
+            <div class="mega-menu">
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Danh mục</p>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Nhẫn</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Dây chuyền</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Hoa tai</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Lắc tay</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Charm</a>
+              </div>
+            </div>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="the-designer.html" class="site-header__nav-link is-active">The Designer</a>
+          </div>
+        </nav>
+
+        <div class="site-header__search">
+          <img class="site-header__search-icon"
+            src="https://www.figma.com/api/mcp/asset/70f580a7-9b44-4df6-a80a-b8877fa8e92e"
+            alt="" aria-hidden="true" />
+          <input class="site-header__search-input" type="search"
+            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <div class="designer-section">
+
+      <!-- 4-step progress bar -->
+      <div class="step-progress designer-progress" role="list" aria-label="Tiến trình tư vấn">
+        <div class="step-progress__step is-active" role="listitem" aria-current="step" data-step-index="0">
+          <div class="step-progress__number">1</div>
+          <span class="step-progress__label">Chọn Designer</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="1">
+          <div class="step-progress__number">2</div>
+          <span class="step-progress__label">Đặt lịch</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="2">
+          <div class="step-progress__number">3</div>
+          <span class="step-progress__label">Tư vấn</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="3">
+          <div class="step-progress__number">4</div>
+          <span class="step-progress__label">Xác nhận</span>
+        </div>
+      </div>
+
+      <!-- Page title -->
+      <h1 class="designer-heading">Chọn Designer</h1>
+
+      <!-- Designer grid -->
+      <div class="designer-grid" id="designer-grid">
+
+        <!-- Card 1: Master Henri de Luca -->
+        <article class="designer-card" tabindex="0" data-designer="henri-de-luca">
+          <div class="designer-card__photo">
+            <img
+              class="designer-card__photo-img"
+              src="https://www.figma.com/api/mcp/asset/d331c70c-a7eb-4fd4-925e-5103568cd8f0"
+              alt="Master Henri de Luca"
+              loading="lazy"
+            />
+            <div class="designer-card__desaturate" aria-hidden="true"></div>
+            <div class="designer-card__gradient" aria-hidden="true">
+              <span class="designer-card__badge">SIGNATURE WORK</span>
+            </div>
+          </div>
+          <div class="designer-card__body">
+            <div class="designer-card__header">
+              <h3 class="designer-card__name">Master Henri de Luca</h3>
+              <div class="designer-card__stars" aria-label="5 sao">
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+              </div>
+            </div>
+            <p class="designer-card__specialty">Nhà thiết kế kim cương</p>
+            <div class="designer-card__footer">
+              <div class="designer-card__fee">
+                <span class="designer-card__fee-label">FEE</span>
+                <span class="designer-card__fee-amount">13 triệu VNĐ</span>
+              </div>
+              <button class="designer-card__select" data-designer="henri-de-luca">Select</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Isabella Moretti -->
+        <article class="designer-card" tabindex="0" data-designer="isabella-moretti">
+          <div class="designer-card__photo">
+            <img
+              class="designer-card__photo-img"
+              src="https://www.figma.com/api/mcp/asset/b4caeee8-a646-4e0f-bed4-5c2f36e7c974"
+              alt="Isabella Moretti"
+              loading="lazy"
+            />
+            <div class="designer-card__desaturate" aria-hidden="true"></div>
+            <div class="designer-card__gradient" aria-hidden="true">
+              <span class="designer-card__badge">HERITAGE REVIVAL</span>
+            </div>
+          </div>
+          <div class="designer-card__body">
+            <div class="designer-card__header">
+              <h3 class="designer-card__name">Isabella Moretti</h3>
+              <div class="designer-card__stars" aria-label="5 sao">
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+              </div>
+            </div>
+            <p class="designer-card__specialty">Nhà thiết kế vòng cổ</p>
+            <div class="designer-card__footer">
+              <div class="designer-card__fee">
+                <span class="designer-card__fee-label">FEE</span>
+                <span class="designer-card__fee-amount">13 triệu VNĐ</span>
+              </div>
+              <button class="designer-card__select" data-designer="isabella-moretti">Select</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Elena Vance -->
+        <article class="designer-card" tabindex="0" data-designer="elena-vance">
+          <div class="designer-card__photo">
+            <img
+              class="designer-card__photo-img"
+              src="https://www.figma.com/api/mcp/asset/3fbcec17-e28e-4a1b-be69-0bbff5ae980c"
+              alt="Elena Vance"
+              loading="lazy"
+            />
+            <div class="designer-card__desaturate" aria-hidden="true"></div>
+            <div class="designer-card__gradient" aria-hidden="true">
+              <span class="designer-card__badge">AVANT-GARDE METALS</span>
+            </div>
+          </div>
+          <div class="designer-card__body">
+            <div class="designer-card__header">
+              <h3 class="designer-card__name">Elena Vance</h3>
+              <div class="designer-card__stars" aria-label="5 sao">
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+                <img class="designer-card__star" src="https://www.figma.com/api/mcp/asset/196ffa1d-0ab8-48b1-9abf-8575098883ee" alt="" aria-hidden="true" />
+              </div>
+            </div>
+            <p class="designer-card__specialty">Nhà thiết kế trang sức tay</p>
+            <div class="designer-card__footer">
+              <div class="designer-card__fee">
+                <span class="designer-card__fee-label">FEE</span>
+                <span class="designer-card__fee-amount">13 triệu VNĐ</span>
+              </div>
+              <button class="designer-card__select" data-designer="elena-vance">Select</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <!-- /designer-grid -->
+
+      <!-- Load more -->
+      <div class="designer-load-more-wrap">
+        <button class="designer-load-more" id="load-more-btn">TẢI THÊM</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__grid">
+
+        <div class="site-footer__brand-col">
+          <a href="../../index.html" class="site-footer__brand">RENGA</a>
+          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
+          <div class="site-footer__social">
+            <a href="#" class="site-footer__social-link" aria-label="Email">
+              <img src="https://www.figma.com/api/mcp/asset/daff34e4-1044-4b30-b5a1-315f3e80cfc1" alt="Email" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
+              <img src="https://www.figma.com/api/mcp/asset/8b5a9ec6-b336-4948-82d2-c597e0088fcd" alt="Phone" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Facebook">
+              <img src="https://www.figma.com/api/mcp/asset/46d2d073-af33-4680-81d3-ea76a9d39eb2" alt="Facebook" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Instagram">
+              <img src="https://www.figma.com/api/mcp/asset/c8b0a491-fec2-4c79-ad53-b6fc9cf78fbd" alt="Instagram" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="TikTok">
+              <img src="https://www.figma.com/api/mcp/asset/542c7ad0-5602-450c-a865-ccb513e7b36b" alt="TikTok" />
+            </a>
+          </div>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
+          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
+          <a href="#" class="site-footer__link">The Studio</a>
+          <a href="#" class="site-footer__link">The Atelier</a>
+          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
+          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
+          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
+          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
+          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">NEWSLETTER</p>
+          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
+          <form class="newsletter-form" novalidate>
+            <div class="newsletter-form__field">
+              <input
+                class="newsletter-form__input"
+                type="email"
+                placeholder="Email của bạn"
+                aria-label="Địa chỉ email đăng ký nhận tin"
+              />
+              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
+                <img src="https://www.figma.com/api/mcp/asset/6a31b439-792a-40a2-8d94-fc8a0c82e6f9" alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-inner">
+        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
+        <div class="site-footer__bottom-links">
+          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
+          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CHAT FAB ===== -->
+  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
+    <img src="https://www.figma.com/api/mcp/asset/a9b92319-e235-4413-9802-48657b384839" alt="Chat" />
+  </button>
+
+  <script src="../../js/pages/designer.js"></script>
+</body>
+</html>

@@ -252,6 +252,7 @@
                 data-material="vang-18k"
                 data-label="Vàng 18K"
                 data-price="15 triệu VNĐ"
+                data-price-vnd="15000000"
                 data-color="#d4af37"
               >
                 <div class="material-option__left">
@@ -269,6 +270,7 @@
                 data-material="vang-14k"
                 data-label="Vàng 14K"
                 data-price="12 triệu VNĐ"
+                data-price-vnd="12000000"
                 data-color="#e5c07b"
               >
                 <div class="material-option__left">
@@ -286,6 +288,7 @@
                 data-material="bach-kim"
                 data-label="Bạch kim"
                 data-price="20 triệu VNĐ"
+                data-price-vnd="20000000"
                 data-color="#e5e4e2"
               >
                 <div class="material-option__left">
@@ -303,6 +306,7 @@
                 data-material="bac-925"
                 data-label="Bạc 925"
                 data-price="8 triệu VNĐ"
+                data-price-vnd="8000000"
                 data-color="#c0c0c0"
               >
                 <div class="material-option__left">
@@ -507,8 +511,263 @@
       </div>
       <!-- /STEP 3 -->
 
+      <!-- ===== STEP 4: Tùy chọn khắc chữ ===== -->
+      <div class="studio-flow__step" data-step="4">
+
+        <!-- Title row with skip button -->
+        <div class="studio-step studio-step--with-skip">
+          <div class="studio-step__heading">
+            <h1 class="studio-step__title">Tùy chọn khắc chữ</h1>
+            <p class="studio-step__subtitle">Công nghệ khắc laser chính xác giúp lưu giữ dấu ấn ấy bền vững theo thời gian.</p>
+          </div>
+          <button class="btn btn--dark studio-step__skip" data-target-step="5">BỎ QUA</button>
+        </div>
+
+        <!-- 2-column layout -->
+        <div class="studio-config studio-config--engrave">
+
+          <!-- LEFT: product gallery -->
+          <div class="engrave-gallery" id="engrave-gallery">
+            <div class="engrave-gallery__main">
+              <img
+                class="engrave-gallery__main-img"
+                id="engrave-main-img"
+                src="https://www.figma.com/api/mcp/asset/3912ec6a-69d0-4cd5-af3c-52ad4d6f0713"
+                alt="Bên trong nhẫn"
+              />
+              <div class="engrave-gallery__controls">
+                <button class="studio-preview__btn" aria-label="Phóng to">
+                  <img src="https://www.figma.com/api/mcp/asset/6b940b9a-90ef-45a8-bfe5-e7c6ca1cac6b" alt="" />
+                </button>
+                <button class="studio-preview__btn" aria-label="Xem 360°">
+                  <img src="https://www.figma.com/api/mcp/asset/fb95319b-cd22-4a3c-9c7b-372c409161ad" alt="" />
+                </button>
+              </div>
+            </div>
+            <div class="engrave-gallery__thumbs">
+              <button class="engrave-gallery__thumb is-selected" aria-pressed="true">
+                <img src="https://www.figma.com/api/mcp/asset/3912ec6a-69d0-4cd5-af3c-52ad4d6f0713" alt="Góc nhìn 1" />
+              </button>
+              <button class="engrave-gallery__thumb" aria-pressed="false">
+                <img src="https://www.figma.com/api/mcp/asset/aa96bd14-564a-4da6-a6b8-6f8f788c0e23" alt="Góc nhìn 2" />
+              </button>
+              <button class="engrave-gallery__thumb" aria-pressed="false">
+                <img src="https://www.figma.com/api/mcp/asset/7f3f0366-04db-4f3e-897f-560e1c36c82f" alt="Góc nhìn 3" />
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: engraving options panel -->
+          <div class="engrave-panel">
+
+            <!-- 01. Nội dung khắc chữ -->
+            <div class="engrave-panel__section">
+              <div class="engrave-panel__section-header">
+                <span class="engrave-panel__section-label">01. Nội dung khắc chữ</span>
+              </div>
+              <input
+                class="engrave-panel__input"
+                id="engrave-input"
+                type="text"
+                maxlength="25"
+                placeholder="Nhập tại đây..."
+                aria-label="Nội dung khắc chữ"
+              />
+              <div class="engrave-panel__input-meta">
+                <span class="engrave-panel__counter" id="engrave-counter">0 / 25 KÝ TỰ</span>
+                <span class="engrave-panel__free-label">MIỄN PHÍ 10 KÝ TỰ</span>
+              </div>
+            </div>
+
+            <!-- 02. Chọn font chữ -->
+            <div class="engrave-panel__section">
+              <div class="engrave-panel__section-header">
+                <span class="engrave-panel__section-label">02. Chọn font chữ</span>
+              </div>
+              <div class="font-selector" id="font-selector" role="group" aria-label="Chọn font chữ">
+                <button class="font-btn is-selected" data-font="serif-italic" aria-pressed="true">
+                  SERIF ITALIC
+                </button>
+                <button class="font-btn" data-font="classic-sans" aria-pressed="false">
+                  CLASSIC SANS
+                </button>
+              </div>
+            </div>
+
+            <!-- Extra fee -->
+            <div class="engrave-panel__fee">
+              <span class="engrave-panel__fee-label">PHÍ TRẢ THÊM:</span>
+              <span class="engrave-panel__fee-amount" id="engrave-fee">0 VNĐ</span>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="engrave-panel__actions">
+              <button class="btn btn--primary engrave-panel__confirm" data-target-step="5">
+                XÁC NHẬN THIẾT KẾ
+              </button>
+              <button class="studio-nav__back" data-target-step="3">
+                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
+                Trước đó
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- /STEP 4 -->
+
+      <!-- ===== STEP 5: Xác nhận & Thanh toán ===== -->
+      <div class="studio-flow__step" data-step="5">
+
+        <section class="studio-step">
+          <h1 class="studio-step__title">Xác nhận &amp; Thanh toán</h1>
+        </section>
+
+        <div class="studio-config studio-config--order">
+
+          <!-- LEFT: product preview + back -->
+          <div class="order-preview">
+            <div class="order-preview__image-wrap">
+              <img
+                class="order-preview__image"
+                src="https://www.figma.com/api/mcp/asset/b867ce8b-2a6d-4756-af81-a05cae5fb4de"
+                alt="Thiết kế của bạn"
+              />
+            </div>
+            <button class="studio-nav__back order-preview__back" data-target-step="4">
+              <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
+              Trước đó
+            </button>
+          </div>
+
+          <!-- RIGHT: price analysis + actions -->
+          <div class="order-panel">
+
+            <!-- Price analysis card -->
+            <div class="order-card">
+              <div class="order-card__heading">
+                <span class="order-card__heading-text">PHÂN TÍCH GIÁ CHI TIẾT</span>
+              </div>
+
+              <div class="order-card__items" id="order-items" aria-live="polite">
+                <!-- populated by buildOrderSummary() in studio.js -->
+              </div>
+
+              <div class="order-card__total">
+                <span class="order-card__total-label">TỔNG CỘNG</span>
+                <span class="order-card__total-amount" id="order-total">0₫</span>
+              </div>
+
+              <div class="order-card__actions">
+                <button class="btn btn--primary order-card__cta">
+                  ĐẶT HÀNG NGAY
+                  <img src="https://www.figma.com/api/mcp/asset/383d1160-83f9-4d49-84b9-c4b82d05ed18" alt="" aria-hidden="true" />
+                </button>
+                <button class="btn btn--outline order-card__cart">
+                  THÊM VÀO GIỎ
+                </button>
+              </div>
+            </div>
+
+            <!-- Secondary actions -->
+            <div class="order-secondary">
+              <button class="order-action-btn" aria-label="Lưu thiết kế">
+                <img class="order-action-btn__icon" src="https://www.figma.com/api/mcp/asset/37b28809-8d84-4f5a-a035-363b94cb8b7d" alt="" aria-hidden="true" />
+                <span class="order-action-btn__label">LƯU THIẾT KẾ</span>
+              </button>
+              <button class="order-action-btn" aria-label="Chia sẻ thiết kế">
+                <span class="order-action-btn__badge">+30pts</span>
+                <img class="order-action-btn__icon" src="https://www.figma.com/api/mcp/asset/ec60ad77-29d8-4de3-a7dd-a9b7f84d83a7" alt="" aria-hidden="true" />
+                <span class="order-action-btn__label">CHIA SẺ</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- /STEP 5 -->
+
     </div>
   </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__grid">
+
+        <!-- Brand column -->
+        <div class="site-footer__brand-col">
+          <a href="../../index.html" class="site-footer__brand">RENGA</a>
+          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
+          <div class="site-footer__social">
+            <a href="#" class="site-footer__social-link" aria-label="Email">
+              <img src="https://www.figma.com/api/mcp/asset/30b0a301-f13e-47da-9626-5089deaa9c4c" alt="Email" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
+              <img src="https://www.figma.com/api/mcp/asset/d75a243e-62bf-4d89-a127-02a9c651f5ce" alt="Phone" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Facebook">
+              <img src="https://www.figma.com/api/mcp/asset/e7c33884-1664-42ad-a199-8778ef462076" alt="Facebook" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Instagram">
+              <img src="https://www.figma.com/api/mcp/asset/0c34a259-11e7-4a00-825f-ec52b906f785" alt="Instagram" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="TikTok">
+              <img src="https://www.figma.com/api/mcp/asset/6d7bf5cc-b2f4-4b34-8b78-162a94434ac0" alt="TikTok" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Về chúng tôi -->
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
+          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
+          <a href="#" class="site-footer__link">The Studio</a>
+          <a href="#" class="site-footer__link">The Atelier</a>
+          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
+        </div>
+
+        <!-- Hỗ trợ khách hàng -->
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
+          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
+          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
+          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
+          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">NEWSLETTER</p>
+          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
+          <form class="newsletter-form" novalidate>
+            <div class="newsletter-form__field">
+              <input
+                class="newsletter-form__input"
+                type="email"
+                placeholder="Email của bạn"
+                aria-label="Địa chỉ email đăng ký nhận tin"
+              />
+              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
+                <img src="https://www.figma.com/api/mcp/asset/3b46e854-0b81-46ac-9959-802c7a43b758" alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-inner">
+        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
+        <div class="site-footer__bottom-links">
+          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
+          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- ===== PRICE SUMMARY (fixed, shown from step 2+) ===== -->
   <div class="studio-price-summary" id="price-summary" aria-live="polite">

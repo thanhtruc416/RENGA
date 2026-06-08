@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giỏ hàng của tôi | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/pages/cart.css" />
+</head>
+<body class="cart-page">
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <div class="site-header__top">
+        <a href="../../index.html" class="site-header__logo">
+          <img class="site-header__logo-icon"
+            src="https://www.figma.com/api/mcp/asset/477dada1-321b-4022-9f4b-7a8352b1f4e6"
+            alt="RENGA" />
+        </a>
+
+        <div class="site-header__actions">
+          <a href="gio-hang.html" class="site-header__action-btn is-active" aria-label="Giỏ hàng">
+            <img src="https://www.figma.com/api/mcp/asset/ed04f87c-540a-4461-8b2d-2ea1e9ae702e" alt="Giỏ hàng" />
+          </a>
+          <a href="lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
+            <img src="https://www.figma.com/api/mcp/asset/7e77b141-a3af-4fc6-8cac-e86a8809260d" alt="Đơn hàng" />
+          </a>
+          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
+            <img class="site-header__avatar"
+              src="https://www.figma.com/api/mcp/asset/13ee8b45-1cb8-47f1-98fe-a2571144fc5e"
+              alt="Tài khoản" />
+          </a>
+        </div>
+      </div>
+
+      <div class="site-header__bottom">
+        <nav class="site-header__nav" aria-label="Menu chính">
+          <div class="site-header__nav-item">
+            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
+          </div>
+        </nav>
+
+        <div class="site-header__search">
+          <img class="site-header__search-icon"
+            src="https://www.figma.com/api/mcp/asset/7361b74e-1660-4839-9c9f-1d863ff6b646"
+            alt="" aria-hidden="true" />
+          <input class="site-header__search-input" type="search"
+            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <!-- Page title -->
+    <div class="cart-hero">
+      <div class="cart-hero__inner">
+        <h1 class="cart-hero__title">Giỏ hàng của tôi</h1>
+      </div>
+    </div>
+
+    <!-- Tab filter bar -->
+    <div class="cart-tabs">
+      <div class="cart-tabs__inner">
+        <div class="cart-tabs__pills" role="tablist" aria-label="Loại sản phẩm">
+          <button
+            class="cart-tab is-active"
+            role="tab"
+            aria-selected="true"
+            data-tab="available"
+            id="tab-available"
+            aria-controls="cart-list"
+          >Sản phẩm có sẵn</button>
+          <button
+            class="cart-tab"
+            role="tab"
+            aria-selected="false"
+            data-tab="studio"
+            id="tab-studio"
+            aria-controls="cart-list"
+          >Sản phẩm The studio</button>
+        </div>
+        <div class="cart-tabs__actions">
+          <button class="cart-tabs__select-many" id="select-many-btn">Chọn nhiều</button>
+          <button class="cart-tabs__add-studio" id="add-studio-btn" aria-label="Thêm thiết kế mới">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart items -->
+    <div class="cart-section">
+      <div class="cart-list" id="cart-list" role="list">
+
+        <!-- Item 1 -->
+        <div class="cart-item" data-id="1" data-type="available" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/3a91ec16-52ff-4671-8f1f-b202ebc44175"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <div class="cart-item__qty-row">
+                  <span class="cart-item__qty-label">Số lượng:</span>
+                  <div class="qty-stepper" aria-label="Số lượng">
+                    <button class="qty-stepper__btn qty-stepper__btn--minus" aria-label="Giảm số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/e39e1fc4-ce3f-4ee7-bd1d-e35886420431" alt="-" />
+                    </button>
+                    <span class="qty-stepper__value" aria-live="polite">1</span>
+                    <button class="qty-stepper__btn qty-stepper__btn--plus" aria-label="Tăng số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/b2ffc601-6b56-4801-97c3-39a913350378" alt="+" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/c9af151d-a0a3-48d3-b0c7-9709325c25ab" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <span class="cart-item__status">Có sẵn</span>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item" data-id="2" data-type="available" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/3a91ec16-52ff-4671-8f1f-b202ebc44175"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <div class="cart-item__qty-row">
+                  <span class="cart-item__qty-label">Số lượng:</span>
+                  <div class="qty-stepper" aria-label="Số lượng">
+                    <button class="qty-stepper__btn qty-stepper__btn--minus" aria-label="Giảm số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/e39e1fc4-ce3f-4ee7-bd1d-e35886420431" alt="-" />
+                    </button>
+                    <span class="qty-stepper__value" aria-live="polite">1</span>
+                    <button class="qty-stepper__btn qty-stepper__btn--plus" aria-label="Tăng số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/b2ffc601-6b56-4801-97c3-39a913350378" alt="+" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/c9af151d-a0a3-48d3-b0c7-9709325c25ab" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <span class="cart-item__status">Có sẵn</span>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="cart-item" data-id="3" data-type="available" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/3a91ec16-52ff-4671-8f1f-b202ebc44175"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <div class="cart-item__qty-row">
+                  <span class="cart-item__qty-label">Số lượng:</span>
+                  <div class="qty-stepper" aria-label="Số lượng">
+                    <button class="qty-stepper__btn qty-stepper__btn--minus" aria-label="Giảm số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/e39e1fc4-ce3f-4ee7-bd1d-e35886420431" alt="-" />
+                    </button>
+                    <span class="qty-stepper__value" aria-live="polite">1</span>
+                    <button class="qty-stepper__btn qty-stepper__btn--plus" aria-label="Tăng số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/b2ffc601-6b56-4801-97c3-39a913350378" alt="+" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/c9af151d-a0a3-48d3-b0c7-9709325c25ab" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <span class="cart-item__status">Có sẵn</span>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="cart-item" data-id="4" data-type="available" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/3a91ec16-52ff-4671-8f1f-b202ebc44175"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <div class="cart-item__qty-row">
+                  <span class="cart-item__qty-label">Số lượng:</span>
+                  <div class="qty-stepper" aria-label="Số lượng">
+                    <button class="qty-stepper__btn qty-stepper__btn--minus" aria-label="Giảm số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/e39e1fc4-ce3f-4ee7-bd1d-e35886420431" alt="-" />
+                    </button>
+                    <span class="qty-stepper__value" aria-live="polite">1</span>
+                    <button class="qty-stepper__btn qty-stepper__btn--plus" aria-label="Tăng số lượng">
+                      <img src="https://www.figma.com/api/mcp/asset/b2ffc601-6b56-4801-97c3-39a913350378" alt="+" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/c9af151d-a0a3-48d3-b0c7-9709325c25ab" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <span class="cart-item__status">Có sẵn</span>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Item 1 -->
+        <div class="cart-item cart-item--studio is-hidden" data-id="5" data-type="studio" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/7b1eaa70-0b17-432c-8e30-58a083ad634d"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <p class="cart-item__saved-date">Đã lưu: 15/09/2026&nbsp;&nbsp;12:22</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/27914b94-98c1-4654-a02f-d0c39064e055" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <a href="../studio/the-studio.html" class="cart-item__continue-btn">Tiếp tục thiết kế</a>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Item 2 -->
+        <div class="cart-item cart-item--studio is-hidden" data-id="6" data-type="studio" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/7b1eaa70-0b17-432c-8e30-58a083ad634d"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <p class="cart-item__saved-date">Đã lưu: 15/09/2026&nbsp;&nbsp;12:22</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/27914b94-98c1-4654-a02f-d0c39064e055" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <a href="../studio/the-studio.html" class="cart-item__continue-btn">Tiếp tục thiết kế</a>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Item 3 -->
+        <div class="cart-item cart-item--studio is-hidden" data-id="7" data-type="studio" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/7b1eaa70-0b17-432c-8e30-58a083ad634d"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <p class="cart-item__saved-date">Đã lưu: 15/09/2026&nbsp;&nbsp;12:22</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/27914b94-98c1-4654-a02f-d0c39064e055" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <a href="../studio/the-studio.html" class="cart-item__continue-btn">Tiếp tục thiết kế</a>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Item 4 -->
+        <div class="cart-item cart-item--studio is-hidden" data-id="8" data-type="studio" data-price="75000000" role="listitem">
+          <div class="cart-item__thumb">
+            <img
+              class="cart-item__img"
+              src="https://www.figma.com/api/mcp/asset/7b1eaa70-0b17-432c-8e30-58a083ad634d"
+              alt="Vòng cổ kim cương Noir"
+              loading="lazy"
+            />
+            <div class="cart-item__desaturate" aria-hidden="true"></div>
+          </div>
+          <div class="cart-item__body">
+            <div class="cart-item__top">
+              <div class="cart-item__info">
+                <h3 class="cart-item__name">Vòng cổ kim cương Noir</h3>
+                <p class="cart-item__spec">Vàng Trắng 18K • 1.5 Carat Diamond</p>
+                <p class="cart-item__saved-date">Đã lưu: 15/09/2026&nbsp;&nbsp;12:22</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Xóa sản phẩm">
+                <img src="https://www.figma.com/api/mcp/asset/27914b94-98c1-4654-a02f-d0c39064e055" alt="Xóa" />
+              </button>
+            </div>
+            <div class="cart-item__bottom">
+              <a href="../studio/the-studio.html" class="cart-item__continue-btn">Tiếp tục thiết kế</a>
+              <span class="cart-item__price">75.000.000₫</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /cart-list -->
+    </div>
+
+    <!-- Subtotal bar -->
+    <div class="cart-summary" id="cart-summary">
+      <div class="cart-summary__inner">
+        <span class="cart-summary__label" id="summary-label">Tạm tính (<span id="item-count">4</span> sản phẩm)</span>
+        <span class="cart-summary__amount" id="summary-amount">300.000.000₫</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__grid">
+
+        <div class="site-footer__brand-col">
+          <a href="../../index.html" class="site-footer__brand">RENGA</a>
+          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
+          <div class="site-footer__social">
+            <a href="#" class="site-footer__social-link" aria-label="Email">
+              <img src="https://www.figma.com/api/mcp/asset/e9fdbfa2-2e9e-4d66-987f-3cdd2899a239" alt="Email" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
+              <img src="https://www.figma.com/api/mcp/asset/691c7f87-feb9-4c9a-aa4e-4aa903b0cefd" alt="Phone" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Facebook">
+              <img src="https://www.figma.com/api/mcp/asset/5b343710-3556-4cde-97eb-b750f151e455" alt="Facebook" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="Instagram">
+              <img src="https://www.figma.com/api/mcp/asset/304e104b-2ffb-42e5-8332-04e2fe6c7897" alt="Instagram" />
+            </a>
+            <a href="#" class="site-footer__social-link" aria-label="TikTok">
+              <img src="https://www.figma.com/api/mcp/asset/334f5d80-241a-40f9-86f7-103bff48441d" alt="TikTok" />
+            </a>
+          </div>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
+          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
+          <a href="#" class="site-footer__link">The Studio</a>
+          <a href="#" class="site-footer__link">The Atelier</a>
+          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
+          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
+          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
+          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
+          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="site-footer__col-title">NEWSLETTER</p>
+          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
+          <form class="newsletter-form" novalidate>
+            <div class="newsletter-form__field">
+              <input
+                class="newsletter-form__input"
+                type="email"
+                placeholder="Email của bạn"
+                aria-label="Địa chỉ email đăng ký nhận tin"
+              />
+              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
+                <img src="https://www.figma.com/api/mcp/asset/87f57610-2ef8-4bf9-ade8-c6a0dfcbe1ce" alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-inner">
+        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
+        <div class="site-footer__bottom-links">
+          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
+          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CHAT FAB ===== -->
+  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
+    <img src="https://www.figma.com/api/mcp/asset/07e7575c-bee5-4ea0-954c-f34445c46e6c" alt="Chat" />
+  </button>
+
+  <script src="../../js/pages/cart.js"></script>
+</body>
+</html>
