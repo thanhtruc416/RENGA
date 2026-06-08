@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hủy lịch tư vấn | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/pages/modal.css" />
+</head>
+<body>
+
+  <div class="modal-backdrop">
+    <div class="modal-card modal-cancel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cancel-title">
+
+      <!-- Header: title + close -->
+      <div class="modal-cancel__header">
+        <div class="modal-cancel__heading">
+          <h1 class="modal-cancel__title" id="cancel-title">Hủy lịch tư vấn</h1>
+          <span class="modal-cancel__appt-id">#AH-8924102</span>
+        </div>
+        <button class="modal-cancel__close" id="close-btn" aria-label="Đóng modal">
+          <img src="https://www.figma.com/api/mcp/asset/3f632568-e359-4d71-8ed5-3364ad07946f"
+            alt="" aria-hidden="true" />
+        </button>
+      </div>
+
+      <!-- Refund eligibility notice -->
+      <div class="modal-cancel__notice" role="note">
+        <p class="modal-cancel__notice-text">Điều kiện hoàn tiền: Bạn đủ điều kiện được hoàn tiền 100% nếu yêu cầu này được gửi trong vòng 1 giờ kể từ khi đặt hàng.</p>
+      </div>
+
+      <!-- Reason section -->
+      <p class="modal-cancel__reasons-title">Lý do hủy lịch tư vấn</p>
+
+      <div class="modal-cancel__checklist" role="group" aria-label="Chọn lý do hủy">
+        <label class="modal-cancel__check-item">
+          <input class="modal-cancel__check-box" type="checkbox" name="cancel-reason" value="change-of-mind" />
+          <span class="modal-cancel__check-label">Change of mind</span>
+        </label>
+        <label class="modal-cancel__check-item">
+          <input class="modal-cancel__check-box" type="checkbox" name="cancel-reason" value="found-different" />
+          <span class="modal-cancel__check-label">Found a different piece</span>
+        </label>
+        <label class="modal-cancel__check-item">
+          <input class="modal-cancel__check-box" type="checkbox" name="cancel-reason" value="incorrect-shipping" />
+          <span class="modal-cancel__check-label">Incorrect shipping details</span>
+        </label>
+        <label class="modal-cancel__check-item">
+          <input class="modal-cancel__check-box" type="checkbox" name="cancel-reason" value="late-arrival" />
+          <span class="modal-cancel__check-label">Arrival date too late</span>
+        </label>
+        <label class="modal-cancel__check-item">
+          <input class="modal-cancel__check-box" type="checkbox" name="cancel-reason" value="other" />
+          <span class="modal-cancel__check-label">Other</span>
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="modal-cancel__actions">
+        <button class="modal-btn modal-btn--primary" id="confirm-btn">XÁC NHẬN</button>
+        <button class="modal-btn modal-btn--outline" id="dismiss-btn">HỦY</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var confirmBtn = document.getElementById('confirm-btn');
+      var dismissBtn = document.getElementById('dismiss-btn');
+      var closeBtn = document.getElementById('close-btn');
+      var checkboxes = document.querySelectorAll('.modal-cancel__check-box');
+
+      function getSelectedReasons() {
+        return Array.from(checkboxes)
+          .filter(function (cb) { return cb.checked; })
+          .map(function (cb) { return cb.value; });
+      }
+
+      function close() {
+        window.history.back();
+      }
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+          var reasons = getSelectedReasons();
+          if (!reasons.length) {
+            alert('Vui lòng chọn ít nhất một lý do.');
+            return;
+          }
+          /* Placeholder: submit cancellation */
+          console.log('Hủy lịch với lý do:', reasons);
+        });
+      }
+
+      if (dismissBtn) dismissBtn.addEventListener('click', close);
+      if (closeBtn) closeBtn.addEventListener('click', close);
+
+      /* Close on backdrop click */
+      document.querySelector('.modal-backdrop').addEventListener('click', function (e) {
+        if (e.target === this) close();
+      });
+
+      /* Close on Escape */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+    }());
+  </script>
+
+</body>
+</html>

@@ -6,6 +6,7 @@
   <title>The Studio — Tự thiết kế trang sức | RENGA</title>
   <link rel="stylesheet" href="../../css/main.css" />
   <link rel="stylesheet" href="../../css/pages/studio.css" />
+  <link rel="stylesheet" href="../../css/pages/studio-checkout.css" />
 </head>
 <body class="studio-page">
 
@@ -108,6 +109,11 @@
         <div class="step-progress__step" role="listitem" data-step-index="4">
           <div class="step-progress__number">5</div>
           <span class="step-progress__label">Đặt hàng</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="5">
+          <div class="step-progress__number">6</div>
+          <span class="step-progress__label">Thanh toán</span>
         </div>
       </div>
 
@@ -659,7 +665,7 @@
               </div>
 
               <div class="order-card__actions">
-                <button class="btn btn--primary order-card__cta">
+                <button class="btn btn--primary order-card__cta" data-target-step="6">
                   ĐẶT HÀNG NGAY
                   <img src="https://www.figma.com/api/mcp/asset/383d1160-83f9-4d49-84b9-c4b82d05ed18" alt="" aria-hidden="true" />
                 </button>
@@ -686,6 +692,182 @@
         </div>
       </div>
       <!-- /STEP 5 -->
+
+      <!-- ===== STEP 6: Xác nhận & Thanh toán ===== -->
+      <div class="studio-flow__step" data-step="6">
+
+        <section class="studio-step">
+          <h1 class="studio-step__title">Xác nhận &amp; Thanh toán</h1>
+        </section>
+
+        <div class="stu-checkout-body">
+
+          <!-- LEFT: shipping + payment forms -->
+          <div>
+
+            <div class="stu-section-label">
+              <span>01 &nbsp; Thông tin vận chuyển</span>
+              <button class="stu-section-label__action" type="button">Chọn địa chỉ ↓</button>
+            </div>
+
+            <div class="stu-shipping-form">
+              <div class="stu-form-grid">
+
+                <div class="stu-form-group">
+                  <label class="stu-form-label" for="stu-name">Họ tên</label>
+                  <input class="stu-form-input" type="text" id="stu-name" name="name"
+                    placeholder="Nguyễn Văn A" autocomplete="name" />
+                </div>
+
+                <div class="stu-form-group">
+                  <label class="stu-form-label" for="stu-phone">Số điện thoại</label>
+                  <input class="stu-form-input" type="tel" id="stu-phone" name="phone"
+                    placeholder="0901 234 567" autocomplete="tel" />
+                </div>
+
+                <div class="stu-form-group stu-form-group--full">
+                  <label class="stu-form-label" for="stu-email">Email (tùy chọn)</label>
+                  <input class="stu-form-input" type="email" id="stu-email" name="email"
+                    placeholder="email@example.com" autocomplete="email" />
+                </div>
+
+                <div class="stu-form-group">
+                  <label class="stu-form-label" for="stu-province">Tỉnh / Thành phố</label>
+                  <div class="stu-form-select-wrap">
+                    <select class="stu-form-select" id="stu-province" name="province" autocomplete="address-level1">
+                      <option value="">Chọn tỉnh/thành...</option>
+                      <option value="hcm" selected>TP. Hồ Chí Minh</option>
+                      <option value="hn">Hà Nội</option>
+                      <option value="dn">Đà Nẵng</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="stu-form-group">
+                  <label class="stu-form-label" for="stu-district">Phường / Xã</label>
+                  <div class="stu-form-select-wrap">
+                    <select class="stu-form-select" id="stu-district" name="district" autocomplete="address-level2">
+                      <option value="">Chọn phường/xã...</option>
+                      <option value="q1">Quận 1</option>
+                      <option value="q3">Quận 3</option>
+                      <option value="q7">Quận 7</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="stu-form-group stu-form-group--full">
+                  <label class="stu-form-label" for="stu-address">Số nhà, tên đường</label>
+                  <input class="stu-form-input" type="text" id="stu-address" name="address"
+                    placeholder="VD: 12 Nguyễn Huệ" autocomplete="street-address" />
+                </div>
+
+              </div>
+            </div>
+
+            <div class="stu-section-label">
+              <span>02 &nbsp; Phương thức thanh toán</span>
+            </div>
+
+            <div class="stu-pay-section">
+              <div class="stu-pay-methods" role="radiogroup" aria-label="Chọn phương thức thanh toán">
+
+                <div class="stu-pay-method is-selected" role="radio" aria-checked="true" tabindex="0"
+                  data-method="credit-card">
+                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
+                  <span class="stu-pay-method__label">Thẻ tín dụng / Thẻ ghi nợ</span>
+                </div>
+
+                <div class="stu-pay-method" role="radio" aria-checked="false" tabindex="0"
+                  data-method="bank-transfer">
+                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
+                  <span class="stu-pay-method__label">Chuyển khoản ngân hàng</span>
+                </div>
+
+                <div class="stu-pay-method" role="radio" aria-checked="false" tabindex="0"
+                  data-method="e-wallet">
+                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
+                  <span class="stu-pay-method__label">Ví điện tử (MoMo, ZaloPay)</span>
+                </div>
+
+              </div>
+            </div>
+
+            <div style="margin-top:32px;padding-bottom:40px">
+              <button class="studio-nav__back" data-target-step="5">
+                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
+                Trước đó
+              </button>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Order summary -->
+          <aside class="stu-summary" aria-label="Tóm tắt đơn hàng">
+
+            <div class="stu-summary__header">
+              <span class="stu-summary__title">Tổng đơn hàng</span>
+              <span class="stu-summary__count">(01 sản phẩm)</span>
+            </div>
+
+            <div class="stu-order-items">
+              <div class="stu-order-item">
+                <div class="stu-order-item__img-wrap">
+                  <img class="stu-order-item__img"
+                    src="https://www.figma.com/api/mcp/asset/b867ce8b-2a6d-4756-af81-a05cae5fb4de"
+                    alt="Thiết kế của bạn" loading="lazy" />
+                </div>
+                <div class="stu-order-item__details">
+                  <p class="stu-order-item__name">Thiết kế của bạn</p>
+                  <p class="stu-order-item__variant" id="checkout-design-summary">Vàng 18K</p>
+                </div>
+                <span class="stu-order-item__price" id="checkout-item-price">15.000.000đ</span>
+              </div>
+            </div>
+
+            <hr class="stu-summary__divider" />
+
+            <div class="stu-summary__row">
+              <span class="stu-summary__row-key">Tạm tính</span>
+              <span class="stu-summary__row-val" id="checkout-subtotal">15.000.000đ</span>
+            </div>
+            <div class="stu-summary__row">
+              <span class="stu-summary__row-key">Phí vận chuyển</span>
+              <span class="stu-summary__row-val stu-summary__row-val--free">MIỄN PHÍ</span>
+            </div>
+
+            <div class="stu-summary__voucher">
+              <input class="stu-summary__voucher-input" type="text"
+                placeholder="Mã VOUCHER / GIFT CODE" aria-label="Nhập mã giảm giá" />
+              <button class="stu-summary__voucher-btn" type="button" id="voucher-apply-btn">Áp dụng</button>
+            </div>
+
+            <div class="stu-summary__total">
+              <span class="stu-summary__total-key">Tổng cộng</span>
+              <span class="stu-summary__total-val" id="checkout-total">15.000.000đ</span>
+            </div>
+
+            <div class="stu-deposit">
+              <div class="stu-deposit__row">
+                <span class="stu-deposit__label">50% Đặt cọc ngay</span>
+                <span class="stu-deposit__amount" id="checkout-deposit">7.500.000đ</span>
+              </div>
+              <div class="stu-deposit__remaining">
+                <span>Số tiền còn lại</span>
+                <span class="stu-deposit__remaining-val" id="checkout-remaining">7.500.000đ</span>
+              </div>
+            </div>
+
+            <p class="stu-summary__disclaimer">
+              Bằng cách đặt hàng, bạn xác nhận đồng ý với Điều khoản Dịch vụ và Chính sách Hoàn tiền của RENGA. Đặt cọc 50% để bắt đầu quá trình chế tác.
+            </p>
+
+            <button class="stu-summary__pay-btn" type="button" id="studio-pay-btn">THANH TOÁN</button>
+
+          </aside>
+
+        </div>
+      </div>
+      <!-- /STEP 6 -->
 
     </div>
   </main>
@@ -784,5 +966,6 @@
   </button>
 
   <script src="../../js/pages/studio.js"></script>
+  <script src="../../js/pages/studio-checkout.js"></script>
 </body>
 </html>
