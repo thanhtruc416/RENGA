@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Studio — Tự thiết kế trang sức | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/pages/studio.css" />
+</head>
+<body class="studio-page">
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <div class="site-header__top">
+        <a href="../../index.html" class="site-header__logo">
+          <img class="site-header__logo-icon"
+            src="https://www.figma.com/api/mcp/asset/218e5260-c802-4c71-aee6-f8e467205227"
+            alt="RENGA icon" />
+          <img class="site-header__logo-wordmark"
+            src="https://www.figma.com/api/mcp/asset/218e5260-c802-4c71-aee6-f8e467205227"
+            alt="RENGA" />
+        </a>
+
+        <div class="site-header__actions">
+          <a href="../order/gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
+            <img src="https://www.figma.com/api/mcp/asset/e8b34603-3dcc-437f-9a74-8f18e2a63741" alt="Giỏ hàng" />
+          </a>
+          <a href="../order/lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
+            <img src="https://www.figma.com/api/mcp/asset/52adc008-f551-4531-8f79-d2e52d7844d6" alt="Đơn hàng" />
+          </a>
+          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
+            <img class="site-header__avatar"
+              src="https://www.figma.com/api/mcp/asset/3ce6c62c-e34c-4c51-8bff-fa8ddf3b7175"
+              alt="Tài khoản" />
+          </a>
+        </div>
+      </div>
+
+      <div class="site-header__bottom">
+        <nav class="site-header__nav" aria-label="Menu chính">
+          <div class="site-header__nav-item">
+            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
+            <div class="mega-menu">
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Danh mục</p>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Nhẫn</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Dây chuyền</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Hoa tai</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Lắc tay</a>
+                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Charm</a>
+              </div>
+            </div>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="the-studio.html" class="site-header__nav-link is-active">The Studio</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
+          </div>
+        </nav>
+
+        <div class="site-header__search">
+          <img class="site-header__search-icon"
+            src="https://www.figma.com/api/mcp/asset/b0f3b2cd-2f0d-4910-b61e-09afab6604b4"
+            alt="" aria-hidden="true" />
+          <input class="site-header__search-input" type="search"
+            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <div class="studio-step-section">
+
+      <!-- Step progress bar -->
+      <div class="step-progress" role="list" aria-label="Tiến trình thiết kế">
+        <div class="step-progress__step is-active" role="listitem" aria-current="step" data-step-index="0">
+          <div class="step-progress__number">1</div>
+          <span class="step-progress__label">Chọn phôi</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="1">
+          <div class="step-progress__number">2</div>
+          <span class="step-progress__label">Chất liệu</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="2">
+          <div class="step-progress__number">3</div>
+          <span class="step-progress__label">Đá quý</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="3">
+          <div class="step-progress__number">4</div>
+          <span class="step-progress__label">Khắc chữ</span>
+        </div>
+        <div class="step-progress__connector"></div>
+        <div class="step-progress__step" role="listitem" data-step-index="4">
+          <div class="step-progress__number">5</div>
+          <span class="step-progress__label">Đặt hàng</span>
+        </div>
+      </div>
+
+      <!-- ===== STEP 1: Chọn phôi sản phẩm ===== -->
+      <div class="studio-flow__step" data-step="1">
+        <section class="studio-step">
+          <h1 class="studio-step__title">Chọn phôi sản phẩm</h1>
+          <p class="studio-step__subtitle">Bắt đầu hành trình tạo nên kiệt tác của riêng bạn.</p>
+        </section>
+
+        <div class="studio-grid" id="studio-grid" role="list" aria-label="Danh sách phôi sản phẩm">
+
+          <article class="studio-card" role="listitem" data-category="nhan" tabindex="0">
+            <button class="studio-card__wishlist" aria-label="Yêu thích Nhẫn">
+              <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" />
+            </button>
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/5011f25a-b583-42e3-9e78-0f3b4012575b" alt="Nhẫn" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Nhẫn</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="nhan">CHỌN</button>
+            </div>
+          </article>
+
+          <article class="studio-card" role="listitem" data-category="day-chuyen" tabindex="0">
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/c8927929-562a-44fd-a521-3430608773be" alt="Dây chuyền" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Dây chuyền</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="day-chuyen">CHỌN</button>
+            </div>
+          </article>
+
+          <article class="studio-card" role="listitem" data-category="hoa-tai" tabindex="0">
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/3089f2cd-fdeb-41fb-bbfc-364e223a3515" alt="Hoa tai" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Hoa tai</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="hoa-tai">CHỌN</button>
+            </div>
+          </article>
+
+          <article class="studio-card" role="listitem" data-category="lac-tay" tabindex="0">
+            <button class="studio-card__wishlist" aria-label="Yêu thích Lắc tay">
+              <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" />
+            </button>
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/5011f25a-b583-42e3-9e78-0f3b4012575b" alt="Lắc tay" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Lắc tay</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="lac-tay">CHỌN</button>
+            </div>
+          </article>
+
+          <article class="studio-card" role="listitem" data-category="charm" tabindex="0">
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/c8927929-562a-44fd-a521-3430608773be" alt="Charm" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Charm</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="charm">CHỌN</button>
+            </div>
+          </article>
+
+          <article class="studio-card" role="listitem" data-category="phu-kien" tabindex="0">
+            <div class="studio-card__image">
+              <img src="https://www.figma.com/api/mcp/asset/3089f2cd-fdeb-41fb-bbfc-364e223a3515" alt="Phụ kiện" loading="lazy" />
+            </div>
+            <div class="studio-card__footer">
+              <div class="studio-card__meta">
+                <p class="studio-card__category">Category</p>
+                <h3 class="studio-card__name">Phụ kiện</h3>
+              </div>
+              <button class="btn btn--dark studio-card__btn" data-category="phu-kien">CHỌN</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+      <!-- /STEP 1 -->
+
+      <!-- ===== STEP 2: Chọn chất liệu ===== -->
+      <div class="studio-flow__step" data-step="2">
+        <section class="studio-step">
+          <h1 class="studio-step__title">Chọn chất liệu</h1>
+          <p class="studio-step__subtitle">
+            Hãy chọn loại kim loại quý cho kiệt tác của bạn.<br />
+            Mỗi chất liệu mang một câu chuyện và độ bền riêng biệt.
+          </p>
+        </section>
+
+        <div class="studio-config">
+
+          <!-- Left: 3D visual preview -->
+          <div class="studio-preview">
+            <div class="studio-preview__viewport">
+              <img
+                class="studio-preview__image"
+                src="https://www.figma.com/api/mcp/asset/7f3f0366-04db-4f3e-897f-560e1c36c82f"
+                alt="Xem trước thiết kế"
+              />
+              <div class="studio-preview__overlay" id="color-overlay" style="background: #d4af37;"></div>
+            </div>
+            <div class="studio-preview__toolbar">
+              <div class="studio-preview__label">Studio View 01</div>
+              <div class="studio-preview__actions">
+                <button class="studio-preview__btn" aria-label="Xem 360°">
+                  <img src="https://www.figma.com/api/mcp/asset/530d40b8-a816-42b5-8290-c2208009eefa" alt="" />
+                </button>
+                <button class="studio-preview__btn" aria-label="Phóng to">
+                  <img src="https://www.figma.com/api/mcp/asset/0193dba0-82e2-4793-9347-a5046090b5ac" alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Material options -->
+          <div class="studio-options">
+            <div class="studio-options__list">
+
+              <button
+                class="material-option is-selected"
+                data-material="vang-18k"
+                data-label="Vàng 18K"
+                data-price="15 triệu VNĐ"
+                data-color="#d4af37"
+              >
+                <div class="material-option__left">
+                  <div class="material-option__swatch" style="background: #d4af37;"></div>
+                  <div class="material-option__info">
+                    <span class="material-option__name">Vàng 18K</span>
+                    <span class="material-option__tag">Signature Choice</span>
+                  </div>
+                </div>
+                <span class="material-option__price">15 triệu VNĐ</span>
+              </button>
+
+              <button
+                class="material-option"
+                data-material="vang-14k"
+                data-label="Vàng 14K"
+                data-price="12 triệu VNĐ"
+                data-color="#e5c07b"
+              >
+                <div class="material-option__left">
+                  <div class="material-option__swatch" style="background: #e5c07b;"></div>
+                  <div class="material-option__info">
+                    <span class="material-option__name">Vàng 14K</span>
+                    <span class="material-option__tag">Balanced Elegance</span>
+                  </div>
+                </div>
+                <span class="material-option__price">12 triệu VNĐ</span>
+              </button>
+
+              <button
+                class="material-option"
+                data-material="bach-kim"
+                data-label="Bạch kim"
+                data-price="20 triệu VNĐ"
+                data-color="#e5e4e2"
+              >
+                <div class="material-option__left">
+                  <div class="material-option__swatch" style="background: #e5e4e2;"></div>
+                  <div class="material-option__info">
+                    <span class="material-option__name">Bạch kim</span>
+                    <span class="material-option__tag">Eternal Strength</span>
+                  </div>
+                </div>
+                <span class="material-option__price">20 triệu VNĐ</span>
+              </button>
+
+              <button
+                class="material-option"
+                data-material="bac-925"
+                data-label="Bạc 925"
+                data-price="8 triệu VNĐ"
+                data-color="#c0c0c0"
+              >
+                <div class="material-option__left">
+                  <div class="material-option__swatch" style="background: #c0c0c0;"></div>
+                  <div class="material-option__info">
+                    <span class="material-option__name">Bạc 925</span>
+                    <span class="material-option__tag">Classic Modernity</span>
+                  </div>
+                </div>
+                <span class="material-option__price">8 triệu VNĐ</span>
+              </button>
+
+            </div>
+
+            <!-- Step navigation -->
+            <div class="studio-options__nav">
+              <button class="studio-nav__back" data-target-step="1">
+                <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" aria-hidden="true" />
+                Trước đó
+              </button>
+              <button class="btn btn--dark studio-nav__next" data-target-step="3">
+                TIẾP THEO
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- /STEP 2 -->
+
+      <!-- ===== STEP 3: Tùy biến đá ===== -->
+      <div class="studio-flow__step" data-step="3">
+
+        <!-- Title row: heading + skip button -->
+        <div class="studio-step studio-step--with-skip">
+          <div class="studio-step__heading">
+            <h1 class="studio-step__title">Tùy biến đá</h1>
+            <p class="studio-step__subtitle">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn.</p>
+          </div>
+          <button class="btn btn--dark studio-step__skip" data-target-step="4">BỎ QUA</button>
+        </div>
+
+        <!-- 2-column config layout -->
+        <div class="studio-config studio-config--gem">
+
+          <!-- LEFT: visual preview -->
+          <div class="stone-preview">
+            <div class="stone-preview__viewport">
+              <img
+                class="stone-preview__image"
+                src="https://www.figma.com/api/mcp/asset/aa96bd14-564a-4da6-a6b8-6f8f788c0e23"
+                alt="Heritage Solitaire Mount"
+              />
+              <div class="stone-preview__controls">
+                <button class="studio-preview__btn" aria-label="Phóng to">
+                  <img src="https://www.figma.com/api/mcp/asset/6b940b9a-90ef-45a8-bfe5-e7c6ca1cac6b" alt="" />
+                </button>
+                <button class="studio-preview__btn" aria-label="Xem 360°">
+                  <img src="https://www.figma.com/api/mcp/asset/fb95319b-cd22-4a3c-9c7b-372c409161ad" alt="" />
+                </button>
+              </div>
+            </div>
+            <div class="stone-preview__info">
+              <h2 class="stone-preview__name">Heritage Solitaire Mount</h2>
+              <p class="stone-preview__desc">
+                Thiết kế đặc trưng của chúng tôi được chế tác chính xác để làm tăng độ sáng
+                và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn.
+              </p>
+            </div>
+          </div>
+
+          <!-- RIGHT: stone options panel -->
+          <div class="stone-panel">
+
+            <!-- 01. Stone type -->
+            <div class="stone-panel__section">
+              <div class="stone-panel__section-header">
+                <span class="stone-panel__section-label">01. Chọn loại đá</span>
+                <span class="stone-panel__section-value" id="stone-label">Kim cương</span>
+              </div>
+
+              <div class="stone-selector" id="stone-selector" role="group" aria-label="Loại đá quý">
+                <button class="stone-option is-selected"
+                  data-stone="diamond"
+                  data-stone-label="Kim cương"
+                  data-stone-price="10000000"
+                  aria-pressed="true">
+                  <div class="stone-option__icon">
+                    <img src="https://www.figma.com/api/mcp/asset/9b97f79c-91e6-4fe3-ab97-9030aa5ea42b" alt="" />
+                  </div>
+                  <span class="stone-option__name">DIAMOND</span>
+                </button>
+
+                <button class="stone-option"
+                  data-stone="ruby"
+                  data-stone-label="Ruby"
+                  data-stone-price="8000000"
+                  aria-pressed="false">
+                  <div class="stone-option__icon">
+                    <img src="https://www.figma.com/api/mcp/asset/7e0714a7-feb8-4b18-a28c-9d6c4e8a447c" alt="" />
+                  </div>
+                  <span class="stone-option__name">RUBY</span>
+                </button>
+
+                <button class="stone-option"
+                  data-stone="sapphire"
+                  data-stone-label="Sapphire"
+                  data-stone-price="7000000"
+                  aria-pressed="false">
+                  <div class="stone-option__icon">
+                    <img src="https://www.figma.com/api/mcp/asset/73a5eaf7-85b6-435e-b5c3-980d437c3d98" alt="" />
+                  </div>
+                  <span class="stone-option__name">SAPPHIRE</span>
+                </button>
+
+                <button class="stone-option"
+                  data-stone="emerald"
+                  data-stone-label="Emerald"
+                  data-stone-price="6000000"
+                  aria-pressed="false">
+                  <div class="stone-option__icon">
+                    <img src="https://www.figma.com/api/mcp/asset/b1c63381-8ffd-4d80-9727-042ab18f2613" alt="" />
+                  </div>
+                  <span class="stone-option__name">EMERALD</span>
+                </button>
+
+                <button class="stone-option stone-option--muted"
+                  data-stone="none"
+                  data-stone-label="Không đá"
+                  data-stone-price="0"
+                  aria-pressed="false">
+                  <div class="stone-option__icon stone-option__icon--dim">
+                    <img src="https://www.figma.com/api/mcp/asset/3712648d-0dca-4c1d-b500-95142a713922" alt="" />
+                  </div>
+                  <span class="stone-option__name">MOUNT<br>ONLY</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 02. Carat weight -->
+            <div class="stone-panel__section">
+              <div class="stone-panel__section-header">
+                <span class="stone-panel__section-label">02. Carat</span>
+                <span class="stone-panel__section-value" id="carat-label">1.0 Carat</span>
+              </div>
+              <div class="carat-slider">
+                <input
+                  class="carat-slider__input"
+                  id="carat-input"
+                  type="range"
+                  min="0.5"
+                  max="5.0"
+                  step="0.1"
+                  value="1.0"
+                  aria-label="Carat weight"
+                />
+                <div class="carat-slider__scale">
+                  <span>0.5CT</span>
+                  <span>1.5CT</span>
+                  <span>3.0CT</span>
+                  <span>5.0CT</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price breakdown -->
+            <div class="price-breakdown">
+              <p class="price-breakdown__heading">Thành phần</p>
+              <div class="price-breakdown__rows">
+                <div class="price-breakdown__row">
+                  <span class="price-breakdown__item">Heritage Mount Phôi</span>
+                  <span class="price-breakdown__amount" id="price-mount">4.000.000</span>
+                </div>
+                <div class="price-breakdown__row">
+                  <span class="price-breakdown__item">18K White Gold</span>
+                  <span class="price-breakdown__amount" id="price-material">8.000.000</span>
+                </div>
+                <div class="price-breakdown__row price-breakdown__row--border">
+                  <span class="price-breakdown__item" id="price-stone-label">Diamond (1.0ct)</span>
+                  <span class="price-breakdown__amount" id="price-stone">10.000.000</span>
+                </div>
+                <div class="price-breakdown__row price-breakdown__row--total">
+                  <span class="price-breakdown__total-label">Tổng giá trị</span>
+                  <span class="price-breakdown__total-amount" id="price-total">22.000.000 VNĐ</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="stone-panel__actions">
+              <button class="btn btn--primary stone-panel__confirm" data-target-step="4">
+                Xác nhận thiết kế
+              </button>
+              <button class="studio-nav__back" data-target-step="2">
+                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
+                Trước đó
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- /STEP 3 -->
+
+    </div>
+  </main>
+
+  <!-- ===== PRICE SUMMARY (fixed, shown from step 2+) ===== -->
+  <div class="studio-price-summary" id="price-summary" aria-live="polite">
+    <p class="studio-price-summary__label">Tổng giá trị hiện tại</p>
+    <div class="studio-price-summary__body">
+      <span class="studio-price-summary__amount" id="price-amount">15 triệu</span>
+      <span class="studio-price-summary__detail" id="price-detail">Vàng 18K</span>
+    </div>
+  </div>
+
+  <!-- ===== CHAT FAB ===== -->
+  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
+    <img src="https://www.figma.com/api/mcp/asset/3a1ad324-af0e-467d-afef-3a5f6f76d6e1" alt="Chat" />
+  </button>
+
+  <script src="../../js/pages/studio.js"></script>
+</body>
+</html>
