@@ -1,0 +1,102 @@
+/* ===== CATEGORY / LISTING PAGE ===== */
+.category-page {
+  min-height: 100vh;
+}
+
+.category-page__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-px);
+}
+
+/* ── Category Header ──────────────────────────────── */
+.category-hero {
+  text-align: center;
+  padding: 48px var(--container-px) 40px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.category-hero__title {
+  font-family: var(--font-serif);
+  font-size: 72px;
+  font-weight: 400;
+  color: var(--color-dark);
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.category-hero__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--color-muted);
+  font-style: italic;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ── Product Grid ─────────────────────────────────── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px 20px;
+  margin-bottom: 48px;
+}
+
+/* ── Load More ────────────────────────────────────── */
+.load-more {
+  text-align: center;
+  padding: 0 0 80px;
+}
+
+.load-more__count {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.load-more__bar {
+  width: 80px;
+  height: 2px;
+  background: var(--color-bg-card);
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.load-more__bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16%;
+  height: 100%;
+  background: var(--color-dark);
+}
+
+.load-more__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  border: 1px solid var(--color-dark);
+  padding: 14px 56px;
+  cursor: pointer;
+  background: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.load-more__btn:hover {
+  background: var(--color-dark);
+  color: var(--color-white);
+}

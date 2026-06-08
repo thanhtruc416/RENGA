@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ Sơ — Hoàng Anh | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/pages/profile.css">
+</head>
+<body class="profile-page">
+
+  <!-- ===== HEADER (Centered wordmark variant) ===== -->
+  <header class="site-header site-header--centered">
+    <div class="site-header__inner">
+
+      <div class="site-header__top">
+        <!-- Icon only on left -->
+        <a href="../../index.html" class="site-header__logo-icon-link" aria-label="RENGA Trang chủ">
+          <img src="../../assets/images/logo-icon.svg" alt="RENGA" width="38" height="44">
+        </a>
+
+        <!-- Centered wordmark -->
+        <a href="../../index.html" class="site-header__wordmark">RENGA</a>
+
+        <!-- Actions with notification bell -->
+        <div class="site-header__actions">
+          <a href="#" class="site-header__action-btn" aria-label="Thông báo">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </a>
+          <a href="../order/gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </a>
+          <a href="../order/lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </a>
+          <div class="user-menu">
+            <button class="site-header__action-btn user-menu__trigger" aria-label="Tài khoản" aria-expanded="false">
+              <img class="site-header__avatar" src="https://placehold.co/45x45/e8c0b8/4a2820?text=HA" alt="Hoàng Anh">
+            </button>
+            <div class="user-menu__dropdown">
+              <a href="./ho-so.html" class="user-menu__item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Hồ sơ
+              </a>
+              <a href="./doi-thuong.html" class="user-menu__item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Đổi thưởng
+              </a>
+              <div class="user-menu__divider"></div>
+              <a href="../auth/dang-nhap.html" class="user-menu__item user-menu__item--danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Đăng xuất
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-header__bottom">
+        <nav class="site-header__nav" aria-label="Menu chính">
+          <div class="site-header__nav-item">
+            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../danh-muc/nhan.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
+            <div class="mega-menu">
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Danh mục sản phẩm</p>
+                <a href="../danh-muc/nhan.html" class="mega-menu__link">Nhẫn</a>
+                <a href="../danh-muc/day-chuyen.html" class="mega-menu__link">Dây chuyền</a>
+                <a href="../danh-muc/hoa-tai.html" class="mega-menu__link">Hoa tai</a>
+                <a href="../danh-muc/lac-tay.html" class="mega-menu__link">Lắc tay &amp; Vòng tay</a>
+                <a href="../danh-muc/charm.html" class="mega-menu__link">Charm</a>
+              </div>
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Bộ sưu tập</p>
+                <a href="#" class="mega-menu__link">Bộ trang sức đồng bộ</a>
+                <a href="#" class="mega-menu__link">Bộ trang sức cặp đôi</a>
+                <a href="#" class="mega-menu__link">Bộ sưu tập Hoàng Gia</a>
+              </div>
+            </div>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="#" class="site-header__nav-link">Bộ sưu tập</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="#" class="site-header__nav-link">The Designer</a>
+          </div>
+        </nav>
+        <div class="site-header__search">
+          <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input class="site-header__search-input" type="text" placeholder="Tìm kiếm...">
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <div class="profile-container">
+
+      <!-- Welcome -->
+      <div class="profile-welcome">
+        <h1 class="profile-welcome__title">Chào mừng trở lại, Hoàng Anh</h1>
+        <p class="profile-welcome__subtitle">Quản lý hành trình thiết kế riêng và các đặc quyền thành viên của bạn.</p>
+      </div>
+
+      <!-- Quick Nav Cards -->
+      <div class="profile-quicknav">
+        <a href="./doi-thuong.html" class="profile-quicknav__card">
+          <div class="profile-quicknav__card-left">
+            <svg class="profile-quicknav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+            <div>
+              <p class="profile-quicknav__card-title">Đổi thưởng</p>
+              <p class="profile-quicknav__card-desc">Sử dụng điểm tích lũy cho các đặc quyền cao cấp</p>
+            </div>
+          </div>
+          <svg class="profile-quicknav__arrow" viewBox="0 0 24 24" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <a href="./doi-thuong.html#lich-su" class="profile-quicknav__card">
+          <div class="profile-quicknav__card-left">
+            <svg class="profile-quicknav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div>
+              <p class="profile-quicknav__card-title">Lịch sử tích điểm</p>
+              <p class="profile-quicknav__card-desc">Xem chi tiết các giao dịch và điểm thưởng</p>
+            </div>
+          </div>
+          <svg class="profile-quicknav__arrow" viewBox="0 0 24 24" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Personal Info + Tier Card -->
+      <div class="profile-main-grid">
+
+        <!-- Personal Info -->
+        <div class="profile-card">
+          <div class="profile-card__header">
+            <h2 class="profile-card__title">Thông tin cá nhân</h2>
+            <button class="profile-card__action-link" id="editInfoBtn" type="button">Chỉnh sửa</button>
+          </div>
+
+          <div class="profile-form__grid" id="profileInfoGrid">
+            <!-- Họ và tên -->
+            <div>
+              <label class="profile-form__label">Họ và tên</label>
+              <span class="profile-form__value" data-field="name">Nguyễn Thị Hoàng Anh</span>
+            </div>
+            <!-- Email -->
+            <div>
+              <label class="profile-form__label">Email</label>
+              <span class="profile-form__value" data-field="email">anhnth23416@gmail.com</span>
+            </div>
+            <!-- SĐT -->
+            <div>
+              <label class="profile-form__label">SĐT</label>
+              <span class="profile-form__value" data-field="phone">+84 7700 900077</span>
+            </div>
+            <!-- Ngày sinh -->
+            <div>
+              <label class="profile-form__label">Ngày sinh</label>
+              <span class="profile-form__value" data-field="dob">22/02/2005</span>
+            </div>
+            <!-- Địa chỉ -->
+            <div class="profile-form__field--full">
+              <label class="profile-form__label">Địa chỉ</label>
+              <span class="profile-form__value" data-field="address">123 Nguyễn Văn Cừ, Quận 7, TP. Hồ Chí Minh</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member Tier Card -->
+        <div class="member-tier-card">
+          <div class="member-tier-card__top-row">
+            <span class="member-tier-card__label">Hạng thành viên</span>
+            <!-- Diamond gem icon -->
+            <svg class="member-tier-card__gem" viewBox="0 0 32 32" fill="none">
+              <polygon points="16,2 28,10 28,22 16,30 4,22 4,10" fill="#c4607e" opacity="0.9"/>
+              <polygon points="16,2 28,10 16,14 4,10" fill="#d4708e"/>
+              <polygon points="16,14 28,10 28,22 16,30" fill="#a84060"/>
+            </svg>
+          </div>
+
+          <p class="member-tier-card__tier-name">Gold</p>
+
+          <div class="member-tier-card__progress-header">
+            <span class="member-tier-card__points-current">4.250 điểm</span>
+            <span class="member-tier-card__points-next">750 nữa</span>
+          </div>
+          <div class="member-tier-card__progress-bar">
+            <div class="member-tier-card__progress-fill" style="width: 85%;"></div>
+          </div>
+
+          <p class="member-tier-card__divider-label">Điểm tích lũy</p>
+          <div class="member-tier-card__history">
+            <div class="member-tier-card__history-row">
+              <span class="member-tier-card__history-label">Mua kim cương</span>
+              <span class="member-tier-card__history-value">+1.200</span>
+            </div>
+            <div class="member-tier-card__history-row">
+              <span class="member-tier-card__history-label">Thưởng kỷ niệm</span>
+              <span class="member-tier-card__history-value">+500</span>
+            </div>
+          </div>
+
+          <!-- Watermark star shape -->
+          <svg class="member-tier-card__watermark" viewBox="0 0 100 100" fill="white">
+            <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"/>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Security Section -->
+      <div class="security-card">
+        <h2 class="security-card__title">Thông tin bảo mật</h2>
+        <div class="security-card__grid">
+          <div>
+            <label class="profile-form__label" for="currentPwd">Mật khẩu hiện tại</label>
+            <input class="profile-form__input" type="password" id="currentPwd" placeholder="········" autocomplete="current-password">
+          </div>
+          <div>
+            <label class="profile-form__label" for="newPwd">Mật khẩu mới</label>
+            <input class="profile-form__input" type="password" id="newPwd" placeholder="Nhập mật khẩu mới" autocomplete="new-password">
+          </div>
+        </div>
+        <button class="security-card__submit" type="button">Cập nhật thông tin</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="site-footer__main">
+      <div class="site-footer__brand">
+        <a href="../../index.html" class="site-footer__logo">
+          <img class="site-footer__logo-icon" src="../../assets/images/logo-icon.svg" alt="RENGA" width="28" height="34">
+          <span class="site-footer__logo-text">RENGA</span>
+        </a>
+        <p class="site-footer__tagline">Chúng tôi tin rằng mỗi trang sức đều kể một câu chuyện riêng. Hãy để chúng tôi giúp bạn kể câu chuyện của mình.</p>
+        <div class="site-footer__socials">
+          <a href="#" class="site-footer__social" aria-label="Facebook">f</a>
+          <a href="#" class="site-footer__social" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="#" class="site-footer__social" aria-label="TikTok">T</a>
+        </div>
+      </div>
+      <div>
+        <p class="site-footer__col-title">Sản Phẩm</p>
+        <ul class="site-footer__col-links">
+          <li><a href="../danh-muc/nhan.html">Nhẫn</a></li>
+          <li><a href="../danh-muc/day-chuyen.html">Dây chuyền</a></li>
+          <li><a href="../danh-muc/hoa-tai.html">Hoa tai</a></li>
+          <li><a href="../danh-muc/lac-tay.html">Lắc tay</a></li>
+          <li><a href="../danh-muc/charm.html">Charm</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="site-footer__col-title">Dịch Vụ</p>
+        <ul class="site-footer__col-links">
+          <li><a href="../studio/the-studio.html">The Studio</a></li>
+          <li><a href="#">The Designer</a></li>
+          <li><a href="#">Bộ sưu tập</a></li>
+          <li><a href="#">Chăm sóc trang sức</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="site-footer__col-title">Hỗ Trợ</p>
+        <ul class="site-footer__col-links">
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Chính sách đổi trả</a></li>
+          <li><a href="#">Hướng dẫn chọn size</a></li>
+          <li><a href="#">Câu hỏi thường gặp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-inner">
+        <p class="site-footer__copyright">© 2024 RENGA. Bản quyền thuộc về RENGA.</p>
+        <nav class="site-footer__legal">
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Điều khoản sử dụng</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CHAT FAB ===== -->
+  <button class="chat-fab" aria-label="Chat với chúng tôi">
+    <img src="../../assets/images/icon-chatbot.svg" alt="Chat hỗ trợ" width="60" height="60">
+  </button>
+
+  <script src="../../js/header.js"></script>
+  <script src="../../js/pages/profile.js"></script>
+</body>
+</html>

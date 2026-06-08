@@ -1,8 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
 
+/* ── Base ── */
 @import './base/variables.css';
 @import './base/reset.css';
 @import './base/typography.css';
+
+/* ── Layout ── */
 @import './layout/header.css';
+
+/* ── Components ── */
 @import './components/button.css';
 @import './components/step-progress.css';
+@import './components/card.css';
+@import './components/footer.css';
+@import './components/breadcrumb.css';
+@import './components/filter-bar.css';
+@import './components/chat-widget.css';
+@import './components/modal.css';

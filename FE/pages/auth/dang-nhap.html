@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Nhập | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/pages/auth.css">
+</head>
+<body>
+
+  <!-- ===== LOGIN PAGE ===== -->
+  <div class="auth-page-login">
+
+    <!-- ── Left: Hero Image ── -->
+    <div class="login-hero">
+      <img
+        class="login-hero__img"
+        src="https://placehold.co/760x1080/2a1820/c4607e?text=."
+        alt="RENGA trang sức"
+      >
+      <div class="login-hero__brand">
+        <span class="login-hero__wordmark">RENGA</span>
+      </div>
+    </div>
+
+    <!-- ── Right: Form Panel ── -->
+    <div class="login-panel">
+
+      <a href="../../index.html" class="login-panel__back" aria-label="Quay lại trang chủ">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </a>
+
+      <h1 class="login-panel__heading">Chào mừng<br>trở lại</h1>
+      <p class="login-panel__subtext">Đăng nhập để tiếp tục hành trình sáng tạo của bạn</p>
+
+      <div class="login-panel__fields">
+
+        <!-- Phone -->
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="loginPhone">Số điện thoại</label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input
+              class="auth-field__input"
+              type="tel"
+              id="loginPhone"
+              autocomplete="tel"
+              placeholder="0881234567"
+            >
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="loginPwd">Mật khẩu</label>
+            <a class="auth-field__link" href="./quen-mat-khau.html">Quên mật khẩu?</a>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input
+              class="auth-field__input auth-field__input--has-eye"
+              type="password"
+              id="loginPwd"
+              autocomplete="current-password"
+              placeholder="········"
+            >
+            <button class="auth-field__eye-btn" type="button" id="loginEyeBtn" aria-label="Hiện mật khẩu">
+              <!-- eye-off (default) -->
+              <svg id="loginEyeOff" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              <!-- eye (hidden) -->
+              <svg id="loginEyeOn" viewBox="0 0 24 24" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /.login-panel__fields -->
+
+      <button class="auth-btn auth-btn--dark" type="button" id="loginSubmitBtn">Đăng nhập</button>
+
+      <div class="auth-divider"><span class="auth-divider__text">Hoặc</span></div>
+
+      <button class="auth-btn auth-btn--outline" type="button" id="socialLoginBtn">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Tiếp tục với Google/Facebook
+      </button>
+
+      <p class="auth-footer-text">Chưa có tài khoản? <a href="#" id="openRegisterBtn">Đăng ký ngay</a></p>
+      <p class="auth-copyright">© 2026 RENGA. All rights reserved.</p>
+
+    </div><!-- /.login-panel -->
+  </div><!-- /.auth-page-login -->
+
+
+  <!-- ===================================================
+       MODAL: ĐĂNG KÝ TÀI KHOẢN
+  ==================================================== -->
+  <div class="modal-backdrop modal--register" id="modalRegister" role="dialog" aria-modal="true" aria-label="Đăng ký tài khoản">
+    <div class="modal-card">
+
+      <button class="modal-close" id="closeRegister" aria-label="Đóng">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <h2 class="modal-title">Đăng kí tài khoản<br>RENGA</h2>
+      <p class="modal-subtitle">Khám phá thế giới trang sức cao cấp dành riêng cho bạn.</p>
+
+      <div class="modal-form-grid register-form" id="registerForm">
+
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="regName">Họ và Tên <span aria-hidden="true">*</span></label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input class="auth-field__input" type="text" id="regName" autocomplete="name" placeholder="Họ và Tên *" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="regEmail">Email</label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input class="auth-field__input" type="email" id="regEmail" autocomplete="email" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="regPhone">Số điện thoại <span aria-hidden="true">*</span></label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input class="auth-field__input" type="tel" id="regPhone" autocomplete="tel" placeholder="Số điện thoại *" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="regPwd">Mật khẩu <span aria-hidden="true">*</span></label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input class="auth-field__input auth-field__input--has-eye" type="password" id="regPwd" autocomplete="new-password" placeholder="Mật khẩu *" required>
+            <button class="auth-field__eye-btn" type="button" data-target="regPwd" aria-label="Hiện mật khẩu">
+              <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <div class="auth-field__label-row">
+            <label class="auth-field__label" for="regPwdConfirm">Xác nhận mật khẩu <span aria-hidden="true">*</span></label>
+          </div>
+          <div class="auth-field__input-wrap">
+            <input class="auth-field__input auth-field__input--has-eye" type="password" id="regPwdConfirm" autocomplete="new-password" placeholder="Xác nhận mật khẩu *" required>
+            <button class="auth-field__eye-btn" type="button" data-target="regPwdConfirm" aria-label="Hiện mật khẩu">
+              <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /.modal-form-grid -->
+
+      <button class="auth-btn auth-btn--dark" type="button" id="registerSubmitBtn">Đăng ký</button>
+      <p class="auth-footer-text">Đã có tài khoản? <a href="#" id="switchToLoginBtn">Đăng nhập ngay</a></p>
+
+    </div>
+  </div><!-- /#modalRegister -->
+
+
+  <!-- ===================================================
+       MODAL: ĐÃ TÌM THẤY ĐƠN HÀNG CŨ
+  ==================================================== -->
+  <div class="modal-backdrop modal--link-orders" id="modalLinkOrders" role="dialog" aria-modal="true">
+    <div class="modal-card">
+
+      <button class="modal-close" id="closeLinkOrders" aria-label="Đóng">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <h2 class="modal-title">Chúng tôi tìm thấy đơn hàng cũ của số điện thoại này!</h2>
+      <p class="modal-body">Bạn đã có 2 đơn hàng trước đây. Xác nhận để liên kết lịch sử mua hàng vào tài khoản mới của bạn.</p>
+
+      <div class="modal-actions-2col">
+        <button class="auth-btn auth-btn--dark" type="button" id="confirmLinkBtn">Xác nhận &amp; tạo tài khoản</button>
+        <button class="auth-btn auth-btn--outline" type="button" id="skipLinkBtn">Bỏ qua, tạo tài khoản mới</button>
+      </div>
+
+    </div>
+  </div><!-- /#modalLinkOrders -->
+
+
+  <!-- ===================================================
+       MODAL: YÊU CẦU ĐĂNG NHẬP
+  ==================================================== -->
+  <div class="modal-backdrop modal--auth-gate" id="modalAuthGate" role="dialog" aria-modal="true">
+    <div class="modal-card">
+
+      <div class="modal-icon-ring">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <circle cx="12" cy="16" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <h2 class="modal-title">Yêu Cầu Đăng Nhập</h2>
+      <p class="modal-body">Để thực hiện chức năng này, bạn vui lòng đăng nhập.</p>
+      <p class="modal-promo">
+        Trở thành thành viên của RENGA<br>
+        để tận hưởng những dịch vụ chế tác<br>
+        Bespoke và các đặc quyền cao cấp nhất.
+      </p>
+
+      <div class="modal-actions-col">
+        <button class="auth-btn auth-btn--dark" type="button" id="authGateLoginBtn">Đăng nhập ngay</button>
+        <button class="auth-btn auth-btn--outline" type="button" id="authGateBackBtn">Trở về</button>
+      </div>
+
+    </div>
+  </div><!-- /#modalAuthGate -->
+
+
+  <script src="../../js/pages/auth.js"></script>
+</body>
+</html>

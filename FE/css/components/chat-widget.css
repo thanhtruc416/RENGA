@@ -1,0 +1,28 @@
+/* ===== CHAT FAB ===== */
+.chat-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 60px;
+  height: 60px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 999;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(196, 96, 126, 0.38);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.chat-fab:hover {
+  transform: scale(1.09);
+  box-shadow: 0 6px 28px rgba(196, 96, 126, 0.55);
+}
+
+.chat-fab img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

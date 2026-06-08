@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 320" fill="none">
+  <!-- ── Hexagon icon (centered at 140, 100) ─────── -->
+  <polygon points="140,10 213,53 213,139 140,182 67,139 67,53" fill="#c4607e"/>
+
+  <!-- Flame mark — white with diamond cutout -->
+  <path fill="white" fill-rule="evenodd" d="
+    M 140,32
+    C 148,42 158,54 160,68
+    C 162,76 162,86 160,94
+    C 162,102 166,110 172,122
+    C 176,130 174,138 168,144
+    C 162,148 154,144 150,136
+    C 146,128 144,118 140,116
+    C 136,118 134,128 130,136
+    C 126,144 118,148 112,144
+    C 106,138 104,130 108,122
+    C 114,110 118,102 120,94
+    C 118,86 118,76 120,68
+    C 122,54 132,42 140,32 Z
+
+    M 140,72 L 155,94 L 140,116 L 125,94 Z
+  "/>
+
+  <!-- ── Wordmark "RENGA" ──────────────────────────── -->
+  <text
+    x="140" y="224"
+    text-anchor="middle"
+    font-family="'Montserrat', 'Arial Narrow', Arial, sans-serif"
+    font-weight="800"
+    font-size="52"
+    letter-spacing="8"
+    fill="#c4607e"
+  >RENGA</text>
+
+  <!-- ── Tagline ───────────────────────────────────── -->
+  <text
+    x="140" y="252"
+    text-anchor="middle"
+    font-family="'Montserrat', Arial, sans-serif"
+    font-weight="400"
+    font-size="11"
+    letter-spacing="3.5"
+    fill="#c4607e"
+  >REFINED ONE DEFINED YOU</text>
+</svg>

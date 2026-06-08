@@ -1,0 +1,181 @@
+/* ===== MODAL / POPUP COMPONENTS ===== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-card {
+  background: var(--color-primary-light);
+  padding: 48px 44px 52px;
+  width: 100%;
+  max-width: 560px;
+  position: relative;
+  animation: modalSlideIn 0.28s ease both;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-dark);
+  opacity: 0.45;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+  line-height: 0;
+}
+
+.modal-close:hover { opacity: 1; }
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ── Register Modal ───────────────────────────────── */
+.modal--register .modal-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-dark);
+  text-align: center;
+  line-height: 1.18;
+  margin-bottom: 10px;
+}
+
+.modal--register .modal-subtitle {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  text-align: center;
+  line-height: 1.65;
+  margin-bottom: 32px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+/* ── Link Orders Modal ────────────────────────────── */
+.modal--link-orders .modal-card {
+  max-width: 660px;
+  padding: 60px 56px;
+  text-align: center;
+}
+
+.modal--link-orders .modal-title {
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--color-dark);
+  line-height: 1.12;
+  margin-bottom: 24px;
+}
+
+.modal--link-orders .modal-body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-muted);
+  line-height: 1.75;
+  margin-bottom: 52px;
+}
+
+.modal-actions-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Auth Gate Modal ──────────────────────────────── */
+.modal--auth-gate .modal-card {
+  max-width: 600px;
+  padding: 64px 52px;
+  text-align: center;
+}
+
+.modal-icon-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+}
+
+.modal-icon-ring svg {
+  width: 36px;
+  height: 36px;
+  stroke: var(--color-primary);
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.modal--auth-gate .modal-title {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+.modal--auth-gate .modal-body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.modal--auth-gate .modal-promo {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  line-height: 2.2;
+  margin-bottom: 40px;
+}
+
+.modal-actions-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

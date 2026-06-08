@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RENGA — Kể Câu Chuyện Của Riêng Bạn</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/pages/home.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <div class="site-header__top">
+        <a href="./index.html" class="site-header__logo">
+          <img class="site-header__logo-icon" src="./assets/images/logo-icon.svg" alt="RENGA" width="38" height="44">
+          <span class="site-header__logo-text">RENGA</span>
+        </a>
+
+        <div class="site-header__actions">
+          <a href="./pages/order/gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </a>
+          <a href="./pages/order/lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </a>
+          <div class="user-menu">
+            <button class="site-header__action-btn user-menu__trigger" aria-label="Tài khoản" aria-expanded="false">
+              <img class="site-header__avatar" src="https://placehold.co/45x45/f3f3f4/444748?text=U" alt="Tài khoản">
+            </button>
+            <div class="user-menu__dropdown">
+              <a href="./pages/auth/dang-nhap.html" class="user-menu__item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Đăng nhập
+              </a>
+              <a href="./pages/auth/dang-nhap.html?register=1" class="user-menu__item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Đăng ký
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-header__bottom">
+        <nav class="site-header__nav" aria-label="Menu chính">
+          <div class="site-header__nav-item">
+            <a href="./index.html" class="site-header__nav-link is-active">Trang chủ</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="./pages/danh-muc/nhan.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
+            <div class="mega-menu">
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Danh mục sản phẩm</p>
+                <a href="./pages/danh-muc/nhan.html" class="mega-menu__link">Nhẫn</a>
+                <a href="./pages/danh-muc/day-chuyen.html" class="mega-menu__link">Dây chuyền</a>
+                <a href="./pages/danh-muc/hoa-tai.html" class="mega-menu__link">Hoa tai</a>
+                <a href="./pages/danh-muc/lac-tay.html" class="mega-menu__link">Lắc tay &amp; Vòng tay</a>
+                <a href="./pages/danh-muc/charm.html" class="mega-menu__link">Charm</a>
+              </div>
+              <div class="mega-menu__col">
+                <p class="mega-menu__col-title">Bộ sưu tập</p>
+                <a href="#" class="mega-menu__link">Bộ trang sức đồng bộ</a>
+                <a href="#" class="mega-menu__link">Bộ trang sức cặp đôi</a>
+                <a href="#" class="mega-menu__link">Bộ sưu tập Hoàng Gia</a>
+              </div>
+            </div>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="#" class="site-header__nav-link">Bộ sưu tập</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="./pages/studio/the-studio.html" class="site-header__nav-link">The Studio</a>
+          </div>
+          <div class="site-header__nav-item">
+            <a href="#" class="site-header__nav-link">The Designer</a>
+          </div>
+        </nav>
+        <div class="site-header__search">
+          <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input class="site-header__search-input" type="text" placeholder="Tìm kiếm...">
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__content">
+      <h1 class="hero__title">Kể Câu Chuyện<br>Của Riêng Bạn</h1>
+      <p class="hero__subtitle">Tự tay thiết kế chiếc nhẫn trong mơ hoặc làm việc trực tiếp cùng Nhà thiết kế của RENGA.</p>
+      <div class="hero__actions">
+        <a href="./pages/danh-muc/nhan.html" class="btn btn--primary">Đặt Hàng Có Sẵn</a>
+        <a href="./pages/studio/the-studio.html" class="btn btn--outline-white">The Studio</a>
+        <a href="#" class="btn btn--outline-white">The Designer</a>
+      </div>
+    </div>
+    <div class="hero__image-wrap">
+      <img class="hero__image"
+        src="https://placehold.co/800x700/f0e0e6/c4607e?text=RENGA+Jewelry"
+        alt="Bộ sưu tập trang sức RENGA">
+    </div>
+  </section>
+
+  <!-- ===== FEATURES BAR ===== -->
+  <div class="features-bar">
+    <div class="features-bar__inner">
+      <div class="feature-item">
+        <svg class="feature-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        <span class="feature-item__text">Tự thiết kế sản phẩm theo ý thích</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span class="feature-item__text">Đặt lịch tư vấn 1:1</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="6"/>
+          <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+        </svg>
+        <span class="feature-item__text">Vật liệu chất lượng</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span class="feature-item__text">Chính sách bảo hành hấp dẫn</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CATEGORY SHOWCASE ===== -->
+  <section class="category-showcase">
+    <div class="category-showcase__inner">
+      <h2 class="section-title">Khám phá Danh mục sản phẩm</h2>
+      <div class="category-grid">
+        <a href="./pages/danh-muc/nhan.html" class="category-card">
+          <div class="category-card__image-wrap">
+            <img class="category-card__image" src="https://placehold.co/220x275/f3f3f4/1a1a1a?text=Nhan" alt="Nhẫn">
+          </div>
+          <span class="category-card__name">Nhẫn</span>
+        </a>
+        <a href="./pages/danh-muc/day-chuyen.html" class="category-card">
+          <div class="category-card__image-wrap">
+            <img class="category-card__image" src="https://placehold.co/220x275/f0ece4/1a1a1a?text=Day+Chuyen" alt="Dây Chuyền">
+          </div>
+          <span class="category-card__name">Dây Chuyền</span>
+        </a>
+        <a href="./pages/danh-muc/hoa-tai.html" class="category-card">
+          <div class="category-card__image-wrap">
+            <img class="category-card__image" src="https://placehold.co/220x275/e8d5c0/1a1a1a?text=Hoa+Tai" alt="Hoa Tai">
+          </div>
+          <span class="category-card__name">Hoa Tai</span>
+        </a>
+        <a href="./pages/danh-muc/lac-tay.html" class="category-card">
+          <div class="category-card__image-wrap">
+            <img class="category-card__image" src="https://placehold.co/220x275/e8d8a0/1a1a1a?text=Lac+Tay" alt="Lắc Tay">
+          </div>
+          <span class="category-card__name">Lắc Tay</span>
+        </a>
+        <a href="./pages/danh-muc/charm.html" class="category-card">
+          <div class="category-card__image-wrap">
+            <img class="category-card__image" src="https://placehold.co/220x275/d5e0d5/1a1a1a?text=Charm" alt="Charm">
+          </div>
+          <span class="category-card__name">Charm</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BEST SELLERS ===== -->
+  <section class="best-sellers">
+    <div class="best-sellers__inner">
+      <div class="best-sellers__header">
+        <span class="best-sellers__label">Best Sellers</span>
+        <a href="./pages/danh-muc/nhan.html" class="best-sellers__see-all">Xem tất cả</a>
+      </div>
+      <div class="best-sellers__carousel">
+        <div class="best-sellers__track">
+
+          <article class="product-card">
+            <a href="./pages/product/aura-diamond-studs.html">
+              <div class="product-card__image-wrap">
+                <span class="product-card__badge">Best Seller</span>
+                <img class="product-card__image" src="https://placehold.co/600x600/111111/cccccc?text=Aura+Diamond" alt="Aura Diamond Studs">
+              </div>
+            </a>
+            <button class="product-card__wishlist" aria-label="Yêu thích">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+            <div class="product-card__body">
+              <p class="product-card__collection">Aura Collection</p>
+              <h3 class="product-card__name">Aura Diamond Studs</h3>
+              <p class="product-card__price">12.500.000đ</p>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <a href="./pages/product/eternal-gold-band.html">
+              <div class="product-card__image-wrap">
+                <span class="product-card__badge">Best Seller</span>
+                <img class="product-card__image" src="https://placehold.co/600x600/e8d5a0/1a1a1a?text=Eternal+Gold" alt="Eternal Gold Band">
+              </div>
+            </a>
+            <button class="product-card__wishlist" aria-label="Yêu thích">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+            <div class="product-card__body">
+              <p class="product-card__collection">Eternal Love</p>
+              <h3 class="product-card__name">Eternal Gold Band</h3>
+              <p class="product-card__price">8.900.000đ</p>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <a href="./pages/product/silk-gold-bangle.html">
+              <div class="product-card__image-wrap">
+                <span class="product-card__badge">Best Seller</span>
+                <img class="product-card__image" src="https://placehold.co/600x600/f3f3f4/444444?text=Silk+Gold" alt="Silk Gold Bangle">
+              </div>
+            </a>
+            <button class="product-card__wishlist" aria-label="Yêu thích">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+            <div class="product-card__body">
+              <p class="product-card__collection">Silk Series</p>
+              <h3 class="product-card__name">Silk Gold Bangle</h3>
+              <p class="product-card__price">15.200.000đ</p>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <a href="./pages/product/solo-sparkle-pendant.html">
+              <div class="product-card__image-wrap">
+                <span class="product-card__badge">Best Seller</span>
+                <img class="product-card__image" src="https://placehold.co/600x600/1a1a1a/f0f0f0?text=Solo+Sparkle" alt="Solo Sparkle Pendant">
+              </div>
+            </a>
+            <button class="product-card__wishlist" aria-label="Yêu thích">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+            <div class="product-card__body">
+              <p class="product-card__collection">Solo Collection</p>
+              <h3 class="product-card__name">Solo Sparkle Pendant</h3>
+              <p class="product-card__price">6.400.000đ</p>
+            </div>
+          </article>
+
+        </div>
+        <button class="carousel-arrow carousel-arrow--next" aria-label="Tiếp theo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THE STUDIO ===== -->
+  <section class="studio-promo">
+    <div class="studio-promo__inner">
+      <div class="studio-promo__content">
+        <p class="studio-promo__eyebrow">The Studio</p>
+        <h2 class="studio-promo__title">Sáng tạo<br>không giới hạn</h2>
+        <ol class="studio-promo__steps">
+          <li class="studio-step-item">
+            <span class="studio-step-item__num">01</span>
+            <span class="studio-step-item__text">Chọn kiểu dáng nhẫn từ bộ sưu tập khung có bán đa dạng.</span>
+          </li>
+          <li class="studio-step-item">
+            <span class="studio-step-item__num">02</span>
+            <span class="studio-step-item__text">Lựa chọn chất liệu Vàng trắng, Vàng hồng hoặc Platinum.</span>
+          </li>
+          <li class="studio-step-item">
+            <span class="studio-step-item__num">03</span>
+            <span class="studio-step-item__text">Cá nhân hóa với đá chủ Moissanite hoặc Kim cương thiên nhiên.</span>
+          </li>
+        </ol>
+        <a href="./pages/studio/the-studio.html" class="btn btn--primary">Bắt đầu thiết kế ngay</a>
+      </div>
+      <div class="studio-promo__image-wrap">
+        <img src="https://placehold.co/600x520/2a2a2a/c4607e?text=Studio+Ring" alt="RENGA Studio thiết kế nhẫn">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THE DESIGNER ===== -->
+  <section class="designer-promo">
+    <div class="designer-promo__inner">
+      <div class="designer-promo__image-wrap">
+        <img src="https://placehold.co/600x500/f0e8e0/4a3a2a?text=Designer+Photo" alt="RENGA Designer chuyên gia trang sức">
+      </div>
+      <div class="designer-promo__content">
+        <p class="designer-promo__tag">The Designer</p>
+        <h2 class="designer-promo__subtitle">Hiện thực hóa ý tưởng<br>cùng Chuyên gia</h2>
+        <p class="designer-promo__text">Trải nghiệm dịch vụ tư vấn cá nhân hóa cao cấp nhất. Với phí dịch vụ 500.000đ, bạn sẽ được trao đổi trực tiếp cùng các chuyên gia hàng đầu của RENGA để phác thảo và chế tác món trang sức đặc biệt riêng của bạn.</p>
+        <div class="designer-promo__pricing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span class="designer-promo__pricing-text">Phí tư vấn: 500.000đ (Trừ trực tiếp vào đơn hàng)</span>
+        </div>
+        <a href="#" class="btn btn--cta-white">Đặt lịch hẹn ngay</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REVIEWS ===== -->
+  <section class="reviews">
+    <div class="reviews__inner">
+      <h2 class="reviews__title">Đánh giá về RENGA</h2>
+      <div class="reviews__grid">
+
+        <div class="review-card">
+          <div class="review-card__header">
+            <img class="review-card__avatar" src="https://placehold.co/52x52/f0d0d8/4a3040?text=LA" alt="Lan Anh">
+            <div>
+              <p class="review-card__name">Lan Anh</p>
+              <div class="review-card__stars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="review-card__text">"Chiếc nhẫn hoàn hảo hơn cả mong đợi! Dịch vụ chăm sóc khách hàng của RENGA rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."</p>
+          <p class="review-card__date">30 Tháng XI, 2023</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__header">
+            <img class="review-card__avatar" src="https://placehold.co/52x52/d8f0d0/304030?text=LA" alt="Lan Anh">
+            <div>
+              <p class="review-card__name">Lan Anh</p>
+              <div class="review-card__stars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="review-card__text">"Chiếc nhẫn hoàn hảo hơn cả mong đợi! Dịch vụ chăm sóc khách hàng của RENGA rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."</p>
+          <p class="review-card__date">30 Tháng XI, 2023</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__header">
+            <img class="review-card__avatar" src="https://placehold.co/52x52/d0d8f0/303040?text=LA" alt="Lan Anh">
+            <div>
+              <p class="review-card__name">Lan Anh</p>
+              <div class="review-card__stars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="review-card__text">"Chiếc nhẫn hoàn hảo hơn cả mong đợi! Dịch vụ chăm sóc khách hàng của RENGA rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."</p>
+          <p class="review-card__date">30 Tháng XI, 2023</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__header">
+            <img class="review-card__avatar" src="https://placehold.co/52x52/f0f0d0/3a3820?text=LA" alt="Lan Anh">
+            <div>
+              <p class="review-card__name">Lan Anh</p>
+              <div class="review-card__stars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="review-card__text">"Chiếc nhẫn hoàn hảo hơn cả mong đợi! Dịch vụ chăm sóc khách hàng của RENGA rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."</p>
+          <p class="review-card__date">30 Tháng XI, 2023</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="site-footer__main">
+      <div class="site-footer__brand">
+        <a href="./index.html" class="site-footer__logo">
+          <img class="site-footer__logo-icon" src="./assets/images/logo-icon.svg" alt="RENGA" width="28" height="34">
+          <span class="site-footer__logo-text">RENGA</span>
+        </a>
+        <p class="site-footer__tagline">Chúng tôi tin rằng mỗi trang sức đều kể một câu chuyện riêng. Hãy để chúng tôi giúp bạn kể câu chuyện của mình.</p>
+        <div class="site-footer__socials">
+          <a href="#" class="site-footer__social" aria-label="Facebook">f</a>
+          <a href="#" class="site-footer__social" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="#" class="site-footer__social" aria-label="TikTok">T</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="site-footer__col-title">Sản Phẩm</p>
+        <ul class="site-footer__col-links">
+          <li><a href="./pages/danh-muc/nhan.html">Nhẫn</a></li>
+          <li><a href="./pages/danh-muc/day-chuyen.html">Dây chuyền</a></li>
+          <li><a href="./pages/danh-muc/hoa-tai.html">Hoa tai</a></li>
+          <li><a href="./pages/danh-muc/lac-tay.html">Lắc tay</a></li>
+          <li><a href="./pages/danh-muc/charm.html">Charm</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="site-footer__col-title">Dịch Vụ</p>
+        <ul class="site-footer__col-links">
+          <li><a href="./pages/studio/the-studio.html">The Studio</a></li>
+          <li><a href="#">The Designer</a></li>
+          <li><a href="#">Bộ sưu tập</a></li>
+          <li><a href="#">Chăm sóc trang sức</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="site-footer__col-title">Hỗ Trợ</p>
+        <ul class="site-footer__col-links">
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Chính sách đổi trả</a></li>
+          <li><a href="#">Hướng dẫn chọn size</a></li>
+          <li><a href="#">Câu hỏi thường gặp</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-inner">
+        <p class="site-footer__copyright">© 2024 RENGA. Bản quyền thuộc về RENGA.</p>
+        <nav class="site-footer__legal">
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Điều khoản sử dụng</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CHAT FAB ===== -->
+  <button class="chat-fab" aria-label="Chat với chúng tôi">
+    <img src="./assets/images/icon-chatbot.svg" alt="Chat hỗ trợ" width="60" height="60">
+  </button>
+
+  <script src="./js/header.js"></script>
+  <script src="./js/pages/home.js"></script>
+</body>
+</html>

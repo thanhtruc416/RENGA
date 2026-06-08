@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quên Mật Khẩu | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/pages/auth.css">
+</head>
+<body>
+
+  <div class="auth-page-minimal">
+
+    <!-- ── Minimal Header ── -->
+    <header class="auth-minimal-header">
+      <a href="../../index.html" class="auth-minimal-logo">RENGA</a>
+      <img class="auth-minimal-gem" src="../../assets/images/logo-icon.svg" alt="RENGA" width="52" height="52">
+    </header>
+
+    <!-- ── Body ── -->
+    <div class="auth-minimal-body">
+      <div class="auth-minimal-card">
+
+        <!-- ══ STEP 1: Nhập số điện thoại ══════════════ -->
+        <div class="auth-step is-active" id="stepPhone">
+          <h1 class="auth-minimal-heading">Quên mật khẩu?</h1>
+          <p class="auth-minimal-subtext">Nhập số điện thoại của bạn để nhận mã khôi phục</p>
+
+          <div class="auth-minimal-field">
+            <label class="auth-minimal-label" for="forgotPhone">Số điện thoại</label>
+            <input
+              class="auth-minimal-input"
+              type="tel"
+              id="forgotPhone"
+              autocomplete="tel"
+              placeholder=""
+            >
+          </div>
+
+          <div class="auth-minimal-btn-row">
+            <button class="auth-btn auth-btn--dark" type="button" id="sendOtpBtn">Gửi mã</button>
+          </div>
+
+          <button class="auth-minimal-resend" type="button" id="resendBtn" disabled>
+            Gửi lại mã (<span id="resendTimer">30</span>s)
+          </button>
+
+          <!-- OTP section (hidden until code sent) -->
+          <div id="otpSection" style="display:none">
+            <label class="otp-label">Nhập mã OTP</label>
+            <div class="otp-grid" id="otpGrid">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 1">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 2">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 3">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 4">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 5">
+              <input class="otp-cell" type="number" inputmode="numeric" maxlength="1" aria-label="OTP digit 6">
+            </div>
+            <button class="auth-btn auth-btn--dark" type="button" id="confirmOtpBtn">Xác nhận</button>
+          </div>
+
+          <a href="./dang-nhap.html" class="auth-back-link">
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Quay lại đăng nhập
+          </a>
+        </div>
+
+
+        <!-- ══ STEP 2: Mật khẩu mới ════════════════════ -->
+        <div class="auth-step" id="stepNewPwd">
+          <h1 class="auth-minimal-heading">Mật khẩu mới</h1>
+
+          <div class="auth-minimal-field">
+            <label class="auth-minimal-label" for="newPwd1">Mật khẩu mới</label>
+            <input
+              class="auth-minimal-input"
+              type="password"
+              id="newPwd1"
+              autocomplete="new-password"
+              placeholder=""
+            >
+          </div>
+
+          <div class="auth-minimal-field" style="margin-top: 28px;">
+            <label class="auth-minimal-label" for="newPwd2">Xác nhận mật khẩu</label>
+            <input
+              class="auth-minimal-input"
+              type="password"
+              id="newPwd2"
+              autocomplete="new-password"
+              placeholder=""
+            >
+          </div>
+
+          <div class="auth-minimal-btn-row" style="margin-top: 40px;">
+            <button class="auth-btn auth-btn--dark" type="button" id="updatePwdBtn">Cập nhật mật khẩu</button>
+          </div>
+        </div>
+
+      </div><!-- /.auth-minimal-card -->
+    </div><!-- /.auth-minimal-body -->
+
+  </div><!-- /.auth-page-minimal -->
+
+  <script src="../../js/pages/auth.js"></script>
+</body>
+</html>

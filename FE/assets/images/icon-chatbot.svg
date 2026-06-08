@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Rounded-square background -->
+  <rect width="120" height="120" rx="26" fill="#c4607e"/>
+
+  <!-- Robot head — rounded rect body -->
+  <rect x="22" y="22" width="76" height="60" rx="14" fill="white"/>
+
+  <!-- Ears (small side bumps) -->
+  <rect x="8"  y="38" width="16" height="18" rx="6" fill="white"/>
+  <rect x="96" y="38" width="16" height="18" rx="6" fill="white"/>
+
+  <!-- Antenna pin -->
+  <rect x="56" y="8" width="8" height="16" rx="4" fill="white"/>
+  <circle cx="60" cy="7" r="5" fill="white"/>
+
+  <!-- Eyes -->
+  <circle cx="42" cy="46" r="9" fill="#c4607e"/>
+  <circle cx="78" cy="46" r="9" fill="#c4607e"/>
+  <!-- Iris glints -->
+  <circle cx="44" cy="43" r="3" fill="white"/>
+  <circle cx="80" cy="43" r="3" fill="white"/>
+
+  <!-- Smile -->
+  <path d="M 40 64 Q 60 76 80 64" stroke="#c4607e" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+  <!-- Speech-bubble tail -->
+  <path d="M 30 82 L 24 100 L 54 82 Z" fill="white"/>
+</svg>

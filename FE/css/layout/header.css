@@ -42,6 +42,25 @@
   object-fit: contain;
 }
 
+/* Text-based wordmark for pages using inline SVG logo */
+.site-header__logo-text {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+/* SVG icon support in action buttons */
+.site-header__action-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--color-dark);
+  fill: none;
+}
+
 /* Actions: cart, orders, avatar */
 .site-header__actions {
   display: flex;
@@ -85,6 +104,10 @@
   display: flex;
   align-items: center;
   gap: 40px;
+}
+
+.site-header__nav-item {
+  position: relative;
 }
 
 .site-header__nav-link {
@@ -164,14 +187,15 @@
 /* Mega menu */
 .mega-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 440px;
   background: var(--color-white);
-  border-top: 1px solid var(--color-border);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border: 1px solid rgba(196, 199, 199, 0.6);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
   display: none;
-  padding: 32px var(--container-px);
+  padding: 28px 32px;
   gap: 40px;
   z-index: 200;
 }
@@ -205,4 +229,77 @@
 
 .mega-menu__link:hover {
   color: var(--color-primary);
+}
+
+/* ── User dropdown menu ── */
+.user-menu {
+  position: relative;
+}
+
+.user-menu__trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 192px;
+  background: var(--color-white);
+  border: 1px solid rgba(196, 199, 199, 0.5);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 300;
+  overflow: hidden;
+}
+
+.user-menu.is-open .user-menu__dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.user-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--color-dark);
+  text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.user-menu__item:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.user-menu__item svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.user-menu__item--danger { color: #a0304f; }
+.user-menu__item--danger:hover { background: #fdf0f3; color: #a0304f; }
+
+.user-menu__divider {
+  height: 1px;
+  background: rgba(196, 199, 199, 0.4);
+  margin: 4px 0;
 }

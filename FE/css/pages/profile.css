@@ -1,0 +1,613 @@
+/* ===== PROFILE & REWARDS PAGES ===== */
+
+/* ── Centered Header Variant ─────────────────────── */
+.site-header--centered .site-header__top {
+  position: relative;
+}
+
+.site-header__logo-icon-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1;
+}
+
+.site-header__logo-icon-link svg {
+  width: 40px;
+  height: 48px;
+}
+
+.site-header__wordmark {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 7px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ── Profile Page Container ──────────────────────── */
+.profile-page,
+.rewards-page {
+  min-height: 100vh;
+  background: var(--color-white);
+}
+
+.profile-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 60px 80px;
+}
+
+/* ── Welcome ─────────────────────────────────────── */
+.profile-welcome {
+  margin-bottom: 32px;
+}
+
+.profile-welcome__title {
+  font-family: var(--font-serif);
+  font-size: 52px;
+  font-weight: 400;
+  color: var(--color-primary);
+  line-height: 1.1;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.profile-welcome__subtitle {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+/* ── Quick Nav Cards ─────────────────────────────── */
+.profile-quicknav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.profile-quicknav__card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-border);
+  padding: 20px 24px;
+  text-decoration: none;
+  color: var(--color-dark);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.profile-quicknav__card:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.profile-quicknav__card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.profile-quicknav__icon {
+  width: 22px;
+  height: 22px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.profile-quicknav__card-title {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+}
+
+.profile-quicknav__card-desc {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.55;
+  max-width: 240px;
+}
+
+.profile-quicknav__arrow {
+  width: 18px;
+  height: 18px;
+  color: var(--color-dark);
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ── Main Grid ───────────────────────────────────── */
+.profile-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* ── Generic Profile Card ────────────────────────── */
+.profile-card {
+  border: 1px solid var(--color-border);
+  padding: 28px 32px;
+}
+
+.profile-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.profile-card__title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+}
+
+.profile-card__action-link {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.profile-card__action-link:hover {
+  opacity: 0.75;
+}
+
+/* ── Profile Form ────────────────────────────────── */
+.profile-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 28px;
+}
+
+.profile-form__field--full {
+  grid-column: 1 / -1;
+}
+
+.profile-form__label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.profile-form__value {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-dark);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+  display: block;
+  line-height: 1.4;
+}
+
+.profile-form__input {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-dark);
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  outline: none;
+  background: var(--color-bg-card);
+  width: 100%;
+  padding: 10px 12px;
+  transition: border-color 0.2s;
+}
+
+.profile-form__input:focus {
+  border-bottom-color: var(--color-primary);
+}
+
+.profile-form__input::placeholder {
+  color: var(--color-border);
+}
+
+/* ── Member Tier Card ────────────────────────────── */
+.member-tier-card {
+  background: var(--color-dark);
+  color: var(--color-white);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.member-tier-card__top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.member-tier-card__label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.member-tier-card__gem {
+  width: 28px;
+  height: 28px;
+  color: var(--color-primary);
+}
+
+.member-tier-card__tier-name {
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--color-white);
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+.member-tier-card__progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.member-tier-card__points-current,
+.member-tier-card__points-next {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.member-tier-card__progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.member-tier-card__progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.member-tier-card__divider-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 14px;
+}
+
+.member-tier-card__history {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.member-tier-card__history-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.member-tier-card__history-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.member-tier-card__history-value {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.member-tier-card__watermark {
+  position: absolute;
+  bottom: -28px;
+  right: -28px;
+  width: 150px;
+  height: 150px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* ── Security Section ────────────────────────────── */
+.security-card {
+  border: 1px solid var(--color-border);
+  padding: 28px 32px;
+}
+
+.security-card__title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  margin-bottom: 24px;
+}
+
+.security-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 28px;
+  margin-bottom: 28px;
+}
+
+.security-card__submit {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--color-dark);
+  color: var(--color-white);
+  border: none;
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.security-card__submit:hover {
+  background: #333;
+}
+
+/* ═══════════════════════════════════════════════════
+   REWARDS PAGE
+════════════════════════════════════════════════════ */
+
+/* ── Rewards Section ─────────────────────────────── */
+.rewards-section {
+  border: 1px solid var(--color-border);
+  padding: 28px 32px;
+  margin-bottom: 28px;
+}
+
+.rewards-section__title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  margin-bottom: 24px;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.reward-card {
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reward-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reward-card__icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-primary);
+  fill: none;
+}
+
+.reward-card__pts {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.reward-card__name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+.reward-card__desc {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.reward-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-dark);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  width: 100%;
+}
+
+.reward-card__btn:hover {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+/* ── History Layout ──────────────────────────────── */
+.rewards-history-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.rewards-sidebar {
+  padding-top: 4px;
+}
+
+.rewards-sidebar__back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-dark);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.rewards-sidebar__back:hover {
+  color: var(--color-primary);
+}
+
+.rewards-sidebar__back svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+
+/* ── Points History ──────────────────────────────── */
+.points-history {
+  border: 1px solid var(--color-border);
+  padding: 28px 32px;
+}
+
+.points-history__title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  margin-bottom: 24px;
+}
+
+.points-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.points-table thead th {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-align: left;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.points-table thead th:last-child {
+  text-align: right;
+}
+
+.points-table tbody tr {
+  border-bottom: 1px solid rgba(196, 199, 199, 0.3);
+}
+
+.points-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.points-table tbody td {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-dark);
+  padding: 16px 0;
+  vertical-align: middle;
+}
+
+.points-table td:last-child {
+  text-align: right;
+  font-weight: 700;
+}
+
+.points-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.points-badge--earned {
+  background: rgba(196, 96, 126, 0.1);
+  color: var(--color-primary);
+}
+
+.points-badge--bonus {
+  background: rgba(26, 26, 26, 0.08);
+  color: var(--color-dark);
+}
+
+.points-badge--redeemed {
+  background: rgba(196, 96, 126, 0.12);
+  color: var(--color-primary);
+}
+
+.points-value--positive {
+  color: var(--color-primary);
+}
+
+.points-value--negative {
+  color: var(--color-muted);
+}
