@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xác nhận đổi lịch | RENGA</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/pages/modal.css" />
+</head>
+<body>
+
+  <div class="modal-backdrop">
+    <div class="modal-card modal-reschedule"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reschedule-title">
+
+      <!-- Info icon -->
+      <div class="modal-reschedule__icon">
+        <img src="https://www.figma.com/api/mcp/asset/b142d92d-a0d0-46cb-9c75-d3144809d411"
+          alt="" aria-hidden="true" />
+      </div>
+
+      <!-- Body -->
+      <div class="modal-reschedule__body">
+        <h1 class="modal-reschedule__title" id="reschedule-title">Xác nhận đổi lịch</h1>
+        <span class="modal-reschedule__appt-id">#AH-8924102</span>
+        <p class="modal-reschedule__desc">Bạn có chắc chắn muốn thay đổi lịch hẹn này không? Hành động này sẽ cập nhật lịch hẹn cũ của bạn.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="modal-reschedule__actions">
+        <button class="modal-btn modal-btn--primary" id="confirm-btn">XÁC NHẬN</button>
+        <button class="modal-btn modal-btn--outline" id="dismiss-btn">HỦY</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var confirmBtn = document.getElementById('confirm-btn');
+      var dismissBtn = document.getElementById('dismiss-btn');
+
+      function close() {
+        window.history.back();
+      }
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+          /* Placeholder: confirm reschedule */
+          console.log('Xác nhận đổi lịch #AH-8924102');
+        });
+      }
+
+      if (dismissBtn) dismissBtn.addEventListener('click', close);
+
+      /* Close on backdrop click */
+      document.querySelector('.modal-backdrop').addEventListener('click', function (e) {
+        if (e.target === this) close();
+      });
+
+      /* Close on Escape */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+    }());
+  </script>
+
+</body>
+</html>
