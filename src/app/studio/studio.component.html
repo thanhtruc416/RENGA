@@ -1,971 +1,619 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Studio — Tự thiết kế trang sức | RENGA</title>
-  <link rel="stylesheet" href="../../css/main.css" />
-  <link rel="stylesheet" href="../../css/pages/studio.css" />
-  <link rel="stylesheet" href="../../css/pages/studio-checkout.css" />
-</head>
-<body class="studio-page">
+<section class="studio">
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header__inner">
+  <!-- ── Step Progress ─────────────────────────────── -->
+  <nav class="step-progress" aria-label="Các bước tạo trang sức">
+    @for (step of steps; track step.n) {
+      <div
+        class="step-progress__item"
+        [class.step-progress__item--active]="currentStep() === step.n"
+        [class.step-progress__item--done]="currentStep() > step.n"
+        (click)="currentStep() > step.n && goToStep(step.n)"
+        [style.cursor]="currentStep() > step.n ? 'pointer' : 'default'"
+        [attr.aria-current]="currentStep() === step.n ? 'step' : null"
+      >
+        <span class="step-progress__circle">
+          @if (currentStep() > step.n) {
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            {{ step.n }}
+          }
+        </span>
+        <span class="step-progress__label">{{ step.label }}</span>
+      </div>
+      @if (!$last) {
+        <div class="step-progress__connector" [class.step-progress__connector--done]="currentStep() > step.n"></div>
+      }
+    }
+  </nav>
 
-      <div class="site-header__top">
-        <a href="../../index.html" class="site-header__logo">
-          <img class="site-header__logo-icon"
-            src="https://www.figma.com/api/mcp/asset/218e5260-c802-4c71-aee6-f8e467205227"
-            alt="RENGA icon" />
-          <img class="site-header__logo-wordmark"
-            src="https://www.figma.com/api/mcp/asset/218e5260-c802-4c71-aee6-f8e467205227"
-            alt="RENGA" />
-        </a>
-
-        <div class="site-header__actions">
-          <a href="../order/gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
-            <img src="https://www.figma.com/api/mcp/asset/e8b34603-3dcc-437f-9a74-8f18e2a63741" alt="Giỏ hàng" />
-          </a>
-          <a href="../order/lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
-            <img src="https://www.figma.com/api/mcp/asset/52adc008-f551-4531-8f79-d2e52d7844d6" alt="Đơn hàng" />
-          </a>
-          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
-            <img class="site-header__avatar"
-              src="https://www.figma.com/api/mcp/asset/3ce6c62c-e34c-4c51-8bff-fa8ddf3b7175"
-              alt="Tài khoản" />
-          </a>
-        </div>
+  <!-- ══════════════════════════════════════════════════
+       STEP 1 — Chọn phôi
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 1) {
+    <div class="studio-card studio-card--wide">
+      <div class="studio-card__head">
+        <h2 class="studio-card__title">Chọn phôi sản phẩm</h2>
+        <p class="studio-card__desc">Bắt đầu hành trình tạo nên kiệt tác của riêng bạn.</p>
       </div>
 
-      <div class="site-header__bottom">
-        <nav class="site-header__nav" aria-label="Menu chính">
-          <div class="site-header__nav-item">
-            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
-            <div class="mega-menu">
-              <div class="mega-menu__col">
-                <p class="mega-menu__col-title">Danh mục</p>
-                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Nhẫn</a>
-                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Dây chuyền</a>
-                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Hoa tai</a>
-                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Lắc tay</a>
-                <a href="../product/danh-muc-san-pham.html" class="mega-menu__link">Charm</a>
-              </div>
+      <div class="category-grid">
+        @for (cat of categories; track cat.id) {
+          <button class="category-card" (click)="selectCategory(cat.id)" type="button">
+            <div class="category-card__img-wrap">
+              <img class="category-card__img" [src]="cat.image" [alt]="cat.name" loading="lazy" />
             </div>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="the-studio.html" class="site-header__nav-link is-active">The Studio</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
-          </div>
-        </nav>
-
-        <div class="site-header__search">
-          <img class="site-header__search-icon"
-            src="https://www.figma.com/api/mcp/asset/b0f3b2cd-2f0d-4910-b61e-09afab6604b4"
-            alt="" aria-hidden="true" />
-          <input class="site-header__search-input" type="search"
-            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
-        </div>
+            <div class="category-card__footer">
+              <div class="category-card__info">
+                <span class="category-card__eyebrow">Danh mục</span>
+                <span class="category-card__name">{{ cat.name }}</span>
+              </div>
+              <span class="category-card__cta">CHỌN</span>
+            </div>
+          </button>
+        }
       </div>
-
     </div>
-  </header>
+  }
 
-  <!-- ===== MAIN CONTENT ===== -->
-  <main>
-    <div class="studio-step-section">
+  <!-- ══════════════════════════════════════════════════
+       STEP 2 — Chọn chất liệu
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 2) {
+    <div class="studio-card studio-card--split">
 
-      <!-- Step progress bar -->
-      <div class="step-progress" role="list" aria-label="Tiến trình thiết kế">
-        <div class="step-progress__step is-active" role="listitem" aria-current="step" data-step-index="0">
-          <div class="step-progress__number">1</div>
-          <span class="step-progress__label">Chọn phôi</span>
-        </div>
-        <div class="step-progress__connector"></div>
-        <div class="step-progress__step" role="listitem" data-step-index="1">
-          <div class="step-progress__number">2</div>
-          <span class="step-progress__label">Chất liệu</span>
-        </div>
-        <div class="step-progress__connector"></div>
-        <div class="step-progress__step" role="listitem" data-step-index="2">
-          <div class="step-progress__number">3</div>
-          <span class="step-progress__label">Đá quý</span>
-        </div>
-        <div class="step-progress__connector"></div>
-        <div class="step-progress__step" role="listitem" data-step-index="3">
-          <div class="step-progress__number">4</div>
-          <span class="step-progress__label">Khắc chữ</span>
-        </div>
-        <div class="step-progress__connector"></div>
-        <div class="step-progress__step" role="listitem" data-step-index="4">
-          <div class="step-progress__number">5</div>
-          <span class="step-progress__label">Đặt hàng</span>
-        </div>
-        <div class="step-progress__connector"></div>
-        <div class="step-progress__step" role="listitem" data-step-index="5">
-          <div class="step-progress__number">6</div>
-          <span class="step-progress__label">Thanh toán</span>
-        </div>
-      </div>
-
-      <!-- ===== STEP 1: Chọn phôi sản phẩm ===== -->
-      <div class="studio-flow__step" data-step="1">
-        <section class="studio-step">
-          <h1 class="studio-step__title">Chọn phôi sản phẩm</h1>
-          <p class="studio-step__subtitle">Bắt đầu hành trình tạo nên kiệt tác của riêng bạn.</p>
-        </section>
-
-        <div class="studio-grid" id="studio-grid" role="list" aria-label="Danh sách phôi sản phẩm">
-
-          <article class="studio-card" role="listitem" data-category="nhan" tabindex="0">
-            <button class="studio-card__wishlist" aria-label="Yêu thích Nhẫn">
-              <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" />
+      <div class="studio-card__preview">
+        <img
+          src="https://www.figma.com/api/mcp/asset/644d2dc6-de4c-49c0-96b9-5f97e1095c9e"
+          alt="Nhẫn vàng Heritage"
+          class="studio-card__preview-img"
+          loading="eager"
+        />
+        <div class="studio-card__preview-foot">
+          <span class="studio-card__preview-label">Góc nhìn 01</span>
+          <div class="studio-card__preview-btns">
+            <button class="studio-card__preview-btn" type="button" aria-label="Phóng to">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
             </button>
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/5011f25a-b583-42e3-9e78-0f3b4012575b" alt="Nhẫn" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Nhẫn</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="nhan">CHỌN</button>
-            </div>
-          </article>
-
-          <article class="studio-card" role="listitem" data-category="day-chuyen" tabindex="0">
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/c8927929-562a-44fd-a521-3430608773be" alt="Dây chuyền" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Dây chuyền</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="day-chuyen">CHỌN</button>
-            </div>
-          </article>
-
-          <article class="studio-card" role="listitem" data-category="hoa-tai" tabindex="0">
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/3089f2cd-fdeb-41fb-bbfc-364e223a3515" alt="Hoa tai" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Hoa tai</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="hoa-tai">CHỌN</button>
-            </div>
-          </article>
-
-          <article class="studio-card" role="listitem" data-category="lac-tay" tabindex="0">
-            <button class="studio-card__wishlist" aria-label="Yêu thích Lắc tay">
-              <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" />
-            </button>
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/5011f25a-b583-42e3-9e78-0f3b4012575b" alt="Lắc tay" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Lắc tay</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="lac-tay">CHỌN</button>
-            </div>
-          </article>
-
-          <article class="studio-card" role="listitem" data-category="charm" tabindex="0">
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/c8927929-562a-44fd-a521-3430608773be" alt="Charm" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Charm</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="charm">CHỌN</button>
-            </div>
-          </article>
-
-          <article class="studio-card" role="listitem" data-category="phu-kien" tabindex="0">
-            <div class="studio-card__image">
-              <img src="https://www.figma.com/api/mcp/asset/3089f2cd-fdeb-41fb-bbfc-364e223a3515" alt="Phụ kiện" loading="lazy" />
-            </div>
-            <div class="studio-card__footer">
-              <div class="studio-card__meta">
-                <p class="studio-card__category">Category</p>
-                <h3 class="studio-card__name">Phụ kiện</h3>
-              </div>
-              <button class="btn btn--dark studio-card__btn" data-category="phu-kien">CHỌN</button>
-            </div>
-          </article>
-
-        </div>
-      </div>
-      <!-- /STEP 1 -->
-
-      <!-- ===== STEP 2: Chọn chất liệu ===== -->
-      <div class="studio-flow__step" data-step="2">
-        <section class="studio-step">
-          <h1 class="studio-step__title">Chọn chất liệu</h1>
-          <p class="studio-step__subtitle">
-            Hãy chọn loại kim loại quý cho kiệt tác của bạn.<br />
-            Mỗi chất liệu mang một câu chuyện và độ bền riêng biệt.
-          </p>
-        </section>
-
-        <div class="studio-config">
-
-          <!-- Left: 3D visual preview -->
-          <div class="studio-preview">
-            <div class="studio-preview__viewport">
-              <img
-                class="studio-preview__image"
-                src="https://www.figma.com/api/mcp/asset/7f3f0366-04db-4f3e-897f-560e1c36c82f"
-                alt="Xem trước thiết kế"
-              />
-              <div class="studio-preview__overlay" id="color-overlay" style="background: #d4af37;"></div>
-            </div>
-            <div class="studio-preview__toolbar">
-              <div class="studio-preview__label">Studio View 01</div>
-              <div class="studio-preview__actions">
-                <button class="studio-preview__btn" aria-label="Xem 360°">
-                  <img src="https://www.figma.com/api/mcp/asset/530d40b8-a816-42b5-8290-c2208009eefa" alt="" />
-                </button>
-                <button class="studio-preview__btn" aria-label="Phóng to">
-                  <img src="https://www.figma.com/api/mcp/asset/0193dba0-82e2-4793-9347-a5046090b5ac" alt="" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Material options -->
-          <div class="studio-options">
-            <div class="studio-options__list">
-
-              <button
-                class="material-option is-selected"
-                data-material="vang-18k"
-                data-label="Vàng 18K"
-                data-price="15 triệu VNĐ"
-                data-price-vnd="15000000"
-                data-color="#d4af37"
-              >
-                <div class="material-option__left">
-                  <div class="material-option__swatch" style="background: #d4af37;"></div>
-                  <div class="material-option__info">
-                    <span class="material-option__name">Vàng 18K</span>
-                    <span class="material-option__tag">Signature Choice</span>
-                  </div>
-                </div>
-                <span class="material-option__price">15 triệu VNĐ</span>
-              </button>
-
-              <button
-                class="material-option"
-                data-material="vang-14k"
-                data-label="Vàng 14K"
-                data-price="12 triệu VNĐ"
-                data-price-vnd="12000000"
-                data-color="#e5c07b"
-              >
-                <div class="material-option__left">
-                  <div class="material-option__swatch" style="background: #e5c07b;"></div>
-                  <div class="material-option__info">
-                    <span class="material-option__name">Vàng 14K</span>
-                    <span class="material-option__tag">Balanced Elegance</span>
-                  </div>
-                </div>
-                <span class="material-option__price">12 triệu VNĐ</span>
-              </button>
-
-              <button
-                class="material-option"
-                data-material="bach-kim"
-                data-label="Bạch kim"
-                data-price="20 triệu VNĐ"
-                data-price-vnd="20000000"
-                data-color="#e5e4e2"
-              >
-                <div class="material-option__left">
-                  <div class="material-option__swatch" style="background: #e5e4e2;"></div>
-                  <div class="material-option__info">
-                    <span class="material-option__name">Bạch kim</span>
-                    <span class="material-option__tag">Eternal Strength</span>
-                  </div>
-                </div>
-                <span class="material-option__price">20 triệu VNĐ</span>
-              </button>
-
-              <button
-                class="material-option"
-                data-material="bac-925"
-                data-label="Bạc 925"
-                data-price="8 triệu VNĐ"
-                data-price-vnd="8000000"
-                data-color="#c0c0c0"
-              >
-                <div class="material-option__left">
-                  <div class="material-option__swatch" style="background: #c0c0c0;"></div>
-                  <div class="material-option__info">
-                    <span class="material-option__name">Bạc 925</span>
-                    <span class="material-option__tag">Classic Modernity</span>
-                  </div>
-                </div>
-                <span class="material-option__price">8 triệu VNĐ</span>
-              </button>
-
-            </div>
-
-            <!-- Step navigation -->
-            <div class="studio-options__nav">
-              <button class="studio-nav__back" data-target-step="1">
-                <img src="https://www.figma.com/api/mcp/asset/813d7ab9-5fe1-4e15-85f1-8c63f830cd93" alt="" aria-hidden="true" />
-                Trước đó
-              </button>
-              <button class="btn btn--dark studio-nav__next" data-target-step="3">
-                TIẾP THEO
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <!-- /STEP 2 -->
-
-      <!-- ===== STEP 3: Tùy biến đá ===== -->
-      <div class="studio-flow__step" data-step="3">
-
-        <!-- Title row: heading + skip button -->
-        <div class="studio-step studio-step--with-skip">
-          <div class="studio-step__heading">
-            <h1 class="studio-step__title">Tùy biến đá</h1>
-            <p class="studio-step__subtitle">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn.</p>
-          </div>
-          <button class="btn btn--dark studio-step__skip" data-target-step="4">BỎ QUA</button>
-        </div>
-
-        <!-- 2-column config layout -->
-        <div class="studio-config studio-config--gem">
-
-          <!-- LEFT: visual preview -->
-          <div class="stone-preview">
-            <div class="stone-preview__viewport">
-              <img
-                class="stone-preview__image"
-                src="https://www.figma.com/api/mcp/asset/aa96bd14-564a-4da6-a6b8-6f8f788c0e23"
-                alt="Heritage Solitaire Mount"
-              />
-              <div class="stone-preview__controls">
-                <button class="studio-preview__btn" aria-label="Phóng to">
-                  <img src="https://www.figma.com/api/mcp/asset/6b940b9a-90ef-45a8-bfe5-e7c6ca1cac6b" alt="" />
-                </button>
-                <button class="studio-preview__btn" aria-label="Xem 360°">
-                  <img src="https://www.figma.com/api/mcp/asset/fb95319b-cd22-4a3c-9c7b-372c409161ad" alt="" />
-                </button>
-              </div>
-            </div>
-            <div class="stone-preview__info">
-              <h2 class="stone-preview__name">Heritage Solitaire Mount</h2>
-              <p class="stone-preview__desc">
-                Thiết kế đặc trưng của chúng tôi được chế tác chính xác để làm tăng độ sáng
-                và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn.
-              </p>
-            </div>
-          </div>
-
-          <!-- RIGHT: stone options panel -->
-          <div class="stone-panel">
-
-            <!-- 01. Stone type -->
-            <div class="stone-panel__section">
-              <div class="stone-panel__section-header">
-                <span class="stone-panel__section-label">01. Chọn loại đá</span>
-                <span class="stone-panel__section-value" id="stone-label">Kim cương</span>
-              </div>
-
-              <div class="stone-selector" id="stone-selector" role="group" aria-label="Loại đá quý">
-                <button class="stone-option is-selected"
-                  data-stone="diamond"
-                  data-stone-label="Kim cương"
-                  data-stone-price="10000000"
-                  aria-pressed="true">
-                  <div class="stone-option__icon">
-                    <img src="https://www.figma.com/api/mcp/asset/9b97f79c-91e6-4fe3-ab97-9030aa5ea42b" alt="" />
-                  </div>
-                  <span class="stone-option__name">DIAMOND</span>
-                </button>
-
-                <button class="stone-option"
-                  data-stone="ruby"
-                  data-stone-label="Ruby"
-                  data-stone-price="8000000"
-                  aria-pressed="false">
-                  <div class="stone-option__icon">
-                    <img src="https://www.figma.com/api/mcp/asset/7e0714a7-feb8-4b18-a28c-9d6c4e8a447c" alt="" />
-                  </div>
-                  <span class="stone-option__name">RUBY</span>
-                </button>
-
-                <button class="stone-option"
-                  data-stone="sapphire"
-                  data-stone-label="Sapphire"
-                  data-stone-price="7000000"
-                  aria-pressed="false">
-                  <div class="stone-option__icon">
-                    <img src="https://www.figma.com/api/mcp/asset/73a5eaf7-85b6-435e-b5c3-980d437c3d98" alt="" />
-                  </div>
-                  <span class="stone-option__name">SAPPHIRE</span>
-                </button>
-
-                <button class="stone-option"
-                  data-stone="emerald"
-                  data-stone-label="Emerald"
-                  data-stone-price="6000000"
-                  aria-pressed="false">
-                  <div class="stone-option__icon">
-                    <img src="https://www.figma.com/api/mcp/asset/b1c63381-8ffd-4d80-9727-042ab18f2613" alt="" />
-                  </div>
-                  <span class="stone-option__name">EMERALD</span>
-                </button>
-
-                <button class="stone-option stone-option--muted"
-                  data-stone="none"
-                  data-stone-label="Không đá"
-                  data-stone-price="0"
-                  aria-pressed="false">
-                  <div class="stone-option__icon stone-option__icon--dim">
-                    <img src="https://www.figma.com/api/mcp/asset/3712648d-0dca-4c1d-b500-95142a713922" alt="" />
-                  </div>
-                  <span class="stone-option__name">MOUNT<br>ONLY</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 02. Carat weight -->
-            <div class="stone-panel__section">
-              <div class="stone-panel__section-header">
-                <span class="stone-panel__section-label">02. Carat</span>
-                <span class="stone-panel__section-value" id="carat-label">1.0 Carat</span>
-              </div>
-              <div class="carat-slider">
-                <input
-                  class="carat-slider__input"
-                  id="carat-input"
-                  type="range"
-                  min="0.5"
-                  max="5.0"
-                  step="0.1"
-                  value="1.0"
-                  aria-label="Carat weight"
-                />
-                <div class="carat-slider__scale">
-                  <span>0.5CT</span>
-                  <span>1.5CT</span>
-                  <span>3.0CT</span>
-                  <span>5.0CT</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Price breakdown -->
-            <div class="price-breakdown">
-              <p class="price-breakdown__heading">Thành phần</p>
-              <div class="price-breakdown__rows">
-                <div class="price-breakdown__row">
-                  <span class="price-breakdown__item">Heritage Mount Phôi</span>
-                  <span class="price-breakdown__amount" id="price-mount">4.000.000</span>
-                </div>
-                <div class="price-breakdown__row">
-                  <span class="price-breakdown__item">18K White Gold</span>
-                  <span class="price-breakdown__amount" id="price-material">8.000.000</span>
-                </div>
-                <div class="price-breakdown__row price-breakdown__row--border">
-                  <span class="price-breakdown__item" id="price-stone-label">Diamond (1.0ct)</span>
-                  <span class="price-breakdown__amount" id="price-stone">10.000.000</span>
-                </div>
-                <div class="price-breakdown__row price-breakdown__row--total">
-                  <span class="price-breakdown__total-label">Tổng giá trị</span>
-                  <span class="price-breakdown__total-amount" id="price-total">22.000.000 VNĐ</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="stone-panel__actions">
-              <button class="btn btn--primary stone-panel__confirm" data-target-step="4">
-                Xác nhận thiết kế
-              </button>
-              <button class="studio-nav__back" data-target-step="2">
-                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
-                Trước đó
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <!-- /STEP 3 -->
-
-      <!-- ===== STEP 4: Tùy chọn khắc chữ ===== -->
-      <div class="studio-flow__step" data-step="4">
-
-        <!-- Title row with skip button -->
-        <div class="studio-step studio-step--with-skip">
-          <div class="studio-step__heading">
-            <h1 class="studio-step__title">Tùy chọn khắc chữ</h1>
-            <p class="studio-step__subtitle">Công nghệ khắc laser chính xác giúp lưu giữ dấu ấn ấy bền vững theo thời gian.</p>
-          </div>
-          <button class="btn btn--dark studio-step__skip" data-target-step="5">BỎ QUA</button>
-        </div>
-
-        <!-- 2-column layout -->
-        <div class="studio-config studio-config--engrave">
-
-          <!-- LEFT: product gallery -->
-          <div class="engrave-gallery" id="engrave-gallery">
-            <div class="engrave-gallery__main">
-              <img
-                class="engrave-gallery__main-img"
-                id="engrave-main-img"
-                src="https://www.figma.com/api/mcp/asset/3912ec6a-69d0-4cd5-af3c-52ad4d6f0713"
-                alt="Bên trong nhẫn"
-              />
-              <div class="engrave-gallery__controls">
-                <button class="studio-preview__btn" aria-label="Phóng to">
-                  <img src="https://www.figma.com/api/mcp/asset/6b940b9a-90ef-45a8-bfe5-e7c6ca1cac6b" alt="" />
-                </button>
-                <button class="studio-preview__btn" aria-label="Xem 360°">
-                  <img src="https://www.figma.com/api/mcp/asset/fb95319b-cd22-4a3c-9c7b-372c409161ad" alt="" />
-                </button>
-              </div>
-            </div>
-            <div class="engrave-gallery__thumbs">
-              <button class="engrave-gallery__thumb is-selected" aria-pressed="true">
-                <img src="https://www.figma.com/api/mcp/asset/3912ec6a-69d0-4cd5-af3c-52ad4d6f0713" alt="Góc nhìn 1" />
-              </button>
-              <button class="engrave-gallery__thumb" aria-pressed="false">
-                <img src="https://www.figma.com/api/mcp/asset/aa96bd14-564a-4da6-a6b8-6f8f788c0e23" alt="Góc nhìn 2" />
-              </button>
-              <button class="engrave-gallery__thumb" aria-pressed="false">
-                <img src="https://www.figma.com/api/mcp/asset/7f3f0366-04db-4f3e-897f-560e1c36c82f" alt="Góc nhìn 3" />
-              </button>
-            </div>
-          </div>
-
-          <!-- RIGHT: engraving options panel -->
-          <div class="engrave-panel">
-
-            <!-- 01. Nội dung khắc chữ -->
-            <div class="engrave-panel__section">
-              <div class="engrave-panel__section-header">
-                <span class="engrave-panel__section-label">01. Nội dung khắc chữ</span>
-              </div>
-              <input
-                class="engrave-panel__input"
-                id="engrave-input"
-                type="text"
-                maxlength="25"
-                placeholder="Nhập tại đây..."
-                aria-label="Nội dung khắc chữ"
-              />
-              <div class="engrave-panel__input-meta">
-                <span class="engrave-panel__counter" id="engrave-counter">0 / 25 KÝ TỰ</span>
-                <span class="engrave-panel__free-label">MIỄN PHÍ 10 KÝ TỰ</span>
-              </div>
-            </div>
-
-            <!-- 02. Chọn font chữ -->
-            <div class="engrave-panel__section">
-              <div class="engrave-panel__section-header">
-                <span class="engrave-panel__section-label">02. Chọn font chữ</span>
-              </div>
-              <div class="font-selector" id="font-selector" role="group" aria-label="Chọn font chữ">
-                <button class="font-btn is-selected" data-font="serif-italic" aria-pressed="true">
-                  SERIF ITALIC
-                </button>
-                <button class="font-btn" data-font="classic-sans" aria-pressed="false">
-                  CLASSIC SANS
-                </button>
-              </div>
-            </div>
-
-            <!-- Extra fee -->
-            <div class="engrave-panel__fee">
-              <span class="engrave-panel__fee-label">PHÍ TRẢ THÊM:</span>
-              <span class="engrave-panel__fee-amount" id="engrave-fee">0 VNĐ</span>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="engrave-panel__actions">
-              <button class="btn btn--primary engrave-panel__confirm" data-target-step="5">
-                XÁC NHẬN THIẾT KẾ
-              </button>
-              <button class="studio-nav__back" data-target-step="3">
-                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
-                Trước đó
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <!-- /STEP 4 -->
-
-      <!-- ===== STEP 5: Xác nhận & Thanh toán ===== -->
-      <div class="studio-flow__step" data-step="5">
-
-        <section class="studio-step">
-          <h1 class="studio-step__title">Xác nhận &amp; Thanh toán</h1>
-        </section>
-
-        <div class="studio-config studio-config--order">
-
-          <!-- LEFT: product preview + back -->
-          <div class="order-preview">
-            <div class="order-preview__image-wrap">
-              <img
-                class="order-preview__image"
-                src="https://www.figma.com/api/mcp/asset/b867ce8b-2a6d-4756-af81-a05cae5fb4de"
-                alt="Thiết kế của bạn"
-              />
-            </div>
-            <button class="studio-nav__back order-preview__back" data-target-step="4">
-              <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
-              Trước đó
+            <button class="studio-card__preview-btn" type="button" aria-label="Xoay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
             </button>
           </div>
+        </div>
+      </div>
 
-          <!-- RIGHT: price analysis + actions -->
-          <div class="order-panel">
+      <div class="studio-card__options">
+        <div class="studio-card__head">
+          <h2 class="studio-card__title">Chọn chất liệu</h2>
+          <p class="studio-card__desc">Hãy chọn loại kim loại quý cho kiệt tác của bạn. Mỗi chất liệu mang một câu chuyện và độ bền riêng biệt.</p>
+        </div>
 
-            <!-- Price analysis card -->
-            <div class="order-card">
-              <div class="order-card__heading">
-                <span class="order-card__heading-text">PHÂN TÍCH GIÁ CHI TIẾT</span>
-              </div>
+        <div class="material-list">
+          @for (mat of materials; track mat.id) {
+            <button
+              class="material-option"
+              [class.material-option--selected]="selectedMaterial().id === mat.id"
+              (click)="selectMaterial(mat)"
+              type="button"
+            >
+              <span class="material-option__swatch" [style.background]="mat.color"></span>
+              <span class="material-option__info">
+                <span class="material-option__name">{{ mat.label }}</span>
+                <span class="material-option__tag">{{ mat.tag }}</span>
+              </span>
+              <span class="material-option__price">{{ mat.price }}</span>
+            </button>
+          }
+        </div>
 
-              <div class="order-card__items" id="order-items" aria-live="polite">
-                <!-- populated by buildOrderSummary() in studio.js -->
-              </div>
+        <div class="studio-card__actions">
+          <button class="btn btn--ghost" (click)="goToStep(1)" type="button">← Trước đó</button>
+          <button class="btn btn--primary" (click)="goToStep(3)" type="button">TIẾP THEO</button>
+        </div>
+      </div>
+    </div>
+  }
 
-              <div class="order-card__total">
-                <span class="order-card__total-label">TỔNG CỘNG</span>
-                <span class="order-card__total-amount" id="order-total">0₫</span>
-              </div>
+  <!-- ══════════════════════════════════════════════════
+       STEP 3 — Tùy biến đá
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 3) {
+    <div class="studio-card studio-card--split">
 
-              <div class="order-card__actions">
-                <button class="btn btn--primary order-card__cta" data-target-step="6">
-                  ĐẶT HÀNG NGAY
-                  <img src="https://www.figma.com/api/mcp/asset/383d1160-83f9-4d49-84b9-c4b82d05ed18" alt="" aria-hidden="true" />
-                </button>
-                <button class="btn btn--outline order-card__cart">
-                  THÊM VÀO GIỎ
-                </button>
-              </div>
-            </div>
-
-            <!-- Secondary actions -->
-            <div class="order-secondary">
-              <button class="order-action-btn" aria-label="Lưu thiết kế">
-                <img class="order-action-btn__icon" src="https://www.figma.com/api/mcp/asset/37b28809-8d84-4f5a-a035-363b94cb8b7d" alt="" aria-hidden="true" />
-                <span class="order-action-btn__label">LƯU THIẾT KẾ</span>
-              </button>
-              <button class="order-action-btn" aria-label="Chia sẻ thiết kế">
-                <span class="order-action-btn__badge">+30pts</span>
-                <img class="order-action-btn__icon" src="https://www.figma.com/api/mcp/asset/ec60ad77-29d8-4de3-a7dd-a9b7f84d83a7" alt="" aria-hidden="true" />
-                <span class="order-action-btn__label">CHIA SẺ</span>
-              </button>
-            </div>
-
+      <div class="studio-card__preview">
+        <img
+          src="https://www.figma.com/api/mcp/asset/9668872f-01b4-4e57-9ebc-2b65b8ac1203"
+          alt="Nhẫn kim cương Heritage"
+          class="studio-card__preview-img"
+          loading="eager"
+        />
+        <div class="studio-card__preview-name">
+          <p class="studio-card__preview-name-title">Phôi Solitaire Heritage</p>
+          <p class="studio-card__preview-name-desc">Thiết kế đặc trưng chúng tôi được chế tác chính xác để làm tăng độ sáng và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn.</p>
+        </div>
+        <div class="studio-card__preview-foot">
+          <div class="studio-card__preview-btns">
+            <button class="studio-card__preview-btn" type="button" aria-label="Phóng to">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </button>
+            <button class="studio-card__preview-btn" type="button" aria-label="Xoay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
-      <!-- /STEP 5 -->
 
-      <!-- ===== STEP 6: Xác nhận & Thanh toán ===== -->
-      <div class="studio-flow__step" data-step="6">
-
-        <section class="studio-step">
-          <h1 class="studio-step__title">Xác nhận &amp; Thanh toán</h1>
-        </section>
-
-        <div class="stu-checkout-body">
-
-          <!-- LEFT: shipping + payment forms -->
+      <div class="studio-card__options">
+        <div class="studio-card__head studio-card__head--row">
           <div>
+            <h2 class="studio-card__title">Tùy biến đá</h2>
+            <p class="studio-card__desc">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn.</p>
+          </div>
+          <button class="btn btn--primary btn--skip" (click)="goToStep(4)" type="button">BỎ QUA</button>
+        </div>
 
-            <div class="stu-section-label">
-              <span>01 &nbsp; Thông tin vận chuyển</span>
-              <button class="stu-section-label__action" type="button">Chọn địa chỉ ↓</button>
+        <div class="studio-section-header">
+          <span class="studio-section-label">01. CHỌN LOẠI ĐÁ</span>
+          <span class="studio-section-chip">{{ selectedStone().label }}</span>
+        </div>
+
+        <div class="stone-grid">
+          @for (stone of stones; track stone.id) {
+            <button
+              class="stone-option"
+              [class.stone-option--selected]="selectedStone().id === stone.id"
+              [class.stone-option--muted]="stone.muted"
+              (click)="selectStone(stone)"
+              type="button"
+            >
+              <img class="stone-option__icon" [src]="stone.image" [alt]="stone.label" loading="lazy" />
+              <span class="stone-option__label">{{ stone.label }}</span>
+            </button>
+          }
+        </div>
+
+        @if (selectedStone().id !== 'none') {
+          <div class="studio-section-header">
+            <span class="studio-section-label">02. TRỌNG LƯỢNG</span>
+            <span class="studio-section-chip">{{ carat() }} carat</span>
+          </div>
+
+          <div class="carat-control">
+            <input
+              class="carat-slider"
+              type="range"
+              min="0.5"
+              max="3.0"
+              step="0.1"
+              [value]="carat()"
+              (input)="onCaratChange($event)"
+              aria-label="Kích thước đá tính bằng carat"
+            />
+            <div class="carat-control__range-labels">
+              <span>0.5ct</span>
+              <span>1ct</span>
+              <span>5.0ct</span>
+              <span>6.0ct</span>
             </div>
+          </div>
 
-            <div class="stu-shipping-form">
-              <div class="stu-form-grid">
+          <div class="price-breakdown">
+            <div class="price-breakdown__row">
+              <span>Phôi Di Sản</span>
+              <span>{{ formatVnd(MOUNT_FEE) }}</span>
+            </div>
+            <div class="price-breakdown__row">
+              <span>{{ selectedMaterial().label }}</span>
+              <span>{{ formatVnd(selectedMaterial().priceVnd) }}</span>
+            </div>
+            <div class="price-breakdown__row">
+              <span>{{ selectedStone().label }} ({{ carat() }}ct)</span>
+              <span>{{ formatVnd(stonePrice()) }}</span>
+            </div>
+            <div class="price-breakdown__divider"></div>
+            <div class="price-breakdown__total">
+              <span>TỔNG GIÁ TRỊ</span>
+              <strong>{{ formatVnd(MOUNT_FEE + selectedMaterial().priceVnd + stonePrice()) }}</strong>
+            </div>
+          </div>
+        }
 
-                <div class="stu-form-group">
-                  <label class="stu-form-label" for="stu-name">Họ tên</label>
-                  <input class="stu-form-input" type="text" id="stu-name" name="name"
-                    placeholder="Nguyễn Văn A" autocomplete="name" />
+        <div class="studio-card__actions">
+          <button class="btn btn--ghost" (click)="goToStep(2)" type="button">← Trước đó</button>
+          <button class="btn btn--primary" (click)="goToStep(4)" type="button">XÁC NHẬN THIẾT KẾ</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 4 — Khắc chữ
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 4) {
+    <div class="studio-card studio-card--split">
+
+      <div class="engrave-gallery">
+        <div class="engrave-gallery__main">
+          <img
+            [src]="currentGalleryImage().src"
+            [alt]="currentGalleryImage().alt"
+            class="engrave-gallery__main-img"
+            loading="eager"
+          />
+          @if (engraveText()) {
+            <div
+              class="engrave-gallery__overlay"
+              [class.engrave-gallery__overlay--serif]="engraveFont() === 'serif-italic'"
+            >
+              {{ engraveText() }}
+            </div>
+          }
+        </div>
+        <div class="engrave-gallery__thumbs">
+          @for (thumb of engraveGallery; track thumb.src; let i = $index) {
+            <button
+              class="engrave-gallery__thumb"
+              [class.engrave-gallery__thumb--active]="selectedThumbIndex() === i"
+              (click)="selectThumb(i)"
+              type="button"
+            >
+              <img [src]="thumb.src" [alt]="thumb.alt" loading="lazy" />
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="studio-card__options">
+        <div class="studio-card__head studio-card__head--row">
+          <div>
+            <h2 class="studio-card__title">Tùy chọn khắc chữ</h2>
+            <p class="studio-card__desc">Công nghệ khắc laser chính xác giúp lưu giữ dấu ấn ấy bền vững theo thời gian.</p>
+          </div>
+          <button class="btn btn--primary btn--skip" (click)="goToStep(5)" type="button">BỎ QUA</button>
+        </div>
+
+        <div class="studio-section-header">
+          <span class="studio-section-label">01. NỘI DUNG KHẮC CHỮ</span>
+        </div>
+
+        <div class="engrave-input-wrap">
+          <input
+            id="engrave-input"
+            class="engrave-input"
+            type="text"
+            placeholder="Nhập tại đây..."
+            [value]="engraveText()"
+            (input)="onEngraveInput($event)"
+            [attr.maxlength]="MAX_ENGRAVE_CHARS"
+          />
+          <div class="engrave-input-wrap__meta">
+            <span
+              class="engrave-input-wrap__count"
+              [class.engrave-input-wrap__count--warn]="engraveCharCount() > ENGRAVE_FREE_CHARS"
+            >
+              {{ engraveCharCount() }} / {{ MAX_ENGRAVE_CHARS }} KÝ TỰ
+            </span>
+            <span class="engrave-input-wrap__free">MIỄN PHÍ {{ ENGRAVE_FREE_CHARS }} KÝ TỰ</span>
+          </div>
+        </div>
+
+        <div class="studio-section-header">
+          <span class="studio-section-label">02. CHỌN FONT CHỮ</span>
+        </div>
+
+        <div class="font-selector">
+          <button
+            class="font-selector__option"
+            [class.font-selector__option--active]="engraveFont() === 'serif-italic'"
+            (click)="selectFont('serif-italic')"
+            type="button"
+          >
+            CHÂN NGHIÊNG
+          </button>
+          <button
+            class="font-selector__option"
+            [class.font-selector__option--active]="engraveFont() === 'classic-sans'"
+            (click)="selectFont('classic-sans')"
+            type="button"
+          >
+            KHÔNG CHÂN
+          </button>
+        </div>
+
+        <div class="engrave-fee-row">
+          <span class="engrave-fee-row__label">PHÍ TRẢ THÊM:</span>
+          <span class="engrave-fee-row__value">{{ engraveFee() > 0 ? formatVnd(engraveFee()) : '0₫' }}</span>
+        </div>
+
+        <div class="studio-card__actions">
+          <button class="btn btn--ghost" (click)="goToStep(3)" type="button">← Trước đó</button>
+          <button class="btn btn--primary" (click)="goToStep(5)" type="button">XÁC NHẬN THIẾT KẾ</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 5 — Xác nhận & Thanh toán
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 5) {
+
+    <!-- Sub-view 1: Phân tích giá + CTA -->
+    @if (checkoutSubStep() === 1) {
+      <div class="studio-card studio-card--split">
+
+        <div class="studio-card__preview">
+          <img
+            src="https://www.figma.com/api/mcp/asset/a1f97ec8-6265-4ed5-9229-df98077a79c5"
+            alt="Trang sức tùy chỉnh của bạn"
+            class="studio-card__preview-img"
+            loading="eager"
+          />
+        </div>
+
+        <div class="studio-card__options">
+          <div class="studio-card__head">
+            <h2 class="studio-card__title">Xác nhận &amp; Thanh toán</h2>
+          </div>
+
+          <div class="order-card">
+            <h3 class="order-card__heading">PHÂN TÍCH GIÁ CHI TIẾT</h3>
+            <ul class="order-card__list">
+              @for (item of orderItems(); track item.name) {
+                <li class="order-card__item">
+                  <span class="order-card__item-name">
+                    {{ item.name }}
+                    @if (item.subName) {
+                      <span class="order-card__item-sub">({{ item.subName }})</span>
+                    }
+                  </span>
+                  <span class="order-card__item-price">{{ formatVnd(item.price) }}</span>
+                </li>
+              }
+            </ul>
+            <div class="order-card__divider"></div>
+            <div class="order-card__total">
+              <span>TỔNG CỘNG</span>
+              <strong>{{ formatVnd(totalPrice()) }}</strong>
+            </div>
+          </div>
+
+          <div class="order-card__actions">
+            <button class="btn btn--primary btn--full" (click)="goToCheckout()" type="button">
+              ĐẶT HÀNG NGAY →
+            </button>
+            <button class="btn btn--secondary btn--full" type="button">
+              THÊM VÀO GIỎ
+            </button>
+          </div>
+
+          <div class="order-card__links">
+            <button class="btn-link" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+              </svg>
+              LƯU THIẾT KẾ
+            </button>
+            <button class="btn-link" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              CHIA SẺ
+            </button>
+          </div>
+
+          <div class="studio-card__actions">
+            <button class="btn btn--ghost" (click)="goToStep(4)" type="button">← Trước đó</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Sub-view 2: Checkout form -->
+    @if (checkoutSubStep() === 2) {
+      <form class="studio-card studio-card--wide" [formGroup]="checkoutForm" (ngSubmit)="submitOrder()">
+        <div class="studio-card__head">
+          <h2 class="studio-card__title">Xác nhận &amp; Thanh toán</h2>
+        </div>
+
+        <div class="checkout-layout">
+
+          <div class="checkout-layout__main">
+
+            <div class="checkout-section">
+              <div class="checkout-section__header">
+                <h3 class="checkout-section__title">① THÔNG TIN VẬN CHUYỂN</h3>
+                <button class="btn btn--ghost btn--sm" type="button" (click)="shippingExpanded.set(!shippingExpanded())">
+                  CHỌN ĐỊA CHỈ {{ shippingExpanded() ? '∧' : '∨' }}
+                </button>
+              </div>
+              @if (shippingExpanded()) {
+              <div class="checkout-form-grid">
+
+                <div class="form-field">
+                  <label class="form-field__label" for="checkout-name">HỌ TÊN *</label>
+                  <input id="checkout-name" class="form-field__input" type="text" formControlName="name" />
+                  @if (checkoutForm.controls.name.invalid && checkoutForm.controls.name.touched) {
+                    <span class="form-field__error">Vui lòng nhập họ tên</span>
+                  }
                 </div>
 
-                <div class="stu-form-group">
-                  <label class="stu-form-label" for="stu-phone">Số điện thoại</label>
-                  <input class="stu-form-input" type="tel" id="stu-phone" name="phone"
-                    placeholder="0901 234 567" autocomplete="tel" />
+                <div class="form-field">
+                  <label class="form-field__label" for="checkout-phone">SỐ ĐIỆN THOẠI *</label>
+                  <input id="checkout-phone" class="form-field__input" type="tel" formControlName="phone" />
+                  @if (checkoutForm.controls.phone.invalid && checkoutForm.controls.phone.touched) {
+                    <span class="form-field__error">Vui lòng nhập số điện thoại</span>
+                  }
                 </div>
 
-                <div class="stu-form-group stu-form-group--full">
-                  <label class="stu-form-label" for="stu-email">Email (tùy chọn)</label>
-                  <input class="stu-form-input" type="email" id="stu-email" name="email"
-                    placeholder="email@example.com" autocomplete="email" />
+                <div class="form-field form-field--full">
+                  <label class="form-field__label" for="checkout-email">EMAIL (TÙY CHỌN)</label>
+                  <input id="checkout-email" class="form-field__input" type="email" formControlName="email" />
                 </div>
 
-                <div class="stu-form-group">
-                  <label class="stu-form-label" for="stu-province">Tỉnh / Thành phố</label>
-                  <div class="stu-form-select-wrap">
-                    <select class="stu-form-select" id="stu-province" name="province" autocomplete="address-level1">
-                      <option value="">Chọn tỉnh/thành...</option>
-                      <option value="hcm" selected>TP. Hồ Chí Minh</option>
-                      <option value="hn">Hà Nội</option>
-                      <option value="dn">Đà Nẵng</option>
-                    </select>
-                  </div>
+                <div class="form-field">
+                  <label class="form-field__label" for="checkout-province">TỈNH/THÀNH *</label>
+                  <select id="checkout-province" class="form-field__input form-field__select" formControlName="province">
+                    <option value="">Chọn Tỉnh/Thành</option>
+                    <option value="hcm">TP. Hồ Chí Minh</option>
+                    <option value="hn">Hà Nội</option>
+                    <option value="dn">Đà Nẵng</option>
+                  </select>
                 </div>
 
-                <div class="stu-form-group">
-                  <label class="stu-form-label" for="stu-district">Phường / Xã</label>
-                  <div class="stu-form-select-wrap">
-                    <select class="stu-form-select" id="stu-district" name="district" autocomplete="address-level2">
-                      <option value="">Chọn phường/xã...</option>
-                      <option value="q1">Quận 1</option>
-                      <option value="q3">Quận 3</option>
-                      <option value="q7">Quận 7</option>
-                    </select>
-                  </div>
+                <div class="form-field">
+                  <label class="form-field__label" for="checkout-ward">PHƯỜNG/XÃ *</label>
+                  <select id="checkout-ward" class="form-field__input form-field__select" formControlName="ward">
+                    <option value="">Chọn Phường/Xã</option>
+                  </select>
                 </div>
 
-                <div class="stu-form-group stu-form-group--full">
-                  <label class="stu-form-label" for="stu-address">Số nhà, tên đường</label>
-                  <input class="stu-form-input" type="text" id="stu-address" name="address"
-                    placeholder="VD: 12 Nguyễn Huệ" autocomplete="street-address" />
+                <div class="form-field form-field--full">
+                  <label class="form-field__label" for="checkout-address">SỐ NHÀ, TÊN ĐƯỜNG *</label>
+                  <input id="checkout-address" class="form-field__input" type="text" formControlName="address" />
+                  @if (checkoutForm.controls.address.invalid && checkoutForm.controls.address.touched) {
+                    <span class="form-field__error">Vui lòng nhập địa chỉ</span>
+                  }
                 </div>
 
               </div>
+              }
             </div>
 
-            <div class="stu-section-label">
-              <span>02 &nbsp; Phương thức thanh toán</span>
-            </div>
-
-            <div class="stu-pay-section">
-              <div class="stu-pay-methods" role="radiogroup" aria-label="Chọn phương thức thanh toán">
-
-                <div class="stu-pay-method is-selected" role="radio" aria-checked="true" tabindex="0"
-                  data-method="credit-card">
-                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
-                  <span class="stu-pay-method__label">Thẻ tín dụng / Thẻ ghi nợ</span>
-                </div>
-
-                <div class="stu-pay-method" role="radio" aria-checked="false" tabindex="0"
-                  data-method="bank-transfer">
-                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
-                  <span class="stu-pay-method__label">Chuyển khoản ngân hàng</span>
-                </div>
-
-                <div class="stu-pay-method" role="radio" aria-checked="false" tabindex="0"
-                  data-method="e-wallet">
-                  <div class="stu-pay-method__radio" aria-hidden="true"></div>
-                  <span class="stu-pay-method__label">Ví điện tử (MoMo, ZaloPay)</span>
-                </div>
-
+            <div class="checkout-section">
+              <h3 class="checkout-section__title">② PHƯƠNG THỨC THANH TOÁN</h3>
+              <div class="payment-methods">
+                @for (method of paymentMethods; track method.id) {
+                  <button
+                    class="payment-method"
+                    [class.payment-method--selected]="selectedPaymentMethod() === method.id"
+                    (click)="selectPaymentMethod(method.id)"
+                    type="button"
+                  >
+                    <span class="payment-method__radio">
+                      @if (selectedPaymentMethod() === method.id) {
+                        <span class="payment-method__radio-dot"></span>
+                      }
+                    </span>
+                    <span class="payment-method__label">{{ method.label }}</span>
+                  </button>
+                }
               </div>
-            </div>
-
-            <div style="margin-top:32px;padding-bottom:40px">
-              <button class="studio-nav__back" data-target-step="5">
-                <img src="https://www.figma.com/api/mcp/asset/f4234d3d-82d2-4f3e-9ec5-81c10c366e16" alt="" aria-hidden="true" />
-                Trước đó
-              </button>
             </div>
 
           </div>
 
-          <!-- RIGHT: Order summary -->
-          <aside class="stu-summary" aria-label="Tóm tắt đơn hàng">
+          <aside class="checkout-layout__aside">
+            <div class="checkout-summary">
+              <h3 class="checkout-summary__title">TỔNG ĐƠN HÀNG (01)</h3>
 
-            <div class="stu-summary__header">
-              <span class="stu-summary__title">Tổng đơn hàng</span>
-              <span class="stu-summary__count">(01 sản phẩm)</span>
-            </div>
-
-            <div class="stu-order-items">
-              <div class="stu-order-item">
-                <div class="stu-order-item__img-wrap">
-                  <img class="stu-order-item__img"
-                    src="https://www.figma.com/api/mcp/asset/b867ce8b-2a6d-4756-af81-a05cae5fb4de"
-                    alt="Thiết kế của bạn" loading="lazy" />
+              <div class="checkout-summary__product">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/48641a6f-72f5-4524-8109-67072e259627"
+                  alt="Sản phẩm tùy chỉnh"
+                  class="checkout-summary__product-img"
+                  loading="lazy"
+                />
+                <div class="checkout-summary__product-info">
+                  <p class="checkout-summary__product-name">Tùy chỉnh Di Sản</p>
+                  <p class="checkout-summary__product-config">
+                    Kích cỡ M | {{ selectedMaterial().label }}
+                    @if (selectedStone().id !== 'none') { | {{ selectedStone().label }} {{ carat() }}ct }
+                  </p>
+                  <p class="checkout-summary__product-price">SL: {{ formatVnd(totalPrice()) }}</p>
                 </div>
-                <div class="stu-order-item__details">
-                  <p class="stu-order-item__name">Thiết kế của bạn</p>
-                  <p class="stu-order-item__variant" id="checkout-design-summary">Vàng 18K</p>
+              </div>
+
+              <div class="checkout-summary__divider"></div>
+
+              <div class="checkout-summary__line">
+                <span>Tạm tính</span>
+                <span>{{ formatVnd(totalPrice()) }}</span>
+              </div>
+              <div class="checkout-summary__line">
+                <span>Phí vận chuyển</span>
+                <span class="checkout-summary__free">MIỄN PHÍ</span>
+              </div>
+
+              <div class="checkout-summary__divider"></div>
+
+              <p class="checkout-summary__voucher-label">MÃ VOUCHER / QUÀ TẶNG</p>
+              <div class="voucher-row">
+                <input
+                  class="voucher-row__input"
+                  type="text"
+                  placeholder="Nhập mã ưu đãi của bạn"
+                  [value]="voucherCode()"
+                  (input)="voucherCode.set($any($event.target).value)"
+                  aria-label="Nhập mã voucher"
+                />
+                <button class="voucher-row__btn" (click)="applyVoucher()" type="button">ÁP DỤNG</button>
+              </div>
+
+              <div class="checkout-summary__divider"></div>
+
+              <div class="checkout-summary__total">
+                <span>TỔNG CỘNG</span>
+                <strong>{{ formatVnd(totalPrice()) }}</strong>
+              </div>
+
+              <div class="checkout-summary__deposit-block">
+                <div class="checkout-summary__deposit-row">
+                  <span>50% ĐẶT CỌC BÂY GIỜ</span>
+                  <strong>{{ formatVnd(depositAmount()) }}</strong>
                 </div>
-                <span class="stu-order-item__price" id="checkout-item-price">15.000.000đ</span>
+                <div class="checkout-summary__deposit-row checkout-summary__deposit-row--remain">
+                  <span>SỐ TIỀN CÒN LẠI</span>
+                  <strong>{{ formatVnd(depositAmount()) }}</strong>
+                </div>
               </div>
+
+              <p class="checkout-summary__legal">
+                Bằng việc nhấn "Thanh toán", bạn đồng ý với các Điều khoản &amp; Chính sách bảo mật của RENGA
+              </p>
+
+              <button
+                class="btn btn--primary btn--full checkout-summary__submit"
+                type="submit"
+              >
+                THANH TOÁN →
+              </button>
             </div>
-
-            <hr class="stu-summary__divider" />
-
-            <div class="stu-summary__row">
-              <span class="stu-summary__row-key">Tạm tính</span>
-              <span class="stu-summary__row-val" id="checkout-subtotal">15.000.000đ</span>
-            </div>
-            <div class="stu-summary__row">
-              <span class="stu-summary__row-key">Phí vận chuyển</span>
-              <span class="stu-summary__row-val stu-summary__row-val--free">MIỄN PHÍ</span>
-            </div>
-
-            <div class="stu-summary__voucher">
-              <input class="stu-summary__voucher-input" type="text"
-                placeholder="Mã VOUCHER / GIFT CODE" aria-label="Nhập mã giảm giá" />
-              <button class="stu-summary__voucher-btn" type="button" id="voucher-apply-btn">Áp dụng</button>
-            </div>
-
-            <div class="stu-summary__total">
-              <span class="stu-summary__total-key">Tổng cộng</span>
-              <span class="stu-summary__total-val" id="checkout-total">15.000.000đ</span>
-            </div>
-
-            <div class="stu-deposit">
-              <div class="stu-deposit__row">
-                <span class="stu-deposit__label">50% Đặt cọc ngay</span>
-                <span class="stu-deposit__amount" id="checkout-deposit">7.500.000đ</span>
-              </div>
-              <div class="stu-deposit__remaining">
-                <span>Số tiền còn lại</span>
-                <span class="stu-deposit__remaining-val" id="checkout-remaining">7.500.000đ</span>
-              </div>
-            </div>
-
-            <p class="stu-summary__disclaimer">
-              Bằng cách đặt hàng, bạn xác nhận đồng ý với Điều khoản Dịch vụ và Chính sách Hoàn tiền của RENGA. Đặt cọc 50% để bắt đầu quá trình chế tác.
-            </p>
-
-            <button class="stu-summary__pay-btn" type="button" id="studio-pay-btn">THANH TOÁN</button>
-
           </aside>
 
         </div>
-      </div>
-      <!-- /STEP 6 -->
 
-    </div>
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__grid">
-
-        <!-- Brand column -->
-        <div class="site-footer__brand-col">
-          <a href="../../index.html" class="site-footer__brand">RENGA</a>
-          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-          <div class="site-footer__social">
-            <a href="#" class="site-footer__social-link" aria-label="Email">
-              <img src="https://www.figma.com/api/mcp/asset/30b0a301-f13e-47da-9626-5089deaa9c4c" alt="Email" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-              <img src="https://www.figma.com/api/mcp/asset/d75a243e-62bf-4d89-a127-02a9c651f5ce" alt="Phone" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Facebook">
-              <img src="https://www.figma.com/api/mcp/asset/e7c33884-1664-42ad-a199-8778ef462076" alt="Facebook" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Instagram">
-              <img src="https://www.figma.com/api/mcp/asset/0c34a259-11e7-4a00-825f-ec52b906f785" alt="Instagram" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="TikTok">
-              <img src="https://www.figma.com/api/mcp/asset/6d7bf5cc-b2f4-4b34-8b78-162a94434ac0" alt="TikTok" />
-            </a>
-          </div>
+        <div class="studio-card__actions studio-card__actions--bottom">
+          <button class="btn btn--ghost" (click)="backFromCheckout()" type="button">← Trước đó</button>
         </div>
+      </form>
+    }
 
-        <!-- Về chúng tôi -->
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-          <a href="#" class="site-footer__link">The Studio</a>
-          <a href="#" class="site-footer__link">The Atelier</a>
-          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-        </div>
+  }
 
-        <!-- Hỗ trợ khách hàng -->
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-        </div>
+</section>
 
-        <!-- Newsletter -->
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">NEWSLETTER</p>
-          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-          <form class="newsletter-form" novalidate>
-            <div class="newsletter-form__field">
-              <input
-                class="newsletter-form__input"
-                type="email"
-                placeholder="Email của bạn"
-                aria-label="Địa chỉ email đăng ký nhận tin"
-              />
-              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-                <img src="https://www.figma.com/api/mcp/asset/3b46e854-0b81-46ac-9959-802c7a43b758" alt="" aria-hidden="true" />
-              </button>
-            </div>
-          </form>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="site-footer__bottom">
-      <div class="site-footer__bottom-inner">
-        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-        <div class="site-footer__bottom-links">
-          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===== PRICE SUMMARY (fixed, shown from step 2+) ===== -->
-  <div class="studio-price-summary" id="price-summary" aria-live="polite">
+<!-- Floating price summary (steps 2–5) -->
+@if (priceSummaryVisible()) {
+  <div class="studio-price-summary" aria-live="polite">
     <p class="studio-price-summary__label">Tổng giá trị hiện tại</p>
-    <div class="studio-price-summary__body">
-      <span class="studio-price-summary__amount" id="price-amount">15 triệu</span>
-      <span class="studio-price-summary__detail" id="price-detail">Vàng 18K</span>
-    </div>
+    <p class="studio-price-summary__amount">{{ priceSummaryAmount() }}</p>
+    <p class="studio-price-summary__detail">{{ priceSummaryDetail() }}</p>
   </div>
-
-  <!-- ===== CHAT FAB ===== -->
-  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
-    <img src="https://www.figma.com/api/mcp/asset/3a1ad324-af0e-467d-afef-3a5f6f76d6e1" alt="Chat" />
-  </button>
-
-  <script src="../../js/pages/studio.js"></script>
-  <script src="../../js/pages/studio-checkout.js"></script>
-</body>
-</html>
+}
