@@ -1,0 +1,440 @@
+<section class="design-page">
+
+  <!-- ── Step Progress ─────────────────────────────── -->
+  <nav class="step-progress" aria-label="Tiến trình tư vấn thiết kế">
+    @for (step of steps; track step.n) {
+      <div
+        class="step-progress__item"
+        [class.step-progress__item--active]="currentStep() === step.n"
+        [class.step-progress__item--done]="currentStep() > step.n"
+        (click)="currentStep() > step.n && goToStep(step.n)"
+        [style.cursor]="currentStep() > step.n ? 'pointer' : 'default'"
+      >
+        <span class="step-progress__circle">
+          @if (currentStep() > step.n) {
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            {{ step.n }}
+          }
+        </span>
+        <span class="step-progress__label">{{ step.label }}</span>
+      </div>
+      @if (!$last) {
+        <div class="step-progress__connector" [class.step-progress__connector--done]="currentStep() > step.n"></div>
+      }
+    }
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 1 — Chọn Designer
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 1) {
+    <div class="design-step">
+      <h1 class="design-step__title">Chọn Designer</h1>
+
+      <div class="designer-grid">
+        @for (designer of designers; track designer.id) {
+          <article
+            class="designer-card"
+            [class.designer-card--selected]="selectedDesigner()?.id === designer.id"
+            tabindex="0"
+            (click)="selectDesigner(designer)"
+            (keydown.enter)="selectDesigner(designer)"
+          >
+            <div class="designer-card__photo">
+              <img class="designer-card__photo-img" [src]="designer.image" [alt]="designer.name" loading="lazy" />
+              <div class="designer-card__desaturate" aria-hidden="true"></div>
+              <div class="designer-card__gradient" aria-hidden="true">
+                <span class="designer-card__badge">{{ designer.badge }}</span>
+              </div>
+            </div>
+            <div class="designer-card__body">
+              <div class="designer-card__header">
+                <h3 class="designer-card__name">{{ designer.name }}</h3>
+                <div class="designer-card__stars" [attr.aria-label]="designer.rating + ' sao'">
+                  @for (star of starsArray(designer.rating); track $index) {
+                    <svg class="designer-card__star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.14L8 10.37l-3.71 2.19.71-4.14L2 5.5l4.15-.75L8 1z"/>
+                    </svg>
+                  }
+                </div>
+              </div>
+              <p class="designer-card__specialty">{{ designer.specialty }}</p>
+              <div class="designer-card__footer">
+                <div class="designer-card__fee">
+                  <span class="designer-card__fee-label">PHÍ</span>
+                  <span class="designer-card__fee-amount">{{ formatVnd(designer.fee) }}</span>
+                </div>
+                <button class="designer-card__select" type="button" (click)="$event.stopPropagation(); selectDesigner(designer)">Chọn</button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      <div class="designer-load-more-wrap">
+        <button class="designer-load-more" type="button">TẢI THÊM</button>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 2 — Chọn thời gian tư vấn
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 2) {
+    <div class="design-step">
+      <h1 class="design-step__title">Chọn thời gian tư vấn</h1>
+
+      <div class="ds-time-layout">
+
+        <!-- Left: designer info + summary -->
+        <aside class="ds-designer-panel">
+          <div class="ds-designer-panel__photo">
+            <img class="ds-designer-panel__photo-img"
+              [src]="selectedDesigner()?.image"
+              [alt]="selectedDesigner()?.name ?? ''"
+              loading="lazy" />
+            <div class="ds-designer-panel__desaturate" aria-hidden="true"></div>
+          </div>
+          <h2 class="ds-designer-panel__name">{{ selectedDesigner()?.name }}</h2>
+          <p class="ds-designer-panel__role">{{ selectedDesigner()?.role }}</p>
+          <p class="ds-designer-panel__bio">{{ selectedDesigner()?.bio }}</p>
+          <hr class="ds-designer-panel__divider" />
+          <div class="ds-booking-summary">
+            <div class="ds-booking-summary__row">
+              <span class="ds-booking-summary__label">Dịch vụ</span>
+              <span class="ds-booking-summary__value">Tư vấn thiết kế</span>
+            </div>
+            <div class="ds-booking-summary__row">
+              <span class="ds-booking-summary__label">Ngày</span>
+              <span class="ds-booking-summary__value">{{ selectedDate() ? selectedDateLabel() : 'Chưa chọn' }}</span>
+            </div>
+            <div class="ds-booking-summary__row">
+              <span class="ds-booking-summary__label">Giờ</span>
+              <span class="ds-booking-summary__value">{{ selectedTime() ?? 'Chưa chọn' }}</span>
+            </div>
+          </div>
+          <button
+            class="ds-cta-btn"
+            type="button"
+            [disabled]="!selectedDate() || !selectedTime()"
+            (click)="confirmSchedule()"
+          >XÁC NHẬN LỊCH HẸN</button>
+        </aside>
+
+        <!-- Right: calendar + timeslots -->
+        <div class="ds-calendar-panel">
+          <div class="ds-calendar">
+            <div class="ds-calendar__header">
+              <button class="ds-calendar__nav" type="button" aria-label="Tháng trước" (click)="prevMonth()">&#8249;</button>
+              <span class="ds-calendar__month-label">{{ calendarMonthLabel() }}</span>
+              <button class="ds-calendar__nav" type="button" aria-label="Tháng sau" (click)="nextMonth()">&#8250;</button>
+            </div>
+            <div class="ds-calendar__grid" role="grid">
+              @for (header of ['T2','T3','T4','T5','T6','T7','CN']; track $index) {
+                <div class="ds-calendar__day-header" aria-hidden="true">{{ header }}</div>
+              }
+              @for (day of calendarDays(); track $index) {
+                @if (day.date === null) {
+                  <div class="ds-calendar__date ds-calendar__date--empty"></div>
+                } @else {
+                  <button
+                    class="ds-calendar__date"
+                    [class.is-selected]="isDateSelected()(day.date)"
+                    [class.is-disabled]="day.disabled"
+                    [disabled]="day.disabled"
+                    type="button"
+                    (click)="selectDate(day)"
+                  >{{ day.dayNum }}</button>
+                }
+              }
+            </div>
+          </div>
+
+          @if (selectedDate()) {
+            <div class="ds-timeslot-section">
+              <h3 class="ds-timeslot-section__title">{{ selectedDateLabel() }}</h3>
+              <div class="ds-timeslot-grid" role="listbox" aria-label="Chọn giờ tư vấn">
+                @for (slot of timeSlots; track slot) {
+                  <button
+                    class="ds-timeslot"
+                    [class.is-selected]="selectedTime() === slot"
+                    [class.is-unavailable]="unavailableSlots.has(slot)"
+                    [disabled]="unavailableSlots.has(slot)"
+                    role="option"
+                    [attr.aria-selected]="selectedTime() === slot"
+                    type="button"
+                    (click)="selectTime(slot)"
+                  >{{ slot }}</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <div class="design-step__actions">
+        <button class="btn btn--ghost" type="button" (click)="goToStep(1)">← Trước đó</button>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 3 — Mô tả ý tưởng của bạn
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 3) {
+    <div class="design-step">
+      <h1 class="design-step__title">Mô tả ý tưởng của bạn</h1>
+
+      <form class="ds-idea-form" [formGroup]="ideaForm" (ngSubmit)="confirmIdea()">
+        <div class="ds-form-grid">
+
+          <div class="ds-form__group">
+            <label class="ds-form__label" for="jewelry-type">Loại trang sức</label>
+            <div class="ds-form__select-wrap">
+              <select class="ds-form__select" id="jewelry-type" formControlName="jewelryType">
+                <option value="">Chọn loại trang sức...</option>
+                <option value="nhan">Nhẫn</option>
+                <option value="day-chuyen">Dây chuyền</option>
+                <option value="vong-tay">Vòng tay</option>
+                <option value="bong-tai">Bông tai</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ds-form__group">
+            <p class="ds-form__label">Dịp lễ</p>
+            <div class="ds-toggle-group" role="group" aria-label="Chọn dịp">
+              @for (opt of occasionOptions; track opt.value) {
+                <button
+                  class="ds-toggle-btn"
+                  [class.is-active]="selectedOccasion() === opt.value"
+                  type="button"
+                  (click)="selectOccasion(opt.value)"
+                >{{ opt.label }}</button>
+              }
+            </div>
+          </div>
+
+          <div class="ds-form__group">
+            <label class="ds-form__label" for="style">Phong cách</label>
+            <input class="ds-form__input" type="text" id="style" formControlName="style"
+              placeholder="VD: Tối giản, cổ điển, hiện đại..." />
+          </div>
+
+          <div class="ds-form__group">
+            <label class="ds-form__label" for="material">Chất liệu trang sức</label>
+            <div class="ds-form__select-wrap">
+              <select class="ds-form__select" id="material" formControlName="material">
+                <option value="18k-yellow">Vàng 18K</option>
+                <option value="18k-white">Vàng trắng 18K</option>
+                <option value="18k-rose">Vàng hồng 18K</option>
+                <option value="platinum">Bạch kim</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ds-form__group">
+            <label class="ds-form__label" for="budget">Ngân sách</label>
+            <input class="ds-form__input" type="text" id="budget" formControlName="budget"
+              placeholder="VD: 5.000.000 VNĐ" />
+          </div>
+
+          <div class="ds-form__group">
+            <label class="ds-form__label" for="expected-date">Ngày kỳ vọng</label>
+            <input class="ds-form__input" type="date" id="expected-date" formControlName="expectedDate" />
+          </div>
+
+          <div class="ds-form__group ds-form__group--full">
+            <label class="ds-form__label" for="idea-desc">Nhập mô tả ý tưởng chi tiết</label>
+            <textarea class="ds-form__textarea" id="idea-desc" formControlName="ideaDesc" rows="6"
+              placeholder="Chia sẻ ý tưởng, cảm hứng và yêu cầu đặc biệt của bạn..."></textarea>
+          </div>
+
+          <div class="ds-form__group ds-form__group--full">
+            <p class="ds-form__label">Tải hình ảnh liên quan</p>
+            <label class="ds-upload-zone" for="idea-images" aria-label="Tải ảnh tham khảo">
+              <input class="ds-upload-zone__input" type="file" id="idea-images"
+                name="images" accept="image/*" multiple />
+              <span class="ds-upload-zone__icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </span>
+              <span class="ds-upload-zone__text">Kéo hoặc thả tệp vào đây</span>
+              <span class="ds-upload-zone__hint">PNG, JPG — Tối đa 10MB/ảnh</span>
+            </label>
+          </div>
+
+        </div>
+
+        <div class="design-step__actions">
+          <div class="step3-actions">
+            <button class="btn btn--ghost" type="button" (click)="goToStep(2)">← Trước đó</button>
+            <button class="ds-cta-btn step3-cta" type="submit">XÁC NHẬN LỊCH HẸN</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════
+       STEP 4 — Thanh toán đặt cọc
+  ══════════════════════════════════════════════════ -->
+  @if (currentStep() === 4) {
+    <div class="design-step">
+      <h1 class="design-step__title">Thanh toán đặt cọc</h1>
+
+      <div class="ds-payment-layout">
+
+        <div class="ds-payment-left">
+
+          <!-- Appointment details -->
+          <div class="ds-appt-detail">
+            <h3 class="ds-appt-detail__title">Chi tiết lịch hẹn</h3>
+            <div class="ds-appt-detail__row">
+              <span class="ds-appt-detail__label">Designer</span>
+              <span class="ds-appt-detail__value">{{ selectedDesigner()?.name }}</span>
+            </div>
+            <div class="ds-appt-detail__row">
+              <span class="ds-appt-detail__label">Dịch vụ</span>
+              <span class="ds-appt-detail__value">Tư vấn thiết kế</span>
+            </div>
+            <div class="ds-appt-detail__row">
+              <span class="ds-appt-detail__label">Ngày</span>
+              <span class="ds-appt-detail__value">{{ selectedDateLabel() }}</span>
+            </div>
+            <div class="ds-appt-detail__row">
+              <span class="ds-appt-detail__label">Giờ</span>
+              <span class="ds-appt-detail__value">{{ selectedTime() }}</span>
+            </div>
+          </div>
+
+          <!-- Member card -->
+          <div class="ds-member-card">
+            <div class="ds-member-card__info">
+              <p class="ds-member-card__label">RENGA MEMBER</p>
+              <p class="ds-member-card__name">Nguyễn Thị Trúc</p>
+              <p class="ds-member-card__tier">Gold Member</p>
+            </div>
+            <div class="ds-member-card__benefit">
+              <span class="ds-member-card__discount">Ưu đãi 10%</span>
+            </div>
+          </div>
+
+          <!-- Payment methods -->
+          <div class="ds-pay-methods">
+            <h3 class="ds-pay-methods__title">Phương thức thanh toán</h3>
+            @for (method of paymentMethods; track method.id) {
+              <label class="ds-pay-method" [class.is-selected]="selectedPayment() === method.id">
+                <input type="radio" name="payment" [value]="method.id"
+                  [checked]="selectedPayment() === method.id"
+                  (change)="selectPayment(method.id)" />
+                <span class="ds-pay-method__icon">
+                  @switch (method.id) {
+                    @case ('momo') {
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="36" rx="8" fill="#AE2070"/>
+                        <rect x="8" y="13" width="20" height="13" rx="2.5" fill="white"/>
+                        <rect x="8" y="17" width="20" height="3.5" fill="#AE2070"/>
+                        <rect x="11" y="21.5" width="6" height="2.5" rx="1.25" fill="#AE2070" fill-opacity="0.6"/>
+                        <circle cx="24.5" cy="22.75" r="1.75" fill="#AE2070" fill-opacity="0.6"/>
+                      </svg>
+                    }
+                    @case ('vnpay') {
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="36" rx="8" fill="#003087"/>
+                        <rect x="7" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
+                        <rect x="9" y="9" width="2" height="2" fill="#003087"/>
+                        <rect x="12" y="9" width="2" height="2" fill="#003087"/>
+                        <rect x="9" y="12" width="2" height="2" fill="#003087"/>
+                        <rect x="20" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
+                        <rect x="22" y="9" width="2" height="2" fill="#003087"/>
+                        <rect x="25" y="9" width="2" height="2" fill="#003087"/>
+                        <rect x="22" y="12" width="2" height="2" fill="#003087"/>
+                        <rect x="7" y="20" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
+                        <rect x="9" y="22" width="2" height="2" fill="#003087"/>
+                        <rect x="9" y="25" width="2" height="2" fill="#003087"/>
+                        <rect x="12" y="22" width="2" height="2" fill="#003087"/>
+                        <rect x="20" y="20" width="2" height="2" fill="white"/>
+                        <rect x="23" y="20" width="2" height="2" fill="white"/>
+                        <rect x="26" y="20" width="2" height="2" fill="white"/>
+                        <rect x="20" y="23" width="2" height="2" fill="white"/>
+                        <rect x="24" y="23" width="4" height="2" fill="white"/>
+                        <rect x="20" y="26" width="2" height="2" fill="white"/>
+                        <rect x="23" y="26" width="2" height="2" fill="white"/>
+                      </svg>
+                    }
+                    @case ('bank') {
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="36" rx="8" fill="#1a3c5e"/>
+                        <polygon points="18,8 6.5,15.5 29.5,15.5" fill="white"/>
+                        <rect x="9" y="16.5" width="3" height="8.5" fill="white"/>
+                        <rect x="13.5" y="16.5" width="3" height="8.5" fill="white"/>
+                        <rect x="19.5" y="16.5" width="3" height="8.5" fill="white"/>
+                        <rect x="24" y="16.5" width="3" height="8.5" fill="white"/>
+                        <rect x="7" y="26" width="22" height="2.5" rx="1.25" fill="white"/>
+                      </svg>
+                    }
+                    @case ('card') {
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="36" rx="8" fill="#2c5f8a"/>
+                        <rect x="5" y="11" width="26" height="16" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
+                        <rect x="5" y="15" width="26" height="4.5" fill="white"/>
+                        <rect x="8" y="23" width="8" height="2.5" rx="1.25" fill="white" fill-opacity="0.8"/>
+                        <circle cx="24.5" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.8"/>
+                        <circle cx="27" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.5"/>
+                      </svg>
+                    }
+                  }
+                </span>
+                <span class="ds-pay-method__label">{{ method.label }}</span>
+              </label>
+            }
+          </div>
+
+        </div>
+
+        <!-- Summary sidebar -->
+        <aside class="ds-pay-summary">
+          <h3 class="ds-pay-summary__title">Tóm tắt thanh toán</h3>
+          <div class="ds-pay-summary__rows">
+            <div class="ds-pay-summary__row">
+              <span>Phí tư vấn Designer</span>
+              <span>{{ formatVnd(consultationFee()) }}</span>
+            </div>
+            <div class="ds-pay-summary__row ds-pay-summary__row--discount">
+              <span>Ưu đãi thành viên (10%)</span>
+              <span>- {{ formatVnd(memberDiscount()) }}</span>
+            </div>
+            <div class="ds-pay-summary__row">
+              <span>Đặt cọc (50%)</span>
+              <span>{{ formatVnd(depositAmount()) }}</span>
+            </div>
+          </div>
+          <div class="ds-pay-summary__total">
+            <span class="ds-pay-summary__total-label">Tổng thanh toán</span>
+            <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}</span>
+          </div>
+          <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()">
+            HOÀN TẤT ĐẶT LỊCH
+          </button>
+          <p class="ds-pay-summary__note">
+            Đặt cọc 50% để xác nhận lịch hẹn. Số tiền còn lại sẽ được thanh toán sau buổi tư vấn.
+          </p>
+        </aside>
+
+      </div>
+
+      <div class="design-step__actions">
+        <button class="btn btn--ghost" type="button" (click)="goToStep(3)">← Trước đó</button>
+      </div>
+    </div>
+  }
+
+</section>
