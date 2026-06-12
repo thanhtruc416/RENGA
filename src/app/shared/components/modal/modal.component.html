@@ -1,0 +1,13 @@
+@if (isOpen) {
+  <div class="modal-backdrop" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <p class="modal__title">{{ title }}</p>
+        <button class="modal__close" type="button" (click)="close()">✕</button>
+      </div>
+      <div class="modal__body">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}
