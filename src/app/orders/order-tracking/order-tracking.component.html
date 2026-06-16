@@ -1,77 +1,26 @@
-<header class="site-header">
-  <div class="site-header__inner">
-    <div class="site-header__top">
-      <a href="/" class="site-header__logo">
-        <img class="site-header__logo-icon"
-          src="https://www.figma.com/api/mcp/asset/7843ab26-ea6a-4365-adaf-8d8cb67731ba"
-          alt="RENGA" />
-      </a>
-      <div class="site-header__actions">
-        <a href="/cart"    class="site-header__action-btn" aria-label="Giỏ hàng">
-          <img src="https://www.figma.com/api/mcp/asset/3bca4fc9-ffe2-4878-82e6-90e16688e10a" alt="Giỏ hàng" />
-        </a>
-        <a href="/orders"  class="site-header__action-btn" aria-label="Đơn hàng">
-          <img src="https://www.figma.com/api/mcp/asset/393ab19c-59b0-462c-b931-7c540392ba8a" alt="Đơn hàng" />
-        </a>
-        <a href="/account" class="site-header__action-btn" aria-label="Tài khoản">
-          <img class="site-header__avatar"
-            src="https://www.figma.com/api/mcp/asset/8b20f83c-eed9-4f35-919e-973ebd4830b7"
-            alt="Tài khoản" />
-        </a>
-      </div>
-    </div>
-    <div class="site-header__bottom">
-      <nav class="site-header__nav" aria-label="Menu chính">
-        <div class="site-header__nav-item">
-          <a href="/"           class="site-header__nav-link">Trang chủ</a>
-        </div>
-        <div class="site-header__nav-item">
-          <a href="/products"   class="site-header__nav-link">Danh mục Sản phẩm</a>
-        </div>
-        <div class="site-header__nav-item">
-          <a href="/collections" class="site-header__nav-link">Bộ sưu tập</a>
-        </div>
-        <div class="site-header__nav-item">
-          <a href="/studio"     class="site-header__nav-link">The Studio</a>
-        </div>
-        <div class="site-header__nav-item">
-          <a href="/designer"   class="site-header__nav-link">The Designer</a>
-        </div>
-      </nav>
-      <div class="site-header__search">
-        <img class="site-header__search-icon"
-          src="https://www.figma.com/api/mcp/asset/d254339a-9b1f-497b-b079-7f406ec93e86"
-          alt="" aria-hidden="true" />
-        <input class="site-header__search-input" type="search"
-          placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
-      </div>
-    </div>
-  </div>
-</header>
-
-<main class="order-tracking-page">
+﻿<div class="order-tracking-page">
 
   <div class="order-tracking-top">
     <div class="order-tracking-top__inner">
 
       <!-- Breadcrumb -->
       <nav class="order-tracking-breadcrumb" aria-label="Điều hướng trang">
-        <a href="/" class="order-tracking-breadcrumb__item">Trang chủ</a>
-        <img class="order-tracking-breadcrumb__sep"
-          src="https://www.figma.com/api/mcp/asset/84d4296f-a308-4952-965d-087067fc8763"
-          alt="" aria-hidden="true" />
+        <a routerLink="/" class="order-tracking-breadcrumb__item">Trang chủ</a>
+        <span class="order-tracking-breadcrumb__sep" aria-hidden="true">›</span>
         <span class="order-tracking-breadcrumb__item order-tracking-breadcrumb__item--current"
           aria-current="page">Đơn hàng</span>
       </nav>
 
       <!-- Hero -->
       <div class="order-tracking-hero">
-        <h1 class="order-tracking-hero__title">Danh sách đơn hàng</h1>
+        <div class="order-tracking-hero__left">
+          <h1 class="order-tracking-hero__title">Danh sách đơn hàng</h1>
+        </div>
         <div class="order-tracking-hero__right">
-          <a href="/orders/lookup" class="order-tracking-lookup-btn">Tra cứu đơn hàng</a>
+          <a routerLink="/orders/lookup" class="order-tracking-lookup-btn">Tra cứu đơn hàng</a>
           <div class="order-tracking-member">
             <span class="order-tracking-member__tier-label">Thành viên ưu tiên</span>
-            <span class="order-tracking-member__tier-value">Gold Heritage Tier</span>
+            <span class="order-tracking-member__tier-value">{{ memberTier() }}</span>
           </div>
         </div>
       </div>
@@ -97,9 +46,7 @@
             <option value="standard">Tiêu chuẩn</option>
             <option value="bespoke">Tùy biến</option>
           </select>
-          <img class="order-tracking-filter__arrow"
-            src="https://www.figma.com/api/mcp/asset/2ca05f25-ac78-41c1-96f4-a6e4e19f92cc"
-            alt="" aria-hidden="true" />
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
         </div>
       </div>
 
@@ -114,9 +61,7 @@
             <option value="completed">Đã hoàn thành</option>
             <option value="cancelled">Đã hủy</option>
           </select>
-          <img class="order-tracking-filter__arrow"
-            src="https://www.figma.com/api/mcp/asset/2ca05f25-ac78-41c1-96f4-a6e4e19f92cc"
-            alt="" aria-hidden="true" />
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
         </div>
       </div>
 
@@ -130,16 +75,15 @@
             <option value="1y">1 năm gần nhất</option>
             <option value="all">Tất cả</option>
           </select>
-          <img class="order-tracking-filter__arrow"
-            src="https://www.figma.com/api/mcp/asset/2ca05f25-ac78-41c1-96f4-a6e4e19f92cc"
-            alt="" aria-hidden="true" />
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
         </div>
       </div>
 
       <button class="order-tracking-filters__apply" type="button" (click)="applyFilters()">
-        <img class="order-tracking-filters__apply-icon"
-          src="https://www.figma.com/api/mcp/asset/8ce03818-6d12-4863-8e04-2f652c9ba735"
-          alt="" aria-hidden="true" />
+        <svg width="10" height="7" viewBox="0 0 10 7" fill="none" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         Áp dụng bộ lọc
       </button>
 
@@ -148,53 +92,61 @@
 
   <!-- Orders table -->
   <div class="order-tracking-table-wrap">
-    <table class="order-tracking-table">
-      <thead>
-        <tr class="order-tracking-table__head-row">
-          <th class="order-tracking-table__th order-tracking-table__th--id">Mã đơn hàng</th>
-          <th class="order-tracking-table__th order-tracking-table__th--date">Ngày đặt</th>
-          <th class="order-tracking-table__th order-tracking-table__th--product">Loại sản phẩm</th>
-          <th class="order-tracking-table__th order-tracking-table__th--amount">Tổng giá trị</th>
-          <th class="order-tracking-table__th order-tracking-table__th--status">Trạng thái</th>
-          <th class="order-tracking-table__th order-tracking-table__th--action"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        @for (order of displayedOrders(); track order.id) {
-          <tr [class]="rowClass(order.status)">
-            <td class="order-tracking-table__td order-tracking-table__td--id">
-              <span class="order-tracking-table__order-id">{{ order.id }}</span>
-              <span class="order-tracking-table__order-sub">{{ order.sub }}</span>
-            </td>
-            <td class="order-tracking-table__td order-tracking-table__td--date">
-              {{ order.date }}
-            </td>
-            <td class="order-tracking-table__td order-tracking-table__td--product">
-              {{ order.product }}
-            </td>
-            <td class="order-tracking-table__td order-tracking-table__td--amount">
-              {{ order.amount }}
-            </td>
-            <td class="order-tracking-table__td order-tracking-table__td--status">
-              <span [class]="badgeClass(order.status)">
-                {{ statusLabel[order.status] }}
-              </span>
-            </td>
-            <td class="order-tracking-table__td order-tracking-table__td--action">
-              <a href="/orders/detail" class="order-tracking-table__detail-link">Chi tiết</a>
-            </td>
+    <!-- div container căn max-width, giống .order-tracking-top__inner -->
+    <div class="order-tracking-table__container">
+      <table class="order-tracking-table">
+        <thead>
+          <tr class="order-tracking-table__head-row">
+            <th class="order-tracking-table__th order-tracking-table__th--id">Mã đơn hàng</th>
+            <th class="order-tracking-table__th order-tracking-table__th--date">Ngày đặt</th>
+            <th class="order-tracking-table__th order-tracking-table__th--product">Loại sản phẩm</th>
+            <th class="order-tracking-table__th order-tracking-table__th--amount">Tổng giá trị</th>
+            <th class="order-tracking-table__th order-tracking-table__th--status">Trạng thái</th>
+            <th class="order-tracking-table__th order-tracking-table__th--action"></th>
           </tr>
-        } @empty {
-          <tr>
-            <td class="order-tracking-table__empty" colspan="6">
-              Không có đơn hàng nào phù hợp.
-            </td>
-          </tr>
-        }
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+          @for (order of displayedOrders(); track order.id) {
+            <tr [class]="rowClass(order.status)">
+              <td class="order-tracking-table__td order-tracking-table__td--id">
+                <span class="order-tracking-table__order-id">{{ order.id }}</span>
+                <span class="order-tracking-table__order-sub">{{ order.sub }}</span>
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--date">
+                {{ order.date }}
+              </td>
+              <td class="order-tracking-table__td">
+                {{ order.product }}
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--amount">
+                {{ order.amount | number: '1.0-0' : 'vi' }}đ
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--status">
+                <span [class]="badgeClass(order.status)">
+                  {{ statusLabel[order.status] }}
+                </span>
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--action">
+                <a
+                  [routerLink]="order.type === 'bespoke'
+                    ? ['/orders', 'custom', cleanId(order.id)]
+                    : ['/orders', cleanId(order.id)]"
+                  class="order-tracking-table__detail-link"
+                >Chi tiết</a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="order-tracking-table__empty" colspan="6">
+                Không có đơn hàng nào phù hợp.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Pagination -->
@@ -203,101 +155,40 @@
       <p class="order-tracking-pagination__info">{{ paginationInfo() }}</p>
       <div class="order-tracking-pagination__pages">
 
-        <button class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+        <button
+          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
           aria-label="Trang trước"
           [disabled]="currentPage() === 1"
-          (click)="goToPage(currentPage() - 1)">
-          <img src="https://www.figma.com/api/mcp/asset/8d71ccb9-fb0a-464e-bc4b-67012a954955"
-            alt="" aria-hidden="true" />
+          (click)="goToPage(currentPage() - 1)"
+        >
+          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+            <path d="M6 1L1 5.5L6 10" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
 
         @for (page of pageNumbers(); track page) {
-          <button class="order-tracking-pagination__btn"
+          <button
+            class="order-tracking-pagination__btn"
             [class.order-tracking-pagination__btn--active]="page === currentPage()"
-            (click)="goToPage(page)">
-            {{ page }}
-          </button>
+            (click)="goToPage(page)"
+          >{{ page }}</button>
         }
 
-        <button class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+        <button
+          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
           aria-label="Trang sau"
           [disabled]="currentPage() === totalPages()"
-          (click)="goToPage(currentPage() + 1)">
-          <img src="https://www.figma.com/api/mcp/asset/029c366c-cafd-4fb8-9f43-04e679a122f9"
-            alt="" aria-hidden="true" />
+          (click)="goToPage(currentPage() + 1)"
+        >
+          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+            <path d="M1 1L6 5.5L1 10" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
 
       </div>
     </div>
   </div>
 
-</main>
-
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__grid">
-      <div class="site-footer__brand-col">
-        <a href="/" class="site-footer__brand">RENGA</a>
-        <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-        <div class="site-footer__social">
-          <a href="#" class="site-footer__social-link" aria-label="Email">
-            <img src="https://www.figma.com/api/mcp/asset/6d3ce4cc-378a-45f8-8ead-e6c4adf8c06c" alt="Email" />
-          </a>
-          <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-            <img src="https://www.figma.com/api/mcp/asset/156c8418-f7a2-4cb0-98fc-6dda0d0c9ada" alt="Phone" />
-          </a>
-          <a href="#" class="site-footer__social-link" aria-label="Facebook">
-            <img src="https://www.figma.com/api/mcp/asset/7b91023b-7680-4cd8-b1e2-14b4d5d0f742" alt="Facebook" />
-          </a>
-          <a href="#" class="site-footer__social-link" aria-label="Instagram">
-            <img src="https://www.figma.com/api/mcp/asset/2da9309f-0588-4ed8-b3bc-c84f9fd6b96e" alt="Instagram" />
-          </a>
-          <a href="#" class="site-footer__social-link" aria-label="TikTok">
-            <img src="https://www.figma.com/api/mcp/asset/1e9564c5-1e21-4f2b-bcc5-9779846a7e4e" alt="TikTok" />
-          </a>
-        </div>
-      </div>
-      <div class="site-footer__col">
-        <p class="site-footer__col-title">Về chúng tôi</p>
-        <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-        <a href="#" class="site-footer__link">The Studio</a>
-        <a href="#" class="site-footer__link">The Designer</a>
-        <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-      </div>
-      <div class="site-footer__col">
-        <p class="site-footer__col-title">Hỗ trợ khách hàng</p>
-        <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-        <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-        <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-        <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-      </div>
-      <div class="site-footer__col">
-        <p class="site-footer__col-title">Newsletter</p>
-        <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-        <form class="newsletter-form" novalidate>
-          <div class="newsletter-form__field">
-            <input class="newsletter-form__input" type="email"
-              placeholder="Email của bạn" aria-label="Địa chỉ email đăng ký nhận tin" />
-            <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-              <img src="https://www.figma.com/api/mcp/asset/2b06ff60-07d1-42b1-93e0-2b5945c90e36"
-                alt="" aria-hidden="true" />
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="site-footer__bottom">
-    <div class="site-footer__bottom-inner">
-      <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-      <div class="site-footer__bottom-links">
-        <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-        <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<button class="chat-fab" aria-label="Mở chat hỗ trợ">
-  <img src="https://www.figma.com/api/mcp/asset/6ad516f4-90e3-462e-99bf-cd55d6dafa2b" alt="Chat" />
-</button>
+</div>

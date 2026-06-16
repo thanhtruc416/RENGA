@@ -1,7 +1,11 @@
+/* ===== ORDER TRACKING PAGE ===== */
+
 .order-tracking-page {
   background: var(--color-white);
+  width: 100%;
 }
 
+/* ── Top section ─────────────────────────────────── */
 .order-tracking-top {
   padding: 0 var(--container-px);
 }
@@ -12,6 +16,7 @@
   padding: 40px 0 48px;
 }
 
+/* ── Breadcrumb ──────────────────────────────────── */
 .order-tracking-breadcrumb {
   display: flex;
   align-items: center;
@@ -25,7 +30,7 @@
   font-size: 20px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -41,14 +46,12 @@
 }
 
 .order-tracking-breadcrumb__sep {
-  width: 27px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
-  flex-shrink: 0;
-  opacity: 0.4;
+  font-size: 20px;
+  color: var(--color-border, #c4c7c7);
+  line-height: 1;
 }
 
+/* ── Hero row ────────────────────────────────────── */
 .order-tracking-hero {
   display: flex;
   align-items: flex-start;
@@ -98,7 +101,7 @@
 }
 
 .order-tracking-lookup-btn:hover {
-  background: #9a3f5c;
+  background: var(--color-primary-dark, #9a3f5c);
 }
 
 .order-tracking-member {
@@ -113,7 +116,7 @@
   font-weight: 400;
   font-size: 16px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   letter-spacing: 0.5px;
 }
 
@@ -133,9 +136,10 @@
   margin: 0;
 }
 
+/* ── Filters ─────────────────────────────────────── */
 .order-tracking-filters-wrap {
-  border-top: 1px solid #c4c7c7;
-  border-bottom: 1px solid #c4c7c7;
+  border-top: 1px solid var(--color-border, #c4c7c7);
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
   padding: 0 var(--container-px);
 }
 
@@ -161,7 +165,7 @@
   font-size: 16px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   white-space: nowrap;
 }
 
@@ -177,7 +181,7 @@
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
-  color: #1a1c1c;
+  color: var(--color-text, #1a1c1c);
   background: transparent;
   border: none;
   outline: none;
@@ -190,15 +194,14 @@
 
 .order-tracking-filter__arrow {
   position: absolute;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+  right: 12px;
+  font-size: 14px;
+  color: var(--color-text-muted, #444748);
   pointer-events: none;
 }
 
 .order-tracking-filters__apply {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   background: var(--color-black);
@@ -214,32 +217,42 @@
   white-space: nowrap;
   transition: background 0.15s;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .order-tracking-filters__apply:hover {
   background: #333;
 }
 
-.order-tracking-filters__apply-icon {
-  width: 10px;
-  height: 7px;
-  object-fit: contain;
-  flex-shrink: 0;
+/* ══════════════════════════════════════════════════
+   TABLE SECTION
+   
+   Cấu trúc đúng:
+   .order-tracking-table-wrap          ← full-width, pink bg, padding ngang
+     .order-tracking-table__container  ← max-width + margin auto (giống các section khác)
+       table.order-tracking-table      ← width: 100%, table-layout: fixed
+   
+   Lý do: max-width trên <table> không hoạt động đúng vì browser
+   tính width của table theo content, không theo parent width.
+   Cần div wrapper để giới hạn max-width.
+══════════════════════════════════════════════════ */
+.order-tracking-table-wrap {
+  /* background: var(--color-primary-light); */
+  padding-bottom: 32px;
 }
 
-.order-tracking-table-wrap {
+.order-tracking-table__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
   background: var(--color-primary-light);
-  margin: 0 var(--container-px);
-  overflow-x: auto;
-  padding-bottom: 32px;
+  box-sizing: border-box;
 }
 
 .order-tracking-table {
   width: 100%;
   border-collapse: collapse;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: table;
+  table-layout: fixed;
 }
 
 .order-tracking-table__head-row {
@@ -252,26 +265,22 @@
   font-size: 16px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #444748;
-  padding: 24px 2px;
+  color: var(--color-text-muted, #444748);
+  padding: 24px 8px;
   white-space: nowrap;
   text-align: left;
 }
 
-.order-tracking-table__th--amount {
-  text-align: right;
-}
-
-.order-tracking-table__th--status {
-  text-align: center;
-}
-
-.order-tracking-table__th--action {
-  width: 86px;
-}
+/* Column widths — tổng = 100% */
+.order-tracking-table__th--id      { width: 25%; }
+.order-tracking-table__th--date    { width: 13%; }
+.order-tracking-table__th--product { width: 27%; }
+.order-tracking-table__th--amount  { width: 16%; text-align: right; }
+.order-tracking-table__th--status  { width: 15%; text-align: center; }
+.order-tracking-table__th--action  { width: 7%;  text-align: right; }
 
 .order-tracking-table__row {
-  border-bottom: 1px solid #c4c7c7;
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
 }
 
 .order-tracking-table__row--cancelled {
@@ -283,39 +292,42 @@
   font-weight: 400;
   font-size: 16px;
   color: var(--color-black);
-  padding: 32px 2px;
+  padding: 28px 8px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .order-tracking-table__td--id {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  padding-right: 12px;
 }
 
 .order-tracking-table__order-id {
+  display: block;
   font-weight: 700;
   font-size: 16px;
   color: var(--color-black);
 }
 
 .order-tracking-table__order-sub {
+  display: block;
   font-weight: 400;
   font-size: 12px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
+  margin-top: 2px;
 }
 
 .order-tracking-table__td--date {
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   white-space: nowrap;
 }
 
 .order-tracking-table__td--amount {
   font-family: var(--font-serif);
   font-size: 16px;
-  color: #9a3f5c;
+  color: var(--color-primary);
   text-align: right;
   white-space: nowrap;
 }
@@ -328,49 +340,53 @@
   text-align: right;
 }
 
+.order-tracking-table__empty {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--color-text-muted, #444748);
+  font-family: var(--font-sans);
+}
+
+/* ── Status badges ───────────────────────────────── */
 .order-tracking-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: -0.6px;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  padding: 3px 16px;
+  padding: 5px 14px;
   white-space: nowrap;
 }
 
-.order-tracking-badge--shipping {
-  background: var(--color-black);
-  color: var(--color-white);
-}
+.order-tracking-badge--shipping    { background: var(--color-black); color: var(--color-white); }
+.order-tracking-badge--completed   { background: transparent; color: var(--color-black); border: 1px solid var(--color-black); }
+.order-tracking-badge--cancelled   { background: #ba1a1a; color: var(--color-white); }
+.order-tracking-badge--in-progress { background: var(--color-primary); color: var(--color-white); }
 
-.order-tracking-badge--completed {
-  background: #e8e8e8;
-  color: #1a1c1c;
-  border: 1px solid var(--color-black);
-}
-
-.order-tracking-badge--cancelled {
-  background: #ba1a1a;
-  color: var(--color-white);
-}
-
+/* ── Detail link ─────────────────────────────────── */
 .order-tracking-table__detail-link {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
   color: var(--color-black);
   text-decoration: underline;
+  text-underline-offset: 3px;
   white-space: nowrap;
   transition: color 0.15s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 .order-tracking-table__detail-link:hover {
   color: var(--color-primary);
 }
 
+/* ── Pagination ──────────────────────────────────── */
 .order-tracking-pagination-wrap {
   padding: 0 var(--container-px);
   border-top: 1px solid var(--color-black);
@@ -390,28 +406,28 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   margin: 0;
 }
 
 .order-tracking-pagination__pages {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 .order-tracking-pagination__btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border: 1px solid #c4c7c7;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border, #c4c7c7);
   background: transparent;
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
-  color: #1a1c1c;
+  color: var(--color-text, #1a1c1c);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
@@ -428,45 +444,10 @@
 }
 
 .order-tracking-pagination__btn--arrow {
-  padding: 2px;
-}
-
-.order-tracking-pagination__btn--arrow img {
-  width: 7px;
-  height: 11px;
-  object-fit: contain;
-  display: block;
+  font-size: 18px;
 }
 
 .order-tracking-pagination__btn:disabled {
   opacity: 0.3;
   cursor: default;
-}
-
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 900;
-  transition: background 0.15s;
-}
-
-.chat-fab:hover {
-  background: #9a3f5c;
-}
-
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
 }
