@@ -16,5 +16,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./appointment-history/appointment-history.component').then((m) => m.AppointmentHistoryComponent),
   },
+ 
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.routes').then((m) => m.adminRoutes),
+  },
+
   { path: '', redirectTo: 'studio', pathMatch: 'full' },
 ];

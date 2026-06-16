@@ -1,3 +1,223 @@
-<div class="warranty-management-page">
-  <p>warranty-management placeholder</p>
+<div class="warranty-page">
+  <!-- Page Header -->
+  <header class="warranty-page__header">
+    <div class="warranty-page__title-group">
+      <h1 class="warranty-page__title">Xử lý yêu cầu sửa chữa và bảo hành</h1>
+      <p class="warranty-page__subtitle">Duyệt các yêu cầu bảo hành hợp lệ hoặc gửi báo giá sửa chữa ngoài bảo hành</p>
+    </div>
+  </header>
+
+  <!-- Filters & Action Bar (Giao diện giả lập filter) -->
+  <div class="warranty-page__toolbar">
+    <div class="warranty-page__filters">
+      <div class="filter-group">
+        <label class="filter-label">DANH MỤC SẢN PHẨM</label>
+        <select class="filter-select"><option>Tất cả</option></select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">TRẠNG THÁI</label>
+        <select class="filter-select"><option>Tất cả</option></select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">THỜI GIAN</label>
+        <select class="filter-select"><option>30 Ngày trước</option></select>
+      </div>
+    </div>
+    <button class="btn btn--black">TẠO YÊU CẦU BẢO HÀNH MỚI</button>
+  </div>
+
+  <!-- Statistics Section -->
+  <div class="warranty-page__stats">
+    @for (stat of stats(); track stat.id) {
+      <div class="stat-card">
+        <p class="stat-card__label">{{ stat.label }}</p>
+        <div class="stat-card__value-group">
+          <span class="stat-card__value">{{ stat.value }}</span>
+        </div>
+        @if (stat.subtext) {
+          <span class="stat-card__subtext">{{ stat.subtext }}</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Data Table -->
+  <div class="warranty-table">
+    <div class="warranty-table__header">
+      <span>SẢN PHẨM</span>
+      <span>ID</span>
+      <span>KHÁCH HÀNG</span>
+      <span>MÔ TẢ</span>
+      <span>TRẠNG THÁI</span>
+      <span class="text-center">THAO TÁC</span>
+    </div>
+
+    <div class="warranty-table__body">
+      @for (req of requests(); track req.id) {
+        <div class="warranty-table__row">
+          
+          <!-- Col 1: Product -->
+          <div class="table-cell table-cell--product">
+            <img class="table-cell__img" [src]="req.productImage" [alt]="req.productName" loading="lazy">
+            <div class="table-cell__info">
+              <p class="table-cell__title">{{ req.productName }}</p>
+              <p class="table-cell__sub">{{ req.sku }}</p>
+            </div>
+          </div>
+
+          <!-- Col 2: ID -->
+          <div class="table-cell">
+            <p class="table-cell__text">{{ req.id }}</p>
+          </div>
+
+          <!-- Col 3: Customer -->
+          <div class="table-cell">
+            <p class="table-cell__title">{{ req.customerName }}</p>
+            <p class="table-cell__sub">{{ req.customerEmail }}</p>
+          </div>
+
+          <!-- Col 4: Description -->
+          <div class="table-cell">
+            <p class="table-cell__text table-cell__text--truncate">{{ req.description }}</p>
+          </div>
+
+          <!-- Col 5: Status -->
+          <div class="table-cell">
+            @if (req.status === 'pending') { <span class="status-badge status-badge--pending">CHỜ XỬ LÝ</span> }
+            @if (req.status === 'repairing') { <span class="status-badge status-badge--processing">ĐANG SỬA CHỮA</span> }
+            @if (req.status === 'completed') { <span class="status-badge status-badge--completed">ĐÃ HOÀN TẤT</span> }
+          </div>
+
+          <!-- Col 6: Actions -->
+          <div class="table-cell table-cell--actions text-center">
+            @if (req.actionState === 'process') {
+              <button class="btn-action btn-action--primary" (click)="openModal(req)">XỬ LÝ</button>
+            }
+            @if (req.actionState === 'view') {
+              <button class="btn-action btn-action--outline">XEM CHI TIẾT</button>
+            }
+            @if (req.actionState === 'delivered') {
+              <span class="text-delivered">✓ ĐÃ GIAO HÀNG</span>
+            }
+          </div>
+
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Pagination (Giả lập) -->
+  <footer class="warranty-page__pagination">
+    <p class="warranty-page__pagination-info">HIỂN THỊ 1-5 TRÊN 20 YÊU CẦU BẢO HÀNH</p>
+    <div class="warranty-page__pagination-controls">
+      <button class="pagination-btn">&lsaquo;</button>
+      <button class="pagination-btn pagination-btn--active">1</button>
+      <button class="pagination-btn">2</button>
+      <button class="pagination-btn">3</button>
+      <button class="pagination-btn">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
+
+<!-- ================= MODAL XỬ LÝ BẢO HÀNH ================= -->
+@if (selectedRequest(); as req) {
+  <div class="modal-overlay">
+    <div class="modal-container" [formGroup]="processForm">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Xử lý yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="modal-subtitle">Thiết lập phương án xử lý cho yêu cầu số {{ req.id }}</p>
+        </div>
+        <button class="modal-close" (click)="closeModal()" aria-label="Đóng">✕</button>
+      </div>
+
+      <!-- Modal Info Section -->
+      <div class="modal-info-card">
+        <img class="modal-info__img" [src]="req.productImage" [alt]="req.productName">
+        <div class="modal-info__details">
+          <p class="modal-info__label">Sản phẩm</p>
+          <p class="modal-info__product-name">{{ req.productName }}</p>
+          
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Mã bảo hành</p>
+              <p class="modal-info__text">{{ req.productId }}</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">{{ req.customerName }}</p>
+            </div>
+          </div>
+
+          <p class="modal-info__label">Mô tả lỗi</p>
+          <p class="modal-info__text">Móc khóa bị lỏng, một viên kim cương tấm ở cạnh bên có dấu hiệu bị lung lay sau khi va chạm mạnh.</p>
+        </div>
+      </div>
+
+      <!-- Evidence Images -->
+      <div class="modal-section">
+        <p class="modal-section__title">ẢNH MINH CHỨNG</p>
+        <div class="modal-evidence-grid">
+          @for (img of req.evidenceImages; track $index) {
+            <img class="modal-evidence__img" [src]="img" alt="Ảnh minh chứng">
+          } @empty {
+            <p class="modal-info__text">Khách hàng không đính kèm ảnh.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Modal Tabs -->
+      <div class="modal-tabs">
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'quote'" (click)="switchTab('quote')">
+          BÁO GIÁ SỬA CHỮA
+        </button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'free'" (click)="switchTab('free')">
+          XÁC NHẬN MIỄN PHÍ
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Báo giá -->
+      @if (modalTab() === 'quote') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Hạng mục sửa chữa</label>
+            <input type="text" class="form-input" formControlName="repairItems" placeholder="VD: Thay móc khóa Platinum, Gắn lại kim cương tấm">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Chi phí dự kiến (VND)</label>
+              <div class="form-input-suffix">
+                <input type="text" class="form-input" formControlName="estimatedCost" placeholder="2.500.000">
+                <span>VND</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thời gian hoàn thành dự kiến</label>
+              <input type="text" class="form-input" formControlName="estimatedTime" placeholder="VD: 3 - 5 ngày làm việc">
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Tab Content 2: Miễn phí -->
+      @if (modalTab() === 'free') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Lý do miễn phí</label>
+            <textarea class="form-textarea" formControlName="freeReason" placeholder="Nhập lý do miễn phí (VD: Lỗi do nhà sản xuất, Sản phẩm trong thời gian bảo hành đặc biệt,...)"></textarea>
+          </div>
+        </div>
+      }
+
+      <!-- Modal Actions -->
+      <div class="modal-actions">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary" (click)="submitProcess()">GỬI THÔNG BÁO CHO KHÁCH HÀNG</button>
+      </div>
+
+    </div>
+  </div>
+}
