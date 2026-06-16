@@ -1,4 +1,4 @@
-﻿.modal-backdrop {
+.modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -24,25 +24,25 @@
 /* ── Card ─────────────────────────────────────────── */
 .payment-modal {
   background: var(--color-white);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
   width: 100%;
   max-width: 580px;
   position: relative;
   overflow: hidden;
   display: none;
   flex-shrink: 0;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
 }
 
 .payment-modal.is-active {
   display: block;
 }
 
-.payment-modal--success {
-  padding: 40px 32px 40px;
-  text-align: center;
+.payment-modal--failure {
+  padding: 32px 0 40px;
 }
 
-/* ── Close button ─────────────────────────────────── */
+/* ── Close button (X trong vòng tròn) ────────────────── */
 .payment-modal__close {
   position: absolute;
   top: 24px;
@@ -65,42 +65,47 @@
   opacity: 0.6;
 }
 
-/* ── Icon ─────────────────────────────────────────── */
-.payment-modal__icon-area {
+/* ── Icon (tam giác cảnh báo) ────────────────────────── */
+.payment-modal--failure .payment-modal__icon-area {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 8px;
 }
 
-/* ── Title / subtitle ─────────────────────────────── */
-.payment-modal--success .payment-modal__title {
+/* ── Title ─────────────────────────────────────────── */
+.payment-modal--failure .payment-modal__title {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 32px;
   line-height: 1.25;
   letter-spacing: 0;
   color: var(--color-black);
+  padding: 0 32px;
   text-align: center;
-  margin: 8px 0 16px;
+  margin: 8px 0 0;
 }
 
-.payment-modal--success .payment-modal__subtitle {
+/* ── Inner content ────────────────────────────────────── */
+.payment-modal--failure .payment-modal__inner {
+  padding: 0 32px;
+}
+
+.payment-modal--failure .payment-modal__subtitle {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.6;
   color: #444748;
   text-align: center;
-  margin-bottom: 24px;
+  margin: 16px 0 24px;
 }
 
-/* ── Order info card ──────────────────────────────── */
-.order-info-card {
+/* ── Order info card ──────────────────────────────────── */
+.payment-modal--failure .order-info-card {
   border: 1px solid var(--color-border);
   padding: 20px;
   margin-bottom: 24px;
-  text-align: left;
 }
 
 .order-info-card__header {
@@ -124,6 +129,10 @@
   margin-bottom: 6px;
 }
 
+.order-info-card__meta-label--sm {
+  font-size: 12px;
+}
+
 .order-info-card__meta-value {
   font-family: var(--font-sans);
   font-weight: 700;
@@ -131,11 +140,11 @@
   color: var(--color-black);
 }
 
-.order-info-card__date {
+.order-info-card__total {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 18px;
-  color: #9a3f5c;
+  color: var(--color-black);
 }
 
 .order-info-card__sep {
@@ -144,55 +153,45 @@
   margin: 0 0 18px;
 }
 
-.order-info-card__product {
+/* ── Hold / countdown row ─────────────────────────────── */
+.order-info-card__hold {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
 }
 
-.order-info-card__thumb {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
+.order-info-card__clock-icon {
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.order-info-card__product-info {
-  padding-top: 2px;
-}
-
-.order-info-card__product-name {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: 0.2px;
-  color: var(--color-black);
-  margin-bottom: 6px;
-}
-
-.order-info-card__product-spec {
+.order-info-card__hold-desc {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 13px;
+  line-height: 1.5;
   color: #444748;
-  margin-bottom: 6px;
+  margin: 0;
+  display: inline;
 }
 
-.order-info-card__product-qty {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  color: var(--color-primary);
+/* Timer cùng hàng với icon + desc, màu hồng theo icon cảnh báo */
+.order-info-card__timer {
+  display: inline;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  color: #9a3f5c !important;
+  margin-left: 4px;
 }
 
-/* ── Action buttons ───────────────────────────────── */
+/* ── Action buttons ────────────────────────────────────── */
 .modal-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-md, 16px);
-  margin-bottom: var(--sp-lg, 24px);
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .modal-actions__primary {
@@ -208,12 +207,10 @@
   font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  text-decoration: none;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
   transition: background 0.15s;
-  flex: 1;
-  text-align: center;
 }
 
 .modal-actions__primary:hover {
@@ -221,17 +218,18 @@
 }
 
 .modal-actions__row {
-  display: flex;
-  align-items: stretch; 
-  gap: var(--sp-md, 16px);
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
+
 .modal-actions__outline {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px 12px;
   border: 1px solid var(--color-black);
+  border-radius: 4px;
   background: transparent;
   color: var(--color-black);
   font-family: var(--font-sans);
@@ -243,21 +241,18 @@
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s;
-  flex: 1;
-  text-align: center;
 }
 
 .modal-actions__outline:hover {
   background: #f5f5f5;
 }
 
-/* ── Modal register (Guest only) ──────────────────── */
+/* ── Modal register (Guest only) ──────────────────────── */
 .modal-register {
   background: var(--color-primary-light);
   padding: 20px;
   text-align: center;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .modal-register__title {
@@ -290,6 +285,7 @@
   letter-spacing: 1.4px;
   text-transform: uppercase;
   text-decoration: none;
+  border-radius: 4px;
   transition: background 0.15s;
 }
 
@@ -297,11 +293,9 @@
   background: #9a3f5c;
 }
 
-/* ── Back link ─────────────────────────────────────── */
+/* ── Back link ─────────────────────────────────────────── */
 .modal-back {
   text-align: center;
-  padding-top: 16px;
-  margin-top: 16px;
 }
 
 .modal-back__link {
@@ -316,7 +310,6 @@
   color: var(--color-black);
   text-decoration: none;
   transition: opacity 0.15s;
-  padding: 8px;
 }
 
 .modal-back__link:hover {

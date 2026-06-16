@@ -1,4 +1,4 @@
-﻿import { Component, HostListener, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, HostListener, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -6,33 +6,48 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  userMenuOpen = signal(false);
-  openNav = signal<string | null>(null);
+  readonly userMenuOpen = signal(false);
+  readonly orderMenuOpen = signal(false);
+  readonly openNav = signal<string | null>(null);
 
-  toggleUserMenu(e: Event) {
+  toggleUserMenu(e: Event): void {
     e.stopPropagation();
+    this.orderMenuOpen.set(false);
     this.openNav.set(null);
-    this.userMenuOpen.update(v => !v);
+    this.userMenuOpen.update((v) => !v);
   }
 
-  toggleNav(e: Event, key: string) {
+  toggleOrderMenu(e: Event): void {
     e.stopPropagation();
     this.userMenuOpen.set(false);
-    this.openNav.update(current => current === key ? null : key);
+    this.openNav.set(null);
+    this.orderMenuOpen.update((v) => !v);
+  }
+
+  toggleNav(e: Event, key: string): void {
+    e.stopPropagation();
+    this.userMenuOpen.set(false);
+    this.orderMenuOpen.set(false);
+    this.openNav.update((current) => (current === key ? null : key));
+  }
+
+  closeAll(): void {
+    this.userMenuOpen.set(false);
+    this.orderMenuOpen.set(false);
+    this.openNav.set(null);
   }
 
   @HostListener('document:click')
-  closeAll() {
-    this.userMenuOpen.set(false);
-    this.openNav.set(null);
+  onDocumentClick(): void {
+    this.closeAll();
   }
 
   @HostListener('document:keydown.escape')
-  onEscape() {
-    this.userMenuOpen.set(false);
-    this.openNav.set(null);
+  onEscape(): void {
+    this.closeAll();
   }
 }

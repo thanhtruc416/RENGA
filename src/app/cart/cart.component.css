@@ -1,11 +1,9 @@
-﻿/* ===== GIá»Ž HÃ€NG (CART) PAGE ===== */
-
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+﻿/* ── Page shell ── */
 .cart-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Hero / title â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Hero ── */
 .cart-hero {
   padding: 0 var(--container-px);
 }
@@ -14,6 +12,9 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 48px 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .cart-hero__title {
@@ -25,27 +26,78 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Tab filter bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.cart-tabs {
-  background: var(--color-primary-light);
-  height: 74px;
+/* Nhóm nút góc phải hero */
+.cart-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Nút "Chọn nhiều" — góc phải hero */
+.cart-hero__select-many {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: none;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  height: 48px;
   display: flex;
   align-items: center;
 }
 
+.cart-hero__select-many:hover,
+.cart-hero__select-many.is-active {
+  background: #9a3f5c;
+}
+
+/* Nút "+" vuông cạnh Chọn nhiều */
+.cart-hero__add-studio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  text-decoration: none;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.cart-hero__add-studio:hover {
+  background: #9a3f5c;
+}
+
+/* ── Tab bar ── */
+.cart-tabs {
+  padding: 0;
+  background: transparent;
+}
 .cart-tabs__inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--container-px);
+  padding: 16px var(--container-px);
+  background: var(--color-primary-light);
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
 }
 
 .cart-tabs__pills {
   display: flex;
+  align-items: center;
   gap: 16px;
 }
 
@@ -57,12 +109,11 @@
   text-transform: uppercase;
   padding: 10px 28px;
   border-radius: 20px;
-  border: 1px solid transparent;
+  border: 1px solid var(--color-black);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
-  background: rgba(247, 240, 243, 0.7);
+  background: #ffffff;
   color: var(--color-black);
-  border-color: var(--color-black);
 }
 
 .cart-tab.is-active {
@@ -74,104 +125,125 @@
 .cart-tab:hover:not(.is-active) {
   background: rgba(196, 96, 126, 0.1);
   border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.cart-tabs__actions {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.cart-tabs__select-many {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: var(--color-white);
-  background: var(--color-primary);
-  border: none;
-  padding: 10px 28px;
-  cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-
-.cart-tabs__select-many:hover,
-.cart-tabs__select-many.is-active {
-  background: #9a3f5c;
-}
-
-/* "+" add studio design button */
+/* Nút "+" Studio */
 .cart-tabs__add-studio {
   font-family: var(--font-sans);
-  font-weight: 900;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 1;
   color: var(--color-white);
   background: var(--color-primary);
   border: none;
-  padding: 7px 20px 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background 0.15s;
-  /* hidden by default â€” only visible on studio tab */
-  display: none;
-}
-
-.cart-tabs__add-studio.is-visible {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.15s;
 }
 
 .cart-tabs__add-studio:hover {
   background: #9a3f5c;
 }
 
-/* â”€â”€ Cart section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Cart section ── */
 .cart-section {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-px);
 }
 
-/* â”€â”€ Cart list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Cart list ── */
 .cart-list {
   display: flex;
   flex-direction: column;
 }
 
-/* â”€â”€ Cart item â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Cart item ── */
 .cart-item {
   display: flex;
   gap: 24px;
   align-items: flex-start;
-  border-bottom: 1px solid #c4c7c7;
+  border-bottom: 1px solid var(--color-border);
   padding: 24px 0 33px;
   transition: background 0.15s;
+  cursor: default;
 }
 
 .cart-item.is-hidden {
   display: none;
 }
 
-/* Multi-select mode */
+/* Checkbox wrapper — ẩn mặc định */
+.cart-item__checkbox-wrap {
+  display: none;
+  align-items: center;
+  align-self: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cart-list.is-selecting .cart-item__checkbox-wrap {
+  display: flex;
+}
+
+.cart-item__checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.cart-item__checkbox-custom {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--color-primary);
+  border-radius: 4px;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.cart-item.is-checked .cart-item__checkbox-custom {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.cart-item.is-checked .cart-item__checkbox-custom::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: 2px solid var(--color-white);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+
 .cart-list.is-selecting .cart-item {
   cursor: pointer;
-  padding-left: 8px;
 }
 
-.cart-list.is-selecting .cart-item.is-selected {
-  background: var(--color-primary-light);
+.cart-list.is-selecting .cart-item.is-checked {
+  background: gray(0.025/1);
+  border-bottom: 1px solid var(--color-primary); /* Thêm cái viền để phân biệt rõ item */
 }
 
-/* â”€â”€ Product thumbnail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Thumbnail ── */
 .cart-item__thumb {
   position: relative;
   width: 130px;
   aspect-ratio: 4 / 5;
   flex-shrink: 0;
-  background: #eee;
+  background: var(--color-bg-card);
   overflow: hidden;
 }
 
@@ -190,7 +262,7 @@
   pointer-events: none;
 }
 
-/* â”€â”€ Item body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Item body ── */
 .cart-item__body {
   flex: 1;
   min-width: 0;
@@ -217,10 +289,9 @@
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 24px;
-  line-height: 33.6px;
+  line-height: 1.4;
   text-transform: uppercase;
   color: var(--color-black);
-  white-space: nowrap;
 }
 
 .cart-item__spec {
@@ -228,14 +299,13 @@
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 1.8px;
-  color: #444748;
+  color: var(--color-muted);
 }
 
-/* â”€â”€ Qty row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Qty row ── */
 .cart-item__qty-row {
   display: flex;
   align-items: center;
-  gap: 0;
   padding-top: 8px;
 }
 
@@ -245,64 +315,58 @@
   font-size: 12px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: #1a1c1c;
+  color: var(--color-dark);
   white-space: nowrap;
   margin-right: 16px;
 }
 
-/* â”€â”€ Qty stepper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Qty stepper ── */
 .qty-stepper {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border: 1px solid var(--color-black);
+  height: 36px;
 }
 
 .qty-stepper__btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 13px;
+  width: 28px;
+  height: 36px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
+  font-size: 16px;
+  color: var(--color-black);
   transition: background 0.1s;
-  flex-shrink: 0;
 }
 
 .qty-stepper__btn:hover {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.qty-stepper__btn img {
-  width: 8px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
 .qty-stepper__value {
   font-family: var(--font-sans);
-  font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
-  color: #1a1c1c;
-  padding: 5px 16px;
-  min-width: 40px;
+  color: var(--color-dark);
+  width: 40px;
   text-align: center;
+  user-select: none;
 }
 
-/* â”€â”€ Studio item: saved date â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Studio: saved date ── */
 .cart-item__saved-date {
   font-family: var(--font-sans);
-  font-weight: 400;
   font-size: 12px;
   letter-spacing: 1.8px;
   font-style: italic;
-  color: #1a1c1c;
+  color: var(--color-dark);
   margin-top: 4px;
 }
 
-/* â”€â”€ Studio item: continue CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Studio: continue CTA ── */
 .cart-item__continue-btn {
   display: inline-flex;
   align-items: center;
@@ -324,7 +388,7 @@
   background: var(--color-primary);
 }
 
-/* â”€â”€ Remove button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Remove button ── */
 .cart-item__remove {
   background: none;
   border: none;
@@ -333,23 +397,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.7;
-  transition: opacity 0.15s;
+  color: var(--color-muted);
+  transition: color 0.15s;
   flex-shrink: 0;
 }
 
 .cart-item__remove:hover {
-  opacity: 1;
+  color: var(--color-dark);
 }
 
-.cart-item__remove img {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
-  display: block;
-}
-
-/* â”€â”€ Item bottom row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Item bottom ── */
 .cart-item__bottom {
   display: flex;
   align-items: baseline;
@@ -363,35 +420,45 @@
   font-size: 12px;
   letter-spacing: 1.8px;
   font-style: italic;
-  color: #444748;
+  color: var(--color-muted);
 }
 
 .cart-item__price {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 32px;
-  line-height: 41.6px;
-  color: #1a1c1c;
+  line-height: 1.3;
+  color: var(--color-dark);
   white-space: nowrap;
 }
 
-/* â”€â”€ Subtotal bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Empty state ── */
+.cart-empty-state {
+  padding: 64px 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  color: var(--color-muted);
+}
+
+/* ── Summary bar ── */
 .cart-summary {
-  background: var(--color-primary-light);
-  height: 74px;
   display: flex;
   align-items: center;
-  margin-top: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
 }
 
 .cart-summary__inner {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-px);
+  background: var(--color-primary-light);
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 74px;
 }
 
 .cart-summary__label {
@@ -400,37 +467,125 @@
   font-size: 14px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: #1a1c1c;
+  color: var(--color-dark);
+}
+
+.cart-summary__right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
 }
 
 .cart-summary__amount {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
-  color: #1a1c1c;
+  color: var(--color-dark);
   white-space: nowrap;
 }
 
-/* â”€â”€ Chat FAB (shared, same as other pages) â”€â”€â”€â”€â”€â”€â”€â”€ */
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
+.cart-summary__checkout-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 900;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 36px;
+  height: 48px;
+  white-space: nowrap;
+  transition: background 0.15s;
 }
 
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
+.cart-summary__checkout-btn:hover {
+  background: #9a3f5c;
+}
+
+/* ── Action bar (chọn nhiều) ── */
+.cart-action-bar {
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
+.cart-action-bar__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 74px;
+}
+
+.cart-action-bar__summary {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  color: var(--color-white);
+}
+
+.cart-action-bar__summary strong {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.cart-action-bar__btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-action-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 13px 32px;
+  height: 48px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.cart-action-bar__btn--delete {
+  background: transparent;
+  color: var(--color-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+}
+
+.cart-action-bar__btn--delete:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cart-action-bar__btn--pay {
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.cart-action-bar__btn--pay:hover {
+  background: #f5e8ec;
+}
+
+.cart-action-bar__btn.is-disabled,
+.cart-action-bar__btn--pay.is-disabled,
+.cart-action-bar__btn--delete.is-disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }

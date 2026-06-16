@@ -1,55 +1,48 @@
-<!-- ===== RENGA FOOTER — copy into every page ===== -->
-<!-- Requires: css/layout/footer.css (imported via main.css) -->
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__grid">
 
-      <!-- Brand column -->
       <div class="site-footer__brand-col">
-        <a href="../../index.html" class="site-footer__brand">RENGA</a>
+        <a routerLink="/" class="site-footer__brand">RENGA</a>
         <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
+        
         <div class="site-footer__social">
           <a href="#" class="site-footer__social-link" aria-label="Email">
-            <img src="https://www.figma.com/api/mcp/asset/30b0a301-f13e-47da-9626-5089deaa9c4c" alt="Email" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           </a>
           <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-            <img src="https://www.figma.com/api/mcp/asset/d75a243e-62bf-4d89-a127-02a9c651f5ce" alt="Phone" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
           </a>
           <a href="#" class="site-footer__social-link" aria-label="Facebook">
-            <img src="https://www.figma.com/api/mcp/asset/e7c33884-1664-42ad-a199-8778ef462076" alt="Facebook" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
           </a>
           <a href="#" class="site-footer__social-link" aria-label="Instagram">
-            <img src="https://www.figma.com/api/mcp/asset/0c34a259-11e7-4a00-825f-ec52b906f785" alt="Instagram" />
-          </a>
-          <a href="#" class="site-footer__social-link" aria-label="TikTok">
-            <img src="https://www.figma.com/api/mcp/asset/6d7bf5cc-b2f4-4b34-8b78-162a94434ac0" alt="TikTok" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </a>
         </div>
       </div>
 
-      <!-- Về chúng tôi -->
       <div class="site-footer__col">
         <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-        <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-        <a href="#" class="site-footer__link">The Studio</a>
-        <a href="#" class="site-footer__link">The Atelier</a>
-        <a href="#" class="site-footer__link">Vật liệu bền vững</a>
+        <a routerLink="/" class="site-footer__link">Câu chuyện thương hiệu</a>
+        <a routerLink="/studio" class="site-footer__link">The Studio</a>
+        <a routerLink="/consultation" class="site-footer__link">The Atelier</a>
+        <a routerLink="/" class="site-footer__link">Vật liệu bền vững</a>
       </div>
 
-      <!-- Hỗ trợ khách hàng -->
       <div class="site-footer__col">
         <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-        <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-        <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-        <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-        <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
+        <a routerLink="/" class="site-footer__link">Chính sách bảo hành</a>
+        <a routerLink="/" class="site-footer__link">Đổi trả & Hoàn tiền</a>
+        <a routerLink="/" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
+        <a routerLink="/" class="site-footer__link">Câu hỏi thường gặp</a>
       </div>
 
-      <!-- Newsletter -->
       <div class="site-footer__col">
         <p class="site-footer__col-title">NEWSLETTER</p>
         <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-        <form class="newsletter-form" novalidate>
+        
+        <form class="newsletter-form" (submit)="$event.preventDefault()">
           <div class="newsletter-form__field">
             <input
               class="newsletter-form__input"
@@ -58,7 +51,10 @@
               aria-label="Địa chỉ email đăng ký nhận tin"
             />
             <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-              <img src="https://www.figma.com/api/mcp/asset/3b46e854-0b81-46ac-9959-802c7a43b758" alt="" aria-hidden="true" />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </button>
           </div>
         </form>

@@ -1,13 +1,11 @@
-﻿/* ===== CHI TIáº¾T ÄÆ N HÃ€NG TÃ™Y BIáº¾N / THIáº¾T Káº¾ =====
-   Extends order-detail.css â€” link both stylesheets
-   =================================================== */
+﻿/* ===== CHI TIẾT ĐƠN HÀNG TÙY BIẾN ===== */
 
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* -- Page shell ----------------------------------- */
 .order-detail-custom-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Hero: title + order# + action buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* -- Hero: breadcrumb + title + actions ----------- */
 .odc-hero {
   padding: 0 var(--container-px);
 }
@@ -23,6 +21,41 @@
 
 .odc-hero__left {
   flex: 1;
+}
+
+/* Breadcrumb */
+.odc-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.odc-breadcrumb__item {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.odc-breadcrumb__item:hover {
+  color: var(--color-primary);
+}
+
+.odc-breadcrumb__item--current {
+  color: var(--color-black);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.odc-breadcrumb__sep {
+  font-size: 20px;
+  color: var(--color-border, #c4c7c7);
+  line-height: 1;
 }
 
 .odc-hero__title {
@@ -70,10 +103,10 @@
 }
 
 .odc-hero__btn:hover {
-  background: #9a3f5c;
+  background: var(--color-primary-dark, #9a3f5c);
 }
 
-/* â”€â”€ Two-column body layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* -- Two-column body layout ----------------------- */
 .odc-body {
   padding: 32px var(--container-px) 80px;
 }
@@ -87,16 +120,13 @@
   align-items: start;
 }
 
-/* â”€â”€ LEFT COLUMN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Status bar wrapper (reuses status-bar from order-detail.css) */
+/* -- LEFT COLUMN ---------------------------------- */
 .odc-status-wrap {
-  border: 1px solid var(--color-black);
-  padding: 33px;
+  border: none;
+  padding: 0px;
   margin-bottom: 32px;
 }
 
-/* â”€â”€ Craftsmanship timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .craft-timeline {
   border-left: 2px solid var(--color-black);
   padding-left: 34px;
@@ -105,31 +135,19 @@
   gap: 40px;
 }
 
-.craft-timeline__heading {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-style: italic;
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--color-black);
-  padding-bottom: 8px;
-}
-
 .craft-step {
   position: relative;
 }
 
-/* Diamond marker on the left border */
 .craft-step::before {
   content: '';
   position: absolute;
-  left: -45px;
+  left: -43px;
   top: 1px;
   width: 16px;
   height: 16px;
   transform: rotate(45deg);
-  background: var(--color-border);
-  flex-shrink: 0;
+  background: var(--color-border, #c4c7c7);
 }
 
 .craft-step--done::before {
@@ -137,11 +155,7 @@
 }
 
 .craft-step--active::before {
-  background: #9a3f5c;
-}
-
-.craft-step--pending::before {
-  background: var(--color-border);
+  background: var(--color-primary);
 }
 
 .craft-step__inner {
@@ -150,15 +164,10 @@
   gap: 4px;
 }
 
-/* Active step gets a highlighted background box */
 .craft-step--active .craft-step__inner {
-  background: #e7e1e4;
+  background: #f7f1f3; /* Màu hồng nhạt nền cho bước hiện tại */
   padding: 24px;
-  margin-left: 0;
-}
-
-.craft-step--pending {
-  opacity: 0.4;
+  border-left: 4px solid var(--color-primary);
 }
 
 .craft-step__num {
@@ -167,44 +176,30 @@
   font-size: 12px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: #747878;
+  color: var(--color-text-muted, #747878);
 }
 
 .craft-step--active .craft-step__num {
-  color: #9a3f5c;
+  color: var(--color-primary);
 }
 
 .craft-step__title {
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: 16px;
-  line-height: 24px;
   color: var(--color-black);
 }
 
-.craft-step__detail {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 25.6px;
-  color: #444748;
+/* -- RIGHT COLUMN --------------------------------- */
+.odc-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.craft-step__time {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 25.6px;
-  color: #444748;
-}
-
-/* â”€â”€ RIGHT COLUMN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Spec list card (pink semi-transparent) */
 .odc-spec-list {
-  background: rgba(196, 96, 126, 0.6);
+  background: rgba(196, 96, 126, 0.6);/* Màu hồng phấn cho box thông số */
   padding: 32px;
-  margin-bottom: 0;
 }
 
 .odc-spec-list__heading {
@@ -219,32 +214,22 @@
 
 .odc-spec-row {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   padding-bottom: 17px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   margin-bottom: 24px;
-}
-
-.odc-spec-row:last-child {
-  margin-bottom: 0;
 }
 
 .odc-spec-row__label {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 15px;
-  line-height: 15px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .odc-spec-row__value {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 25.6px;
   color: var(--color-white);
-  text-align: right;
+  font-weight: 400;
 }
 
 /* Shipping info card */
@@ -259,9 +244,9 @@
   font-size: 12px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: var(--color-dark);
+  color: var(--color-text, #1a1c1c);
   padding-bottom: 17px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
   margin-bottom: 24px;
 }
 
@@ -281,6 +266,7 @@
   width: 17px;
   height: auto;
   object-fit: contain;
+  color: #9a3f5c;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -290,7 +276,7 @@
   font-weight: 400;
   font-size: 10px;
   line-height: 15px;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
   display: block;
 }
 
@@ -299,14 +285,14 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: var(--color-dark);
+  color: var(--color-text, #1a1c1c);
 }
 
 .odc-shipping-row__value--normal {
   font-weight: 400;
 }
 
-/* Artisan highlight card */
+/* Artisan card */
 .odc-artisan-card {
   border: 1px solid var(--color-black);
   padding: 33px;
@@ -330,14 +316,6 @@
 }
 
 .odc-artisan-avatar {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  background: #eee;
-  flex-shrink: 0;
-}
-
-.odc-artisan-avatar-overlay {
   position: relative;
   width: 80px;
   height: 80px;
@@ -346,13 +324,14 @@
   flex-shrink: 0;
 }
 
-.odc-artisan-avatar-overlay img {
+.odc-artisan-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.odc-artisan-avatar-overlay::after {
+.odc-artisan-avatar::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -365,7 +344,7 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: var(--color-dark);
+  color: var(--color-text, #1a1c1c);
 }
 
 .odc-artisan-role {
@@ -374,7 +353,7 @@
   font-style: italic;
   font-size: 12px;
   line-height: 18px;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
 }
 
 .odc-artisan-quote {
@@ -383,10 +362,129 @@
   font-style: italic;
   font-size: 16px;
   line-height: 25.6px;
-  color: #444748;
+  color: var(--color-text-muted, #444748);
 }
 
-/* Right column stacked cards with spacing */
-.odc-right > * + * {
-  margin-top: 16px;
+/* ══ STATUS BAR ═══════════════════════════════════ */
+.status-bar {
+  background: var(--color-white);
+  border: 1px solid var(--color-black);
+  padding: 32px 9px 24px;
+}
+
+.status-bar__heading {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  padding: 0 23px;
+  margin-bottom: 24px;
+}
+
+.status-bar__track {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.status-bar__track::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 16px;
+  height: 2px;
+  background: var(--color-border, #c4c7c7);
+  z-index: 0;
+}
+
+.status-bar__track::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  width: calc((100% - 32px) * var(--progress-pct, 0));
+  top: 16px;
+  height: 2px;
+  background: var(--color-black);
+  z-index: 0;
+  transition: width 0.3s ease;
+}
+
+.status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.status-step__dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.status-step--done .status-step__dot {
+  background: var(--color-black);
+}
+
+.status-step--done .status-step__dot::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid var(--color-white);
+  border-bottom: 2px solid var(--color-white);
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+.status-step--active .status-step__dot {
+  background: var(--color-white);
+  border: 2px solid var(--color-black);
+}
+
+.status-step__dot-inner {
+  width: 10px;
+  height: 10px;
+  background: var(--color-black);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-step--pending .status-step__dot {
+  background: var(--color-white);
+  border: 1px solid var(--color-border, #c4c7c7);
+}
+
+.status-step__label {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+.status-step--pending .status-step__label {
+  color: var(--color-text-muted, #444748);
+}
+
+
+.craft-timeline-heading {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 20px;
+  color: #1a1c1c;
+  margin-bottom: 24px;
+  display: block;
 }

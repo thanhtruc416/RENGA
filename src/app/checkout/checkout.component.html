@@ -1,637 +1,323 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thanh toán đơn hàng | RENGA</title>
-  <link rel="stylesheet" href="../../css/main.css" />
-  <link rel="stylesheet" href="../../css/pages/checkout.css" />
-  <link rel="stylesheet" href="../../css/components/payment-modal.css" />
-</head>
-<body class="checkout-page">
+﻿<div class="checkout-page">
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header__inner">
+  <!-- ── Top: breadcrumb + title + timer ── -->
+  <div class="checkout-top">
+    <div class="checkout-top__inner">
 
-      <div class="site-header__top">
-        <a href="../../index.html" class="site-header__logo">
-          <img class="site-header__logo-icon"
-            src="https://www.figma.com/api/mcp/asset/6130b51f-66fb-4836-a74d-765bdc92f58f"
-            alt="RENGA" />
-        </a>
-        <div class="site-header__actions">
-          <a href="gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
-            <img src="https://www.figma.com/api/mcp/asset/97a706f0-4089-4cb8-985c-f8d3e482b061" alt="Giỏ hàng" />
-          </a>
-          <a href="lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
-            <img src="https://www.figma.com/api/mcp/asset/f83a4781-a415-4476-a4d8-9e67831b0830" alt="Đơn hàng" />
-          </a>
-          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
-            <img class="site-header__avatar"
-              src="https://www.figma.com/api/mcp/asset/0e7abba3-a53c-4217-ace5-ba440fb38146"
-              alt="Tài khoản" />
-          </a>
-        </div>
-      </div>
+      <nav class="breadcrumb" aria-label="Điều hướng trang">
+        <a routerLink="/" class="breadcrumb__item">Trang chủ</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <a routerLink="/cart" class="breadcrumb__item">Giỏ hàng</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="breadcrumb__item breadcrumb__item--current" aria-current="page">Thanh toán</span>
+      </nav>
 
-      <div class="site-header__bottom">
-        <nav class="site-header__nav" aria-label="Menu chính">
-          <div class="site-header__nav-item">
-            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
-          </div>
-        </nav>
-        <div class="site-header__search">
-          <img class="site-header__search-icon"
-            src="https://www.figma.com/api/mcp/asset/d51218ed-9f9f-46dd-b5b2-fc8924f530b4"
-            alt="" aria-hidden="true" />
-          <input class="site-header__search-input" type="search"
-            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
+      <div class="checkout-title-row">
+        <h1 class="checkout-title">Thanh toán đơn hàng</h1>
+
+        <div class="checkout-timer" role="timer" aria-live="polite" aria-label="Thời gian thanh toán còn lại">
+          <p class="checkout-timer__label">Thời gian thanh toán còn lại</p>
+          <p class="checkout-timer__time">{{ countdownDisplay() }}</p>
         </div>
       </div>
 
     </div>
-  </header>
+  </div>
 
-  <!-- ===== MAIN ===== -->
-  <main>
-    <div class="checkout-top">
-      <div class="checkout-top__inner">
+  <!-- ── Body: form + summary ── -->
+  <div class="checkout-body">
+    <div class="checkout-body__inner">
 
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb" aria-label="Điều hướng trang">
-          <a href="../../index.html" class="breadcrumb__item">Trang chủ</a>
-          <img class="breadcrumb__sep"
-            src="https://www.figma.com/api/mcp/asset/8daf302f-b0b7-4a11-bc9f-51dec87b55a7"
-            alt="" aria-hidden="true" />
-          <a href="gio-hang.html" class="breadcrumb__item">Giỏ hàng</a>
-          <img class="breadcrumb__sep"
-            src="https://www.figma.com/api/mcp/asset/8daf302f-b0b7-4a11-bc9f-51dec87b55a7"
-            alt="" aria-hidden="true" />
-          <span class="breadcrumb__item breadcrumb__item--current" aria-current="page">Thanh toán</span>
-        </nav>
+      <!-- ── LEFT: Form ── -->
+      <form class="checkout-form" [formGroup]="shippingForm" (ngSubmit)="onSubmit()">
 
-        <!-- Title row -->
-        <div class="checkout-title-row">
-          <h1 class="checkout-title">Thanh toán đơn hàng</h1>
-
-          <!-- Countdown timer -->
-          <div class="checkout-timer" role="timer" aria-live="polite" aria-label="Thời gian thanh toán còn lại">
-            <p class="checkout-timer__label">Thời gian thanh toán còn lại</p>
-            <p class="checkout-timer__time" id="countdown">23:59:56</p>
+        <!-- Section 01: Shipping -->
+        <section class="checkout-section" aria-labelledby="shipping-heading">
+          <div class="checkout-section__head">
+            <span class="checkout-section__number" aria-hidden="true">01</span>
+            <h2 class="checkout-section__title" id="shipping-heading">Thông tin vận chuyển</h2>
           </div>
+
+          <div class="shipping-fields">
+
+            <div class="fields-row fields-row--2col">
+              <div class="field-group">
+                <label class="field-group__label" for="full-name">HỌ TÊN *</label>
+                <input
+                  class="field-group__input"
+                  id="full-name"
+                  type="text"
+                  autocomplete="name"
+                  formControlName="fullName"
+                  placeholder=" "
+                />
+              </div>
+              <div class="field-group">
+                <label class="field-group__label" for="phone">SỐ ĐIỆN THOẠI *</label>
+                <input
+                  class="field-group__input"
+                  id="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  formControlName="phone"
+                  placeholder=" "
+                />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-group__label" for="email">EMAIL (TÙY CHỌN)</label>
+              <input
+                class="field-group__input"
+                id="email"
+                type="email"
+                autocomplete="email"
+                formControlName="email"
+                placeholder=" "
+              />
+            </div>
+
+            <div class="fields-row fields-row--2col">
+              <div class="field-group field-group--select">
+                <label class="field-group__label field-group__label--above" for="province">TỈNH/THÀNH *</label>
+                <div class="field-group__select-wrap">
+                  <select class="field-group__select" id="province" formControlName="province">
+                    <option value="" disabled>Chọn Tỉnh/Thành</option>
+                    <option value="hcm">TP. Hồ Chí Minh</option>
+                    <option value="hn">Hà Nội</option>
+                    <option value="dn">Đà Nẵng</option>
+                  </select>
+                  <span class="field-group__select-icon" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <div class="field-group field-group--select">
+                <label class="field-group__label field-group__label--above" for="district">PHƯỜNG/XÃ *</label>
+                <div class="field-group__select-wrap">
+                  <select class="field-group__select" id="district" formControlName="district">
+                    <option value="" disabled>Chọn Phường/Xã</option>
+                  </select>
+                  <span class="field-group__select-icon" aria-hidden="true">▾</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-group__label" for="address">SỐ NHÀ, TÊN ĐƯỜNG *</label>
+              <input
+                class="field-group__input"
+                id="address"
+                type="text"
+                autocomplete="street-address"
+                formControlName="address"
+                placeholder=" "
+              />
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Section 02: Payment method -->
+        <section class="checkout-section" aria-labelledby="payment-heading">
+          <div class="checkout-section__head">
+            <span class="checkout-section__number" aria-hidden="true">02</span>
+            <h2 class="checkout-section__title" id="payment-heading">Phương thức thanh toán</h2>
+          </div>
+
+          <div class="payment-options" role="radiogroup" aria-labelledby="payment-heading">
+
+            <label class="payment-opt" [class.is-active]="selectedPayment() === 'cod'">
+              <input
+                class="payment-opt__radio"
+                type="radio"
+                name="payment"
+                [checked]="selectedPayment() === 'cod'"
+                (change)="selectPayment('cod')"
+              />
+              <span class="payment-opt__radio-ui" [class.payment-opt__radio-ui--empty]="selectedPayment() !== 'cod'" aria-hidden="true">
+                @if (selectedPayment() === 'cod') {
+                  <span class="payment-opt__radio-dot"></span>
+                }
+              </span>
+              <span class="payment-opt__label">Thanh toán khi nhận hàng (COD)</span>
+            </label>
+
+            <label class="payment-opt" [class.is-active]="selectedPayment() === 'bank'">
+              <input
+                class="payment-opt__radio"
+                type="radio"
+                name="payment"
+                [checked]="selectedPayment() === 'bank'"
+                (change)="selectPayment('bank')"
+              />
+              <span class="payment-opt__radio-ui" [class.payment-opt__radio-ui--empty]="selectedPayment() !== 'bank'" aria-hidden="true">
+                @if (selectedPayment() === 'bank') {
+                  <span class="payment-opt__radio-dot"></span>
+                }
+              </span>
+              <span class="payment-opt__label">Chuyển khoản ngân hàng</span>
+            </label>
+
+            <label class="payment-opt" [class.is-active]="selectedPayment() === 'ewallet'">
+              <input
+                class="payment-opt__radio"
+                type="radio"
+                name="payment"
+                [checked]="selectedPayment() === 'ewallet'"
+                (change)="selectPayment('ewallet')"
+              />
+              <span class="payment-opt__radio-ui" [class.payment-opt__radio-ui--empty]="selectedPayment() !== 'ewallet'" aria-hidden="true">
+                @if (selectedPayment() === 'ewallet') {
+                  <span class="payment-opt__radio-dot"></span>
+                }
+              </span>
+              <span class="payment-opt__label">Ví điện tử (Momo/ZaloPay)</span>
+            </label>
+
+            <label class="payment-opt" [class.is-active]="selectedPayment() === 'card'">
+              <input
+                class="payment-opt__radio"
+                type="radio"
+                name="payment"
+                [checked]="selectedPayment() === 'card'"
+                (change)="selectPayment('card')"
+              />
+              <span class="payment-opt__radio-ui" [class.payment-opt__radio-ui--empty]="selectedPayment() !== 'card'" aria-hidden="true">
+                @if (selectedPayment() === 'card') {
+                  <span class="payment-opt__radio-dot"></span>
+                }
+              </span>
+              <span class="payment-opt__label">Thẻ tín dụng / Ghi nợ</span>
+            </label>
+
+          </div>
+        </section>
+
+      </form>
+
+      <!-- ── RIGHT: Order summary ── -->
+      <aside class="order-summary" aria-label="Tóm tắt đơn hàng">
+
+        <div class="order-summary__heading">
+          <span class="order-summary__heading-text">Tổng đơn hàng ({{ orderCount() }})</span>
         </div>
 
-      </div>
-    </div>
-
-    <!-- Checkout body -->
-    <div class="checkout-body">
-      <div class="checkout-body__inner">
-
-        <!-- ── LEFT: Form ── -->
-        <form class="checkout-form" id="checkout-form" novalidate>
-
-          <!-- Section 01: Shipping info -->
-          <section class="checkout-section" aria-labelledby="shipping-heading">
-            <div class="checkout-section__head">
-              <span class="checkout-section__number" aria-hidden="true">01</span>
-              <h2 class="checkout-section__title" id="shipping-heading">Thông tin vận chuyển</h2>
-            </div>
-
-            <div class="shipping-fields">
-
-              <!-- Row: Name + Phone -->
-              <div class="fields-row fields-row--2col">
-                <div class="field-group">
-                  <label class="field-group__label" for="full-name">HỌ TÊN *</label>
-                  <input class="field-group__input" id="full-name" name="fullName"
-                    type="text" autocomplete="name" required placeholder=" " />
-                </div>
-                <div class="field-group">
-                  <label class="field-group__label" for="phone">SỐ ĐIỆN THOẠI *</label>
-                  <input class="field-group__input" id="phone" name="phone"
-                    type="tel" autocomplete="tel" required placeholder=" " />
-                </div>
-              </div>
-
-              <!-- Email -->
-              <div class="field-group">
-                <label class="field-group__label" for="email">EMAIL (TÙY CHỌN)</label>
-                <input class="field-group__input" id="email" name="email"
-                  type="email" autocomplete="email" placeholder=" " />
-              </div>
-
-              <!-- Row: Province + District -->
-              <div class="fields-row fields-row--2col">
-                <div class="field-group field-group--select">
-                  <label class="field-group__label field-group__label--above" for="province">TỈNH/THÀNH *</label>
-                  <div class="field-group__select-wrap">
-                    <select class="field-group__select" id="province" name="province" required>
-                      <option value="" disabled selected>Chọn Tỉnh/Thành</option>
-                      <option value="hcm">TP. Hồ Chí Minh</option>
-                      <option value="hn">Hà Nội</option>
-                      <option value="dn">Đà Nẵng</option>
-                    </select>
-                    <img class="field-group__select-icon"
-                      src="https://www.figma.com/api/mcp/asset/8ca8f5fc-0202-4e41-8e43-5096cb517ae9"
-                      alt="" aria-hidden="true" />
-                  </div>
-                </div>
-                <div class="field-group field-group--select">
-                  <label class="field-group__label field-group__label--above" for="district">PHƯỜNG/XÃ *</label>
-                  <div class="field-group__select-wrap">
-                    <select class="field-group__select" id="district" name="district" required>
-                      <option value="" disabled selected>Chọn Phường/Xã</option>
-                    </select>
-                    <img class="field-group__select-icon"
-                      src="https://www.figma.com/api/mcp/asset/8ca8f5fc-0202-4e41-8e43-5096cb517ae9"
-                      alt="" aria-hidden="true" />
-                  </div>
-                </div>
-              </div>
-
-              <!-- Address -->
-              <div class="field-group">
-                <label class="field-group__label" for="address">SỐ NHÀ, TÊN ĐƯỜNG *</label>
-                <input class="field-group__input" id="address" name="address"
-                  type="text" autocomplete="street-address" required placeholder=" " />
-              </div>
-
-            </div>
-          </section>
-
-          <!-- Section 02: Payment method -->
-          <section class="checkout-section" aria-labelledby="payment-heading">
-            <div class="checkout-section__head">
-              <span class="checkout-section__number" aria-hidden="true">02</span>
-              <h2 class="checkout-section__title" id="payment-heading">Phương thức thanh toán</h2>
-            </div>
-
-            <div class="payment-options" role="radiogroup" aria-labelledby="payment-heading">
-
-              <!-- COD (default selected) -->
-              <label class="payment-opt is-active">
-                <input class="payment-opt__radio" type="radio"
-                  name="payment" value="cod" checked />
-                <span class="payment-opt__radio-ui" aria-hidden="true">
-                  <img src="https://www.figma.com/api/mcp/asset/399fd71b-d014-4cb9-9495-cbf4dc68c1e1" alt="" />
-                </span>
-                <span class="payment-opt__label">Thanh toán khi nhận hàng (COD)</span>
-                <img class="payment-opt__icon"
-                  src="https://www.figma.com/api/mcp/asset/2c8cef68-f663-47b6-a9fd-49727870c921"
-                  alt="" aria-hidden="true" />
-              </label>
-
-              <!-- Bank transfer -->
-              <label class="payment-opt">
-                <input class="payment-opt__radio" type="radio"
-                  name="payment" value="bank" />
-                <span class="payment-opt__radio-ui payment-opt__radio-ui--empty" aria-hidden="true"></span>
-                <span class="payment-opt__label">Chuyển khoản ngân hàng</span>
-                <img class="payment-opt__icon"
-                  src="https://www.figma.com/api/mcp/asset/d4659303-af69-4311-baf1-f8dac4ac3c0d"
-                  alt="" aria-hidden="true" />
-              </label>
-
-              <!-- E-wallet -->
-              <label class="payment-opt">
-                <input class="payment-opt__radio" type="radio"
-                  name="payment" value="ewallet" />
-                <span class="payment-opt__radio-ui payment-opt__radio-ui--empty" aria-hidden="true"></span>
-                <span class="payment-opt__label">Ví điện tử (Momo/ZaloPay)</span>
-                <img class="payment-opt__icon"
-                  src="https://www.figma.com/api/mcp/asset/3e5262c5-0612-4068-a4e8-60bf6f5da905"
-                  alt="" aria-hidden="true" />
-              </label>
-
-              <!-- Credit / debit card -->
-              <label class="payment-opt">
-                <input class="payment-opt__radio" type="radio"
-                  name="payment" value="card" />
-                <span class="payment-opt__radio-ui payment-opt__radio-ui--empty" aria-hidden="true"></span>
-                <span class="payment-opt__label">Thẻ tín dụng / Ghi nợ</span>
-                <img class="payment-opt__icon"
-                  src="https://www.figma.com/api/mcp/asset/7cba1ef7-2bff-460d-93b1-28d98c7fbad1"
-                  alt="" aria-hidden="true" />
-              </label>
-
-            </div>
-          </section>
-
-        </form>
-
-        <!-- ── RIGHT: Order Summary ── -->
-        <aside class="order-summary" aria-label="Tóm tắt đơn hàng">
-
-          <div class="order-summary__heading">
-            <span class="order-summary__heading-text" id="order-count">Tổng đơn hàng (02)</span>
-          </div>
-
-          <!-- Item list -->
-          <div class="order-items" role="list">
-
+        <div class="order-items" role="list">
+          @for (item of orderItems(); track item.id) {
             <div class="order-item" role="listitem">
               <div class="order-item__thumb">
-                <img src="https://www.figma.com/api/mcp/asset/22a07cb6-3f0b-4c2e-828a-65cbad3ed678"
-                  alt="Aurelia Infinity Collar" loading="lazy" />
+                <img [src]="item.image" [alt]="item.name" loading="lazy" />
               </div>
               <div class="order-item__info">
                 <div class="order-item__top">
-                  <p class="order-item__name">Aurelia Infinity Collar</p>
-                  <p class="order-item__spec">Kích cỡ: M | Vàng 18K</p>
+                  <p class="order-item__name">{{ item.name }}</p>
+                  <p class="order-item__spec">{{ item.spec }}</p>
                 </div>
                 <div class="order-item__bottom">
-                  <span class="order-item__qty">SL: 1</span>
-                  <span class="order-item__price">45.000.000đ</span>
+                  <span class="order-item__qty">SL: {{ item.qty }}</span>
+                  <span class="order-item__price">{{ item.price | number: '1.0-0' }}đ</span>
                 </div>
               </div>
             </div>
+          }
+        </div>
 
-            <div class="order-item" role="listitem">
-              <div class="order-item__thumb">
-                <img src="https://www.figma.com/api/mcp/asset/402fc372-9472-44ea-82e7-c1fb140231dc"
-                  alt="Heritage Emerald Signet" loading="lazy" />
-              </div>
-              <div class="order-item__info">
-                <div class="order-item__top">
-                  <p class="order-item__name">Heritage Emerald Signet</p>
-                  <p class="order-item__spec">Kích cỡ: 52 | Ngọc Lục Bảo</p>
-                </div>
-                <div class="order-item__bottom">
-                  <span class="order-item__qty">SL: 1</span>
-                  <span class="order-item__price">72.500.000đ</span>
-                </div>
-              </div>
-            </div>
-
+        <div class="order-pricing">
+          <div class="order-pricing__row">
+            <span class="order-pricing__label">Tạm tính</span>
+            <span class="order-pricing__value">{{ subtotal() | number: '1.0-0' }}đ</span>
           </div>
-          <!-- /order-items -->
-
-          <!-- Pricing rows -->
-          <div class="order-pricing">
+          <div class="order-pricing__row">
+            <span class="order-pricing__label">Phí vận chuyển</span>
+            <span class="order-pricing__value order-pricing__value--free">Miễn phí</span>
+          </div>
+          @if (voucherDiscount() > 0) {
             <div class="order-pricing__row">
-              <span class="order-pricing__label">Tạm tính</span>
-              <span class="order-pricing__value">117.500.000đ</span>
+              <span class="order-pricing__label">Giảm giá voucher</span>
+              <span class="order-pricing__value order-pricing__value--free">-{{ voucherDiscount() | number: '1.0-0' }}đ</span>
             </div>
-            <div class="order-pricing__row">
-              <span class="order-pricing__label">Phí vận chuyển</span>
-              <span class="order-pricing__value order-pricing__value--free">Miễn phí</span>
-            </div>
+          }
+        </div>
+
+        <div class="voucher-field">
+          <p class="voucher-field__label">Voucher / Gift Code</p>
+          <div class="voucher-field__row">
+            <input
+              class="voucher-field__input"
+              type="text"
+              placeholder="Nhập mã ưu đãi của bạn"
+              aria-label="Mã voucher hoặc gift code"
+              [value]="voucherCode()"
+              (input)="onVoucherInput($event)"
+            />
+            <button class="voucher-field__apply" type="button" (click)="applyVoucher()">Áp dụng</button>
           </div>
+        </div>
 
-          <!-- Voucher -->
-          <div class="voucher-field">
-            <p class="voucher-field__label">Voucher / Gift Code</p>
-            <div class="voucher-field__row">
-              <input class="voucher-field__input" type="text"
-                id="voucher-input" placeholder="Nhập mã ưu đãi của bạn"
-                aria-label="Mã voucher hoặc gift code" />
-              <button class="voucher-field__apply" type="button" id="apply-voucher">Áp dụng</button>
-            </div>
-          </div>
+        <div class="order-total">
+          <span class="order-total__label">Tổng cộng</span>
+          <span class="order-total__amount">{{ total() | number: '1.0-0' }}đ</span>
+        </div>
 
-          <!-- Total -->
-          <div class="order-total">
-            <span class="order-total__label">Tổng cộng</span>
-            <span class="order-total__amount" id="order-total-amount">117.500.000đ</span>
-          </div>
+        <div class="order-cta">
+          <p class="order-cta__legal">
+            Bằng việc nhấn "Thanh toán", bạn đồng ý với các Điều khoản &amp; Chính sách bảo mật của RENGA.
+          </p>
+        <button
+            class="order-cta__btn"
+            type="submit"
+            [disabled]="isSubmitting()">
 
-          <!-- Legal & CTA -->
-          <div class="order-cta">
-            <p class="order-cta__legal">Bằng việc nhấn "Thanh toán", bạn đồng ý với các Điều khoản &amp; Chính sách bảo mật của RENGA.</p>
-            <button class="order-cta__btn" type="submit" form="checkout-form">
-              Thanh toán
-              <img class="order-cta__btn-arrow"
-                src="https://www.figma.com/api/mcp/asset/818b475d-0572-4292-8559-82c83a313938"
-                alt="" aria-hidden="true" />
-            </button>
-          </div>
+            Thanh toán
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
 
-        </aside>
+      </aside>
 
-      </div>
     </div>
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__grid">
-
-        <div class="site-footer__brand-col">
-          <a href="../../index.html" class="site-footer__brand">RENGA</a>
-          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-          <div class="site-footer__social">
-            <a href="#" class="site-footer__social-link" aria-label="Email">
-              <img src="https://www.figma.com/api/mcp/asset/73ecf839-e2a1-4672-85a3-7d5f6ba9e866" alt="Email" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-              <img src="https://www.figma.com/api/mcp/asset/17f772f1-5b48-4464-9657-564a9cf2fcbb" alt="Phone" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Facebook">
-              <img src="https://www.figma.com/api/mcp/asset/1bb38835-26d3-479b-a3c4-b08efef5854a" alt="Facebook" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Instagram">
-              <img src="https://www.figma.com/api/mcp/asset/23226429-d034-49be-83cd-4587e34c2b4e" alt="Instagram" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="TikTok">
-              <img src="https://www.figma.com/api/mcp/asset/1cbcfd0f-7fb3-4688-8137-80d338520fa1" alt="TikTok" />
-            </a>
-          </div>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-          <a href="#" class="site-footer__link">The Studio</a>
-          <a href="#" class="site-footer__link">The Atelier</a>
-          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">NEWSLETTER</p>
-          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-          <form class="newsletter-form" novalidate>
-            <div class="newsletter-form__field">
-              <input class="newsletter-form__input" type="email" placeholder="Email của bạn"
-                aria-label="Địa chỉ email đăng ký nhận tin" />
-              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-                <img src="https://www.figma.com/api/mcp/asset/0cb7fbdc-73e7-4de7-991a-7da2d654a4c6" alt="" aria-hidden="true" />
-              </button>
-            </div>
-          </form>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="site-footer__bottom">
-      <div class="site-footer__bottom-inner">
-        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-        <div class="site-footer__bottom-links">
-          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===== CHAT FAB ===== -->
-  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
-    <img src="https://www.figma.com/api/mcp/asset/6bc8fdb4-3957-432b-a7ca-069a1d3c5ed1" alt="Chat" />
-  </button>
-
-  <script src="../../js/pages/checkout.js"></script>
+  </div>
 
   <!-- ===== PAYMENT RESULT MODALS ===== -->
-  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-label="Kết quả thanh toán">
+  <app-payment-success-modal
+    [isOpen]="showSuccessModal()"
+    [isGuest]="false"
+    (closed)="showSuccessModal.set(false)"
+  />
 
-    <!-- ① THANH TOÁN THÀNH CÔNG — KHÁCH HÀNG (CUSTOMER) -->
-    <div class="payment-modal payment-modal--success" id="modal-success-cus">
-      <img class="payment-modal__icon"
-        src="https://www.figma.com/api/mcp/asset/7d5b32c2-66f8-446d-a893-b6b44b1b99a8"
-        width="205" height="148" alt="" aria-hidden="true" />
-      <h2 class="payment-modal__title">Thanh toán thành công!</h2>
-      <p class="payment-modal__subtitle">
-        Cảm ơn quý khách đã tin tưởng RENGA.<br />
-        Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi.
-      </p>
+  <app-payment-success-modal
+    [isOpen]="showSuccessGuestModal()"
+    [isGuest]="true"
+    (closed)="showSuccessGuestModal.set(false)"
+  />
 
-      <div class="order-info-card">
-        <div class="order-info-card__header">
-          <div>
-            <p class="order-info-card__meta-label">Mã đơn hàng</p>
-            <p class="order-info-card__meta-value">#AH-8829104</p>
-          </div>
-          <div class="order-info-card__header-right">
-            <p class="order-info-card__meta-label order-info-card__meta-label--sm">Ngày giao dự kiến</p>
-            <p class="order-info-card__date">15 Tháng 12, 2024</p>
-          </div>
-        </div>
-        <hr class="order-info-card__sep" />
-        <div class="order-info-card__product">
-          <img class="order-info-card__thumb"
-            src="https://www.figma.com/api/mcp/asset/2075859f-4dce-42f5-9aae-a04a2abc81fd"
-            alt="RENGA Solstice Necklace" />
-          <div class="order-info-card__product-info">
-            <p class="order-info-card__product-name">RENGA Solstice Necklace</p>
-            <p class="order-info-card__product-spec">18k Gold • 2.5ct Diamonds</p>
-            <p class="order-info-card__product-qty">1 sản phẩm</p>
-          </div>
-        </div>
-      </div>
+  <app-payment-fail-modal
+    [isOpen]="showFailModal()"
+    [isGuest]="false"
+    [countdownDisplay]="countdownDisplay()"
+    (closed)="showFailModal.set(false)"
+  />
 
-      <div class="modal-back">
-        <a href="../../index.html" class="modal-back__link">
-          <img class="modal-back__arrow"
-            src="https://www.figma.com/api/mcp/asset/c42dc59f-7c94-4c76-a11f-2e51771d406f"
-            alt="" aria-hidden="true" />
-          Trở về trang chủ
-        </a>
-      </div>
-    </div>
-    <!-- /modal-success-cus -->
+  <app-payment-fail-modal
+    [isOpen]="showFailGuestModal()"
+    [isGuest]="true"
+    [countdownDisplay]="countdownDisplay()"
+    (closed)="showFailGuestModal.set(false)"
+  />
 
-    <!-- ② THANH TOÁN THÀNH CÔNG — KHÁCH VÃNG LAI (GUEST) -->
-    <div class="payment-modal payment-modal--success" id="modal-success-guest">
-      <img class="payment-modal__icon"
-        src="https://www.figma.com/api/mcp/asset/25e684ca-63e1-4f64-84db-0446ccfe6b68"
-        width="205" height="148" alt="" aria-hidden="true" />
-      <h2 class="payment-modal__title">Thanh toán thành công!</h2>
-      <p class="payment-modal__subtitle">
-        Cảm ơn quý khách đã tin tưởng RENGA.<br />
-        Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi.
-      </p>
+</div>
 
-      <div class="order-info-card">
-        <div class="order-info-card__header">
-          <div>
-            <p class="order-info-card__meta-label">Mã đơn hàng</p>
-            <p class="order-info-card__meta-value">#AH-8829104</p>
-          </div>
-          <div class="order-info-card__header-right">
-            <p class="order-info-card__meta-label order-info-card__meta-label--sm">Ngày giao dự kiến</p>
-            <p class="order-info-card__date">15 Tháng 12, 2024</p>
-          </div>
-        </div>
-        <hr class="order-info-card__sep" />
-        <div class="order-info-card__product">
-          <img class="order-info-card__thumb"
-            src="https://www.figma.com/api/mcp/asset/af8925f5-e32a-4e58-a002-0e282f9fcd65"
-            alt="RENGA Solstice Necklace" />
-          <div class="order-info-card__product-info">
-            <p class="order-info-card__product-name">RENGA Solstice Necklace</p>
-            <p class="order-info-card__product-spec">18k Gold • 2.5ct Diamonds</p>
-            <p class="order-info-card__product-qty">1 sản phẩm</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-register">
-        <h3 class="modal-register__title">Tạo tài khoản để theo dõi đơn hàng &amp; tích điểm</h3>
-        <p class="modal-register__desc">Trở thành thành viên của RENGA để nhận các ưu đãi độc quyền dành riêng cho bạn.</p>
-        <a href="../profile/dang-ky.html" class="modal-register__btn">Đăng ký ngay</a>
-      </div>
-
-      <div class="modal-back">
-        <a href="../../index.html" class="modal-back__link">
-          <img class="modal-back__arrow"
-            src="https://www.figma.com/api/mcp/asset/c42dc59f-7c94-4c76-a11f-2e51771d406f"
-            alt="" aria-hidden="true" />
-          Trở về trang chủ
-        </a>
-      </div>
-    </div>
-    <!-- /modal-success-guest -->
-
-    <!-- ③ THANH TOÁN THẤT BẠI — KHÁCH HÀNG (CUSTOMER) -->
-    <div class="payment-modal payment-modal--failure" id="modal-failure-cus">
-      <div class="payment-modal__icon-area">
-        <img class="payment-modal__icon"
-          src="https://www.figma.com/api/mcp/asset/fde2ec13-6882-43e6-af7b-b9769dd63cdb"
-          width="140" height="132" alt="" aria-hidden="true" />
-      </div>
-      <h2 class="payment-modal__title">Thanh toán không thành công</h2>
-
-      <div class="payment-modal__inner">
-        <p class="payment-modal__subtitle">
-          Rất tiếc, giao dịch của bạn chưa được thực hiện.<br />
-          Vui lòng kiểm tra thông tin thanh toán và thử lại.
-        </p>
-
-        <div class="order-info-card">
-          <div class="order-info-card__header">
-            <div>
-              <p class="order-info-card__meta-label">Mã đơn hàng</p>
-              <p class="order-info-card__meta-value">#AH-8829104</p>
-            </div>
-            <div class="order-info-card__header-right">
-              <p class="order-info-card__meta-label order-info-card__meta-label--sm">Tổng cộng</p>
-              <p class="order-info-card__total">245.000.000 ₫</p>
-            </div>
-          </div>
-          <hr class="order-info-card__sep" />
-          <div class="order-info-card__hold">
-            <img class="order-info-card__clock"
-              src="https://www.figma.com/api/mcp/asset/63ae5ed4-a360-4014-be8e-e8eaac2f9afe"
-              alt="" aria-hidden="true" />
-            <div>
-              <p class="order-info-card__hold-desc">Chúng tôi sẽ giữ các sản phẩm này trong giỏ hàng của bạn trong vòng:</p>
-              <p class="order-info-card__timer js-hold-timer">59:58</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button class="modal-actions__primary js-retry-payment" type="button">Thử lại thanh toán</button>
-          <div class="modal-actions__row">
-            <button class="modal-actions__outline" type="button"
-              onclick="window.closePaymentModal()">Thay đổi phương thức</button>
-            <a class="modal-actions__outline" href="gio-hang.html">Quay lại giỏ hàng</a>
-          </div>
-        </div>
-
-        <div class="modal-back">
-          <a href="../../index.html" class="modal-back__link">
-            <img class="modal-back__arrow"
-              src="https://www.figma.com/api/mcp/asset/c42dc59f-7c94-4c76-a11f-2e51771d406f"
-              alt="" aria-hidden="true" />
-            Trở về trang chủ
-          </a>
-        </div>
-      </div>
-    </div>
-    <!-- /modal-failure-cus -->
-
-    <!-- ④ THANH TOÁN THẤT BẠI — KHÁCH VÃNG LAI (GUEST) -->
-    <div class="payment-modal payment-modal--failure" id="modal-failure-guest">
-      <div class="payment-modal__icon-area">
-        <img class="payment-modal__icon"
-          src="https://www.figma.com/api/mcp/asset/8b1299ed-255a-41a7-bcf7-ec8ff6f0d2bf"
-          width="140" height="132" alt="" aria-hidden="true" />
-      </div>
-      <h2 class="payment-modal__title">Thanh toán không thành công</h2>
-
-      <div class="payment-modal__inner">
-        <p class="payment-modal__subtitle">
-          Rất tiếc, giao dịch của bạn chưa được thực hiện.<br />
-          Vui lòng kiểm tra thông tin thanh toán và thử lại.
-        </p>
-
-        <div class="order-info-card">
-          <div class="order-info-card__header">
-            <div>
-              <p class="order-info-card__meta-label">Mã đơn hàng</p>
-              <p class="order-info-card__meta-value">#AH-8829104</p>
-            </div>
-            <div class="order-info-card__header-right">
-              <p class="order-info-card__meta-label order-info-card__meta-label--sm">Tổng cộng</p>
-              <p class="order-info-card__total">245.000.000 ₫</p>
-            </div>
-          </div>
-          <hr class="order-info-card__sep" />
-          <div class="order-info-card__hold">
-            <img class="order-info-card__clock"
-              src="https://www.figma.com/api/mcp/asset/6b353da7-ed0c-4d5a-ad0e-76247d3645a3"
-              alt="" aria-hidden="true" />
-            <div>
-              <p class="order-info-card__hold-desc">Chúng tôi sẽ giữ các sản phẩm này trong giỏ hàng của bạn trong vòng:</p>
-              <p class="order-info-card__timer js-hold-timer">59:58</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button class="modal-actions__primary js-retry-payment" type="button">Thử lại thanh toán</button>
-          <div class="modal-actions__row">
-            <button class="modal-actions__outline" type="button"
-              onclick="window.closePaymentModal()">Thay đổi phương thức</button>
-            <a class="modal-actions__outline" href="gio-hang.html">Quay lại giỏ hàng</a>
-          </div>
-        </div>
-
-        <div class="modal-register">
-          <h3 class="modal-register__title">Tạo tài khoản để theo dõi đơn hàng &amp; tích điểm</h3>
-          <p class="modal-register__desc">Trở thành thành viên của RENGA để nhận các ưu đãi độc quyền dành riêng cho bạn.</p>
-          <a href="../profile/dang-ky.html" class="modal-register__btn">Đăng ký ngay</a>
-        </div>
-
-        <div class="modal-back">
-          <a href="../../index.html" class="modal-back__link">
-            <img class="modal-back__arrow"
-              src="https://www.figma.com/api/mcp/asset/c42dc59f-7c94-4c76-a11f-2e51771d406f"
-              alt="" aria-hidden="true" />
-            Trở về trang chủ
-          </a>
-        </div>
-      </div>
-    </div>
-    <!-- /modal-failure-guest -->
-
-  </div>
-  <!-- /modal-backdrop -->
-
-  <script src="../../js/components/payment-modal.js"></script>
-</body>
-</html>
+<!-- DEV ONLY: test modal buttons — xóa khi merge BE
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;display:flex;gap:8px;flex-wrap:wrap">
+  <button (click)="showSuccessModal.set(true)" style="padding:8px 12px;background:#1a1a1a;color:#fff;font-size:12px;border:none;cursor:pointer">
+    ✓ Success Customer
+  </button>
+  <button (click)="showSuccessGuestModal.set(true)" style="padding:8px 12px;background:#9a3f5c;color:#fff;font-size:12px;border:none;cursor:pointer">
+    ✓ Success Guest
+  </button>
+  <button (click)="showFailModal.set(true)" style="padding:8px 12px;background:#444;color:#fff;font-size:12px;border:none;cursor:pointer">
+    ✗ Fail Customer
+  </button>
+  <button (click)="showFailGuestModal.set(true)" style="padding:8px 12px;background:#c0392b;color:#fff;font-size:12px;border:none;cursor:pointer">
+    ✗ Fail Guest
+  </button>
+</div> -->

@@ -1,0 +1,80 @@
+<div class="modal-backdrop" [class.is-open]="isModalOpen()">
+  <div class="payment-modal payment-modal--success" [class.is-active]="isModalOpen()">
+
+    <button class="payment-modal__close" type="button" (click)="close()" aria-label="Đóng">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    
+    <div class="payment-modal__icon-area">
+      <svg class="payment-modal__icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+        <circle cx="28" cy="28" r="20" stroke="#9a3f5c" stroke-width="2"/>
+        <path d="M18 28l6 6 14-14" stroke="#9a3f5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <h2 class="payment-modal__title">Thanh toán thành công!</h2>
+
+    <p class="payment-modal__subtitle">
+      Cảm ơn quý khách đã tin tưởng RENGA.<br />
+      Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi.
+    </p>
+
+    <div class="order-info-card">
+      <div class="order-info-card__header">
+        <div>
+          <p class="order-info-card__meta-label">Mã đơn hàng</p>
+          <p class="order-info-card__meta-value">#AH-8829104</p>
+        </div>
+        <div class="order-info-card__header-right">
+          <p class="order-info-card__meta-label">Ngày giao dự kiến</p>
+          <p class="order-info-card__date">15 Tháng 12, 2024</p>
+        </div>
+      </div>
+      <hr class="order-info-card__sep" />
+      <div class="order-info-card__product">
+        <img
+          class="order-info-card__thumb"
+          src="assets/images/sp-aurelia-collar.webp"
+          alt="RENGA Solstice Necklace"
+        />
+        <div class="order-info-card__product-info">
+          <p class="order-info-card__product-name">RENGA Solstice Necklace</p>
+          <p class="order-info-card__product-spec">18k Gold · 2.5ct Diamonds</p>
+          <p class="order-info-card__product-qty">1 sản phẩm</p>
+        </div>
+      </div>
+    </div>
+
+    @if (!isGuest()) {
+      <div class="modal-actions__row">
+        <a class="modal-actions__primary" routerLink="/orders" (click)="close()">
+          Xem đơn hàng của tôi </a>
+          <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
+      </div>
+    }
+
+    @if (isGuest()) {
+      <div class="modal-actions__row">
+        <a class="modal-actions__primary" routerLink="/orders/lookup" (click)="close()">
+          Tra cứu đơn hàng của tôi
+        </a>
+        <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
+      </div>
+
+      <div class="modal-register">
+        <p class="modal-register__title">Tạo tài khoản để theo dõi đơn hàng &amp; tích điểm</p>
+        <p class="modal-register__desc">Trở thành thành viên của RENGA để nhận các ưu đãi độc quyền dành riêng cho bạn.</p>
+        <a class="modal-register__btn" routerLink="/auth/register" (click)="close()">Đăng ký ngay</a>
+      </div>
+    }
+
+    <div class="modal-back">
+      <a class="modal-back__link" routerLink="/" (click)="close()">
+        ← Trở về trang chủ
+      </a>
+    </div>
+
+  </div>
+</div>

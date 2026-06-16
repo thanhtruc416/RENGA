@@ -1,223 +1,107 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tra cứu đơn hàng | RENGA</title>
-  <link rel="stylesheet" href="../../css/main.css" />
-  <link rel="stylesheet" href="../../css/pages/order-lookup.css" />
-</head>
-<body class="order-lookup-page">
+<div class="order-lookup-page">
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header__inner">
-
-      <div class="site-header__top">
-        <a href="../../index.html" class="site-header__logo">
-          <img class="site-header__logo-icon"
-            src="https://www.figma.com/api/mcp/asset/e335a400-37b7-4128-b862-63a86c022d03"
-            alt="RENGA" />
-        </a>
-        <div class="site-header__actions">
-          <a href="gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
-            <img src="https://www.figma.com/api/mcp/asset/2805e621-6b79-4a45-bcd9-de523c904544" alt="Giỏ hàng" />
-          </a>
-          <a href="lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
-            <img src="https://www.figma.com/api/mcp/asset/2001d448-6e51-4df1-93f3-c4a6d8d40e34" alt="Đơn hàng" />
-          </a>
-          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
-            <img class="site-header__avatar"
-              src="https://www.figma.com/api/mcp/asset/facb9920-7c34-4995-b49a-54ce2a10d80e"
-              alt="Tài khoản" />
-          </a>
-        </div>
-      </div>
-
-      <div class="site-header__bottom">
-        <nav class="site-header__nav" aria-label="Menu chính">
-          <div class="site-header__nav-item">
-            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
-          </div>
-        </nav>
-        <div class="site-header__search">
-          <img class="site-header__search-icon"
-            src="https://www.figma.com/api/mcp/asset/41ed696c-fc1e-44b3-86aa-0f5919131602"
-            alt="" aria-hidden="true" />
-          <input class="site-header__search-input" type="search"
-            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
-        </div>
-      </div>
-
+  <!-- ── Breadcrumb ── -->
+  <div class="lookup-breadcrumb-wrap">
+    <div class="lookup-breadcrumb-wrap__inner">
+      <nav class="lookup-breadcrumb" aria-label="Điều hướng trang">
+        <a routerLink="/orders/tracking" class="lookup-breadcrumb__item">Đơn hàng</a>
+        <span class="lookup-breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="lookup-breadcrumb__item lookup-breadcrumb__item--current" aria-current="page">
+          Tra cứu đơn hàng
+        </span>
+      </nav>
     </div>
-  </header>
+  </div>
 
-  <!-- ===== MAIN ===== -->
-  <main>
+  <!-- ── Centered column ── -->
+  <div class="lookup-center">
 
-    <!-- Breadcrumb -->
-    <div class="lookup-breadcrumb-wrap">
-      <div class="lookup-breadcrumb-wrap__inner">
-        <nav class="lookup-breadcrumb" aria-label="Điều hướng trang">
-          <a href="lich-su-don-hang.html" class="lookup-breadcrumb__item">Đơn hàng</a>
-          <img class="lookup-breadcrumb__sep"
-            src="https://www.figma.com/api/mcp/asset/f9e5c6b4-9a6c-4a70-a64c-f1580369b7b3"
-            alt="" aria-hidden="true" />
-          <span class="lookup-breadcrumb__item lookup-breadcrumb__item--current" aria-current="page">Tra cứu đơn hàng</span>
-        </nav>
-      </div>
+    <!-- Hero -->
+    <div class="lookup-hero">
+      <h1 class="lookup-hero__title">Tra cứu đơn hàng</h1>
+      <p class="lookup-hero__sub">Vui lòng nhập thông tin để theo dõi tình trạng tuyệt tác của bạn.</p>
     </div>
 
-    <!-- Centered content column -->
-    <div class="lookup-center">
+    <!-- Form card -->
+    <div class="lookup-card">
+      <form class="lookup-form" [formGroup]="lookupForm" (ngSubmit)="onSubmit()">
 
-      <!-- Hero -->
-      <div class="lookup-hero">
-        <h1 class="lookup-hero__title">Tra cứu đơn hàng</h1>
-        <p class="lookup-hero__sub">Vui lòng nhập thông tin để theo dõi tình trạng tuyệt tác của bạn.</p>
-      </div>
+        <div class="lookup-form__fields">
 
-      <!-- Search form card -->
-      <div class="lookup-card">
-        <form class="lookup-form" id="lookup-form" novalidate>
-
-          <div class="lookup-form__fields">
-
-            <div class="lookup-field">
-              <label class="lookup-field__label" for="order-id">Mã đơn hàng</label>
-              <input class="lookup-field__input" id="order-id" name="orderId"
-                type="text" autocomplete="off" placeholder="Vd: AU-88921" required />
-            </div>
-
-            <div class="lookup-field">
-              <label class="lookup-field__label" for="lookup-phone">Số điện thoại</label>
-              <input class="lookup-field__input" id="lookup-phone" name="phone"
-                type="tel" autocomplete="tel" placeholder="09xx xxx xxx" required />
-            </div>
-
+          <div class="lookup-field">
+            <label class="lookup-field__label" for="order-id">Mã đơn hàng</label>
+            <input
+              class="lookup-field__input"
+              id="order-id"
+              type="text"
+              autocomplete="off"
+              placeholder="Vd: AU-88921"
+              formControlName="orderId"
+            />
+            @if (orderIdCtrl.invalid && orderIdCtrl.touched) {
+              <span class="lookup-field__error">Vui lòng nhập mã đơn hàng</span>
+            }
           </div>
 
-          <button class="lookup-form__submit" type="submit">
-            Tìm kiếm đơn hàng
-            <img class="lookup-form__submit-arrow"
-              src="https://www.figma.com/api/mcp/asset/dae3e2e5-a7c1-4946-98e8-b7a0837b424d"
-              alt="" aria-hidden="true" />
+          <div class="lookup-field">
+            <label class="lookup-field__label" for="lookup-phone">Số điện thoại</label>
+            <input
+              class="lookup-field__input"
+              id="lookup-phone"
+              type="tel"
+              autocomplete="tel"
+              placeholder="09xx xxx xxx"
+              formControlName="phone"
+            />
+            @if (phoneCtrl.invalid && phoneCtrl.touched) {
+              <span class="lookup-field__error">Số điện thoại không hợp lệ (vd: 0912345678)</span>
+            }
+          </div>
+
+        </div>
+
+        @if (errorMsg()) {
+          <p class="lookup-form__error-msg">{{ errorMsg() }}</p>
+        }
+
+        <button
+          class="lookup-form__submit"
+          type="submit"
+          [disabled]="isLoading()"
+        >
+          @if (isLoading()) {
+            Đang tìm kiếm...
+          } @else {
+            Tìm kiếm đơn hàng →
+          }
+        </button>
+
+        <div class="lookup-card__help">
+          <button
+            type="button"
+            class="lookup-card__help-link"
+            (click)="openSupportChat()"
+          >
+            Bạn cần trợ giúp về đơn hàng?
           </button>
-
-          <div class="lookup-card__help">
-            <a href="#" class="lookup-card__help-link">Bạn cần trợ giúp về đơn hàng?</a>
-          </div>
-
-        </form>
-      </div>
-
-      <!-- Decorative images -->
-      <div class="lookup-images" aria-hidden="true">
-        <div class="lookup-image">
-          <img src="https://www.figma.com/api/mcp/asset/7d5a0a6d-7a59-4015-b992-4542341e6ddd"
-            alt="" loading="lazy" />
-          <div class="lookup-image__desaturate"></div>
         </div>
-        <div class="lookup-image">
-          <img src="https://www.figma.com/api/mcp/asset/51ec5631-3e12-477e-8f76-efe0ca0abecd"
-            alt="" loading="lazy" />
-          <div class="lookup-image__desaturate"></div>
-        </div>
-      </div>
 
+      </form>
     </div>
-    <!-- /lookup-center -->
 
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__grid">
-
-        <div class="site-footer__brand-col">
-          <a href="../../index.html" class="site-footer__brand">RENGA</a>
-          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-          <div class="site-footer__social">
-            <a href="#" class="site-footer__social-link" aria-label="Email">
-              <img src="https://www.figma.com/api/mcp/asset/8f2219b3-0030-4d43-886c-6a4d46ef6985" alt="Email" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-              <img src="https://www.figma.com/api/mcp/asset/d50eaeb1-c4e9-454d-8a66-125d584093f7" alt="Phone" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Facebook">
-              <img src="https://www.figma.com/api/mcp/asset/a3c2705c-06a0-4c60-8d7f-ae467aa579d2" alt="Facebook" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Instagram">
-              <img src="https://www.figma.com/api/mcp/asset/43f7b529-47ed-4929-ada4-2e8f857b791a" alt="Instagram" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="TikTok">
-              <img src="https://www.figma.com/api/mcp/asset/561e6e0a-ebe5-476f-af70-c4d81a8e8851" alt="TikTok" />
-            </a>
-          </div>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-          <a href="#" class="site-footer__link">The Studio</a>
-          <a href="#" class="site-footer__link">The Designer</a>
-          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">NEWSLETTER</p>
-          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-          <form class="newsletter-form" novalidate>
-            <div class="newsletter-form__field">
-              <input class="newsletter-form__input" type="email" placeholder="Email của bạn"
-                aria-label="Địa chỉ email đăng ký nhận tin" />
-              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-                <img src="https://www.figma.com/api/mcp/asset/ca9ccc7a-2aef-4327-b5e0-9122ed717309" alt="" aria-hidden="true" />
-              </button>
-            </div>
-          </form>
-        </div>
-
+    <!-- Decorative images -->
+    <div class="lookup-images" aria-hidden="true">
+      <div class="lookup-image">
+        <img src="assets/images/lookup-decor-1.webp" alt="" loading="lazy" />
+        <div class="lookup-image__desaturate"></div>
+      </div>
+      <div class="lookup-image">
+        <img src="assets/images/lookup-decor-2.webp" alt="" loading="lazy" />
+        <div class="lookup-image__desaturate"></div>
       </div>
     </div>
 
-    <div class="site-footer__bottom">
-      <div class="site-footer__bottom-inner">
-        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-        <div class="site-footer__bottom-links">
-          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  </div>
 
-  <!-- ===== CHAT FAB ===== -->
-  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
-    <img src="https://www.figma.com/api/mcp/asset/1772782a-86aa-4a08-9c3a-8f34cc9f8d9f" alt="Chat" />
-  </button>
+</div>
 
-  <script src="../../js/pages/order-lookup.js"></script>
-</body>
-</html>
