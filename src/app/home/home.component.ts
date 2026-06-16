@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { ModalService } from '../services/modal.service';
+import { AuthService } from '../core/services/auth.service';
+import { ModalService } from '../core/services/modal.service';
 
 interface Category {
   name: string;

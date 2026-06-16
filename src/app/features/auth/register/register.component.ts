@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { OldOrdersModalComponent } from '../shared/components/modal/old-orders-modal/old-orders-modal.component';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
+import { OldOrdersModalComponent } from '../../../shared/components/modal/old-orders-modal/old-orders-modal.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, OldOrdersModalComponent],
+  imports: [RouterLink, ReactiveFormsModule, OldOrdersModalComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -15,59 +18,28 @@ export class RegisterComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly fullName = signal('');
-  readonly email = signal('');
-  readonly phone = signal('');
-  readonly password = signal('');
-  readonly confirmPassword = signal('');
   readonly isSubmitting = signal(false);
   readonly showOldOrders = signal(false);
 
-  setFullName(value: string): void { this.fullName.set(value); }
-  setEmail(value: string): void { this.email.set(value); }
-  setPhone(value: string): void { this.phone.set(value.replace(/\D/g, '')); }
-
-  onPhoneKeyPress(e: KeyboardEvent): void {
-    if (!/[0-9]/.test(e.key)) e.preventDefault();
-  }
-
-  onPhoneInvalid(e: Event): void {
-    const el = e.target as HTMLInputElement;
-    if (el.validity.valueMissing) {
-      el.setCustomValidity('Vui lòng nhập số điện thoại');
-    } else if (el.validity.patternMismatch) {
-      el.setCustomValidity('Số điện thoại chỉ được chứa chữ số');
-    } else {
-      el.setCustomValidity('');
-    }
-  }
-
-  onEmailInvalid(e: Event): void {
-    const el = e.target as HTMLInputElement;
-    if (el.validity.valueMissing) {
-      el.setCustomValidity('Vui lòng nhập địa chỉ email');
-    } else if (el.validity.typeMismatch) {
-      el.setCustomValidity('Email không hợp lệ, vui lòng nhập đúng định dạng (ví dụ: ten@email.com)');
-    } else {
-      el.setCustomValidity('');
-    }
-  }
-  setPassword(value: string): void { this.password.set(value); }
-  setConfirmPassword(value: string): void { this.confirmPassword.set(value); }
+  readonly form = new FormGroup({
+    fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
+    phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^[0-9]{10,11}$/)] }),
+    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    confirmPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
   register(): void {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting() || this.form.invalid) return;
     this.isSubmitting.set(true);
-    this.authService.register({
-      fullName: this.fullName(),
-      email: this.email(),
-      phone: this.phone(),
-      password: this.password(),
-    }).subscribe({
+    const { fullName, email, phone, password } = this.form.getRawValue();
+    this.authService.register({ fullName, email, phone, password }).subscribe({
       next: () => this.router.navigate(['/']),
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        this.showOldOrders.set(true);
+        if (err.status === 409 && err.error?.code === 'EXISTING_ORDERS') {
+          this.showOldOrders.set(true);
+        }
       },
     });
   }
@@ -76,11 +48,11 @@ export class RegisterComponent {
 
   confirmOldOrders(): void {
     this.showOldOrders.set(false);
-    this.authService.mockLogin();
+    if (!environment.production) this.authService.mockLogin();
   }
 
   skipOldOrders(): void {
     this.showOldOrders.set(false);
-    this.authService.mockLogin();
+    if (!environment.production) this.authService.mockLogin();
   }
 }

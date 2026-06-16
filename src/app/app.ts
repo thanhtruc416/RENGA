@@ -4,7 +4,7 @@ import { HeaderComponent } from './shared/components/header/header';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
 import { LoginRequiredModalComponent } from './shared/components/modal/login-required-modal/login-required-modal.component';
-import { ModalService } from './services/modal.service';
+import { ModalService } from './core/services/modal.service';
 
 @Component({
   selector: 'app-root',

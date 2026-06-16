@@ -22,14 +22,13 @@
     </div>
 
     <!-- Form -->
-    <form class="register__form" (submit)="$event.preventDefault(); register()">
+    <form class="register__form" [formGroup]="form" (ngSubmit)="register()">
       <div class="register__field">
         <input
           class="register__input"
           type="text"
           placeholder="Họ và Tên *"
-          [value]="fullName()"
-          (input)="setFullName($any($event.target).value)"
+          formControlName="fullName"
           autocomplete="name"
         />
       </div>
@@ -39,9 +38,7 @@
           class="register__input"
           type="email"
           placeholder="Email"
-          [value]="email()"
-          (input)="setEmail($any($event.target).value); $any($event.target).setCustomValidity('')"
-          (invalid)="onEmailInvalid($event)"
+          formControlName="email"
           autocomplete="email"
         />
       </div>
@@ -51,11 +48,7 @@
           class="register__input"
           type="tel"
           placeholder="Số điện thoại *"
-          [value]="phone()"
-          pattern="[0-9]+"
-          (input)="setPhone($any($event.target).value); $any($event.target).setCustomValidity('')"
-          (keypress)="onPhoneKeyPress($event)"
-          (invalid)="onPhoneInvalid($event)"
+          formControlName="phone"
           inputmode="numeric"
           autocomplete="tel"
         />
@@ -66,8 +59,7 @@
           class="register__input"
           type="password"
           placeholder="Mật khẩu *"
-          [value]="password()"
-          (input)="setPassword($any($event.target).value)"
+          formControlName="password"
           autocomplete="new-password"
         />
       </div>
@@ -77,8 +69,7 @@
           class="register__input"
           type="password"
           placeholder="Xác nhận mật khẩu *"
-          [value]="confirmPassword()"
-          (input)="setConfirmPassword($any($event.target).value)"
+          formControlName="confirmPassword"
           autocomplete="new-password"
         />
       </div>

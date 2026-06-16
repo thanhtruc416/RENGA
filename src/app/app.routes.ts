@@ -44,22 +44,22 @@ export const routes: Routes = [
   {
     path: 'dang-ki',
     loadComponent: () =>
-      import('./register/register.component').then((m) => m.RegisterComponent),
+      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
   },
   {
     path: 'dang-nhap',
     loadComponent: () =>
-      import('./login/login.component').then((m) => m.LoginComponent),
+      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'quen-mat-khau',
     loadComponent: () =>
-      import('./forgot-password/forgot-password.component').then((m) => m.ForgotPasswordComponent),
+      import('./features/auth/forgot-password/forgot-password.component').then((m) => m.ForgotPasswordComponent),
   },
   {
     path: 'mat-khau-moi',
     loadComponent: () =>
-      import('./reset-password/reset-password.component').then((m) => m.ResetPasswordComponent),
+      import('./features/auth/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent),
   },
   {
     path: '**',

@@ -283,6 +283,11 @@
   margin-top: 1px;
 }
 
+.chatbot__bullet-icon circle,
+.chatbot__bullet-icon path {
+  stroke: var(--color-primary);
+}
+
 .chatbot__card-actions {
   display: flex;
   gap: 8px;

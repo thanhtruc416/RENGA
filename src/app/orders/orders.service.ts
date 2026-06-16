@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse, PaginatedResponse } from '../models/api-response.model';
+import { environment } from '../../environments/environment';
 
 export interface Order {
   id: string;
@@ -31,18 +32,18 @@ export class OrdersService {
   private readonly http = inject(HttpClient);
 
   getOrders(params?: OrderListParams): Observable<PaginatedResponse<Order>> {
-    return this.http.get<PaginatedResponse<Order>>('/api/orders', { params: { ...params } });
+    return this.http.get<PaginatedResponse<Order>>(`${environment.apiUrl}/orders`, { params: { ...params } });
   }
 
   getOrderById(id: string): Observable<ApiResponse<Order>> {
-    return this.http.get<ApiResponse<Order>>(`/api/orders/${id}`);
+    return this.http.get<ApiResponse<Order>>(`${environment.apiUrl}/orders/${id}`);
   }
 
   getOrderByCode(code: string): Observable<ApiResponse<Order>> {
-    return this.http.get<ApiResponse<Order>>(`/api/orders/track/${code}`);
+    return this.http.get<ApiResponse<Order>>(`${environment.apiUrl}/orders/track/${code}`);
   }
 
   cancelOrder(id: string, reason?: string): Observable<ApiResponse<void>> {
-    return this.http.patch<ApiResponse<void>>(`/api/orders/${id}/cancel`, { reason });
+    return this.http.patch<ApiResponse<void>>(`${environment.apiUrl}/orders/${id}/cancel`, { reason });
   }
 }

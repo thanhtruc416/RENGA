@@ -9,12 +9,13 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
@@ -24,36 +25,22 @@ export class ForgotPasswordComponent {
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  readonly phone = signal('');
+  readonly phoneControl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.pattern(/^[0-9]{10,11}$/)],
+  });
+
   readonly codeSent = signal(false);
   readonly countdown = signal(0);
-  // Source of truth khi submit — không dùng để bind ngược lại DOM
   readonly otpDigits = signal(['', '', '', '', '', '']);
   readonly isSubmitting = signal(false);
 
   readonly otpIndices = [0, 1, 2, 3, 4, 5];
 
-  setPhone(value: string): void { this.phone.set(value.replace(/\D/g, '')); }
-
-  onPhoneKeyPress(e: KeyboardEvent): void {
-    if (e.key === 'Enter') return;
-    if (!/[0-9]/.test(e.key)) e.preventDefault();
-  }
-
-  onPhoneInvalid(e: Event): void {
-    const el = e.target as HTMLInputElement;
-    if (el.validity.valueMissing) {
-      el.setCustomValidity('Vui lòng nhập số điện thoại');
-    } else if (el.validity.patternMismatch) {
-      el.setCustomValidity('Số điện thoại chỉ được chứa chữ số');
-    } else {
-      el.setCustomValidity('');
-    }
-  }
-
   sendCode(): void {
-    if (!this.phone().trim()) return;
+    if (this.phoneControl.invalid) return;
     this.codeSent.set(true);
+    this.phoneControl.disable();
     this.startCountdown();
   }
 
@@ -64,10 +51,7 @@ export class ForgotPasswordComponent {
 
   onOtpInput(index: number, event: Event): void {
     const input = event.target as HTMLInputElement;
-    // Chỉ lấy chữ số cuối cùng được gõ
     const digit = input.value.replace(/\D/g, '').slice(-1);
-
-    // Gán lại DOM để loại bỏ ký tự không hợp lệ — không dùng [value] binding
     input.value = digit;
 
     const digits = [...this.otpDigits()];
@@ -124,7 +108,6 @@ export class ForgotPasswordComponent {
     const el = this.otpInputs?.toArray()?.[index]?.nativeElement;
     if (!el) return;
     el.focus();
-    // Đặt cursor sau ký tự hiện có (nếu ô đã có giá trị)
     el.setSelectionRange(el.value.length, el.value.length);
   }
 
@@ -133,7 +116,6 @@ export class ForgotPasswordComponent {
     const otp = this.otpDigits().join('');
     if (otp.length < 6) return;
     this.isSubmitting.set(true);
-    // TODO: verify OTP với API — hiện tại navigate thẳng cho FE dev
     this.router.navigate(['/mat-khau-moi']);
   }
 

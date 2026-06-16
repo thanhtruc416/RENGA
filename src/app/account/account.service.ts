@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { User } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 export interface UpdateProfilePayload {
   fullName?: string;
@@ -36,18 +37,18 @@ export class AccountService {
   private readonly http = inject(HttpClient);
 
   getProfile(): Observable<ApiResponse<User>> {
-    return this.http.get<ApiResponse<User>>('/api/account/profile');
+    return this.http.get<ApiResponse<User>>(`${environment.apiUrl}/account/profile`);
   }
 
   updateProfile(payload: UpdateProfilePayload): Observable<ApiResponse<User>> {
-    return this.http.patch<ApiResponse<User>>('/api/account/profile', payload);
+    return this.http.patch<ApiResponse<User>>(`${environment.apiUrl}/account/profile`, payload);
   }
 
   changePassword(payload: ChangePasswordPayload): Observable<ApiResponse<void>> {
-    return this.http.patch<ApiResponse<void>>('/api/account/password', payload);
+    return this.http.patch<ApiResponse<void>>(`${environment.apiUrl}/account/password`, payload);
   }
 
   getLoyaltyPoints(): Observable<ApiResponse<LoyaltyPoints>> {
-    return this.http.get<ApiResponse<LoyaltyPoints>>('/api/account/loyalty');
+    return this.http.get<ApiResponse<LoyaltyPoints>>(`${environment.apiUrl}/account/loyalty`);
   }
 }

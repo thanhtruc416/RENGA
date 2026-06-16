@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.model';
-import { ApiResponse } from '../models/api-response.model';
+import { User } from '../../models/user.model';
+import { ApiResponse } from '../../models/api-response.model';
+import { environment } from '../../../environments/environment';
 
 interface LoginPayload {
   phone: string;
@@ -38,7 +39,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(payload: LoginPayload): Observable<ApiResponse<AuthData>> {
-    return this.http.post<ApiResponse<AuthData>>('/api/auth/login', payload).pipe(
+    return this.http.post<ApiResponse<AuthData>>(`${environment.apiUrl}/auth/login`, payload).pipe(
       tap(res => {
         if (res.success) {
           this._saveSession(res.data.token, res.data.user);
@@ -48,7 +49,7 @@ export class AuthService {
   }
 
   register(payload: RegisterPayload): Observable<ApiResponse<AuthData>> {
-    return this.http.post<ApiResponse<AuthData>>('/api/auth/register', payload).pipe(
+    return this.http.post<ApiResponse<AuthData>>(`${environment.apiUrl}/auth/register`, payload).pipe(
       tap(res => {
         if (res.success) {
           this._saveSession(res.data.token, res.data.user);

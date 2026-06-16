@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { LoginFailModalComponent } from '../shared/components/modal/login-fail-modal/login-fail-modal.component';
-import { PhoneNotFoundModalComponent } from '../shared/components/modal/phone-not-found-modal/phone-not-found-modal.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { LoginFailModalComponent } from '../../../shared/components/modal/login-fail-modal/login-fail-modal.component';
+import { PhoneNotFoundModalComponent } from '../../../shared/components/modal/phone-not-found-modal/phone-not-found-modal.component';
+import { environment } from '../../../../environments/environment';
+
+const MOCK_PHONES = ['0000000000', '0373265707'];
 
 @Component({
   selector: 'app-login',
@@ -34,19 +38,15 @@ export class LoginComponent {
     this.isSubmitting.set(true);
     this.authService.login({ phone: this.phone(), password: this.password() }).subscribe({
       next: () => this.router.navigate(['/']),
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        // Bypass mock login cho FE dev
-        const MOCK_PHONES = ['0000000000', '0373265707'];
-        if (MOCK_PHONES.includes(this.phone())) {
+        if (!environment.production && MOCK_PHONES.includes(this.phone())) {
           this.authService.mockLogin();
           return;
         }
-        // Giả lập: phone < 10 số → chưa đăng ký, ngược lại → sai mật khẩu
-        const digits = this.phone().replace(/\D/g, '');
-        if (digits.length < 10) {
+        if (err.status === 404) {
           this.showPhoneNotFound.set(true);
-        } else {
+        } else if (err.status === 401) {
           this.remainingAttempts.update(v => Math.max(0, v - 1));
           this.showLoginFail.set(true);
         }

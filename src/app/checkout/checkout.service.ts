@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
+import { environment } from '../../environments/environment';
 
 export interface ShippingAddress {
   fullName: string;
@@ -36,10 +37,10 @@ export class CheckoutService {
   private readonly http = inject(HttpClient);
 
   placeOrder(payload: PlaceOrderPayload): Observable<ApiResponse<PlaceOrderResult>> {
-    return this.http.post<ApiResponse<PlaceOrderResult>>('/api/checkout', payload);
+    return this.http.post<ApiResponse<PlaceOrderResult>>(`${environment.apiUrl}/checkout`, payload);
   }
 
   applyVoucher(code: string): Observable<ApiResponse<VoucherResult>> {
-    return this.http.post<ApiResponse<VoucherResult>>('/api/vouchers/apply', { code });
+    return this.http.post<ApiResponse<VoucherResult>>(`${environment.apiUrl}/vouchers/apply`, { code });
   }
 }
