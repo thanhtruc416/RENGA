@@ -1,13 +1,7 @@
-﻿/* ===== CHI TIáº¾T ÄÆ N HÃ€NG TÃ™Y BIáº¾N / THIáº¾T Káº¾ =====
-   Extends order-detail.css â€” link both stylesheets
-   =================================================== */
-
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.order-detail-custom-page {
+﻿.order-detail-custom-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Hero: title + order# + action buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .odc-hero {
   padding: 0 var(--container-px);
 }
@@ -73,7 +67,6 @@
   background: #9a3f5c;
 }
 
-/* â”€â”€ Two-column body layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .odc-body {
   padding: 32px var(--container-px) 80px;
 }
@@ -87,16 +80,12 @@
   align-items: start;
 }
 
-/* â”€â”€ LEFT COLUMN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Status bar wrapper (reuses status-bar from order-detail.css) */
 .odc-status-wrap {
   border: 1px solid var(--color-black);
   padding: 33px;
   margin-bottom: 32px;
 }
 
-/* â”€â”€ Craftsmanship timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .craft-timeline {
   border-left: 2px solid var(--color-black);
   padding-left: 34px;
@@ -119,7 +108,6 @@
   position: relative;
 }
 
-/* Diamond marker on the left border */
 .craft-step::before {
   content: '';
   position: absolute;
@@ -150,7 +138,6 @@
   gap: 4px;
 }
 
-/* Active step gets a highlighted background box */
 .craft-step--active .craft-step__inner {
   background: #e7e1e4;
   padding: 24px;
@@ -198,9 +185,6 @@
   color: #444748;
 }
 
-/* â”€â”€ RIGHT COLUMN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Spec list card (pink semi-transparent) */
 .odc-spec-list {
   background: rgba(196, 96, 126, 0.6);
   padding: 32px;
@@ -247,7 +231,6 @@
   text-align: right;
 }
 
-/* Shipping info card */
 .odc-shipping-card {
   border: 1px solid var(--color-black);
   padding: 33px;
@@ -306,7 +289,6 @@
   font-weight: 400;
 }
 
-/* Artisan highlight card */
 .odc-artisan-card {
   border: 1px solid var(--color-black);
   padding: 33px;
@@ -386,7 +368,6 @@
   color: #444748;
 }
 
-/* Right column stacked cards with spacing */
 .odc-right > * + * {
   margin-top: 16px;
 }

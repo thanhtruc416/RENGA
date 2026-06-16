@@ -1,11 +1,7 @@
-﻿/* ===== CHI TIáº¾T ÄÆ N HÃ€NG (ORDER DETAIL) PAGE ===== */
-
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.order-detail-page {
+﻿.order-detail-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Top section (breadcrumb + title) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-detail-top {
   padding: 0 var(--container-px);
 }
@@ -16,7 +12,6 @@
   padding: 40px 0 36px;
 }
 
-/* â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-breadcrumb {
   display: flex;
   align-items: center;
@@ -54,7 +49,6 @@
   opacity: 0.4;
 }
 
-/* â”€â”€ Page title â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-detail-title {
   font-family: var(--font-serif);
   font-weight: 500;
@@ -64,7 +58,6 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Body: two-column grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-detail-body {
   padding: 0 var(--container-px);
 }
@@ -90,9 +83,6 @@
   gap: 16px;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STATUS PROGRESS BAR (horizontal)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .status-bar {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -111,7 +101,6 @@
   margin-bottom: 24px;
 }
 
-/* Track: line + steps row */
 .status-bar__track {
   position: relative;
   display: flex;
@@ -120,19 +109,17 @@
   padding: 0 16px;
 }
 
-/* Gray background line */
 .status-bar__track::before {
   content: '';
   position: absolute;
   left: 16px;
   right: 16px;
-  top: 16px; /* center of 32px dot */
+  top: 16px;
   height: 2px;
   background: #c4c7c7;
   z-index: 0;
 }
 
-/* Black active line (covers first 4 steps = 75% of track) */
 .status-bar__track::after {
   content: '';
   position: absolute;
@@ -144,7 +131,6 @@
   z-index: 0;
 }
 
-/* â”€â”€ Step â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .status-step {
   display: flex;
   flex-direction: column;
@@ -154,7 +140,6 @@
   z-index: 1;
 }
 
-/* Dot: done (filled black + checkmark) */
 .status-step__dot {
   width: 32px;
   height: 32px;
@@ -176,7 +161,6 @@
   display: block;
 }
 
-/* Dot: active (white + black border + inner filled dot) */
 .status-step--active .status-step__dot {
   background: var(--color-white);
   border: 2px solid var(--color-black);
@@ -191,13 +175,11 @@
   flex-shrink: 0;
 }
 
-/* Dot: pending (white + gray border) */
 .status-step--pending .status-step__dot {
   background: var(--color-white);
   border: 1px solid #c4c7c7;
 }
 
-/* Step label */
 .status-step__label {
   font-family: var(--font-sans);
   font-weight: 400;
@@ -211,9 +193,6 @@
   color: #444748;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ORDER ID ROW
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-id-row {
   padding: 20px 3px 12px;
 }
@@ -226,15 +205,11 @@
   color: var(--color-black);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PRODUCT SECTION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .product-section {
   border: 1px solid var(--color-black);
   overflow: hidden;
 }
 
-/* Section header */
 .product-section__header {
   background: var(--color-primary-light);
   border-bottom: 1px solid var(--color-black);
@@ -250,7 +225,6 @@
   color: #1a1c1c;
 }
 
-/* Product rows */
 .product-list {
   display: flex;
   flex-direction: column;
@@ -267,7 +241,6 @@
   border-top: 1px solid #c4c7c7;
 }
 
-/* Product thumbnail */
 .product-row__thumb {
   width: 96px;
   height: 96px;
@@ -287,7 +260,6 @@
   display: block;
 }
 
-/* Product info */
 .product-row__info {
   flex: 1;
   min-width: 0;
@@ -321,7 +293,6 @@
   color: #444748;
 }
 
-/* Product price */
 .product-row__price {
   font-family: var(--font-serif);
   font-weight: 400;
@@ -333,7 +304,6 @@
   text-align: right;
 }
 
-/* Section total */
 .product-section__total {
   background: var(--color-primary-light);
   border-top: 1px solid var(--color-black);
@@ -363,9 +333,6 @@
   white-space: nowrap;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   TIMELINE CARD (right column, vertical timeline)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .timeline-card {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -375,7 +342,6 @@
   gap: 40px;
 }
 
-/* Heading with border-bottom */
 .timeline-card__heading {
   border-bottom: 1px solid #c4c7c7;
   padding-bottom: 17px;
@@ -391,7 +357,6 @@
   white-space: nowrap;
 }
 
-/* â”€â”€ Vertical timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-timeline {
   position: relative;
   padding-left: 40px;
@@ -401,7 +366,6 @@
   padding-bottom: 8px;
 }
 
-/* Full gray background connecting line */
 .order-timeline::before {
   content: '';
   position: absolute;
@@ -413,19 +377,17 @@
   z-index: 0;
 }
 
-/* Pink active line (doneâ†’active portion only) */
 .order-timeline::after {
   content: '';
   position: absolute;
   left: 11px;
   top: 12px;
-  height: 110px; /* ~from center of dot 1 to center of dot 2 */
+  height: 110px;
   width: 2px;
   background: #9a3f5c;
   z-index: 1;
 }
 
-/* â”€â”€ Timeline item â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-timeline__item {
   position: relative;
   display: flex;
@@ -437,7 +399,6 @@
   opacity: 0.4;
 }
 
-/* Dot: common */
 .order-timeline__dot {
   position: absolute;
   border-radius: 50%;
@@ -445,7 +406,6 @@
   z-index: 2;
 }
 
-/* Done dot: 20px, pink fill, white border */
 .order-timeline__dot--done {
   width: 20px;
   height: 20px;
@@ -456,7 +416,6 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Active dot: 28px, pink fill, white border, outer pink glow */
 .order-timeline__dot--active {
   width: 28px;
   height: 28px;
@@ -467,7 +426,6 @@
   box-shadow: 0 0 0 4px #ffd9e1, 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Pending dot: 20px, gray fill, white border */
 .order-timeline__dot--pending {
   width: 20px;
   height: 20px;
@@ -477,7 +435,6 @@
   border: 4px solid var(--color-white);
 }
 
-/* â”€â”€ Timeline item content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-timeline__content {
   display: flex;
   flex-direction: column;
@@ -527,7 +484,6 @@
   margin-top: 8px;
 }
 
-/* â”€â”€ Support button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .timeline-card__support-btn {
   display: flex;
   align-items: center;
@@ -550,9 +506,6 @@
   background: #9a3f5c;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   SHIPPING CARD (right column, bottom)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .shipping-card {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -562,7 +515,6 @@
   gap: 24px;
 }
 
-/* Heading with border-bottom */
 .shipping-card__heading {
   border-bottom: 1px solid #c4c7c7;
   padding-bottom: 17px;
@@ -578,7 +530,6 @@
   white-space: nowrap;
 }
 
-/* Shipping rows */
 .shipping-rows {
   display: flex;
   flex-direction: column;
@@ -626,7 +577,6 @@
   line-height: 24px;
 }
 
-/* â”€â”€ Chat FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .chat-fab {
   position: fixed;
   bottom: 32px;
