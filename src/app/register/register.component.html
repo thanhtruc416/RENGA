@@ -17,12 +17,12 @@
         Đăng kí tài khoản<br />RENGA
       </h1>
       <p class="register__subtitle">
-        Khám phá thế giới trang sức cao cấp dành riêng cho bạn.
+        Khám phá thế giới trang sức cao cấp dành riêng cho bạn
       </p>
     </div>
 
     <!-- Form -->
-    <form class="register__form" (ngSubmit)="register()">
+    <form class="register__form" (submit)="$event.preventDefault(); register()">
       <div class="register__field">
         <input
           class="register__input"
@@ -40,7 +40,8 @@
           type="email"
           placeholder="Email"
           [value]="email()"
-          (input)="setEmail($any($event.target).value)"
+          (input)="setEmail($any($event.target).value); $any($event.target).setCustomValidity('')"
+          (invalid)="onEmailInvalid($event)"
           autocomplete="email"
         />
       </div>
@@ -51,7 +52,11 @@
           type="tel"
           placeholder="Số điện thoại *"
           [value]="phone()"
-          (input)="setPhone($any($event.target).value)"
+          pattern="[0-9]+"
+          (input)="setPhone($any($event.target).value); $any($event.target).setCustomValidity('')"
+          (keypress)="onPhoneKeyPress($event)"
+          (invalid)="onPhoneInvalid($event)"
+          inputmode="numeric"
           autocomplete="tel"
         />
       </div>
@@ -94,3 +99,11 @@
 
   </div>
 </div>
+
+@if (showOldOrders()) {
+  <app-old-orders-modal
+    (closed)="closeOldOrders()"
+    (confirmed)="confirmOldOrders()"
+    (skipped)="skipOldOrders()"
+  />
+}

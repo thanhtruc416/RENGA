@@ -39,6 +39,73 @@ export class ProfileComponent {
     address: '123 Nguyễn Văn Cừ, Quận 7, TP. Hồ Chí Minh',
   });
 
+  readonly isEditing = signal(false);
+  readonly showSuccess = signal(false);
+  readonly draft = signal<UserProfile>({ ...this.user() });
+
+  // Converts "DD/MM/YYYY" → "YYYY-MM-DD" for <input type="date">
+  readonly draftDateInput = computed(() => {
+    const d = this.draft().birthDate;
+    if (!d) return '';
+    const parts = d.split('/');
+    if (parts.length !== 3) return '';
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  });
+
+  startEdit(): void {
+    this.draft.set({ ...this.user() });
+    this.isEditing.set(true);
+  }
+
+  cancelEdit(): void {
+    this.isEditing.set(false);
+  }
+
+  saveEdit(form: HTMLFormElement): void {
+    if (!form.reportValidity()) return;
+    this.user.set({ ...this.draft() });
+    this.isEditing.set(false);
+    this.showSuccess.set(true);
+    setTimeout(() => this.showSuccess.set(false), 3000);
+  }
+
+  setDraft(field: keyof UserProfile, value: string): void {
+    this.draft.update(d => ({ ...d, [field]: value }));
+  }
+
+  // Converts "YYYY-MM-DD" → "DD/MM/YYYY"
+  setBirthDate(isoDate: string): void {
+    if (!isoDate) return;
+    const [y, m, d] = isoDate.split('-');
+    this.draft.update(dr => ({ ...dr, birthDate: `${d}/${m}/${y}` }));
+  }
+
+  onPhoneKeyPress(e: KeyboardEvent): void {
+    if (!/[\d+\-\s]/.test(e.key)) e.preventDefault();
+  }
+
+  onPhoneInvalid(e: Event): void {
+    const el = e.target as HTMLInputElement;
+    if (el.validity.valueMissing) {
+      el.setCustomValidity('Vui lòng nhập số điện thoại');
+    } else if (el.validity.patternMismatch) {
+      el.setCustomValidity('Số điện thoại chỉ được chứa chữ số, dấu + và khoảng trắng');
+    } else {
+      el.setCustomValidity('');
+    }
+  }
+
+  onEmailInvalid(e: Event): void {
+    const el = e.target as HTMLInputElement;
+    if (el.validity.valueMissing) {
+      el.setCustomValidity('Vui lòng nhập địa chỉ email');
+    } else if (el.validity.typeMismatch) {
+      el.setCustomValidity('Email không hợp lệ, vui lòng nhập đúng định dạng (ví dụ: ten@email.com)');
+    } else {
+      el.setCustomValidity('');
+    }
+  }
+
   readonly loyaltyTier = signal('Gold');
   readonly loyaltyPoints = signal(4250);
   readonly loyaltyNextTierPoints = signal(5000);

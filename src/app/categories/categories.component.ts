@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface CategoryLink {
@@ -12,13 +12,6 @@ interface CategoryCard {
   englishName: string;
   imageUrl: string;
   links: CategoryLink[];
-}
-
-interface ChatMessage {
-  id: string;
-  sender: 'bot' | 'user';
-  text: string;
-  timestamp: string;
 }
 
 @Component({
@@ -73,48 +66,4 @@ export class CategoriesComponent {
     { label: 'Đá Quý Phong Thủy', route: '/products' },
     { label: 'Lắc Charm Cá Tính', route: '/products' },
   ];
-
-  readonly chatbotOpen = signal(false);
-
-  readonly chatMessages = signal<ChatMessage[]>([
-    {
-      id: '1',
-      sender: 'bot',
-      text: 'Xin chào! Tôi là REN AI Concierge. Tôi có thể giúp gì cho bạn?',
-      timestamp: 'REN AI • NOW',
-    },
-  ]);
-
-  readonly inputValue = signal('');
-
-  readonly quickChips: string[] = ['Collections', 'Bespoke Service', 'Order Status'];
-
-  toggleChatbot(): void {
-    this.chatbotOpen.update((v) => !v);
-  }
-
-  closeChatbot(): void {
-    this.chatbotOpen.set(false);
-  }
-
-  setInputValue(value: string): void {
-    this.inputValue.set(value);
-  }
-
-  sendMessage(): void {
-    const text = this.inputValue().trim();
-    if (!text) return;
-    this.chatMessages.update((msgs) => [
-      ...msgs,
-      { id: String(msgs.length + 1), sender: 'user', text, timestamp: 'YOU • NOW' },
-    ]);
-    this.inputValue.set('');
-  }
-
-  sendChip(chip: string): void {
-    this.chatMessages.update((msgs) => [
-      ...msgs,
-      { id: String(msgs.length + 1), sender: 'user', text: chip, timestamp: 'YOU • NOW' },
-    ]);
-  }
 }

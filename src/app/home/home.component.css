@@ -51,8 +51,14 @@
 
 .home__hero-actions {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
-  flex-wrap: wrap;
+}
+
+.home__hero-actions-row {
+  display: flex;
+  gap: 16px;
 }
 
 .home__hero-btn {
@@ -70,6 +76,10 @@
   text-transform: uppercase;
   white-space: nowrap;
   transition: opacity 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  user-select: none;
 }
 
 .home__hero-btn:hover {
@@ -141,11 +151,12 @@
   gap: 20px;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.2s;
+  transition: transform 0.35s ease, filter 0.35s ease;
 }
 
 .home__category-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-12px);
+  filter: drop-shadow(0 18px 28px rgba(196, 96, 126, 0.35));
 }
 
 .home__category-arch {
@@ -210,6 +221,10 @@
   grid-template-columns: repeat(4, 320px);
   gap: 24px;
   overflow-x: auto;
+  padding-top: 14px;
+  margin-top: -14px;
+  padding-bottom: 28px;
+  margin-bottom: -28px;
 }
 
 .home__product-card {
@@ -222,13 +237,14 @@
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
   flex-shrink: 0;
+  will-change: transform;
 }
 
 .home__product-card:hover {
-  box-shadow: var(--shadow-card);
-  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(196, 96, 126, 0.28);
+  transform: translateY(-10px);
 }
 
 .home__product-badge {
@@ -266,7 +282,7 @@
 }
 
 .home__product-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
   color: var(--color-dark);
@@ -356,6 +372,10 @@
   text-transform: uppercase;
   white-space: nowrap;
   transition: opacity 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  user-select: none;
 }
 
 .home__studio-btn:hover {
@@ -444,6 +464,7 @@
 
 .home__designer-subtitle {
   display: block;
+  font-family: var(--font-serif);
   font-size: 45px;
 }
 
@@ -495,6 +516,9 @@
   text-transform: uppercase;
   white-space: nowrap;
   transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
 }
 
 .home__designer-btn:hover {
@@ -572,11 +596,11 @@
 }
 
 .home__chatbot-btn {
-  position: absolute;
-  bottom: 48px;
-  right: var(--container-px);
-  width: 85px;
-  height: 85px;
+  position: fixed;
+  bottom: clamp(20px, 3vh, 40px);
+  right: clamp(16px, 2.5vw, 40px);
+  width: clamp(64px, 5.5vw, 85px);
+  height: clamp(64px, 5.5vw, 85px);
   border-radius: 20px;
   background-color: var(--color-primary);
   display: flex;
@@ -584,15 +608,18 @@
   justify-content: center;
   cursor: pointer;
   border: none;
-  transition: opacity 0.2s;
+  box-shadow: 0 4px 16px rgba(196, 96, 126, 0.4);
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 999;
 }
 
 .home__chatbot-btn:hover {
   opacity: 0.85;
+  transform: scale(1.05);
 }
 
 .home__chatbot-btn img {
-  width: 75px;
-  height: 79px;
+  width: 65%;
+  height: 65%;
   object-fit: contain;
 }

@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { ModalService } from '../services/modal.service';
 
 interface Category {
   name: string;
@@ -30,6 +32,18 @@ interface Review {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
+
+  guardedNav(route: string): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate([route]);
+    } else {
+      this.modalService.openLoginRequired();
+    }
+  }
+
   readonly categories = signal<Category[]>([
     { name: 'NHẪN', imageUrl: '/images/category-nhan.png', slug: 'nhan' },
     { name: 'DÂY CHUYỀN', imageUrl: '/images/category-day-chuyen.png', slug: 'day-chuyen' },
@@ -53,10 +67,10 @@ export class HomeComponent {
   ]);
 
   readonly features = [
-    { icon: '/icons/ic-feature-customize.png', label: 'Tự thiết kế sản phẩm theo ý thích' },
-    { icon: '/icons/ic-feature-consult.png', label: 'Đặt lịch tư vấn 1-1' },
-    { icon: '/icons/ic-feature-quality.png', label: 'Vật liệu chất lượng' },
-    { icon: '/icons/ic-feature-warranty.png', label: 'Chính sách bảo hành hấp dẫn' },
+    { icon: '/icons/ic-feature-customize.svg', label: 'Tự thiết kế sản phẩm theo ý thích' },
+    { icon: '/icons/ic-feature-consult.svg', label: 'Đặt lịch tư vấn 1-1' },
+    { icon: '/icons/ic-feature-quality.svg', label: 'Vật liệu chất lượng' },
+    { icon: '/icons/ic-feature-warranty.svg', label: 'Chính sách bảo hành hấp dẫn' },
   ];
 
   readonly studioSteps = [

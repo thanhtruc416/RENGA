@@ -16,13 +16,141 @@
   <!-- Filter Bar -->
   <div class="product-list__filters" role="group" aria-label="Bộ lọc sản phẩm">
     @for (filter of filters; track filter.key) {
-      <button class="product-list__filter-btn" type="button">
-        <span class="product-list__filter-label">{{ filter.label }}</span>
-        <svg class="product-list__filter-chevron" width="9" height="6" viewBox="0 0 9 6" fill="none">
-          <path d="M1 1L4.5 5L8 1" stroke="#1a1c1c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+      <div class="product-list__filter-item" [class.is-open]="openFilter() === filter.key">
+
+        <button
+          class="product-list__filter-btn"
+          type="button"
+          [class.is-active]="hasActiveFilter(filter.key)"
+          (click)="toggleFilter(filter.key, $event)"
+        >
+          <span class="product-list__filter-label">{{ filter.label }}</span>
+          @if (hasActiveFilter(filter.key)) {
+            <span class="product-list__filter-dot"></span>
+          }
+          <svg class="product-list__filter-chevron" width="9" height="6" viewBox="0 0 9 6" fill="none">
+            <path d="M1 1L4.5 5L8 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        @if (openFilter() === filter.key) {
+          <div class="product-list__filter-panel" (click)="stopProp($event)">
+
+            @switch (filter.key) {
+
+              @case ('chat-lieu') {
+                <p class="filter-panel__title">Chọn chất liệu</p>
+                <ul class="filter-panel__list">
+                  @for (mat of materials; track mat) {
+                    <li>
+                      <label class="filter-panel__checkbox-label">
+                        <input
+                          type="checkbox"
+                          class="filter-panel__checkbox"
+                          [checked]="draftMaterials().includes(mat)"
+                          (change)="toggleDraftMaterial(mat)"
+                        />
+                        <span class="filter-panel__checkbox-box"></span>
+                        {{ mat }}
+                      </label>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @case ('khoang-gia') {
+                <p class="filter-panel__title">Khoảng giá</p>
+                <div class="filter-panel__price-values">
+                  <span>{{ formatPrice(draftPriceMin()) }}</span>
+                  <span>—</span>
+                  <span>{{ formatPrice(draftPriceMax()) }}</span>
+                </div>
+                <div class="filter-panel__price-slider">
+                  <div class="price-slider__track">
+                    <div
+                      class="price-slider__fill"
+                      [style.left.%]="draftMinPct()"
+                      [style.width.%]="draftMaxPct() - draftMinPct()"
+                    ></div>
+                  </div>
+                  <input
+                    type="range" class="price-slider__input"
+                    [min]="0" [max]="MAX_PRICE" [step]="500000"
+                    [value]="draftPriceMin()"
+                    (input)="setDraftPriceMin(+$any($event.target).value)"
+                  />
+                  <input
+                    type="range" class="price-slider__input"
+                    [min]="0" [max]="MAX_PRICE" [step]="500000"
+                    [value]="draftPriceMax()"
+                    (input)="setDraftPriceMax(+$any($event.target).value)"
+                  />
+                </div>
+              }
+
+              @case ('loai-da') {
+                <p class="filter-panel__title">Chọn loại đá</p>
+                <ul class="filter-panel__list">
+                  @for (stone of stones; track stone) {
+                    <li>
+                      <label class="filter-panel__checkbox-label">
+                        <input
+                          type="checkbox"
+                          class="filter-panel__checkbox"
+                          [checked]="draftStones().includes(stone)"
+                          (change)="toggleDraftStone(stone)"
+                        />
+                        <span class="filter-panel__checkbox-box"></span>
+                        {{ stone }}
+                      </label>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @case ('ban-chay') {
+                <p class="filter-panel__title">Sắp xếp theo</p>
+                <ul class="filter-panel__list">
+                  <li>
+                    <button
+                      class="filter-panel__sort-btn"
+                      [class.is-selected]="draftSortKey() === ''"
+                      (click)="setDraftSortKey('')"
+                    >Mặc định</button>
+                  </li>
+                  <li>
+                    <button
+                      class="filter-panel__sort-btn"
+                      [class.is-selected]="draftSortKey() === 'price-asc'"
+                      (click)="setDraftSortKey('price-asc')"
+                    >Giá tăng dần</button>
+                  </li>
+                  <li>
+                    <button
+                      class="filter-panel__sort-btn"
+                      [class.is-selected]="draftSortKey() === 'price-desc'"
+                      (click)="setDraftSortKey('price-desc')"
+                    >Giá giảm dần</button>
+                  </li>
+                </ul>
+              }
+
+            }
+
+            @if (hasActiveFilter(filter.key)) {
+              <button class="filter-panel__reset" type="button" (click)="resetFilter(filter.key, $event)">Xóa lọc</button>
+            }
+
+          </div>
+        }
+
+      </div>
     }
+
+    <div class="product-list__filter-actions">
+      <button class="product-list__apply-btn" type="button" (click)="applyAllFilters($event)">ÁP DỤNG</button>
+      <button class="product-list__reset-all" type="button" (click)="resetAllFilters($event)">Xóa bộ lọc</button>
+    </div>
   </div>
 
   <!-- Product Grid -->
@@ -42,14 +170,19 @@
         </div>
       </a>
     }
+    @if (displayedProducts().length === 0) {
+      <p class="product-list__empty">Không tìm thấy sản phẩm phù hợp.</p>
+    }
   </section>
 
   <!-- Pagination -->
-  <footer class="product-list__pagination">
-    <p class="product-list__pagination-count">HIỂN THỊ {{ displayCount() }} TRÊN {{ totalCount() }} SẢN PHẨM</p>
-    <div class="product-list__pagination-divider"></div>
-    <button class="product-list__load-more" type="button" (click)="loadMore()">TẢI THÊM</button>
-  </footer>
+  @if (displayCount() < totalCount()) {
+    <footer class="product-list__pagination">
+      <p class="product-list__pagination-count">HIỂN THỊ {{ displayedProducts().length }} TRÊN {{ totalCount() }} SẢN PHẨM</p>
+      <div class="product-list__pagination-divider"></div>
+      <button class="product-list__load-more" type="button" (click)="loadMore()">TẢI THÊM</button>
+    </footer>
+  }
 
 </div>
 

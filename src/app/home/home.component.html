@@ -5,12 +5,14 @@
     <div class="home__hero-content">
       <h1 class="home__hero-title">Kể Câu Chuyện Của Riêng Bạn</h1>
       <p class="home__hero-subtitle">
-        Tự tay thiết kế chiếc nhẫn trong mơ hoặc làm việc trực tiếp cùng Nhà thiết kế của RENGA.
+        Tự tay thiết kế chiếc nhẫn trong mơ hoặc làm việc trực tiếp cùng Nhà thiết kế của RENGA
       </p>
       <div class="home__hero-actions">
         <a routerLink="/products" class="home__hero-btn">Đặt hàng có sẵn</a>
-        <a routerLink="/studio" class="home__hero-btn">THE STUDIO</a>
-        <a routerLink="/the-designer" class="home__hero-btn">THE DESIGNER</a>
+        <div class="home__hero-actions-row">
+          <a class="home__hero-btn" (click)="guardedNav('/studio')">THE STUDIO</a>
+          <a class="home__hero-btn" (click)="guardedNav('/the-designer')">THE DESIGNER</a>
+        </div>
       </div>
     </div>
   </section>
@@ -77,7 +79,7 @@
           </li>
         }
       </ol>
-      <a routerLink="/studio" class="home__studio-btn">BẮT ĐẦU THIẾT KẾ NGAY</a>
+      <a class="home__studio-btn" (click)="guardedNav('/studio')">BẮT ĐẦU THIẾT KẾ NGAY</a>
     </div>
     <div class="home__studio-visual">
       <img src="/images/product-detail-nhan-aeterna-1.png" alt="Studio Ring" class="home__studio-img" />
@@ -97,15 +99,15 @@
         <span class="home__designer-subtitle">Hiện thực hóa ý tưởng cùng Chuyên gia</span>
       </h2>
       <p class="home__designer-desc">
-        Trải nghiệm dịch vụ tư vấn cá nhân hóa cao cấp nhất. Với phí dịch vụ 500.000₫, bạn sẽ được
+        Trải nghiệm dịch vụ tư vấn cá nhân hóa cao cấp nhất. Với phí dịch vụ 500.000đ, bạn sẽ được
         trao đổi trực tiếp cùng các chuyên gia hàng đầu của RENGA để phác thảo và chế tác món trang
         sức độc bản của riêng bạn.
       </p>
       <div class="home__designer-fee">
         <img src="/icons/ic-fee.png" alt="" class="home__designer-fee-icon" />
-        <strong>Phí tư vấn: 500.000₫ (Trừ trực tiếp vào đơn hàng)</strong>
+        <strong>Phí tư vấn: 500.000đ (Trừ trực tiếp vào đơn hàng)</strong>
       </div>
-      <a routerLink="/the-designer" class="home__designer-btn">ĐẶT LỊCH HẸN NGAY</a>
+      <a class="home__designer-btn" (click)="guardedNav('/the-designer')">ĐẶT LỊCH HẸN NGAY</a>
     </div>
   </section>
 
@@ -120,7 +122,7 @@
           </div>
           <div class="home__review-stars">
             @for (star of stars; track star) {
-              <img src="/icons/ic-star.png" alt="★" class="home__review-star" />
+              <img src="/icons/ic-star.svg" alt="★" class="home__review-star" />
             }
           </div>
           <p class="home__review-quote">{{ review.quote }} - {{ review.author }}</p>
@@ -133,3 +135,4 @@
   </section>
 
 </div>
+

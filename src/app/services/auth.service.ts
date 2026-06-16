@@ -7,7 +7,14 @@ import { User } from '../models/user.model';
 import { ApiResponse } from '../models/api-response.model';
 
 interface LoginPayload {
+  phone: string;
+  password: string;
+}
+
+interface RegisterPayload {
+  fullName: string;
   email: string;
+  phone: string;
   password: string;
 }
 
@@ -40,12 +47,34 @@ export class AuthService {
     );
   }
 
+  register(payload: RegisterPayload): Observable<ApiResponse<AuthData>> {
+    return this.http.post<ApiResponse<AuthData>>('/api/auth/register', payload).pipe(
+      tap(res => {
+        if (res.success) {
+          this._saveSession(res.data.token, res.data.user);
+        }
+      })
+    );
+  }
+
+  /** Dùng cho FE dev khi chưa có backend — tạo session giả để test UI */
+  mockLogin(): void {
+    this._saveSession('mock-token-dev', {
+      id: '1',
+      fullName: 'Nguyễn Văn A',
+      email: 'test@renga.vn',
+      role: 'customer',
+      avatarUrl: '',
+    } as User);
+    this.router.navigate(['/']);
+  }
+
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this._currentUser.set(null);
     this._token.set(null);
-    this.router.navigate(['/auth/dang-nhap']);
+    this.router.navigate(['/dang-nhap']);
   }
 
   getToken(): string | null {

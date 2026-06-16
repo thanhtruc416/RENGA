@@ -26,6 +26,7 @@
   font-weight: 400;
   color: var(--color-muted);
   line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 /* ── Section Title (shared) ── */
@@ -72,9 +73,18 @@
 }
 
 .profile-rewards__voucher-icon {
-  width: 20px;
-  height: 16px;
-  object-fit: contain;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.profile-rewards__voucher-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--color-primary);
 }
 
 .profile-rewards__voucher-pts {
@@ -127,39 +137,32 @@
 
 /* ── Bottom Layout ── */
 .profile-rewards__bottom {
-  display: grid;
-  grid-template-columns: 285px 1fr;
-  gap: 0;
-  align-items: start;
+  display: block;
 }
 
 /* ── Back Nav ── */
-.profile-rewards__back-col {
-  padding-top: 8px;
-}
-
 .profile-rewards__back-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--color-muted);
-  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
   text-decoration: none;
-  text-transform: none;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .profile-rewards__back-btn:hover {
-  color: var(--color-primary);
+  opacity: 0.75;
 }
 
-.profile-rewards__back-icon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
+.profile-rewards__back-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--color-primary);
+  flex-shrink: 0;
 }
 
 /* ── Points History ── */

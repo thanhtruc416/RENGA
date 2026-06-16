@@ -8,18 +8,38 @@
 
   <!-- Dashboard Gateway Links -->
   <div class="profile__gateway">
-    @for (link of dashboardLinks; track link.key) {
-      <a [routerLink]="link.route" class="profile__gateway-card">
-        <div class="profile__gateway-body">
-          <img [src]="link.iconUrl" [alt]="link.title" class="profile__gateway-icon" />
-          <div class="profile__gateway-text">
-            <p class="profile__gateway-title">{{ link.title }}</p>
-            <p class="profile__gateway-desc">{{ link.description }}</p>
-          </div>
+    <a routerLink="/profile/rewards" class="profile__gateway-card">
+      <div class="profile__gateway-body">
+        <div class="profile__gateway-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
         </div>
-        <img src="/icons/ic-arrow-right.png" alt="" class="profile__gateway-arrow" />
-      </a>
-    }
+        <div class="profile__gateway-text">
+          <p class="profile__gateway-title">ĐỔI THƯỞNG</p>
+          <p class="profile__gateway-desc">Sử dụng điểm tích lũy cho các đặc quyền cao cấp</p>
+        </div>
+      </div>
+      <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l4 4-4 4"/>
+      </svg>
+    </a>
+    <a routerLink="/profile/rewards" class="profile__gateway-card">
+      <div class="profile__gateway-body">
+        <div class="profile__gateway-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="profile__gateway-text">
+          <p class="profile__gateway-title">LỊCH SỬ TÍCH ĐIỂM</p>
+          <p class="profile__gateway-desc">Xem chi tiết các giao dịch và điểm thưởng</p>
+        </div>
+      </div>
+      <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l4 4-4 4"/>
+      </svg>
+    </a>
   </div>
 
   <!-- Main Sections: Personal Info + Loyalty Card -->
@@ -29,46 +49,92 @@
     <section class="profile__info-card">
       <div class="profile__info-header">
         <h2 class="profile__info-title">THÔNG TIN CÁ NHÂN</h2>
-        <button class="profile__info-edit-btn" type="button">Chỉnh sửa</button>
+        @if (!isEditing()) {
+          <button class="profile__info-edit-btn" type="button" (click)="startEdit()">Chỉnh sửa</button>
+        } @else {
+          <div class="profile__info-actions">
+            <button class="profile__info-cancel-btn" type="button" (click)="cancelEdit()">Hủy</button>
+            <button class="profile__info-save-btn" type="button" (click)="saveEdit(editForm)">Lưu</button>
+          </div>
+        }
       </div>
 
-      <div class="profile__info-grid">
-        <div class="profile__info-field">
-          <label class="profile__field-label">Họ và tên</label>
-          <div class="profile__field-value">{{ user().fullName }}</div>
-        </div>
-        <div class="profile__info-field">
-          <label class="profile__field-label">Email</label>
-          <div class="profile__field-value">{{ user().email }}</div>
-        </div>
-        <div class="profile__info-field">
-          <label class="profile__field-label">SĐT</label>
-          <div class="profile__field-value">{{ user().phone }}</div>
-        </div>
-        <div class="profile__info-field">
-          <label class="profile__field-label">Ngày sinh</label>
-          <div class="profile__field-value profile__field-value--with-icon">
-            <span>{{ user().birthDate }}</span>
+      <form #editForm id="profile-edit-form" (submit)="$event.preventDefault()">
+        <div class="profile__info-grid">
+          <div class="profile__info-field">
+            <label class="profile__field-label">Họ và tên</label>
+            @if (!isEditing()) {
+              <div class="profile__field-value">{{ user().fullName }}</div>
+            } @else {
+              <input class="profile__field-input" type="text" required
+                [value]="draft().fullName"
+                (input)="setDraft('fullName', $any($event.target).value)" />
+            }
+          </div>
+          <div class="profile__info-field">
+            <label class="profile__field-label">Email</label>
+            @if (!isEditing()) {
+              <div class="profile__field-value">{{ user().email }}</div>
+            } @else {
+              <input class="profile__field-input" type="email" required
+                [value]="draft().email"
+                (input)="setDraft('email', $any($event.target).value); $any($event.target).setCustomValidity('')"
+                (invalid)="onEmailInvalid($event)" />
+            }
+          </div>
+          <div class="profile__info-field">
+            <label class="profile__field-label">SĐT</label>
+            @if (!isEditing()) {
+              <div class="profile__field-value">{{ user().phone }}</div>
+            } @else {
+              <input class="profile__field-input" type="tel" required
+                pattern="[0-9+\-\s]+"
+                inputmode="tel"
+                [value]="draft().phone"
+                (keypress)="onPhoneKeyPress($event)"
+                (input)="setDraft('phone', $any($event.target).value); $any($event.target).setCustomValidity('')"
+                (invalid)="onPhoneInvalid($event)" />
+            }
+          </div>
+          <div class="profile__info-field">
+            <label class="profile__field-label">Ngày sinh</label>
+            @if (!isEditing()) {
+              <div class="profile__field-value">{{ user().birthDate }}</div>
+            } @else {
+              <input class="profile__field-input profile__field-input--date" type="date"
+                [value]="draftDateInput()"
+                (change)="setBirthDate($any($event.target).value)" />
+            }
           </div>
         </div>
-      </div>
 
-      <div class="profile__info-field profile__info-field--full">
-        <label class="profile__field-label">Địa chỉ</label>
-        <div class="profile__field-value">{{ user().address }}</div>
-      </div>
+        <div class="profile__info-field profile__info-field--full">
+          <label class="profile__field-label">Địa chỉ</label>
+          @if (!isEditing()) {
+            <div class="profile__field-value">{{ user().address }}</div>
+          } @else {
+            <input class="profile__field-input" type="text"
+              [value]="draft().address"
+              (input)="setDraft('address', $any($event.target).value)" />
+          }
+        </div>
+      </form>
     </section>
 
     <!-- Loyalty Status Card -->
     <section class="profile__loyalty-card">
-      <img src="/icons/ic-loyalty-sparkle.png" alt="" class="profile__loyalty-sparkle" aria-hidden="true" />
+      <svg class="profile__loyalty-sparkle" aria-hidden="true" viewBox="0 0 40 40" fill="none">
+        <path d="M20 2l2.5 15.5L38 20l-15.5 2.5L20 38l-2.5-15.5L2 20l15.5-2.5Z" fill="rgba(255,255,255,0.15)"/>
+      </svg>
 
       <div class="profile__loyalty-top">
         <div class="profile__loyalty-tier">
           <p class="profile__loyalty-tier-label">HẠNG THÀNH VIÊN</p>
           <h2 class="profile__loyalty-tier-name">{{ loyaltyTier() }}</h2>
         </div>
-        <img src="/icons/ic-loyalty-diamond.png" alt="" class="profile__loyalty-diamond" />
+        <svg class="profile__loyalty-diamond" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5">
+          <path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M6 3l4 6m8-6-4 6"/>
+        </svg>
       </div>
 
       <div class="profile__loyalty-progress-section">
@@ -93,6 +159,16 @@
     </section>
 
   </div>
+
+  <!-- Success Toast -->
+  @if (showSuccess()) {
+    <div class="profile__toast" role="alert">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      Cập nhật thông tin thành công!
+    </div>
+  }
 
   <!-- Security Section -->
   <section class="profile__security">

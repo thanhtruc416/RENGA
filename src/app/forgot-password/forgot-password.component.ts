@@ -8,7 +8,7 @@ import {
   signal,
   ViewChildren,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -20,6 +20,7 @@ import { RouterLink } from '@angular/router';
 })
 export class ForgotPasswordComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
@@ -32,7 +33,23 @@ export class ForgotPasswordComponent {
 
   readonly otpIndices = [0, 1, 2, 3, 4, 5];
 
-  setPhone(value: string): void { this.phone.set(value); }
+  setPhone(value: string): void { this.phone.set(value.replace(/\D/g, '')); }
+
+  onPhoneKeyPress(e: KeyboardEvent): void {
+    if (e.key === 'Enter') return;
+    if (!/[0-9]/.test(e.key)) e.preventDefault();
+  }
+
+  onPhoneInvalid(e: Event): void {
+    const el = e.target as HTMLInputElement;
+    if (el.validity.valueMissing) {
+      el.setCustomValidity('Vui lòng nhập số điện thoại');
+    } else if (el.validity.patternMismatch) {
+      el.setCustomValidity('Số điện thoại chỉ được chứa chữ số');
+    } else {
+      el.setCustomValidity('');
+    }
+  }
 
   sendCode(): void {
     if (!this.phone().trim()) return;
@@ -113,8 +130,11 @@ export class ForgotPasswordComponent {
 
   confirmOtp(): void {
     if (this.isSubmitting()) return;
+    const otp = this.otpDigits().join('');
+    if (otp.length < 6) return;
     this.isSubmitting.set(true);
-    // TODO: verify OTP and navigate to reset-password
+    // TODO: verify OTP với API — hiện tại navigate thẳng cho FE dev
+    this.router.navigate(['/mat-khau-moi']);
   }
 
   private startCountdown(): void {

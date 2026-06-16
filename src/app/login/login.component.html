@@ -21,16 +21,16 @@
 
       <!-- Brand Anchor -->
       <div class="login__brand-anchor">
-        <h1 class="login__title">Chào mừng trở lại</h1>
+        <h1 class="login__title">Chào mừng &nbsp;bạn trở lại</h1>
         <p class="login__subtitle">
           Đăng nhập để tiếp tục hành trình sáng tạo của bạn
         </p>
       </div>
 
       <!-- Login Form -->
-      <form class="login__form" (ngSubmit)="login()">
+      <form class="login__form" (submit)="$event.preventDefault(); login()">
 
-        <!-- Số điện thoại -->
+        <!-- Phone number -->
         <div class="login__field">
           <label class="login__label" for="login-phone">SỐ ĐIỆN THOẠI</label>
           <input
@@ -44,7 +44,7 @@
           />
         </div>
 
-        <!-- Mật khẩu -->
+        <!-- Password -->
         <div class="login__field">
           <div class="login__label-row">
             <label class="login__label" for="login-password">MẬT KHẨU</label>
@@ -91,7 +91,7 @@
 
       <!-- Social Login -->
       <button class="login__social" type="button">
-        <img src="/icons/ic-social-google.png" alt="" class="login__social-icon" />
+        <img src="/icons/ic-social-google.svg" alt="" class="login__social-icon" />
         <span>Tiếp tục với Google/Facebook</span>
       </button>
 
@@ -100,11 +100,24 @@
         Chưa có tài khoản?&nbsp;<a routerLink="/dang-ki" class="login__register-link">Đăng ký ngay</a>
       </p>
 
-    </div>
+      <!-- Copyright -->
+      <p class="login__copyright">© 2026 RENGA. All rights reserved.</p>
 
-    <!-- Copyright -->
-    <p class="login__copyright">© 2026 RENGA. All rights reserved.</p>
+    </div>
 
   </div>
 
 </div>
+
+@if (showLoginFail()) {
+  <app-login-fail-modal
+    [remainingAttempts]="remainingAttempts()"
+    (closed)="closeLoginFail()"
+  />
+}
+
+@if (showPhoneNotFound()) {
+  <app-phone-not-found-modal
+    (closed)="closePhoneNotFound()"
+  />
+}

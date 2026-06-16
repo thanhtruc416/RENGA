@@ -88,6 +88,7 @@
   text-align: center;
   line-height: 1.56;
   opacity: 0.8;
+  white-space: nowrap;
 }
 
 /* ── Form ── */

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login-required-modal',
+  selector: 'app-old-orders-modal',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink],
-  templateUrl: './login-required-modal.component.html',
-  styleUrl: './login-required-modal.component.css',
+  templateUrl: './old-orders-modal.component.html',
+  styleUrl: './old-orders-modal.component.css',
 })
-export class LoginRequiredModalComponent {
+export class OldOrdersModalComponent {
   @Output() closed = new EventEmitter<void>();
+  @Output() confirmed = new EventEmitter<void>();
+  @Output() skipped = new EventEmitter<void>();
 }

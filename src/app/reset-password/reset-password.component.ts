@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -9,6 +11,9 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
   styleUrl: './reset-password.component.css',
 })
 export class ResetPasswordComponent {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
   readonly newPassword = signal('');
   readonly confirmPassword = signal('');
   readonly isSubmitting = signal(false);
@@ -18,7 +23,9 @@ export class ResetPasswordComponent {
 
   updatePassword(): void {
     if (this.isSubmitting()) return;
+    if (!this.newPassword().trim()) return;
     this.isSubmitting.set(true);
-    // TODO: call auth service
+    // TODO: call API để cập nhật password — hiện tại mock login cho FE dev
+    this.authService.mockLogin();
   }
 }
