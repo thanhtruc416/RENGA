@@ -1,0 +1,157 @@
+<div class="categories">
+
+  <!-- Page Title -->
+  <h1 class="categories__title">Danh mục sản phẩm</h1>
+
+  <!-- Top Row: 3 equal columns -->
+  <div class="categories__top-grid">
+    @for (cat of topCategories; track cat.id) {
+      <div class="categories__card">
+        <div class="categories__card-img-wrap">
+          <img [src]="cat.imageUrl" [alt]="cat.name" class="categories__card-img" />
+          <div class="categories__card-gradient"></div>
+          <div class="categories__card-label">{{ cat.name }} ({{ cat.englishName }})</div>
+        </div>
+        <ul class="categories__card-links">
+          @for (link of cat.links; track link.label) {
+            <li class="categories__card-link-item">
+              <a [routerLink]="link.route" class="categories__card-link">
+                <span>{{ link.label }}</span>
+                <img src="/icons/ic-arrow-right.png" alt="" class="categories__link-chevron" />
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <!-- Bottom Row -->
+  <div class="categories__bottom-grid">
+
+    <!-- Lắc & Vòng Tay (wide) -->
+    <div class="categories__card">
+      <div class="categories__card-img-wrap categories__card-img-wrap--short">
+        <img src="/images/category-lac-vong-tay.png" alt="Lắc & Vòng Tay" class="categories__card-img" />
+        <div class="categories__card-gradient"></div>
+        <div class="categories__card-label">Lắc & Vòng Tay (Bracelets)</div>
+      </div>
+      <div class="categories__bracelet-links">
+        <div class="categories__bracelet-col">
+          @for (link of braceletsLinks.slice(0, 2); track link.label) {
+            <a [routerLink]="link.route" class="categories__card-link categories__card-link--plain">
+              {{ link.label }}
+            </a>
+          }
+        </div>
+        <div class="categories__bracelet-col">
+          @for (link of braceletsLinks.slice(2, 4); track link.label) {
+            <a [routerLink]="link.route" class="categories__card-link categories__card-link--plain">
+              {{ link.label }}
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Charm Collection (dark callout) -->
+    <div class="categories__charm-card">
+      <div class="categories__charm-inner">
+        <h3 class="categories__charm-title">
+          Charm<br />Collection
+        </h3>
+        <p class="categories__charm-desc">
+          Ghi lại từng khoảnh<br />khắc đáng nhớ của<br />bạn.
+        </p>
+        <a routerLink="/products" class="categories__charm-cta">KHÁM PHÁ NGAY</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Chatbot FAB (fixed) -->
+<button
+  class="categories__chatbot-fab"
+  type="button"
+  (click)="toggleChatbot()"
+  aria-label="Mở chatbot REN AI"
+>
+  <img src="/icons/ic-chatbot-fab.png" alt="" class="categories__chatbot-fab-icon" />
+</button>
+
+<!-- Chatbot Window (fixed) -->
+@if (chatbotOpen()) {
+  <div class="categories__chatbot-window">
+
+    <!-- Header -->
+    <div class="categories__chatbot-header">
+      <div>
+        <div class="categories__chatbot-name">REN AI</div>
+        <div class="categories__chatbot-desc">CHATBOT AI THÔNG MINH CỦA RENGA</div>
+      </div>
+      <button
+        class="categories__chatbot-close"
+        type="button"
+        (click)="closeChatbot()"
+        aria-label="Đóng chatbot"
+      >
+        <img src="/icons/ic-chatbot-close.png" alt="" />
+      </button>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="categories__chatbot-body">
+      @for (msg of chatMessages(); track msg.id) {
+        <div
+          class="categories__chat-msg"
+          [class.categories__chat-msg--user]="msg.sender === 'user'"
+        >
+          @if (msg.sender === 'bot') {
+            <img src="/icons/ic-chatbot-robot.png" alt="REN AI" class="categories__chat-avatar" />
+          }
+          <div class="categories__chat-content">
+            <div
+              class="categories__chat-bubble"
+              [class.categories__chat-bubble--user]="msg.sender === 'user'"
+            >{{ msg.text }}</div>
+            <span class="categories__chat-time">{{ msg.timestamp }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Input Area -->
+    <div class="categories__chatbot-footer">
+      <div class="categories__chatbot-input-row">
+        <input
+          class="categories__chatbot-input"
+          type="text"
+          placeholder="Nhập câu hỏi của bạn..."
+          [value]="inputValue()"
+          (input)="setInputValue($any($event.target).value)"
+          (keydown.enter)="sendMessage()"
+        />
+        <button
+          class="categories__chatbot-send"
+          type="button"
+          (click)="sendMessage()"
+          aria-label="Gửi"
+        >
+          <img src="/icons/ic-chatbot-send.png" alt="" />
+        </button>
+      </div>
+      <div class="categories__chatbot-chips">
+        @for (chip of quickChips; track chip) {
+          <button
+            class="categories__chatbot-chip"
+            type="button"
+            (click)="sendChip(chip)"
+          >{{ chip }}</button>
+        }
+      </div>
+    </div>
+
+  </div>
+}

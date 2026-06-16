@@ -263,3 +263,12 @@
 .mega-menu__link:hover {
   color: var(--color-primary);
 }
+
+.user-menu__item--btn {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-dark);
+}

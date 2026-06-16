@@ -1,0 +1,249 @@
+.profile-rewards {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 65px 80px;
+}
+
+/* ── Welcome Hero ── */
+.profile-rewards__hero {
+  padding: 48px 0 24px;
+}
+
+.profile-rewards__hero-title {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  max-width: 894px;
+}
+
+.profile-rewards__hero-subtitle {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+/* ── Section Title (shared) ── */
+.profile-rewards__section-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+/* ── Redeem Section ── */
+.profile-rewards__redeem {
+  border: 1px solid #2c2c2c;
+  background-color: var(--color-white);
+  padding: 40px 41px;
+  margin-bottom: 32px;
+}
+
+.profile-rewards__vouchers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.profile-rewards__voucher-card {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-black);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 327px;
+  position: relative;
+}
+
+.profile-rewards__voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.profile-rewards__voucher-icon {
+  width: 20px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.profile-rewards__voucher-pts {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.profile-rewards__voucher-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: #1a1c1c;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.profile-rewards__voucher-desc {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  flex: 1;
+}
+
+.profile-rewards__voucher-btn {
+  width: 100%;
+  border: 1px solid var(--color-black);
+  background: none;
+  padding: 13px 1px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-black);
+  text-align: center;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.profile-rewards__voucher-btn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* ── Bottom Layout ── */
+.profile-rewards__bottom {
+  display: grid;
+  grid-template-columns: 285px 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+/* ── Back Nav ── */
+.profile-rewards__back-col {
+  padding-top: 8px;
+}
+
+.profile-rewards__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  text-transform: none;
+  transition: color 0.2s;
+}
+
+.profile-rewards__back-btn:hover {
+  color: var(--color-primary);
+}
+
+.profile-rewards__back-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+/* ── Points History ── */
+.profile-rewards__history {
+  border: 1px solid #2c2c2c;
+  background-color: var(--color-white);
+  padding: 40px 41px;
+}
+
+.profile-rewards__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.profile-rewards__table-head-row {
+  border-bottom: 1px solid var(--color-black);
+}
+
+.profile-rewards__th {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1c1c;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 1px 1px 16px;
+  text-align: left;
+}
+
+.profile-rewards__th--right {
+  text-align: right;
+}
+
+.profile-rewards__table-row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-rewards__table-row:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-rewards__td {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: #1a1c1c;
+  padding: 24px 1px;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.profile-rewards__td--right {
+  text-align: right;
+}
+
+/* ── Type Badges ── */
+.profile-rewards__type-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2.5px 12px;
+}
+
+.profile-rewards__type-badge--earned,
+.profile-rewards__type-badge--bonus {
+  background-color: #eee;
+  color: #1a1c1c;
+}
+
+.profile-rewards__type-badge--redeemed {
+  background-color: #ffdad6;
+  color: #93000a;
+}
+
+/* ── Points Colors ── */
+.profile-rewards__points--positive {
+  font-weight: 700;
+  color: var(--color-price);
+}
+
+.profile-rewards__points--negative {
+  font-weight: 700;
+  color: #ba1a1a;
+}

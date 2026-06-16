@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/products/products.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\n\r\nexport const productsRoutes: Routes = [\r\n  {\r\n    path: '',\r\n    loadComponent: () => import('./product-list/product-list.component').then(m => m.ProductListComponent),\r\n  },\r\n  {\r\n    path: ':id',\r\n    loadComponent: () => import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent),\r\n  },\r\n];\r\n"],
+  "mappings": ";;;AAEO,IAAM,iBAAyB;EACpC;IACE,MAAM;IACN,eAAe,MAAM,OAAO,qBAAuC,EAAE,KAAK,OAAK,EAAE,oBAAoB;;EAEvG;IACE,MAAM;IACN,eAAe,MAAM,OAAO,qBAA2C,EAAE,KAAK,OAAK,EAAE,sBAAsB;;;",
+  "names": []
+}

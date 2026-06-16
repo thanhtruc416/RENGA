@@ -1,0 +1,96 @@
+<div class="register">
+
+  <!-- Blurred background -->
+  <div class="register__bg" aria-hidden="true"></div>
+
+  <!-- Card -->
+  <div class="register__card">
+
+    <!-- Close Button -->
+    <a routerLink="/" class="register__close" aria-label="Đóng">
+      <img src="/icons/ic-close.png" alt="" />
+    </a>
+
+    <!-- Brand Header -->
+    <div class="register__header">
+      <h1 class="register__title">
+        Đăng kí tài khoản<br />RENGA
+      </h1>
+      <p class="register__subtitle">
+        Khám phá thế giới trang sức cao cấp dành riêng cho bạn.
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form class="register__form" (ngSubmit)="register()">
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="text"
+          placeholder="Họ và Tên *"
+          [value]="fullName()"
+          (input)="setFullName($any($event.target).value)"
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="email"
+          placeholder="Email"
+          [value]="email()"
+          (input)="setEmail($any($event.target).value)"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="tel"
+          placeholder="Số điện thoại *"
+          [value]="phone()"
+          (input)="setPhone($any($event.target).value)"
+          autocomplete="tel"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="password"
+          placeholder="Mật khẩu *"
+          [value]="password()"
+          (input)="setPassword($any($event.target).value)"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="password"
+          placeholder="Xác nhận mật khẩu *"
+          [value]="confirmPassword()"
+          (input)="setConfirmPassword($any($event.target).value)"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button
+        class="register__submit"
+        type="submit"
+        [disabled]="isSubmitting()"
+      >
+        ĐĂNG KÝ
+      </button>
+    </form>
+
+    <!-- Footer Link -->
+    <p class="register__footer">
+      Đã có tài khoản?&nbsp;<a routerLink="/dang-nhap" class="register__login-link">Đăng nhập ngay</a>
+    </p>
+
+  </div>
+</div>

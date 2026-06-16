@@ -1,0 +1,34 @@
+<!-- Backdrop -->
+<div class="modal-found-orders__overlay" (click)="onClose()">
+
+  <!-- Card -->
+  <div class="modal-found-orders__card" (click)="$event.stopPropagation()">
+
+    <!-- Close Button -->
+    <button class="modal-found-orders__close" type="button" (click)="onClose()" aria-label="Đóng">
+      <img src="/icons/ic-close.png" alt="" />
+    </button>
+
+    <!-- Title -->
+    <h2 class="modal-found-orders__title">
+      Chúng tôi tìm thấy đơn<br />hàng cũ của số điện<br />thoại này!
+    </h2>
+
+    <!-- Body -->
+    <p class="modal-found-orders__body">
+      Bạn đã có 2 đơn hàng trước đây. Xác nhận để liên<br />kết lịch sử mua hàng vào tài khoản mới của bạn.
+    </p>
+
+    <!-- Actions -->
+    <div class="modal-found-orders__actions">
+      <button class="modal-found-orders__btn modal-found-orders__btn--confirm" type="button" (click)="onConfirm()">
+        XÁC NHẬN &amp; TẠO TÀI<br />KHOẢN
+      </button>
+      <button class="modal-found-orders__btn modal-found-orders__btn--skip" type="button" (click)="onSkip()">
+        BỎ QUA, TẠO TÀI<br />KHOẢN MỚI
+      </button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,3 +1,157 @@
-<div class="product-detail-page">
-  <p>product-detail placeholder</p>
+<div class="product-detail">
+
+  <!-- Breadcrumb -->
+  <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
+    <a routerLink="/" class="product-detail__breadcrumb-link">DANH MỤC SẢN PHẨM</a>
+    <span class="product-detail__breadcrumb-sep">›</span>
+    <a routerLink="/products" class="product-detail__breadcrumb-link">NHẪN</a>
+    <span class="product-detail__breadcrumb-sep">›</span>
+    <span class="product-detail__breadcrumb-current">{{ product().name }}</span>
+  </nav>
+
+  <!-- Product Main -->
+  <section class="product-detail__main">
+
+    <!-- Gallery -->
+    <div class="product-detail__gallery">
+      <div class="product-detail__gallery-thumbnails">
+        @for (img of product().images; track $index) {
+          <button
+            class="product-detail__thumb-btn"
+            [class.product-detail__thumb-btn--active]="activeImageIndex() === $index"
+            type="button"
+            (click)="selectImage($index)"
+          >
+            <img [src]="img" [alt]="product().name + ' - ảnh ' + ($index + 1)" class="product-detail__thumb-img" />
+          </button>
+        }
+      </div>
+      <div class="product-detail__gallery-main">
+        <img
+          [src]="product().images[activeImageIndex()]"
+          [alt]="product().name"
+          class="product-detail__main-img"
+        />
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-detail__info">
+      <p class="product-detail__collection">{{ product().collection }}</p>
+      <h1 class="product-detail__name">{{ product().name }}</h1>
+
+      <div class="product-detail__price-row">
+        <span class="product-detail__price">{{ formatPrice(product().price) }}</span>
+        @if (product().inStock) {
+          <span class="product-detail__stock-badge">SẴN CÓ</span>
+        }
+      </div>
+
+      <p class="product-detail__desc">{{ product().description }}</p>
+
+      <!-- Size Selector -->
+      <div class="product-detail__size-section">
+        <p class="product-detail__size-label">KÍCH THƯỚC (SIZE)</p>
+        <div class="product-detail__size-options">
+          @for (size of product().sizes; track size) {
+            <button
+              class="product-detail__size-btn"
+              [class.product-detail__size-btn--active]="selectedSize() === size"
+              type="button"
+              (click)="selectSize(size)"
+            >
+              {{ size }}
+            </button>
+          }
+        </div>
+        <a class="product-detail__size-guide" routerLink=".">HƯỚNG DẪN CHỌN SIZE</a>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="product-detail__cta">
+        <button class="product-detail__btn product-detail__btn--primary" type="button">
+          THÊM VÀO GIỎ HÀNG
+        </button>
+        <button class="product-detail__btn product-detail__btn--secondary" type="button">
+          MUA NGAY
+        </button>
+      </div>
+
+      <!-- Service Info -->
+      <div class="product-detail__services">
+        <div class="product-detail__service-item">
+          <img src="/icons/ic-feature-warranty.png" alt="" class="product-detail__service-icon" />
+          <span class="product-detail__service-text">MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC</span>
+        </div>
+        <div class="product-detail__service-item">
+          <img src="/icons/ic-feature-quality.png" alt="" class="product-detail__service-icon" />
+          <span class="product-detail__service-text">BẢO HÀNH TRỌN ĐỜI &amp; KIỂM ĐỊNH GIA</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Product Specs -->
+  <section class="product-detail__specs">
+    <h2 class="product-detail__specs-title">THÔNG SỐ CHI TIẾT</h2>
+    <div class="product-detail__specs-grid">
+      @for (spec of specs; track spec.label; let last = $last) {
+        <div class="product-detail__spec-item" [class.product-detail__spec-item--last]="last">
+          <p class="product-detail__spec-label">{{ spec.label }}</p>
+          <p class="product-detail__spec-value">{{ spec.value }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section class="product-detail__reviews">
+    <h2 class="product-detail__reviews-title">ĐÁNH GIÁ TỪ KHÁCH HÀNG ({{ reviewCount() }})</h2>
+    <div class="product-detail__reviews-grid">
+      @for (review of reviews(); track review.id) {
+        <div class="product-detail__review-card">
+          <div class="product-detail__review-header">
+            <span class="product-detail__review-name">{{ review.name }}</span>
+            <div class="product-detail__review-stars" aria-label="{{ review.rating }} sao">
+              @for (star of stars; track star) {
+                <img src="/icons/ic-star.png" alt="★" class="product-detail__review-star" />
+              }
+            </div>
+          </div>
+          <img [src]="review.imageUrl" [alt]="review.name" class="product-detail__review-img" />
+          <p class="product-detail__review-quote">{{ review.quote }}</p>
+          <p class="product-detail__review-date">{{ review.date }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Related Products -->
+  <section class="product-detail__related">
+    <h2 class="product-detail__related-title">SẢN PHẨM LIÊN QUAN</h2>
+    <div class="product-detail__related-grid">
+      @for (item of relatedProducts(); track item.id) {
+        <a [routerLink]="['/products', item.id]" class="product-detail__related-card">
+          <div class="product-detail__related-img-wrap">
+            <img [src]="item.imageUrl" [alt]="item.name" class="product-detail__related-img" />
+            <div class="product-detail__related-overlay">
+              <span class="product-detail__related-quick-view">QUICK VIEW</span>
+            </div>
+          </div>
+          <div class="product-detail__related-info">
+            <span class="product-detail__related-collection">{{ item.collection }}</span>
+            <h3 class="product-detail__related-name">{{ item.name }}</h3>
+            <p class="product-detail__related-price">{{ formatPrice(item.price) }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
 </div>
+
+<!-- Chatbot FAB -->
+<button class="product-detail__chatbot" aria-label="Mở chatbot hỗ trợ">
+  <img src="/icons/ic-chatbot.png" alt="Chatbot" />
+</button>

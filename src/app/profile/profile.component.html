@@ -1,0 +1,129 @@
+<div class="profile">
+
+  <!-- Welcome Hero -->
+  <section class="profile__hero">
+    <h1 class="profile__hero-title">Chào mừng trở lại, {{ user().fullName.split(' ').pop() }}</h1>
+    <p class="profile__hero-subtitle">Quản lý hành trình thiết kế riêng và các đặc quyền thành viên của bạn.</p>
+  </section>
+
+  <!-- Dashboard Gateway Links -->
+  <div class="profile__gateway">
+    @for (link of dashboardLinks; track link.key) {
+      <a [routerLink]="link.route" class="profile__gateway-card">
+        <div class="profile__gateway-body">
+          <img [src]="link.iconUrl" [alt]="link.title" class="profile__gateway-icon" />
+          <div class="profile__gateway-text">
+            <p class="profile__gateway-title">{{ link.title }}</p>
+            <p class="profile__gateway-desc">{{ link.description }}</p>
+          </div>
+        </div>
+        <img src="/icons/ic-arrow-right.png" alt="" class="profile__gateway-arrow" />
+      </a>
+    }
+  </div>
+
+  <!-- Main Sections: Personal Info + Loyalty Card -->
+  <div class="profile__sections">
+
+    <!-- Personal Info -->
+    <section class="profile__info-card">
+      <div class="profile__info-header">
+        <h2 class="profile__info-title">THÔNG TIN CÁ NHÂN</h2>
+        <button class="profile__info-edit-btn" type="button">Chỉnh sửa</button>
+      </div>
+
+      <div class="profile__info-grid">
+        <div class="profile__info-field">
+          <label class="profile__field-label">Họ và tên</label>
+          <div class="profile__field-value">{{ user().fullName }}</div>
+        </div>
+        <div class="profile__info-field">
+          <label class="profile__field-label">Email</label>
+          <div class="profile__field-value">{{ user().email }}</div>
+        </div>
+        <div class="profile__info-field">
+          <label class="profile__field-label">SĐT</label>
+          <div class="profile__field-value">{{ user().phone }}</div>
+        </div>
+        <div class="profile__info-field">
+          <label class="profile__field-label">Ngày sinh</label>
+          <div class="profile__field-value profile__field-value--with-icon">
+            <span>{{ user().birthDate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile__info-field profile__info-field--full">
+        <label class="profile__field-label">Địa chỉ</label>
+        <div class="profile__field-value">{{ user().address }}</div>
+      </div>
+    </section>
+
+    <!-- Loyalty Status Card -->
+    <section class="profile__loyalty-card">
+      <img src="/icons/ic-loyalty-sparkle.png" alt="" class="profile__loyalty-sparkle" aria-hidden="true" />
+
+      <div class="profile__loyalty-top">
+        <div class="profile__loyalty-tier">
+          <p class="profile__loyalty-tier-label">HẠNG THÀNH VIÊN</p>
+          <h2 class="profile__loyalty-tier-name">{{ loyaltyTier() }}</h2>
+        </div>
+        <img src="/icons/ic-loyalty-diamond.png" alt="" class="profile__loyalty-diamond" />
+      </div>
+
+      <div class="profile__loyalty-progress-section">
+        <div class="profile__loyalty-progress-labels">
+          <span class="profile__loyalty-points">{{ loyaltyPoints().toLocaleString('vi-VN') }} điểm</span>
+          <span class="profile__loyalty-remaining">{{ loyaltyRemaining().toLocaleString('vi-VN') }} nữa</span>
+        </div>
+        <div class="profile__loyalty-progress-bg">
+          <div class="profile__loyalty-progress-fill" [style.width.%]="loyaltyProgress()"></div>
+        </div>
+      </div>
+
+      <div class="profile__loyalty-history">
+        <p class="profile__loyalty-history-label">Điểm tích lũy</p>
+        @for (item of loyaltyHistory(); track item.label) {
+          <div class="profile__loyalty-history-item">
+            <span class="profile__loyalty-history-name">{{ item.label }}</span>
+            <span class="profile__loyalty-history-points">+{{ item.points.toLocaleString('vi-VN') }}</span>
+          </div>
+        }
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Security Section -->
+  <section class="profile__security">
+    <h2 class="profile__security-title">THÔNG TIN BẢO MẬT</h2>
+    <div class="profile__security-fields">
+      <div class="profile__security-field">
+        <label class="profile__security-label" for="current-password">MẬT KHẨU HIỆN TẠI</label>
+        <input
+          id="current-password"
+          type="password"
+          class="profile__security-input"
+          [value]="currentPassword()"
+          (input)="setCurrentPassword($any($event.target).value)"
+          placeholder="••••••••"
+        />
+      </div>
+      <div class="profile__security-field">
+        <label class="profile__security-label" for="new-password">MẬT KHẨU MỚI</label>
+        <input
+          id="new-password"
+          type="password"
+          class="profile__security-input"
+          [value]="newPassword()"
+          (input)="setNewPassword($any($event.target).value)"
+          placeholder="Nhập mật khẩu mới"
+        />
+      </div>
+    </div>
+    <button class="profile__security-btn" type="button" (click)="updatePassword()">
+      CẬP NHẬT THÔNG TIN
+    </button>
+  </section>
+
+</div>
