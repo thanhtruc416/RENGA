@@ -1,11 +1,7 @@
-﻿/* ===== CHECKOUT PAGE ===== */
-
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.checkout-page {
+﻿.checkout-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Top section (breadcrumb + title + timer) â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-top {
   padding: 0 var(--container-px);
   border-bottom: 1px solid #c4c7c7;
@@ -17,7 +13,6 @@
   padding: 40px 0 48px;
 }
 
-/* â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -56,7 +51,6 @@
   opacity: 0.5;
 }
 
-/* â”€â”€ Title row (title + timer side by side) â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-title-row {
   display: flex;
   align-items: flex-start;
@@ -73,7 +67,6 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Countdown timer widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-timer {
   flex-shrink: 0;
   background: var(--color-white);
@@ -105,7 +98,6 @@
   letter-spacing: 0.5px;
 }
 
-/* â”€â”€ Checkout body (two-column layout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-body {
   padding: 0 var(--container-px);
 }
@@ -120,12 +112,10 @@
   padding: 48px 0 80px;
 }
 
-/* â”€â”€ Left: checkout form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-form {
   padding-right: 56px;
 }
 
-/* â”€â”€ Section heading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-section {
   margin-bottom: 48px;
 }
@@ -166,7 +156,6 @@
   color: #1a1c1c;
 }
 
-/* â”€â”€ Shipping fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .shipping-fields {
   display: flex;
   flex-direction: column;
@@ -179,7 +168,6 @@
   gap: 32px;
 }
 
-/* â”€â”€ Field group â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .field-group {
   display: flex;
   flex-direction: column;
@@ -230,7 +218,6 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Select wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .field-group__select-wrap {
   position: relative;
   display: flex;
@@ -271,7 +258,6 @@
   pointer-events: none;
 }
 
-/* â”€â”€ Payment options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .payment-options {
   display: flex;
   flex-direction: column;
@@ -298,7 +284,6 @@
   border-color: var(--color-primary);
 }
 
-/* hide native radio */
 .payment-opt__radio {
   position: absolute;
   opacity: 0;
@@ -307,7 +292,6 @@
   pointer-events: none;
 }
 
-/* custom radio indicator */
 .payment-opt__radio-ui {
   display: flex;
   align-items: center;
@@ -351,7 +335,6 @@
   flex-shrink: 0;
 }
 
-/* â”€â”€ Right: order summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-summary {
   background: var(--color-primary-light);
   padding: 32px;
@@ -374,7 +357,6 @@
   color: #1a1c1c;
 }
 
-/* â”€â”€ Order items â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-items {
   display: flex;
   flex-direction: column;
@@ -474,7 +456,6 @@
   white-space: nowrap;
 }
 
-/* â”€â”€ Pricing rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-pricing {
   display: flex;
   flex-direction: column;
@@ -513,7 +494,6 @@
   color: #9a3f5c;
 }
 
-/* â”€â”€ Voucher field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .voucher-field {
   padding-bottom: 20px;
   border-bottom: 1px solid #d4c8cc;
@@ -572,7 +552,6 @@
   background: #9a3f5c;
 }
 
-/* â”€â”€ Order total â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-total {
   display: flex;
   align-items: baseline;
@@ -600,7 +579,6 @@
   white-space: nowrap;
 }
 
-/* â”€â”€ CTA area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-cta {
   display: flex;
   flex-direction: column;
@@ -646,7 +624,6 @@
   flex-shrink: 0;
 }
 
-/* â”€â”€ Chat FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .chat-fab {
   position: fixed;
   bottom: 32px;

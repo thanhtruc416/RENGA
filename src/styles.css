@@ -1,13 +1,4 @@
-﻿:root {
-  /* Brand colors */
-  --color-primary: #c4607e;
-  --color-primary-light: #f7f0f3;
-  --color-dark: #1a1a1a;
-  --color-muted: #444748;
-  --color-border: #c4c7c7;
-  --color-bg-card: #f3f3f4;
-  --color-white: #ffffff;
-  --color-black: #000000;
+﻿@import './styles/_token.css';
 
   /* Typography */
   --font-serif: 'Playfair Display', Georgia, serif;

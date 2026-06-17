@@ -1,10 +1,4 @@
-﻿/* ===== ORDER MODALS =====
-   Covers: warranty/repair, cancel, cancel-bespoke,
-           cancel-success popup, cancel-fail popup
-   ================================================== */
-
-/* â”€â”€ Shared backdrop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.order-modal-backdrop {
+﻿.order-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -25,7 +19,6 @@
   visibility: visible;
 }
 
-/* â”€â”€ Base modal card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-modal {
   background: var(--color-white);
   position: relative;
@@ -38,7 +31,6 @@
   display: block;
 }
 
-/* Shared close button */
 .omodal-close {
   background: none;
   border: none;
@@ -61,10 +53,6 @@
   display: block;
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   WARRANTY / REPAIR MODAL  (222:1719)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-modal--warranty {
   width: 670px;
   border: 1px solid var(--color-border);
@@ -72,7 +60,6 @@
   padding: 41px 32px 0;
 }
 
-/* Header */
 .warranty-modal__header {
   display: flex;
   align-items: flex-start;
@@ -98,7 +85,6 @@
   color: #9a3f5c;
 }
 
-/* Summary: 3-col grid (image 1fr, info 2fr) */
 .warranty-summary {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -152,7 +138,6 @@
   gap: 16px;
 }
 
-/* Evidence photos */
 .warranty-evidence {
   border-top: 1px solid #f3f3f3;
   padding-top: 16px;
@@ -199,7 +184,6 @@
   pointer-events: none;
 }
 
-/* Tabs */
 .warranty-tabs {
   border-bottom: 1px solid var(--color-border);
   margin-bottom: 24px;
@@ -228,7 +212,6 @@
   border-bottom-color: var(--color-primary);
 }
 
-/* Quote fields */
 .warranty-fields {
   margin-bottom: 16px;
 }
@@ -259,7 +242,6 @@
   border-bottom-color: var(--color-primary);
 }
 
-/* Buttons */
 .warranty-actions {
   display: flex;
   align-items: center;
@@ -311,10 +293,6 @@
   background: #9a3f5c;
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CANCEL ORDER MODAL  (222:1606)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-modal--cancel {
   width: 541px;
   border-radius: 20px;
@@ -457,10 +435,6 @@
   background: #f0e0e6;
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CANCEL BESPOKE MODAL  (222:1696)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-modal--cancel-bespoke {
   width: 750px;
   border: 1px solid var(--color-black);
@@ -606,10 +580,6 @@
   background: #f5f5f5;
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CANCEL SUCCESS POPUP  (222:1537)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-modal--cancel-success {
   width: 950px;
   border-radius: 30px;
@@ -651,7 +621,6 @@
   color: var(--color-black);
 }
 
-/* 2-col product card */
 .cancel-success__card {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -812,10 +781,6 @@
   background: #f5f5f5;
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CANCEL FAIL POPUP  (222:1589)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-modal--cancel-fail {
   width: 1100px;
   border-radius: 30px;

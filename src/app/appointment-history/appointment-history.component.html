@@ -156,50 +156,12 @@
   </div>
 
   <!-- Cancel modal -->
-  <div class="ltv-modal-backdrop" [class.is-open]="cancelModalOpen()" (click)="closeCancel()">
-    <div class="ltv-cancel-modal" (click)="$event.stopPropagation()">
-      <div class="ltv-cancel-modal__header">
-        <div class="ltv-cancel-modal__heading">
-          <p class="ltv-cancel-modal__title">Hủy lịch hẹn</p>
-          <p class="ltv-cancel-modal__ref">{{ upcomingAppointment.id }}</p>
-        </div>
-        <button class="ltv-cancel-modal__close" type="button" (click)="closeCancel()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="ltv-cancel-modal__refund-notice">
-        <strong>Chính sách hoàn tiền:</strong> Hủy trước 24 giờ sẽ được hoàn 100% đặt cọc. Hủy trong vòng 24 giờ sẽ mất phí đặt cọc.
-      </div>
-
-      <div class="ltv-cancel-modal__reasons">
-        <p class="ltv-cancel-modal__reason-heading">Lý do hủy</p>
-        <label class="ltv-cancel-modal__reason">
-          <input type="checkbox">
-          <span class="ltv-cancel-modal__reason-label">Thay đổi kế hoạch cá nhân</span>
-        </label>
-        <label class="ltv-cancel-modal__reason">
-          <input type="checkbox">
-          <span class="ltv-cancel-modal__reason-label">Muốn đổi sang designer khác</span>
-        </label>
-        <label class="ltv-cancel-modal__reason">
-          <input type="checkbox">
-          <span class="ltv-cancel-modal__reason-label">Chưa sẵn sàng về ngân sách</span>
-        </label>
-        <label class="ltv-cancel-modal__reason">
-          <input type="checkbox">
-          <span class="ltv-cancel-modal__reason-label">Lý do khác</span>
-        </label>
-      </div>
-
-      <div class="ltv-cancel-modal__actions">
-        <button class="ltv-cancel-modal__btn ltv-cancel-modal__btn--secondary" type="button" (click)="closeCancel()">GIỮ LỊCH HẸN</button>
-        <button class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary" type="button" (click)="confirmCancel()">XÁC NHẬN HỦY</button>
-      </div>
-    </div>
-  </div>
+  @if (cancelModalOpen()) {
+    <app-cancel-appointment-modal
+      [appointmentId]="upcomingAppointment.id"
+      (closed)="closeCancel()"
+      (confirmed)="confirmCancel($event)"
+    />
+  }
 
 </div>
