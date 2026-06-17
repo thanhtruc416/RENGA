@@ -449,7 +449,7 @@
 }
 
 .order-item__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
   color: #1a1c1c;
@@ -571,7 +571,7 @@
 }
 
 .order-total__amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 28px;
   line-height: 1.2;

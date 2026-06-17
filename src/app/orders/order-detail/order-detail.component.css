@@ -294,7 +294,7 @@
 }
 
 .product-row__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 24px;
   line-height: 33.6px;
@@ -324,7 +324,7 @@
 }
 
 .product-section__total-amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
   line-height: 38.4px;

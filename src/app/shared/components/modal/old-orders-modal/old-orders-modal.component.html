@@ -1,0 +1,28 @@
+<div class="old-orders-modal__backdrop" (click)="closed.emit()">
+  <div class="old-orders-modal__card" (click)="$event.stopPropagation()">
+
+    <button class="old-orders-modal__close" type="button" (click)="closed.emit()" aria-label="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <h2 class="old-orders-modal__title">
+      Chúng tôi tìm thấy đơn hàng cũ của số điện thoại này!
+    </h2>
+    <p class="old-orders-modal__subtitle">
+      Bạn đã có 2 đơn hàng trước đây. Xác nhận để liên kết lịch sử mua hàng vào tài khoản mới của bạn.
+    </p>
+
+    <div class="old-orders-modal__actions">
+      <button class="old-orders-modal__btn old-orders-modal__btn--primary" type="button" (click)="confirmed.emit()">
+        XÁC NHẬN &amp; TẠO TÀI KHOẢN
+      </button>
+      <button class="old-orders-modal__btn old-orders-modal__btn--secondary" type="button" (click)="skipped.emit()">
+        BỎ QUA, TẠO TÀI KHOẢN MỚI
+      </button>
+    </div>
+
+  </div>
+</div>

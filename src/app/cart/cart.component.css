@@ -202,7 +202,7 @@
 }
 
 .cart-item__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 24px;
   line-height: 33.6px;
@@ -349,7 +349,7 @@
 }
 
 .cart-item__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
   line-height: 41.6px;

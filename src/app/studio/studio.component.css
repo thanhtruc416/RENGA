@@ -421,7 +421,7 @@
 }
 
 .material-option__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 400;
   color: var(--color-black);
@@ -436,7 +436,7 @@
 }
 
 .material-option__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
@@ -822,7 +822,7 @@
 }
 
 .order-card__item-price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
@@ -1065,7 +1065,7 @@
 }
 
 .checkout-summary__product-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   margin: 0 0 4px;
@@ -1160,7 +1160,7 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 24px;
     color: var(--color-black);
     font-weight: 400;
@@ -1182,7 +1182,7 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 20px;
     color: var(--color-primary);
     font-weight: 400;
@@ -1227,7 +1227,7 @@
 }
 
 .studio-price-summary__amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 700;
   color: var(--color-white);
@@ -1300,7 +1300,7 @@
 }
 
 .studio-card__preview-name-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 6px;
@@ -1398,7 +1398,7 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 22px;
     color: #9a3f5c;
     font-weight: 400;
@@ -1434,7 +1434,7 @@
 }
 
 .engrave-fee-row__value {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 20px;
   color: var(--color-black);
 }
