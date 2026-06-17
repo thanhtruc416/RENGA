@@ -1,0 +1,123 @@
+<div class="login">
+
+  <!-- Left Panel: Visual Anchor -->
+  <div class="login__left">
+    <div class="login__left-gradient" aria-hidden="true"></div>
+    <div class="login__left-content">
+      <span class="login__brand-text">RENGA</span>
+    </div>
+  </div>
+
+  <!-- Right Panel: Form -->
+  <div class="login__right">
+
+    <!-- Back Arrow -->
+    <a routerLink="/" class="login__back" aria-label="Quay lại">
+      <img src="/icons/ic-back-arrow.png" alt="" />
+    </a>
+
+    <!-- Main Content -->
+    <div class="login__content">
+
+      <!-- Brand Anchor -->
+      <div class="login__brand-anchor">
+        <h1 class="login__title">Chào mừng &nbsp;bạn trở lại</h1>
+        <p class="login__subtitle">
+          Đăng nhập để tiếp tục hành trình sáng tạo của bạn
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login__form" (submit)="$event.preventDefault(); login()">
+
+        <!-- Phone number -->
+        <div class="login__field">
+          <label class="login__label" for="login-phone">SỐ ĐIỆN THOẠI</label>
+          <input
+            id="login-phone"
+            class="login__input"
+            type="tel"
+            placeholder="0881234567"
+            [value]="phone()"
+            (input)="setPhone($any($event.target).value)"
+            autocomplete="tel"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="login__field">
+          <div class="login__label-row">
+            <label class="login__label" for="login-password">MẬT KHẨU</label>
+            <a routerLink="/quen-mat-khau" class="login__forgot">Quên mật khẩu?</a>
+          </div>
+          <div class="login__input-wrap">
+            <input
+              id="login-password"
+              class="login__input"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="••••••••"
+              [value]="password()"
+              (input)="setPassword($any($event.target).value)"
+              autocomplete="current-password"
+            />
+            <button
+              class="login__eye-btn"
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+            >
+              <img src="/icons/ic-eye.png" alt="" />
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button
+          class="login__submit"
+          type="submit"
+          [disabled]="isSubmitting()"
+        >
+          ĐĂNG NHẬP
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="login__divider">
+        <div class="login__divider-line"></div>
+        <span class="login__divider-text">HOẶC</span>
+        <div class="login__divider-line"></div>
+      </div>
+
+      <!-- Social Login -->
+      <button class="login__social" type="button">
+        <img src="/icons/ic-social-google.svg" alt="" class="login__social-icon" />
+        <span>Tiếp tục với Google/Facebook</span>
+      </button>
+
+      <!-- Footer Link -->
+      <p class="login__footer">
+        Chưa có tài khoản?&nbsp;<a routerLink="/dang-ki" class="login__register-link">Đăng ký ngay</a>
+      </p>
+
+      <!-- Copyright -->
+      <p class="login__copyright">© 2026 RENGA. All rights reserved.</p>
+
+    </div>
+
+  </div>
+
+</div>
+
+@if (showLoginFail()) {
+  <app-login-fail-modal
+    [remainingAttempts]="remainingAttempts()"
+    (closed)="closeLoginFail()"
+  />
+}
+
+@if (showPhoneNotFound()) {
+  <app-phone-not-found-modal
+    (closed)="closePhoneNotFound()"
+  />
+}

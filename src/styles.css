@@ -26,6 +26,17 @@
   --max-width: 1440px;
   --header-height: 169px;
   --container-px: 80px;
+
+  /* Section backgrounds */
+  --color-studio-bg: rgba(26, 26, 26, 0.9);
+  --color-designer-bg: rgba(196, 96, 126, 0.6);
+
+  /* Component-specific */
+  --color-badge-bg: #fff0f5;
+  --color-review-card-bg: #f9f9f9;
+  --color-price: #9a3f5c;
+  --color-product-card-bg: rgba(247, 240, 243, 0.7);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 *, *::before, *::after {
   box-sizing: border-box;

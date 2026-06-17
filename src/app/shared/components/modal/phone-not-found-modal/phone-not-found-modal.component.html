@@ -1,3 +1,23 @@
-<div class="phone-not-found-modal">
-  <p>phone-not-found-modal placeholder</p>
+<div class="phone-not-found-modal__backdrop" (click)="closed.emit()">
+  <div class="phone-not-found-modal__card" (click)="$event.stopPropagation()">
+    <svg class="phone-not-found-modal__icon" viewBox="0 0 64 64" fill="none">
+      <path d="M32 6L58 54H6L32 6Z" stroke="var(--color-primary)" stroke-width="3.5" stroke-linejoin="round"/>
+      <line x1="32" y1="26" x2="32" y2="40" stroke="var(--color-primary)" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="32" cy="48" r="2.5" fill="var(--color-primary)"/>
+    </svg>
+
+    <h2 class="phone-not-found-modal__title">Số điện thoại chưa được đăng ký</h2>
+    <p class="phone-not-found-modal__subtitle">
+      Vui lòng đăng nhập lại hoặc đăng ký tài khoản
+    </p>
+
+    <div class="phone-not-found-modal__actions">
+      <button class="phone-not-found-modal__btn phone-not-found-modal__btn--secondary" type="button" (click)="closed.emit()">
+        Thử lại
+      </button>
+      <a class="phone-not-found-modal__btn" routerLink="/dang-ki" (click)="closed.emit()">
+        Đăng ký ngay
+      </a>
+    </div>
+  </div>
 </div>

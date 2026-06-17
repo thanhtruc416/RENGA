@@ -1,0 +1,100 @@
+<div class="register">
+
+  <!-- Blurred background -->
+  <div class="register__bg" aria-hidden="true"></div>
+
+  <!-- Card -->
+  <div class="register__card">
+
+    <!-- Close Button -->
+    <a routerLink="/" class="register__close" aria-label="Đóng">
+      <img src="/icons/ic-close.png" alt="" />
+    </a>
+
+    <!-- Brand Header -->
+    <div class="register__header">
+      <h1 class="register__title">
+        Đăng kí tài khoản<br />RENGA
+      </h1>
+      <p class="register__subtitle">
+        Khám phá thế giới trang sức cao cấp dành riêng cho bạn
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form class="register__form" [formGroup]="form" (ngSubmit)="register()">
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="text"
+          placeholder="Họ và Tên *"
+          formControlName="fullName"
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="tel"
+          placeholder="Số điện thoại *"
+          formControlName="phone"
+          inputmode="numeric"
+          autocomplete="tel"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="password"
+          placeholder="Mật khẩu *"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="register__field">
+        <input
+          class="register__input"
+          type="password"
+          placeholder="Xác nhận mật khẩu *"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button
+        class="register__submit"
+        type="submit"
+        [disabled]="isSubmitting()"
+      >
+        ĐĂNG KÝ
+      </button>
+    </form>
+
+    <!-- Footer Link -->
+    <p class="register__footer">
+      Đã có tài khoản?&nbsp;<a routerLink="/dang-nhap" class="register__login-link">Đăng nhập ngay</a>
+    </p>
+
+  </div>
+</div>
+
+@if (showOldOrders()) {
+  <app-old-orders-modal
+    (closed)="closeOldOrders()"
+    (confirmed)="confirmOldOrders()"
+    (skipped)="skipOldOrders()"
+  />
+}
