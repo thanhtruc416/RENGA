@@ -1,23 +1,6 @@
 ﻿@import './styles/_token.css';
 
-  /* Typography */
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Montserrat', Arial, sans-serif;
-  --font-ui: 'DM Sans', Arial, sans-serif;
-
-  /* Spacing scale */
-  --sp-xs: 4px;
-  --sp-sm: 8px;
-  --sp-md: 16px;
-  --sp-lg: 24px;
-  --sp-xl: 48px;
-  --sp-2xl: 80px;
-
-  /* Layout */
-  --max-width: 1440px;
-  --header-height: 169px;
-  --container-px: 80px;
-
+:root {
   /* Section backgrounds */
   --color-studio-bg: rgba(26, 26, 26, 0.9);
   --color-designer-bg: rgba(196, 96, 126, 0.6);
@@ -79,4 +62,10 @@ h3 { font-size: 24px; }
 
 p, span, a, li, label, input, select, textarea, button {
   font-family: var(--font-sans);
+}
+
+/* Chatbot FAB nhường chỗ khi panel giá Studio xuất hiện */
+body:has(.studio-price-summary) .chatbot__fab {
+  bottom: calc(100px + clamp(20px, 3vh, 40px));
+  transition: bottom 0.25s ease;
 }

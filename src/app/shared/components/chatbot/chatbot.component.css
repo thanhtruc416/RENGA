@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 16px rgba(196, 96, 126, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, bottom 0.25s ease;
   z-index: 1000;
 }
 

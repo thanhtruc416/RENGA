@@ -411,12 +411,12 @@
   white-space: nowrap;
 }
 
-.home__studio-callout--top {
+.home__studio-callout--right {
   top: 60%;
   right: -10%;
 }
 
-.home__studio-callout--bottom {
+.home__studio-callout--left {
   top: 28%;
   left: -15%;
 }

@@ -577,25 +577,26 @@
   line-height: 24px;
 }
 
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
+.order-detail-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 900;
+  gap: 16px;
+  margin-top: 24px;
+  padding-bottom: 8px;
 }
 
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
+.order-detail-btn {
+  padding: 17.5px 40px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.order-detail-btn:hover {
+  background: var(--color-price);
 }

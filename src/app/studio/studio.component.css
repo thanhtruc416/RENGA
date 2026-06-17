@@ -466,11 +466,11 @@
 }
 
 .stone-option--selected {
-  background: var(--color-black);
-  border-color: var(--color-black);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
 
-  .stone-option__label { color: var(--color-white); }
-  .stone-option__icon { filter: invert(1); }
+  .stone-option__label { color: var(--color-primary); }
+  .stone-option__icon { filter: none; }
 }
 
 .stone-option--muted {
@@ -483,6 +483,7 @@
   object-fit: contain;
   display: block;
 }
+
 
 .stone-option__label {
   font-family: var(--font-sans);
@@ -557,12 +558,13 @@
 .carat-control__range-labels {
   display: flex;
   justify-content: space-between;
+  padding: 0 12px;
+  margin-top: 6px;
   font-family: var(--font-sans);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-muted);
-  margin-top: 6px;
 }
 
 .stone-details {

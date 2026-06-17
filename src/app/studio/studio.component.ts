@@ -74,17 +74,17 @@ export class StudioComponent {
     {
       id: 'nhan',
       name: 'Nhẫn',
-      image: 'https://www.figma.com/api/mcp/asset/dc1a985c-947c-4266-97c9-8119fe0caf30',
+      image: '/images/category-nhan.png',
     },
     {
       id: 'day-chuyen',
       name: 'Dây chuyền',
-      image: 'https://www.figma.com/api/mcp/asset/4f425328-80a5-4f6f-a2b2-6bc553066238',
+      image: '/images/category-day-chuyen.png',
     },
     {
       id: 'hoa-tai',
       name: 'Hoa tai',
-      image: 'https://www.figma.com/api/mcp/asset/83b1346c-fa67-4b9f-82d0-d8a6622c2474',
+      image: '/images/category-hoa-tai.png',
     },
   ];
 
@@ -99,31 +99,31 @@ export class StudioComponent {
     {
       id: 'diamond',
       label: 'Kim cương',
-      image: 'https://www.figma.com/api/mcp/asset/67883825-e8c9-4cd2-b5f9-39299b8bf6c7',
+      image: '/images/product-nhan-kim-cuong-solitaire.png',
       pricePerCarat: 10_000_000,
     },
     {
       id: 'ruby',
       label: 'Hồng ngọc',
-      image: 'https://www.figma.com/api/mcp/asset/2294db08-47d6-4f95-9f9d-7e11bb50c2c3',
+      image: '/images/product-nhan-rose-gold-sapphire.png',
       pricePerCarat: 8_000_000,
     },
     {
       id: 'sapphire',
       label: 'Lam ngọc',
-      image: 'https://www.figma.com/api/mcp/asset/92ade0aa-43fe-4afa-bfdc-66c1468aa92c',
+      image: '/images/product-nhan-eternal-love.png',
       pricePerCarat: 7_000_000,
     },
     {
       id: 'emerald',
       label: 'Ngọc lục bảo',
-      image: 'https://www.figma.com/api/mcp/asset/c7b70169-ea45-4d68-ade1-1db78066391d',
+      image: '/images/product-nhan-emerald-modernity.png',
       pricePerCarat: 6_000_000,
     },
     {
       id: 'none',
       label: 'Không đá',
-      image: 'https://www.figma.com/api/mcp/asset/429be43b-8e11-462f-8a03-2c9a7ba6f266',
+      image: '/images/studio-ring.png',
       pricePerCarat: 0,
       muted: true,
     },
@@ -131,19 +131,19 @@ export class StudioComponent {
 
   readonly engraveGallery: GalleryThumb[] = [
     {
-      src: 'https://www.figma.com/api/mcp/asset/1366bf7e-90dc-405c-b9db-286001fa1621',
+      src: '/images/product-detail-nhan-aeterna-1.png',
       alt: 'Góc nhìn chính',
     },
     {
-      src: 'https://www.figma.com/api/mcp/asset/a2c234ed-2b83-4413-8ff4-03942d6affec',
+      src: '/images/product-detail-nhan-aeterna-2.png',
       alt: 'Góc nhìn 2',
     },
     {
-      src: 'https://www.figma.com/api/mcp/asset/185a999c-76c2-45b8-8b21-cbdc11b42896',
+      src: '/images/product-detail-nhan-aeterna-3.png',
       alt: 'Góc nhìn 3',
     },
     {
-      src: 'https://www.figma.com/api/mcp/asset/7660327d-c0e3-424b-9688-3725d7b37077',
+      src: '/images/product-detail-nhan-aeterna-4.png',
       alt: 'Góc nhìn 4',
     },
   ];

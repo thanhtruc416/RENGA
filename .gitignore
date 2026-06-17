@@ -1,97 +1,29 @@
 # ========================
-# VS Code
+# Angular / Node
 # ========================
-.vscode/*
-!.vscode/settings.json
-*.code-workspace
-# PyCharm / IntelliJ
-.idea/
-*.iml
-# ========================
-# Python
-# ========================
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.env
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-*.egg
-*.egg-info/
+node_modules/
 dist/
-build/
-eggs/
-parts/
-var/
-sdist/
-develop-eggs/
-.installed.cfg
-lib/
-lib64/
-*.so
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.log
-
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints/
+.angular/
+out-tsc/
+tmp/
+*.tsbuildinfo
+src/environments/*.local.ts
 
 # ========================
-# Java / Spring
-# ========================
-target/
-*.class
-*.jar
-*.war
-*.ear
-*.nar
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
-
-# Maven
-.mvn/
-mvnw
-mvnw.cmd
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-
-# Gradle
-.gradle/
-gradle/
-gradlew
-gradlew.bat
-build/
-!gradle/wrapper/gradle-wrapper.jar
-
-# Spring Boot
-application-local.properties
-application-local.yml
-
-# ========================
-# Environment / Secrets
+# Environment & Secrets
 # ========================
 .env
 .env.*
 !.env.example
 *.pem
 *.key
-secrets.*
+
+# ========================
+# VS Code
+# ========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # ========================
 # OS
@@ -99,33 +31,29 @@ secrets.*
 .DS_Store
 Thumbs.db
 desktop.ini
-node_modules/
-.angular/
-.claude/
-# Dependencies
-node_modules/
+ehthumbs.db
 
-# Angular build cache & output
-.angular/
-dist/
-tmp/
-out-tsc/
-
-# Environment files (nếu sau này có key thật)
-.env
-.env.local
-.env.*.local
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
+# ========================
 # Logs
+# ========================
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ========================
+# Test coverage
+# ========================
+coverage/
+
+# ========================
+# IDE
+# ========================
+.idea/
+
+# ========================
+# Misc
+# ========================
+.claude/
+*.code-workspace
+*.orig
