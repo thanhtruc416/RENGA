@@ -1,3 +1,85 @@
-<div class="cancel-design-modal">
-  <p>cancel-design-modal placeholder</p>
+<div
+  class="order-modal-backdrop is-open"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Yêu cầu hủy đơn thiết kế"
+  (click)="onClose()"
+>
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    @if (!submitted()) {
+      <div class="order-modal order-modal--cancel-bespoke is-active">
+
+        <div class="cancel-bespoke__close-row">
+          <button type="button" class="omodal-close" aria-label="Đóng" (click)="onClose()">
+            <img class="omodal-close__icon" src="assets/icons/ic-close.svg" alt="" aria-hidden="true" />
+          </button>
+        </div>
+
+        <h2 class="cancel-bespoke__title">Yêu cầu hủy đơn thiết kế/tùy biến</h2>
+        <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+        <p class="cancel-bespoke__desc">{{ policyText() }}</p>
+
+        <label class="cancel-bespoke__reason-label" for="design-cancel-reason">
+          Lý do hủy đơn
+        </label>
+        <textarea
+          id="design-cancel-reason"
+          class="cancel-bespoke__textarea"
+          placeholder="Vui lòng cung cấp chi tiết lý do cho yêu cầu hủy đơn của quý khách. Đội ngũ RENGA sẽ xem xét từng trường hợp cụ thể để đánh giá khả năng dừng quá trình sản xuất và chuẩn bị nguyên vật liệu."
+          [value]="reason()"
+          (input)="onReasonInput($event)"
+        ></textarea>
+
+        <div class="cancel-bespoke__ack">
+          <label class="cancel-bespoke__ack-label" for="design-cancel-ack">
+            <input
+              id="design-cancel-ack"
+              class="cancel-bespoke__ack-checkbox"
+              type="checkbox"
+              [checked]="acknowledged()"
+              (change)="toggleAck()"
+            />
+            <span class="cancel-bespoke__ack-text">
+              Tôi hiểu rằng yêu cầu này sẽ được gửi đến đội ngũ RENGA để xem xét chính thức và khoản đặt cọc của tôi có thể không được hoàn lại do sản phẩm đã bước vào giai đoạn thiết kế và chuẩn bị nguyên vật liệu.
+            </span>
+          </label>
+        </div>
+
+        <div class="cancel-bespoke__actions">
+          <button
+            type="button"
+            class="cancel-bespoke__submit"
+            [disabled]="!canSubmit() || isSubmitting()"
+            (click)="onSubmit()"
+          >
+            {{ isSubmitting() ? 'Đang gửi...' : 'Gửi yêu cầu đến Quản trị viên' }}
+          </button>
+          <button type="button" class="cancel-bespoke__keep" (click)="onClose()">
+            Tiếp tục giữ đơn hàng
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="order-modal order-modal--cancel-bespoke is-active">
+        <div class="cancel-bespoke__close-row">
+          <button type="button" class="omodal-close" aria-label="Đóng" (click)="onClose()">
+            <img class="omodal-close__icon" src="assets/icons/ic-close.svg" alt="" aria-hidden="true" />
+          </button>
+        </div>
+
+        <h2 class="cancel-bespoke__title">Đã gửi yêu cầu</h2>
+        <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+
+        <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
+          Yêu cầu hủy đơn của bạn đã được gửi thành công. Đội ngũ RENGA sẽ liên hệ với bạn trong vòng 1–2 ngày làm việc để xác nhận kết quả xử lý.
+        </p>
+
+        <div class="cancel-bespoke__actions" style="grid-template-columns: 1fr;">
+          <button type="button" class="cancel-bespoke__submit" (click)="onClose()">Đóng</button>
+        </div>
+      </div>
+    }
+
+  </div>
 </div>

@@ -1,0 +1,453 @@
+/* ===== ORDER TRACKING PAGE ===== */
+
+.order-tracking-page {
+  background: var(--color-white);
+  width: 100%;
+}
+
+/* ── Top section ─────────────────────────────────── */
+.order-tracking-top {
+  padding: 0 var(--container-px);
+}
+
+.order-tracking-top__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 0 48px;
+}
+
+/* ── Breadcrumb ──────────────────────────────────── */
+.order-tracking-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.order-tracking-breadcrumb__item {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.order-tracking-breadcrumb__item:hover {
+  color: var(--color-primary);
+}
+
+.order-tracking-breadcrumb__item--current {
+  color: var(--color-black);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.order-tracking-breadcrumb__sep {
+  font-size: 20px;
+  color: var(--color-border, #c4c7c7);
+  line-height: 1;
+}
+
+/* ── Hero row ────────────────────────────────────── */
+.order-tracking-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.order-tracking-hero__left {
+  flex: 1;
+}
+
+.order-tracking-hero__title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 80px;
+  letter-spacing: -1.28px;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.order-tracking-hero__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+
+.order-tracking-lookup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 17px 40px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.order-tracking-lookup-btn:hover {
+  background: var(--color-primary-dark, #9a3f5c);
+}
+
+.order-tracking-member {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.order-tracking-member__tier-label {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  letter-spacing: 0.5px;
+}
+
+.order-tracking-member__tier-value {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-black);
+}
+
+.order-tracking-desc {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--color-black);
+  margin: 0;
+}
+
+/* ── Filters ─────────────────────────────────────── */
+.order-tracking-filters-wrap {
+  border-top: 1px solid var(--color-border, #c4c7c7);
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
+  padding: 0 var(--container-px);
+}
+
+.order-tracking-filters {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  padding: 32px 0;
+}
+
+.order-tracking-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.order-tracking-filter__label {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  white-space: nowrap;
+}
+
+.order-tracking-filter__select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-black);
+  height: 42px;
+}
+
+.order-tracking-filter__select {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-text, #1a1c1c);
+  background: transparent;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 9px 40px 9px 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.order-tracking-filter__arrow {
+  position: absolute;
+  right: 12px;
+  font-size: 14px;
+  color: var(--color-text-muted, #444748);
+  pointer-events: none;
+}
+
+.order-tracking-filters__apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  border: none;
+  padding: 16px 32px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.order-tracking-filters__apply:hover {
+  background: #333;
+}
+
+/* ══════════════════════════════════════════════════
+   TABLE SECTION
+   
+   Cấu trúc đúng:
+   .order-tracking-table-wrap          ← full-width, pink bg, padding ngang
+     .order-tracking-table__container  ← max-width + margin auto (giống các section khác)
+       table.order-tracking-table      ← width: 100%, table-layout: fixed
+   
+   Lý do: max-width trên <table> không hoạt động đúng vì browser
+   tính width của table theo content, không theo parent width.
+   Cần div wrapper để giới hạn max-width.
+══════════════════════════════════════════════════ */
+.order-tracking-table-wrap {
+  /* background: var(--color-primary-light); */
+  padding-bottom: 32px;
+}
+
+.order-tracking-table__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
+  background: var(--color-primary-light);
+  box-sizing: border-box;
+}
+
+.order-tracking-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.order-tracking-table__head-row {
+  border-bottom: 1px solid var(--color-black);
+}
+
+.order-tracking-table__th {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  padding: 24px 8px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Column widths — tổng = 100% */
+.order-tracking-table__th--id      { width: 25%; }
+.order-tracking-table__th--date    { width: 13%; }
+.order-tracking-table__th--product { width: 27%; }
+.order-tracking-table__th--amount  { width: 16%; text-align: right; }
+.order-tracking-table__th--status  { width: 15%; text-align: center; }
+.order-tracking-table__th--action  { width: 7%;  text-align: right; }
+
+.order-tracking-table__row {
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
+}
+
+.order-tracking-table__row--cancelled {
+  opacity: 0.75;
+}
+
+.order-tracking-table__td {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-black);
+  padding: 28px 8px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.order-tracking-table__td--id {
+  padding-right: 12px;
+}
+
+.order-tracking-table__order-id {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-black);
+}
+
+.order-tracking-table__order-sub {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #444748);
+  margin-top: 2px;
+}
+
+.order-tracking-table__td--date {
+  color: var(--color-text-muted, #444748);
+  white-space: nowrap;
+}
+
+.order-tracking-table__td--amount {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--color-primary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.order-tracking-table__td--status {
+  text-align: center;
+}
+
+.order-tracking-table__td--action {
+  text-align: right;
+}
+
+.order-tracking-table__empty {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--color-text-muted, #444748);
+  font-family: var(--font-sans);
+}
+
+/* ── Status badges ───────────────────────────────── */
+.order-tracking-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  white-space: nowrap;
+}
+
+.order-tracking-badge--shipping    { background: var(--color-black); color: var(--color-white); }
+.order-tracking-badge--completed   { background: transparent; color: var(--color-black); border: 1px solid var(--color-black); }
+.order-tracking-badge--cancelled   { background: #ba1a1a; color: var(--color-white); }
+.order-tracking-badge--in-progress { background: var(--color-primary); color: var(--color-white); }
+
+/* ── Detail link ─────────────────────────────────── */
+.order-tracking-table__detail-link {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  transition: color 0.15s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.order-tracking-table__detail-link:hover {
+  color: var(--color-primary);
+}
+
+/* ── Pagination ──────────────────────────────────── */
+.order-tracking-pagination-wrap {
+  padding: 0 var(--container-px);
+  border-top: 1px solid var(--color-black);
+}
+
+.order-tracking-pagination {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 33px 0 40px;
+}
+
+.order-tracking-pagination__info {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-muted, #444748);
+  margin: 0;
+}
+
+.order-tracking-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-tracking-pagination__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border, #c4c7c7);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-text, #1a1c1c);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.order-tracking-pagination__btn:hover:not(:disabled):not(.order-tracking-pagination__btn--active) {
+  border-color: var(--color-black);
+}
+
+.order-tracking-pagination__btn--active {
+  background: var(--color-black);
+  border-color: var(--color-black);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.order-tracking-pagination__btn--arrow {
+  font-size: 18px;
+}
+
+.order-tracking-pagination__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

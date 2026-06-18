@@ -1,3 +1,80 @@
-<div class="payment-fail-modal">
-  <p>payment-fail-modal placeholder</p>
+<div class="modal-backdrop" [class.is-open]="isOpen()">
+  <div class="payment-modal payment-modal--failure is-active">
+
+    <button class="payment-modal__close" type="button" (click)="close()" aria-label="Đóng">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="payment-modal__icon-area">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+        <path d="M28 4 L52 48 L4 48 Z" stroke="#9a3f5c" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+        <line x1="28" y1="20" x2="28" y2="32" stroke="#9a3f5c" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="28" cy="40" r="1.8" fill="#9a3f5c"/>
+      </svg>
+    </div>
+
+    <h2 class="payment-modal__title">Thanh toán không thành công</h2>
+
+    <div class="payment-modal__inner">
+      <p class="payment-modal__subtitle">
+        Rất tiếc, giao dịch của bạn chưa được thực hiện.<br />
+        Điều này có thể do lỗi kết nối tạm thời hoặc thẻ của bạn bị từ chối.
+      </p>
+
+      <div class="order-info-card">
+        <div class="order-info-card__header">
+          <div>
+            <p class="order-info-card__meta-label">Mã đơn hàng</p>
+            <p class="order-info-card__meta-value">#AH-8829104</p>
+          </div>
+          <div class="order-info-card__header-right">
+            <p class="order-info-card__meta-label order-info-card__meta-label--sm">Tổng cộng</p>
+            <p class="order-info-card__total">245.000.000 đ</p>
+          </div>
+        </div>
+        <hr class="order-info-card__sep" />
+        <div class="order-info-card__hold">
+          <svg class="order-info-card__clock-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="8.5" stroke="#9a3f5c" stroke-width="1.5"/>
+            <path d="M10 5v5l3 3" stroke="#9a3f5c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="order-info-card__hold-desc">
+            Chúng tôi sẽ giữ các sản phẩm này trong giỏ hàng của bạn trong vòng:
+            <span class="order-info-card__timer">{{ countdownDisplay() }}</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-actions__primary" type="button" (click)="close()">
+          Thử lại thanh toán
+        </button>
+        <div class="modal-actions__row">
+          <button class="modal-actions__outline" type="button" (click)="close()">
+            Thay đổi phương thức
+          </button>
+          <a class="modal-actions__outline" routerLink="/cart" (click)="close()">
+            Quay lại giỏ hàng
+          </a>
+        </div>
+      </div>
+
+      @if (isGuest()) {
+        <div class="modal-register">
+          <p class="modal-register__title">Tạo tài khoản để theo dõi đơn hàng &amp; tích điểm</p>
+          <p class="modal-register__desc">Trở thành thành viên của RENGA để nhận các ưu đãi độc quyền dành riêng cho bạn.</p>
+          <a class="modal-register__btn" routerLink="/auth/register" (click)="close()">Đăng ký ngay</a>
+        </div>
+      }
+
+      <div class="modal-back">
+        <a class="modal-back__link" routerLink="/" (click)="close()">
+          ← Trở về trang chủ
+        </a>
+      </div>
+    </div>
+
+  </div>
 </div>

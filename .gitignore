@@ -17,6 +17,7 @@ src/environments/*.local.ts
 !.env.example
 *.pem
 *.key
+secrets.*
 
 # ========================
 # VS Code

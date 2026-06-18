@@ -11,14 +11,40 @@
       </a>
 
       <div class="site-header__actions">
-        <a routerLink="/gio-hang" class="site-header__action-btn" aria-label="Giỏ hàng">
+        <!-- Giỏ hàng -->
+        <a routerLink="/cart" class="site-header__action-btn" aria-label="Giỏ hàng">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="site-header__tooltip">Giỏ hàng</span>
         </a>
-        <a routerLink="/lich-su-don-hang" class="site-header__action-btn" aria-label="Đơn hàng">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          <span class="site-header__tooltip">Đơn hàng</span>
-        </a>
+
+        <!-- Đơn hàng dropdown -->
+        <div class="order-menu" [class.is-open]="openNav() === 'orders'">
+          <button
+            class="site-header__action-btn order-menu__trigger"
+            aria-label="Đơn hàng"
+            [attr.aria-expanded]="openNav() === 'orders'"
+            (click)="toggleNav($event, 'orders')"
+          >
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="site-header__tooltip">Đơn hàng</span>
+          </button>
+          <div class="order-menu__dropdown" (click)="$event.stopPropagation()">
+            <a routerLink="/orders/lookup" class="order-menu__item" (click)="closeAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              Tra cứu đơn hàng
+            </a>
+            <a routerLink="/orders/tracking" class="order-menu__item" (click)="closeAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Danh sách đơn hàng
+            </a>
+          </div>
+        </div>
+
+        <!-- Tài khoản dropdown -->
         <div class="user-menu" [class.is-open]="userMenuOpen()">
           <button
             class="site-header__action-btn user-menu__trigger"
@@ -26,10 +52,10 @@
             [attr.aria-expanded]="userMenuOpen()"
             (click)="toggleUserMenu($event)"
           >
-            @if (authService.isLoggedIn()) {
+            @if (auth.isLoggedIn()) {
               <img
                 class="site-header__avatar"
-                [src]="authService.currentUser()?.avatarUrl || '/images/header-avatar.jpg'"
+                [src]="auth.currentUser()?.avatarUrl || '/images/header-avatar.jpg'"
                 alt="Tài khoản"
               >
             } @else {
@@ -40,22 +66,22 @@
             }
             <span class="site-header__tooltip">Tài khoản</span>
           </button>
-          <div class="user-menu__dropdown">
-            @if (authService.isLoggedIn()) {
-              <a routerLink="/profile" class="user-menu__item">
+          <div class="user-menu__dropdown" (click)="$event.stopPropagation()">
+            @if (auth.isLoggedIn()) {
+              <a routerLink="/profile" class="user-menu__item" (click)="closeAll()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Hồ sơ
               </a>
-              <button type="button" class="user-menu__item user-menu__item--btn" (click)="authService.logout(); closeAll()">
+              <button type="button" class="user-menu__item user-menu__item--btn" (click)="auth.logout(); closeAll()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Đăng xuất
               </button>
             } @else {
-              <a routerLink="/dang-nhap" class="user-menu__item">
+              <a routerLink="/dang-nhap" class="user-menu__item" (click)="closeAll()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                 Đăng nhập
               </a>
-              <a routerLink="/dang-ki" class="user-menu__item">
+              <a routerLink="/dang-ki" class="user-menu__item" (click)="closeAll()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
                 Đăng ký
               </a>
@@ -68,14 +94,12 @@
     <div class="site-header__bottom">
       <nav class="site-header__nav" aria-label="Menu chính">
         <div class="site-header__nav-item">
-          <a routerLink="/" [routerLinkActive]="'is-active'" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link">Trang chủ</a>
+          <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link">Trang chủ</a>
         </div>
-        <div class="site-header__nav-item"
-             [class.is-open]="openNav() === 'danh-muc'"
-             (mouseenter)="openNavItem('danh-muc')"
-             (mouseleave)="closeNavItem()">
-          <a routerLink="/danh-muc" [routerLinkActive]="'is-active'" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          <div class="mega-menu">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'danh-muc'" (click)="toggleNav($event, 'danh-muc')">
+          <a routerLink="/danh-muc" routerLinkActive="is-active" class="site-header__nav-link">Danh mục Sản phẩm</a>
+          <div class="mega-menu" (click)="$event.stopPropagation()">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Danh mục sản phẩm</p>
               <a routerLink="/products" [queryParams]="{category: 'nhan'}" class="mega-menu__link">Nhẫn</a>
@@ -86,12 +110,10 @@
             </div>
           </div>
         </div>
-        <div class="site-header__nav-item"
-             [class.is-open]="openNav() === 'bo-suu-tap'"
-             (mouseenter)="openNavItem('bo-suu-tap')"
-             (mouseleave)="closeNavItem()">
-          <a routerLink="/bo-suu-tap" [routerLinkActive]="'is-active'" class="site-header__nav-link">Bộ sưu tập</a>
-          <div class="mega-menu">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'bo-suu-tap'" (click)="toggleNav($event, 'bo-suu-tap')">
+          <a routerLink="/bo-suu-tap" routerLinkActive="is-active" class="site-header__nav-link">Bộ sưu tập</a>
+          <div class="mega-menu" (click)="$event.stopPropagation()">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Bộ sưu tập</p>
               <a routerLink="/bo-suu-tap" class="mega-menu__link">Bộ trang sức đồng bộ</a>
@@ -100,23 +122,23 @@
             </div>
           </div>
         </div>
+
         <div class="site-header__nav-item">
-          <a routerLink="/studio" [routerLinkActive]="'is-active'" class="site-header__nav-link">The Studio</a>
+          <a routerLink="/studio" routerLinkActive="is-active" class="site-header__nav-link">The Studio</a>
         </div>
-        <div class="site-header__nav-item"
-             [class.is-open]="openNav() === 'designer'"
-             (mouseenter)="openNavItem('designer')"
-             (mouseleave)="closeNavItem()">
-          <a routerLink="/the-designer" [routerLinkActive]="'is-active'" class="site-header__nav-link">The Designer</a>
-          <div class="mega-menu">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'designer'" (click)="toggleNav($event, 'designer')">
+          <a routerLink="/the-designer" routerLinkActive="is-active" class="site-header__nav-link">The Designer</a>
+          <div class="mega-menu" (click)="$event.stopPropagation()">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">The Designer</p>
-              <a routerLink="/the-designer" class="mega-menu__link">Đặt lịch tư vấn</a>
+              <a routerLink="/consultation" class="mega-menu__link">Đặt lịch tư vấn</a>
               <a routerLink="/appointment-history" class="mega-menu__link">Lịch tư vấn của tôi</a>
             </div>
           </div>
         </div>
       </nav>
+
       <div class="site-header__search">
         <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>

@@ -1,4 +1,4 @@
-﻿import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header';
 import { FooterComponent } from './shared/components/footer/footer.component';
@@ -10,7 +10,6 @@ import { ModalService } from './core/services/modal.service';
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, LoginRequiredModalComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('renga-tmp');

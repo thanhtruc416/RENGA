@@ -620,7 +620,16 @@
   }
 
 </section>
+<app-payment-success-modal
+  [isOpen]="showSuccessModal()"
+  (closed)="showSuccessModal.set(false)"
+/>
 
+<app-payment-fail-modal
+  [isOpen]="showFailModal()"
+  [countdownDisplay]="'00:59:56'"
+  (closed)="showFailModal.set(false)"
+/>
 <!-- Floating price summary (steps 2–5) -->
 @if (priceSummaryVisible()) {
   <div class="studio-price-summary" aria-live="polite">

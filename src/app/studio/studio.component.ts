@@ -1,6 +1,11 @@
 import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef, inject } from '@angular/core';
+import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
+import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 
 interface Category {
   id: string;
@@ -49,7 +54,7 @@ interface CheckoutForm {
   selector: 'app-studio',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PaymentSuccessModalComponent, PaymentFailModalComponent],
   templateUrl: './studio.component.html',
   styleUrl: './studio.component.css',
 })
@@ -60,6 +65,8 @@ export class StudioComponent {
   readonly ENGRAVE_FEE_PER_CHAR = 50_000;
   readonly ENGRAVE_FREE_CHARS = 10;
   readonly MAX_ENGRAVE_CHARS = 25;
+  readonly showSuccessModal = signal(false);
+  readonly showFailModal = signal(false);
 
   // ─── Static data ──────────────────────────────────────────────────────
   readonly steps = [
@@ -151,7 +158,7 @@ export class StudioComponent {
   readonly paymentMethods = [
     { id: 'bank-transfer', label: 'Chuyển khoản ngân hàng' },
     { id: 'e-wallet', label: 'Ví điện tử (MoMo/ZaloPay)' },
-    { id: 'credit-card', label: 'Thẻ tín dụng / Ghi nợ' },
+    { id: 'credit-card', label: 'Thẻ tín dụng/Ghi nợ' },
   ];
 
   // ─── Step state ───────────────────────────────────────────────────────
@@ -159,6 +166,21 @@ export class StudioComponent {
 
   // Step 5 has two sub-views: 1 = price analysis, 2 = checkout form
   readonly checkoutSubStep = signal<1 | 2>(1);
+
+  constructor() {
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const step = Number(params['step']);
+        const sub = Number(params['sub']) as 1 | 2;
+        if (step >= 1 && step <= 5) {
+          this.currentStep.set(step);
+        }
+        if (sub === 1 || sub === 2) {
+          this.checkoutSubStep.set(sub);
+        }
+      });
+  }
 
   // Step 1
   readonly selectedCategoryId = signal<string | null>(null);
@@ -209,6 +231,9 @@ export class StudioComponent {
       this.engraveFee() +
       this.CRAFT_FEE,
   );
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly depositAmount = computed(() => Math.round(this.totalPrice() / 2));
 
@@ -309,7 +334,8 @@ export class StudioComponent {
       this.checkoutForm.markAllAsTouched();
       return;
     }
-    // TODO: gọi API đặt hàng
+    // TODO: gọi API — giả lập thành công
+    this.showSuccessModal.set(true);
   }
 
   applyVoucher(): void {
