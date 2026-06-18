@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CancelAppointmentModalComponent } from '../shared/components/modal/cancel-appointment-modal/cancel-appointment-modal.component';
 
 interface Appointment {
   id: string;
@@ -16,7 +17,7 @@ interface Appointment {
   selector: 'app-appointment-history',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, CancelAppointmentModalComponent],
   templateUrl: './appointment-history.component.html',
   styleUrl: './appointment-history.component.css',
 })
@@ -66,8 +67,9 @@ export class AppointmentHistoryComponent {
     this.cancelModalOpen.set(false);
   }
 
-  confirmCancel(): void {
+  confirmCancel(reasons: string[]): void {
     // TODO: gọi API hủy lịch
+    console.log('Hủy lịch với lý do:', reasons);
     this.closeCancel();
   }
 }

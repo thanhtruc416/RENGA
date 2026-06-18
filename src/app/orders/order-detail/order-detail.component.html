@@ -1,567 +1,211 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chi tiết đơn hàng | RENGA</title>
-</head>
-<body class="order-detail-page">
+<div class="order-detail-page">
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header__inner">
-      <div class="site-header__top">
-        <a href="../../index.html" class="site-header__logo">
-          <img class="site-header__logo-icon"
-            src="https://www.figma.com/api/mcp/asset/ab7d9d02-9acf-4956-9d3e-8db1c62fb4e2"
-            alt="RENGA" />
-        </a>
-        <div class="site-header__actions">
-          <a href="gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
-            <img src="https://www.figma.com/api/mcp/asset/6d6643f0-c7a8-4ae7-848a-93924d2669bd" alt="Giỏ hàng" />
-          </a>
-          <a href="lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
-            <img src="https://www.figma.com/api/mcp/asset/a33624b2-2500-4a84-b0ce-512423d19d7e" alt="Đơn hàng" />
-          </a>
-          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
-            <img class="site-header__avatar"
-              src="https://www.figma.com/api/mcp/asset/d8f4f264-9918-412f-9f0c-96884c5bfe5a"
-              alt="Tài khoản" />
-          </a>
-        </div>
-      </div>
-      <div class="site-header__bottom">
-        <nav class="site-header__nav" aria-label="Menu chính">
-          <div class="site-header__nav-item">
-            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
-          </div>
-        </nav>
-        <div class="site-header__search">
-          <img class="site-header__search-icon"
-            src="https://www.figma.com/api/mcp/asset/14cd0ee0-036d-4881-b609-32bd6e752e2f"
-            alt="" aria-hidden="true" />
-          <input class="site-header__search-input" type="search"
-            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
-        </div>
-      </div>
-    </div>
-  </header>
+  <div class="order-detail-top">
+    <div class="order-detail-top__inner">
 
-  <!-- ===== MAIN ===== -->
-  <main class="order-detail-main">
-    <div class="order-detail-top">
-      <div class="order-detail-top__inner">
+      <nav class="order-breadcrumb" aria-label="Điều hướng trang">
+        <a routerLink="/orders" class="order-breadcrumb__item">Đơn hàng</a>
+        <span class="order-breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="order-breadcrumb__item order-breadcrumb__item--current" aria-current="page">
+          Chi tiết đơn hàng
+        </span>
+      </nav>
 
-        <!-- Breadcrumb -->
-        <nav class="order-breadcrumb" aria-label="Điều hướng trang">
-          <a href="lich-su-don-hang.html" class="order-breadcrumb__item">Đơn hàng</a>
-          <img class="order-breadcrumb__sep"
-            src="https://www.figma.com/api/mcp/asset/8df54299-961c-43d6-9ef9-bf63d591b3cc"
-            alt="" aria-hidden="true" />
-          <span class="order-breadcrumb__item order-breadcrumb__item--current" aria-current="page">Tra cứu đơn hàng</span>
-        </nav>
-
-        <!-- Page title -->
+      <div class="order-detail-title-row">
         <h1 class="order-detail-title">Chi tiết đơn hàng</h1>
-
-        <!-- Order action buttons -->
-        <div style="display:flex;gap:16px;margin-top:24px;padding-bottom:8px;">
-          <button type="button"
-            style="padding:17.5px 40px;background:#c4607e;color:#fff;font-family:'Montserrat',Arial,sans-serif;font-size:16px;letter-spacing:1.6px;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.15s;"
-            onmouseover="this.style.background='#9a3f5c'" onmouseout="this.style.background='#c4607e'"
-            onclick="window.openOrderModal('order-modal-warranty')">YÊU CẦU BẢO HÀNH</button>
-          <button type="button"
-            style="padding:17.5px 40px;background:#c4607e;color:#fff;font-family:'Montserrat',Arial,sans-serif;font-size:16px;letter-spacing:1.6px;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.15s;"
-            onmouseover="this.style.background='#9a3f5c'" onmouseout="this.style.background='#c4607e'"
-            onclick="window.openOrderModal('order-modal-cancel')">HỦY ĐƠN HÀNG</button>
+        <div class="order-detail-actions">
+          <button type="button" class="order-detail-actions__btn" (click)="openWarrantyModal()">
+            Yêu cầu bảo hành
+          </button>
+          <button type="button" class="order-detail-actions__btn" (click)="openCancelModal()">
+            Hủy đơn hàng
+          </button>
         </div>
-
       </div>
+
     </div>
-
-    <!-- ── Two-column layout ── -->
-    <div class="order-detail-body">
-      <div class="order-detail-body__inner">
-
-        <!-- LEFT COLUMN -->
-        <div class="order-detail-left">
-
-          <!-- Horizontal status progress bar -->
-          <div class="status-bar" role="region" aria-label="Trạng thái đơn hàng">
-            <p class="status-bar__heading">Trạng thái đơn hàng</p>
-            <div class="status-bar__track">
-              <!-- Steps (z-index above lines) -->
-              <div class="status-step status-step--done">
-                <div class="status-step__dot" aria-label="Đã hoàn tất">
-                  <img src="https://www.figma.com/api/mcp/asset/e406110a-7d6c-4f19-a3e5-2a033b882fd4"
-                    alt="" aria-hidden="true" class="status-step__check" />
-                </div>
-                <span class="status-step__label">PLACED (P)</span>
-              </div>
-              <div class="status-step status-step--done">
-                <div class="status-step__dot" aria-label="Đã hoàn tất">
-                  <img src="https://www.figma.com/api/mcp/asset/e406110a-7d6c-4f19-a3e5-2a033b882fd4"
-                    alt="" aria-hidden="true" class="status-step__check" />
-                </div>
-                <span class="status-step__label">CONFIRMED (PC)</span>
-              </div>
-              <div class="status-step status-step--done">
-                <div class="status-step__dot" aria-label="Đã hoàn tất">
-                  <img src="https://www.figma.com/api/mcp/asset/e406110a-7d6c-4f19-a3e5-2a033b882fd4"
-                    alt="" aria-hidden="true" class="status-step__check" />
-                </div>
-                <span class="status-step__label">FULFILLED (PF)</span>
-              </div>
-              <div class="status-step status-step--active" aria-current="step">
-                <div class="status-step__dot">
-                  <div class="status-step__dot-inner"></div>
-                </div>
-                <span class="status-step__label">SHIPPING (S)</span>
-              </div>
-              <div class="status-step status-step--pending">
-                <div class="status-step__dot" aria-label="Chưa hoàn tất"></div>
-                <span class="status-step__label">COMPLETE (CM)</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Order ID -->
-          <div class="order-id-row">
-            <span class="order-id-row__text">#AH-8829104</span>
-          </div>
-
-          <!-- Product list section -->
-          <div class="product-section">
-
-            <div class="product-section__header">
-              <span class="product-section__header-text">Các mặt hàng được đặt</span>
-            </div>
-
-            <div class="product-list">
-
-              <div class="product-row">
-                <div class="product-row__thumb">
-                  <img src="https://www.figma.com/api/mcp/asset/3e2a90f2-5485-449d-8f71-e11216ac8619"
-                    alt="Celestial Gold Choker" loading="lazy" />
-                </div>
-                <div class="product-row__info">
-                  <p class="product-row__collection">BST</p>
-                  <h3 class="product-row__name">Celestial Gold Choker</h3>
-                  <p class="product-row__qty">SL: 1</p>
-                </div>
-                <p class="product-row__price">12.500.000đ</p>
-              </div>
-
-              <div class="product-row product-row--bordered">
-                <div class="product-row__thumb">
-                  <img src="https://www.figma.com/api/mcp/asset/19b58b17-86f3-4b4c-9f8a-aa24e2bf958e"
-                    alt="Midnight Sapphire Band" loading="lazy" />
-                </div>
-                <div class="product-row__info">
-                  <p class="product-row__collection">Bespoke</p>
-                  <h3 class="product-row__name">Midnight Sapphire Band</h3>
-                  <p class="product-row__qty">SL: 1</p>
-                </div>
-                <p class="product-row__price">8.200.000đ</p>
-              </div>
-
-            </div>
-
-            <div class="product-section__total">
-              <span class="product-section__total-label">Tổng giá trị</span>
-              <span class="product-section__total-amount">20.700.000đ</span>
-            </div>
-
-          </div>
-          <!-- /product-section -->
-
-        </div>
-        <!-- /order-detail-left -->
-
-        <!-- RIGHT COLUMN -->
-        <div class="order-detail-right">
-
-          <!-- Vertical timeline card -->
-          <div class="timeline-card">
-
-            <div class="timeline-card__heading">
-              <span class="timeline-card__heading-text">Thời gian cập nhật</span>
-            </div>
-
-            <div class="order-timeline" role="list">
-
-              <!-- Item 1: Done -->
-              <div class="order-timeline__item order-timeline__item--done" role="listitem">
-                <div class="order-timeline__dot order-timeline__dot--done" aria-hidden="true"></div>
-                <div class="order-timeline__content">
-                  <p class="order-timeline__status">Hoàn tất</p>
-                  <p class="order-timeline__name">Đã chuẩn bị</p>
-                  <p class="order-timeline__date">24/10/2026&nbsp;&nbsp;7:40</p>
-                </div>
-              </div>
-
-              <!-- Item 2: Active -->
-              <div class="order-timeline__item order-timeline__item--active" role="listitem">
-                <div class="order-timeline__dot order-timeline__dot--active" aria-current="step" aria-hidden="true"></div>
-                <div class="order-timeline__content">
-                  <p class="order-timeline__status">Hiện tại</p>
-                  <p class="order-timeline__name">Đang giao hàng</p>
-                  <p class="order-timeline__date">25/10/2026&nbsp;&nbsp;8:40</p>
-                  <p class="order-timeline__note">Sản phẩm đang được kiểm tra chất lượng &amp; đóng gói thủ công.</p>
-                </div>
-              </div>
-
-              <!-- Item 3: Pending -->
-              <div class="order-timeline__item order-timeline__item--pending" role="listitem">
-                <div class="order-timeline__dot order-timeline__dot--pending" aria-hidden="true"></div>
-                <div class="order-timeline__content">
-                  <p class="order-timeline__status">Sắp tới</p>
-                  <p class="order-timeline__name">Đã giao</p>
-                  <p class="order-timeline__date">Dự kiến: 26/10/2026</p>
-                </div>
-              </div>
-
-            </div>
-
-            <button class="timeline-card__support-btn" type="button">Hỗ trợ</button>
-
-          </div>
-          <!-- /timeline-card -->
-
-          <!-- Shipping info card -->
-          <div class="shipping-card">
-
-            <div class="shipping-card__heading">
-              <span class="shipping-card__heading-text">Thông tin giao hàng</span>
-            </div>
-
-            <div class="shipping-rows">
-
-              <div class="shipping-row">
-                <img class="shipping-row__icon"
-                  src="https://www.figma.com/api/mcp/asset/5fb76051-da4f-4d21-8c72-731da2f497d5"
-                  alt="" aria-hidden="true" />
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Khách hàng</p>
-                  <p class="shipping-row__value shipping-row__value--bold">Nguyễn Minh Anh</p>
-                </div>
-              </div>
-
-              <div class="shipping-row">
-                <img class="shipping-row__icon"
-                  src="https://www.figma.com/api/mcp/asset/796d53fa-7fc3-4da2-8de3-074378b0b3c6"
-                  alt="" aria-hidden="true" />
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Điện thoại</p>
-                  <p class="shipping-row__value">090 • 456 • 7890</p>
-                </div>
-              </div>
-
-              <div class="shipping-row">
-                <img class="shipping-row__icon"
-                  src="https://www.figma.com/api/mcp/asset/1e92b053-bcf8-408d-85a9-71df5937c064"
-                  alt="" aria-hidden="true" />
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Địa chỉ</p>
-                  <p class="shipping-row__value">88 Lê Lợi, Phường Bến Thành,<br>Quận 1, TP. Hồ Chí Minh</p>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-          <!-- /shipping-card -->
-
-        </div>
-        <!-- /order-detail-right -->
-
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__grid">
-
-        <div class="site-footer__brand-col">
-          <a href="../../index.html" class="site-footer__brand">RENGA</a>
-          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-          <div class="site-footer__social">
-            <a href="#" class="site-footer__social-link" aria-label="Email">
-              <img src="https://www.figma.com/api/mcp/asset/acb1767e-e093-4063-baa6-8ba82a1f0269" alt="Email" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-              <img src="https://www.figma.com/api/mcp/asset/fa0ba77c-dd4e-4c7b-9606-169ac21047f2" alt="Phone" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Facebook">
-              <img src="https://www.figma.com/api/mcp/asset/27f1dff3-6723-4257-86d2-44e1bf7d590e" alt="Facebook" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Instagram">
-              <img src="https://www.figma.com/api/mcp/asset/327ac5f5-0bca-45d4-bb35-60c7e1c6e44c" alt="Instagram" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="TikTok">
-              <img src="https://www.figma.com/api/mcp/asset/53bea6dd-3e00-4455-9953-9a045877af0c" alt="TikTok" />
-            </a>
-          </div>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-          <a href="#" class="site-footer__link">The Studio</a>
-          <a href="#" class="site-footer__link">The Designer</a>
-          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">NEWSLETTER</p>
-          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-          <form class="newsletter-form" novalidate>
-            <div class="newsletter-form__field">
-              <input class="newsletter-form__input" type="email" placeholder="Email của bạn"
-                aria-label="Địa chỉ email đăng ký nhận tin" />
-              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-                <img src="https://www.figma.com/api/mcp/asset/b2e91fd6-d3e9-4b94-982c-a7f873370214" alt="" aria-hidden="true" />
-              </button>
-            </div>
-          </form>
-        </div>
-
-      </div>
-    </div>
-    <div class="site-footer__bottom">
-      <div class="site-footer__bottom-inner">
-        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-        <div class="site-footer__bottom-links">
-          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===== CHAT FAB ===== -->
-  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
-    <img src="https://www.figma.com/api/mcp/asset/11c3a821-3fde-429b-8824-fc4dbad436f4" alt="Chat" />
-  </button>
-
-  <!-- ===== ORDER MODALS ===== -->
-  <div id="order-modal-backdrop" class="order-modal-backdrop" role="dialog" aria-modal="true">
-
-    <!-- Warranty / Repair modal (222:1719) -->
-    <div class="order-modal order-modal--warranty" id="order-modal-warranty" role="document">
-      <div class="warranty-modal__header">
-        <div>
-          <h2 class="warranty-modal__title">Bảo hành / Sửa chữa</h2>
-          <p class="warranty-modal__order-id">#AH-8829104</p>
-        </div>
-        <button class="omodal-close" type="button" data-close-order-modal aria-label="Đóng">
-          <img class="omodal-close__icon"
-            src="https://www.figma.com/api/mcp/asset/e2d0d792-3a7d-43a2-89da-40763c228221"
-            alt="" aria-hidden="true" />
-        </button>
-      </div>
-      <div class="warranty-summary">
-        <img class="warranty-summary__thumb"
-          src="https://www.figma.com/api/mcp/asset/84a1cdc8-3489-4ea5-ae37-dee00ff0bee0"
-          alt="Celestial Gold Choker" loading="lazy" />
-        <div class="warranty-summary__info">
-          <div class="warranty-info-grid">
-            <div>
-              <span class="warranty-label">Sản phẩm</span>
-              <span class="warranty-value">Celestial Gold Choker</span>
-            </div>
-            <div>
-              <span class="warranty-label">Mã SKU</span>
-              <span class="warranty-value warranty-value--normal">RNGA-0012</span>
-            </div>
-            <div>
-              <span class="warranty-label">Chất liệu</span>
-              <span class="warranty-value warranty-value--normal">Vàng 18K</span>
-            </div>
-            <div>
-              <span class="warranty-label">Thời hạn BH</span>
-              <span class="warranty-value warranty-value--normal">24/01/2028</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="warranty-evidence">
-        <p class="warranty-evidence__label">Ảnh sản phẩm hiện tại</p>
-        <div class="warranty-evidence__photos">
-          <div class="warranty-photo">
-            <img class="warranty-photo__img"
-              src="https://www.figma.com/api/mcp/asset/1409ffc5-4227-40fc-9f13-888afdd36605"
-              alt="Ảnh minh chứng 1" loading="lazy" />
-            <div class="warranty-photo__overlay"></div>
-          </div>
-          <div class="warranty-photo">
-            <img class="warranty-photo__img"
-              src="https://www.figma.com/api/mcp/asset/c462ce76-0e6c-4b8c-bc6a-2e57ea736013"
-              alt="Ảnh minh chứng 2" loading="lazy" />
-            <div class="warranty-photo__overlay"></div>
-          </div>
-        </div>
-      </div>
-      <div class="warranty-tabs" role="tablist">
-        <button class="warranty-tab is-active" data-tab="request" role="tab" aria-selected="true">YÊU CẦU BẢO HÀNH</button>
-        <button class="warranty-tab" data-tab="history" role="tab" aria-selected="false">LỊCH SỬ BẢO HÀNH</button>
-      </div>
-      <div class="warranty-panel warranty-fields" data-panel="request">
-        <div class="warranty-field">
-          <input class="warranty-field__input" type="text" placeholder="Mô tả vấn đề của sản phẩm..." />
-        </div>
-      </div>
-      <div class="warranty-panel" data-panel="history" hidden>
-        <p style="font-family:inherit;color:#444748;padding:16px 0;">Không có lịch sử bảo hành.</p>
-      </div>
-      <div class="warranty-actions">
-        <button class="warranty-actions__cancel" type="button" data-close-order-modal>Hủy</button>
-        <button class="warranty-actions__confirm" type="button">Gửi yêu cầu</button>
-      </div>
-    </div>
-
-    <!-- Cancel order modal (222:1606) -->
-    <div class="order-modal order-modal--cancel" id="order-modal-cancel" role="document">
-      <div class="cancel-modal__header">
-        <div class="cancel-modal__header-text">
-          <h2 class="cancel-modal__title">Hủy đơn hàng</h2>
-          <p class="cancel-modal__order-id">#AH-8829104</p>
-        </div>
-        <button class="omodal-close" type="button" data-close-order-modal aria-label="Đóng">
-          <img class="omodal-close__icon"
-            src="https://www.figma.com/api/mcp/asset/ebc76efc-7e15-43ec-ada6-dac2aea87176"
-            alt="" aria-hidden="true" />
-        </button>
-      </div>
-      <div class="cancel-modal__policy">
-        <p class="cancel-modal__policy-text">Đơn hàng đã thanh toán sẽ được hoàn tiền trong vòng 7–14 ngày làm việc sau khi xác nhận hủy.</p>
-      </div>
-      <p class="cancel-modal__reason-heading">LÝ DO HỦY ĐƠN</p>
-      <form class="cancel-modal__form">
-        <div class="cancel-reasons" role="group" aria-label="Chọn lý do hủy đơn">
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="changed-mind" />
-            <span class="cancel-reason__label">Tôi đổi ý / không muốn mua nữa</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="found-cheaper" />
-            <span class="cancel-reason__label">Tìm được sản phẩm tương tự với giá rẻ hơn</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="wrong-item" />
-            <span class="cancel-reason__label">Đặt nhầm sản phẩm</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="delivery-too-long" />
-            <span class="cancel-reason__label">Thời gian giao hàng quá lâu</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="payment-issue" />
-            <span class="cancel-reason__label">Gặp vấn đề về thanh toán</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="other" />
-            <span class="cancel-reason__label">Lý do khác</span>
-          </label>
-          <textarea class="cancel-reasons__other" hidden rows="3"
-            placeholder="Nhập lý do của bạn..."
-            style="width:100%;border:1px solid #c4c7c7;padding:12px;font-family:inherit;font-size:15px;resize:vertical;"></textarea>
-        </div>
-        <div class="cancel-modal__actions">
-          <button class="cancel-modal__confirm" type="submit">Xác nhận hủy</button>
-          <button class="cancel-modal__dismiss" type="button" data-close-order-modal>Giữ đơn hàng</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Cancel success popup (222:1537) -->
-    <div class="order-modal order-modal--cancel-success" id="order-modal-cancel-success" role="document">
-      <img class="cancel-success__icon"
-        src="https://www.figma.com/api/mcp/asset/b39e4135-68c1-4dfe-b7b6-8b8aa22955d4"
-        alt="Hủy đơn thành công" />
-      <h2 class="cancel-success__title">Đã hủy đơn hàng</h2>
-      <p class="cancel-success__desc">Yêu cầu hủy của bạn đã được ghi nhận. <strong>Hoàn tiền sẽ được xử lý trong 7–14 ngày làm việc.</strong></p>
-      <div class="cancel-success__card">
-        <div class="cancel-success__img-col">
-          <img class="cancel-success__product-img"
-            src="https://www.figma.com/api/mcp/asset/9610ea2a-71da-4aaa-990e-602c8b28e146"
-            alt="Celestial Gold Choker" />
-          <div class="cancel-success__img-overlay"></div>
-          <span class="cancel-success__status-tag">ĐÃ HỦY</span>
-        </div>
-        <div class="cancel-success__info-col">
-          <p class="cancel-success__product-label">BST RENGA — #AH-8829104</p>
-          <h3 class="cancel-success__product-name">Celestial Gold Choker</h3>
-          <p class="cancel-success__product-spec">Vàng 18K · Dây chuyền cổ</p>
-          <div class="cancel-success__card-footer">
-            <div>
-              <span class="cancel-success__refund-label">HOÀN TIỀN</span>
-              <span class="cancel-success__refund-amount">20.700.000đ</span>
-            </div>
-            <div>
-              <span class="cancel-success__status-label">TRẠNG THÁI</span>
-              <span class="cancel-success__status-value">ĐANG XỬ LÝ</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cancel-success__actions">
-        <a href="lich-su-don-hang.html" class="cancel-success__btn-primary">XEM LỊCH SỬ ĐƠN HÀNG</a>
-        <a href="../../index.html" class="cancel-success__btn-outline">TIẾP TỤC MUA SẮM</a>
-      </div>
-    </div>
-
-    <!-- Cancel fail popup (222:1589) -->
-    <div class="order-modal order-modal--cancel-fail" id="order-modal-cancel-fail" role="document">
-      <div class="cancel-fail__top">
-        <img class="cancel-fail__icon"
-          src="https://www.figma.com/api/mcp/asset/49f6a9bf-99ec-4932-90a9-388eee5ee569"
-          alt="Hủy đơn không thành công" />
-        <h2 class="cancel-fail__title">Không thể hủy đơn hàng</h2>
-      </div>
-      <div class="cancel-fail__body">
-        <div class="cancel-fail__img-col">
-          <img class="cancel-fail__product-img"
-            src="https://www.figma.com/api/mcp/asset/ea16e6c2-0d3c-4ce6-9b33-8d921ab42f68"
-            alt="Sản phẩm" />
-          <span class="cancel-fail__status-tag">ĐANG GIAO HÀNG</span>
-        </div>
-        <div class="cancel-fail__info-col">
-          <p class="cancel-fail__desc">Đơn hàng của bạn đã chuyển sang giai đoạn <strong>đang giao hàng</strong> và không thể hủy tại thời điểm này. Vui lòng liên hệ bộ phận hỗ trợ để được tư vấn.</p>
-          <a href="#" class="cancel-fail__btn-primary">LIÊN HỆ HỖ TRỢ</a>
-          <button class="cancel-fail__btn-outline" type="button" data-close-order-modal>QUAY LẠI ĐƠN HÀNG</button>
-          <a href="#" class="cancel-fail__policy-link">Chính sách đổi trả &amp; hoàn tiền</a>
-        </div>
-      </div>
-    </div>
-
   </div>
-  <!-- /order-modal-backdrop -->
 
-  <script src="../../js/components/order-modals.js"></script>
+  <div class="order-detail-body">
+    <div class="order-detail-body__inner">
 
-</body>
-</html>
+      <div class="order-detail-left">
+
+        <div
+          class="status-bar"
+          role="region"
+          aria-label="Trạng thái đơn hàng"
+          [style.--progress-pct]="progressPct()"
+        >
+          <p class="status-bar__heading">Trạng thái đơn hàng</p>
+          <div class="status-bar__track">
+            @for (step of statusSteps(); track step.code) {
+              <div
+                class="status-step"
+                [class.status-step--done]="step.state === 'done'"
+                [class.status-step--active]="step.state === 'active'"
+                [class.status-step--pending]="step.state === 'pending'"
+                [attr.aria-current]="step.state === 'active' ? 'step' : null"
+              >
+                <div class="status-step__dot" [attr.aria-label]="step.dotLabel">
+                  @if (step.state === 'active') {
+                    <div class="status-step__dot-inner"></div>
+                  }
+                </div>
+                <span class="status-step__label">{{ step.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="order-id-row">
+          <span class="order-id-row__text">#{{ order().id }}</span>
+        </div>
+
+        <div class="product-section">
+          <div class="product-section__header">
+            <span class="product-section__header-text">Các mặt hàng được đặt</span>
+          </div>
+
+          <div class="product-list">
+            @for (item of order().items; track item.id; let first = $first) {
+              <div class="product-row" [class.product-row--bordered]="!first">
+                <div class="product-row__thumb">
+                  <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+                </div>
+                <div class="product-row__info">
+                  <p class="product-row__collection">{{ item.collection }}</p>
+                  <h3 class="product-row__name">{{ item.name }}</h3>
+                  <p class="product-row__qty">Số lượng: {{ item.qty }}</p>
+                </div>
+                <p class="product-row__price">
+                  {{ item.price * item.qty | number: '1.0-0' : 'vi' }}<u>đ</u>
+                </p>
+              </div>
+            }
+          </div>
+
+          <div class="product-section__total">
+            <span class="product-section__total-label">Tổng giá trị</span>
+            <span class="product-section__total-amount">
+              {{ order().total | number: '1.0-0' : 'vi' }}<u>đ</u>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="order-detail-right">
+
+        <div class="timeline-card">
+          <div class="timeline-card__heading">
+            <span class="timeline-card__heading-text">Thời gian cập nhật</span>
+          </div>
+
+          <div
+            class="order-timeline"
+            role="list"
+            [style.--timeline-active-h]="timelineActiveHeight()"
+          >
+            @for (event of order().timeline; track event.id) {
+              <div
+                class="order-timeline__item"
+                [class.order-timeline__item--done]="event.state === 'done'"
+                [class.order-timeline__item--active]="event.state === 'active'"
+                [class.order-timeline__item--pending]="event.state === 'pending'"
+                role="listitem"
+              >
+                <div
+                  class="order-timeline__dot"
+                  [class.order-timeline__dot--done]="event.state === 'done'"
+                  [class.order-timeline__dot--active]="event.state === 'active'"
+                  [class.order-timeline__dot--pending]="event.state === 'pending'"
+                  [attr.aria-current]="event.state === 'active' ? 'step' : null"
+                  aria-hidden="true"
+                ></div>
+
+                <div class="order-timeline__content">
+                  <p class="order-timeline__status">{{ event.statusLabel }}</p>
+                  <p class="order-timeline__name">{{ event.name }}</p>
+                  <p class="order-timeline__date">{{ event.date }}</p>
+                  @if (event.note) {
+                    <p class="order-timeline__note">{{ event.note }}</p>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <button class="timeline-card__support-btn" type="button" (click)="openSupport()">
+            Hỗ trợ
+          </button>
+        </div>
+
+        <div class="shipping-card">
+          <div class="shipping-card__heading">
+            <span class="shipping-card__heading-text">Thông tin giao hàng</span>
+          </div>
+
+          <div class="shipping-rows">
+
+            <div class="shipping-row">
+              <span class="shipping-row__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+              </span>
+              <div class="shipping-row__info">
+                <p class="shipping-row__label">Khách hàng</p>
+                <p class="shipping-row__value shipping-row__value--bold">{{ order().shipping.name }}</p>
+              </div>
+            </div>
+
+            <div class="shipping-row">
+              <span class="shipping-row__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
+                </svg>
+              </span>
+              <div class="shipping-row__info">
+                <p class="shipping-row__label">Điện thoại</p>
+                <p class="shipping-row__value">{{ order().shipping.phone }}</p>
+              </div>
+            </div>
+
+            <div class="shipping-row">
+              <span class="shipping-row__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
+                </svg>
+              </span>
+              <div class="shipping-row__info">
+                <p class="shipping-row__label">Địa chỉ</p>
+                <p class="shipping-row__value">{{ order().shipping.address }}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+@if (showWarrantyModal()) {
+  <app-warranty-modal
+    [orderId]="order().id"
+    (closed)="showWarrantyModal.set(false)"
+  />
+}
+
+@if (showCancelModal()) {
+  <app-cancel-order-modal
+    [orderId]="order().id"
+    [orderStatus]="order().status"
+    (cancelled)="onOrderCancelled()"
+    (closed)="showCancelModal.set(false)"
+  />
+}

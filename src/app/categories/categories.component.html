@@ -1,0 +1,72 @@
+<div class="categories">
+
+  <!-- Page Title -->
+  <h1 class="categories__title">Danh mục sản phẩm</h1>
+
+  <!-- Top Row: 3 equal columns -->
+  <div class="categories__top-grid">
+    @for (cat of topCategories; track cat.id) {
+      <div class="categories__card">
+        <a class="categories__card-img-wrap" [routerLink]="['/products']" [queryParams]="{category: cat.id}">
+          <img [src]="cat.imageUrl" [alt]="cat.name" class="categories__card-img" />
+          <div class="categories__card-gradient"></div>
+          <div class="categories__card-label">{{ cat.name }} ({{ cat.englishName }})</div>
+        </a>
+        <ul class="categories__card-links">
+          @for (link of cat.links; track link.label) {
+            <li class="categories__card-link-item">
+              <a [routerLink]="link.route" class="categories__card-link">
+                <span>{{ link.label }}</span>
+                <img src="/icons/ic-arrow-right.png" alt="" class="categories__link-chevron" />
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <!-- Bottom Row -->
+  <div class="categories__bottom-grid">
+
+    <!-- Lắc & Vòng Tay (wide) -->
+    <div class="categories__card">
+      <a class="categories__card-img-wrap categories__card-img-wrap--short" routerLink="/products" [queryParams]="{category: 'lac-tay'}">
+        <img src="/images/category-lac-vong-tay.png" alt="Lắc & Vòng Tay" class="categories__card-img" />
+        <div class="categories__card-gradient"></div>
+        <div class="categories__card-label">Lắc & Vòng Tay (Bracelets)</div>
+      </a>
+      <div class="categories__bracelet-links">
+        <div class="categories__bracelet-col">
+          @for (link of braceletsLinks.slice(0, 2); track link.label) {
+            <a [routerLink]="link.route" class="categories__card-link categories__card-link--plain">
+              {{ link.label }}
+            </a>
+          }
+        </div>
+        <div class="categories__bracelet-col">
+          @for (link of braceletsLinks.slice(2, 4); track link.label) {
+            <a [routerLink]="link.route" class="categories__card-link categories__card-link--plain">
+              {{ link.label }}
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Charm Collection (dark callout) -->
+    <div class="categories__charm-card">
+      <div class="categories__charm-inner">
+        <h3 class="categories__charm-title">
+          Charm<br />Collection
+        </h3>
+        <p class="categories__charm-desc">
+          Ghi lại từng khoảnh<br />khắc đáng nhớ của<br />bạn.
+        </p>
+        <a routerLink="/products" [queryParams]="{category: 'charm'}" class="categories__charm-cta">KHÁM PHÁ NGAY</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>

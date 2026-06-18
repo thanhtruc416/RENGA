@@ -1,37 +1,40 @@
-﻿import { Component, HostListener, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  userMenuOpen = signal(false);
-  openNav = signal<string | null>(null);
+  readonly auth = inject(AuthService);
+  readonly userMenuOpen = signal(false);
+  readonly openNav = signal<string | null>(null);
 
-  toggleUserMenu(e: Event) {
+  toggleUserMenu(e: Event): void {
     e.stopPropagation();
     this.openNav.set(null);
-    this.userMenuOpen.update(v => !v);
+    this.userMenuOpen.update((v) => !v);
   }
 
-  toggleNav(e: Event, key: string) {
+  toggleNav(e: Event, key: string): void {
     e.stopPropagation();
     this.userMenuOpen.set(false);
-    this.openNav.update(current => current === key ? null : key);
+    this.openNav.update((current) => (current === key ? null : key));
   }
 
   @HostListener('document:click')
-  closeAll() {
+  closeAll(): void {
     this.userMenuOpen.set(false);
     this.openNav.set(null);
   }
 
   @HostListener('document:keydown.escape')
-  onEscape() {
+  onEscape(): void {
     this.userMenuOpen.set(false);
     this.openNav.set(null);
   }

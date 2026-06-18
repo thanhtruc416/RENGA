@@ -1,10 +1,7 @@
-﻿/* ===== LICH TU VAN â€” APPOINTMENT LIST PAGE ===== */
-
-.appt-page {
+﻿.appt-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-bcrumb-wrap {
   border-bottom: 1px solid var(--color-border);
 }
@@ -42,7 +39,6 @@
   color: var(--color-muted);
 }
 
-/* â”€â”€ Page header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-hero {
   border-bottom: 1px solid var(--color-border);
 }
@@ -81,10 +77,9 @@
 }
 
 .appt-hero__cancel-btn:hover {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
-/* â”€â”€ Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-body {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -94,7 +89,6 @@
   gap: 40px;
 }
 
-/* ── Tab bar ─────────────────────────────────────────────── */
 .appt-tabs-bar {
   border-bottom: 1px solid var(--color-border);
 }
@@ -132,11 +126,10 @@
 }
 
 .appt-tab.is-active {
-  color: #9a3f5c;
-  border-bottom-color: #9a3f5c;
+  color: var(--color-primary-dark);
+  border-bottom-color: var(--color-primary-dark);
 }
 
-/* â”€â”€ Upcoming appointment card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-card {
   background: var(--color-primary-light);
   border: 1px solid var(--color-black);
@@ -222,7 +215,6 @@
   flex-shrink: 0;
 }
 
-/* â”€â”€ Black side banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-card__banner {
   background: var(--color-dark);
   padding: 32px;
@@ -275,7 +267,6 @@
   color: var(--color-white);
 }
 
-/* ── History section ─────────────────────────────────────── */
 .appt-history-section {
   display: flex;
   flex-direction: column;
@@ -292,7 +283,6 @@
   margin-bottom: 16px;
 }
 
-/* â”€â”€ Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-table-wrap {
   background: rgba(247, 240, 243, 0.7);
   overflow: hidden;
@@ -325,7 +315,6 @@
   border-top: 1px solid rgba(196, 199, 199, 0.4);
 }
 
-/* Designer cell */
 .appt-designer-cell {
   display: flex;
   align-items: center;
@@ -364,14 +353,12 @@
   color: var(--color-dark);
 }
 
-/* Date cell */
 .appt-date-cell {
   font-family: var(--font-sans);
   font-size: 14px;
   color: var(--color-dark);
 }
 
-/* Status cell */
 .appt-status {
   display: flex;
   align-items: center;
@@ -403,7 +390,6 @@
   color: #e05252;
 }
 
-/* Action cell */
 .appt-action-link {
   font-family: var(--font-sans);
   font-size: 11px;
@@ -422,10 +408,10 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Load more â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .appt-load-more-wrap {
   display: flex;
   justify-content: center;
+  margin-top: 32px;
 }
 
 .appt-load-more {
@@ -446,27 +432,157 @@
   color: var(--color-dark);
 }
 
-/* â”€â”€ Modals (reschedule + cancel) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.ltv-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
+@media (max-width: 1100px) {
+  .appt-bcrumb-wrap__inner,
+  .appt-tabs-bar__inner {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .appt-hero__inner {
+    padding: 32px 40px 24px;
+  }
+
+  .appt-hero__title {
+    font-size: 48px;
+  }
+
+  .appt-body {
+    padding: 32px 40px 60px;
+  }
+
+  .appt-card {
+    grid-template-columns: 160px 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .appt-card__photo {
+    width: 160px;
+  }
+
+  .appt-card__banner {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+    padding: 20px 28px;
+  }
+
+  .appt-card__banner-title {
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  .appt-card__banner-body {
+    flex: 1;
+  }
+
+  .appt-card__banner-rows {
+    margin-top: 0;
+    flex-direction: row;
+    gap: 24px;
+  }
 }
 
-.ltv-modal-backdrop.is-open {
-  opacity: 1;
-  pointer-events: auto;
+@media (max-width: 960px) {
+  .appt-hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 24px;
+  }
+
+  .appt-hero__title {
+    font-size: 40px;
+  }
+
+  .appt-hero__cancel-btn {
+    align-self: flex-start;
+    flex-shrink: unset;
+  }
 }
 
-/* Reschedule confirm modal */
+@media (max-width: 768px) {
+  .appt-bcrumb-wrap__inner,
+  .appt-tabs-bar__inner {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .appt-hero__inner {
+    padding: 24px 20px 20px;
+  }
+
+  .appt-hero__title {
+    font-size: 32px;
+  }
+
+  .appt-body {
+    padding: 24px 20px 48px;
+    gap: 28px;
+  }
+
+  .appt-tab {
+    padding: 12px 20px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .appt-card {
+    grid-template-columns: 1fr;
+  }
+
+  .appt-card__photo {
+    width: 100%;
+    height: 240px;
+  }
+
+  .appt-card__badge {
+    top: 16px;
+    right: 16px;
+  }
+
+  .appt-card__content {
+    padding: 24px 20px;
+  }
+
+  .appt-card__name {
+    font-size: 24px;
+  }
+
+  .appt-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .appt-table {
+    min-width: 520px;
+  }
+
+  .appt-table th,
+  .appt-table td {
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .appt-hero__title {
+    font-size: 26px;
+  }
+
+  .appt-card__photo {
+    height: 200px;
+  }
+
+  .appt-card__name {
+    font-size: 20px;
+  }
+
+  .appt-table {
+    min-width: 460px;
+  }
+}
+
 .ltv-confirm-modal {
   background: var(--color-white);
   border-radius: 30px;
@@ -540,150 +656,6 @@
 }
 
 .ltv-confirm-modal__btn--secondary {
-  background: var(--color-primary-light);
-  color: var(--color-dark);
-  border: 1px solid #c4607e;
-}
-
-/* Cancel form modal */
-.ltv-cancel-modal {
-  background: var(--color-white);
-  border-radius: 20px;
-  width: min(540px, 100%);
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.ltv-cancel-modal__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.ltv-cancel-modal__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.ltv-cancel-modal__title {
-  font-family: var(--font-serif);
-  font-size: 32px;
-  color: var(--color-dark);
-  line-height: 1.15;
-}
-
-.ltv-cancel-modal__ref {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--color-primary);
-}
-
-.ltv-cancel-modal__close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  flex-shrink: 0;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-}
-
-.ltv-cancel-modal__close:hover {
-  opacity: 1;
-}
-
-.ltv-cancel-modal__close img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.ltv-cancel-modal__refund-notice {
-  background: #f3f3f4;
-  border-left: 2px solid #9a3f5c;
-  padding: 14px 16px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--color-dark);
-  line-height: 1.6;
-}
-
-.ltv-cancel-modal__refund-notice strong {
-  font-weight: 700;
-}
-
-.ltv-cancel-modal__reasons {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.ltv-cancel-modal__reason-heading {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--color-muted);
-  margin-bottom: 2px;
-}
-
-.ltv-cancel-modal__reason {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-}
-
-.ltv-cancel-modal__reason input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-primary);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.ltv-cancel-modal__reason-label {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--color-dark);
-}
-
-.ltv-cancel-modal__actions {
-  display: flex;
-  gap: 16px;
-}
-
-.ltv-cancel-modal__btn {
-  flex: 1;
-  padding: 18px 24px;
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.ltv-cancel-modal__btn:hover {
-  opacity: 0.85;
-}
-
-.ltv-cancel-modal__btn--primary {
-  background: #c4607e;
-  color: var(--color-white);
-}
-
-.ltv-cancel-modal__btn--secondary {
   background: var(--color-primary-light);
   color: var(--color-dark);
   border: 1px solid #c4607e;

@@ -1,3 +1,78 @@
-<div class="not-found-page">
-  <p>not-found placeholder</p>
-</div>
+<main class="nf-page" role="main" aria-label="Trang không tồn tại">
+
+  <!-- Decorative background number -->
+  <span class="nf-bg" aria-hidden="true">404</span>
+
+  <!-- Corner frame accents -->
+  <span class="nf-corner nf-corner--tl" aria-hidden="true"></span>
+  <span class="nf-corner nf-corner--tr" aria-hidden="true"></span>
+  <span class="nf-corner nf-corner--bl" aria-hidden="true"></span>
+  <span class="nf-corner nf-corner--br" aria-hidden="true"></span>
+
+  <!-- Scattered micro gems -->
+  <span class="nf-dot nf-dot--1" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--2" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--3" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--4" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--5" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--6" aria-hidden="true"></span>
+  <span class="nf-dot nf-dot--7" aria-hidden="true"></span>
+
+  <!-- Main content -->
+  <div class="nf-inner">
+
+    <!-- Gem icon -->
+    <div class="nf-gem" aria-hidden="true">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="nf-gem__outline" points="40,7 72,30 40,73 8,30"
+          stroke="#c4607e" stroke-width="1.5" stroke-linejoin="round"
+          fill="rgba(196,96,126,0.05)"/>
+        <line class="nf-gem__girdle" x1="8" y1="30" x2="72" y2="30"
+          stroke="#c4607e" stroke-width="1.2"/>
+        <line class="nf-gem__facet" x1="40" y1="7" x2="20" y2="30"
+          stroke="#c4607e" stroke-width="0.75" opacity="0.65"/>
+        <line class="nf-gem__facet" x1="40" y1="7" x2="60" y2="30"
+          stroke="#c4607e" stroke-width="0.75" opacity="0.65"/>
+        <line class="nf-gem__facet" x1="40" y1="7" x2="40" y2="30"
+          stroke="#c4607e" stroke-width="0.6" opacity="0.35"/>
+        <line class="nf-gem__facet" x1="20" y1="30" x2="40" y2="73"
+          stroke="#c4607e" stroke-width="0.6" opacity="0.5"/>
+        <line class="nf-gem__facet" x1="60" y1="30" x2="40" y2="73"
+          stroke="#c4607e" stroke-width="0.6" opacity="0.5"/>
+        <line class="nf-gem__facet" x1="40" y1="30" x2="40" y2="73"
+          stroke="#c4607e" stroke-width="0.5" opacity="0.28"/>
+      </svg>
+    </div>
+
+    <!-- Brand divider -->
+    <div class="nf-divider" aria-hidden="true">
+      <span class="nf-divider__line"></span>
+      <span class="nf-divider__text">RENGA</span>
+      <span class="nf-divider__line"></span>
+    </div>
+
+    <!-- Error label -->
+    <p class="nf-code">Lỗi &middot; 404</p>
+
+    <!-- Heading -->
+    <h1 class="nf-title">Not Found</h1>
+
+    <!-- Thin rule -->
+    <div class="nf-rule" aria-hidden="true"></div>
+
+    <!-- Description -->
+    <p class="nf-desc">
+      Đường dẫn bạn tìm kiếm không tồn tại hoặc đã được<br>
+      chuyển đến vị trí mới. Hãy để chúng tôi đưa bạn<br>
+      đến những tác phẩm xứng đáng hơn.
+    </p>
+
+    <!-- CTA actions -->
+    <div class="nf-actions">
+      <a routerLink="/" class="nf-btn nf-btn--primary">Về trang chủ</a>
+      <a routerLink="/products" class="nf-btn nf-btn--ghost">Khám phá RENGA</a>
+    </div>
+
+  </div>
+
+</main>

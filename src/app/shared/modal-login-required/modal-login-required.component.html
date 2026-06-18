@@ -1,0 +1,42 @@
+<!-- Backdrop -->
+<div class="modal-login__overlay" (click)="onBack()">
+
+  <!-- Card -->
+  <div class="modal-login__card" (click)="$event.stopPropagation()">
+
+    <!-- Decorative Header -->
+    <div class="modal-login__header">
+      <div class="modal-login__icon-circle">
+        <img src="/icons/ic-lock.png" alt="" class="modal-login__lock-icon" />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-login__content">
+
+      <h2 class="modal-login__title">Yêu Cầu Đăng Nhập</h2>
+
+      <p class="modal-login__desc">
+        Để thực hiện chức năng này, bạn vui lòng đăng nhập.
+      </p>
+
+      <p class="modal-login__marketing">
+        TRỞ THÀNH THÀNH VIÊN CỦA RENGA<br />
+        ĐỂ TẬN HƯỞNG NHỮNG DỊCH VỤ CHẾ TÁC<br />
+        BESPOKE VÀ CÁC ĐẶC QUYỀN CAO CẤP NHẤT.
+      </p>
+
+      <div class="modal-login__actions">
+        <button class="modal-login__btn modal-login__btn--primary" type="button" (click)="onLogin()">
+          ĐĂNG NHẬP NGAY
+        </button>
+        <button class="modal-login__btn modal-login__btn--secondary" type="button" (click)="onBack()">
+          TRỞ VỀ
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

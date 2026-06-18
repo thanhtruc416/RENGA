@@ -1,0 +1,317 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.payment-modal {
+  background: var(--color-white);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+  width: 100%;
+  max-width: 580px;
+  position: relative;
+  overflow: hidden;
+  display: none;
+  flex-shrink: 0;
+}
+
+.payment-modal.is-active {
+  display: block;
+}
+
+.payment-modal--failure {
+  padding: 32px 0 40px;
+}
+
+/* ── Close button (X trong vòng tròn) ────────────────── */
+.payment-modal__close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+  z-index: 2;
+}
+
+.payment-modal__close:hover {
+  opacity: 0.6;
+}
+
+/* ── Icon (tam giác cảnh báo) ────────────────────────── */
+.payment-modal--failure .payment-modal__icon-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* ── Title ─────────────────────────────────────────── */
+.payment-modal--failure .payment-modal__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--color-black);
+  padding: 0 32px;
+  text-align: center;
+  margin: 8px 0 0;
+}
+
+/* ── Inner content ────────────────────────────────────── */
+.payment-modal--failure .payment-modal__inner {
+  padding: 0 32px;
+}
+
+.payment-modal--failure .payment-modal__subtitle {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444748;
+  text-align: center;
+  margin: 16px 0 24px;
+}
+
+/* ── Order info card ──────────────────────────────────── */
+.payment-modal--failure .order-info-card {
+  border: 1px solid var(--color-border);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.order-info-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.order-info-card__header-right {
+  text-align: right;
+}
+
+.order-info-card__meta-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #444748;
+  margin-bottom: 6px;
+}
+
+.order-info-card__meta-label--sm {
+  font-size: 12px;
+}
+
+.order-info-card__meta-value {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-black);
+}
+
+.order-info-card__total {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--color-black);
+}
+
+.order-info-card__sep {
+  border: none;
+  border-top: 1px solid rgba(196, 199, 199, 0.4);
+  margin: 0 0 18px;
+}
+
+/* ── Hold / countdown row ─────────────────────────────── */
+.order-info-card__hold {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.order-info-card__clock-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.order-info-card__hold-desc {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #444748;
+  margin: 0;
+  display: inline;
+}
+
+/* Timer cùng hàng với icon + desc, màu hồng theo icon cảnh báo */
+.order-info-card__timer {
+  display: inline;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  color: var(--color-primary-dark) !important;
+  margin-left: 4px;
+}
+
+/* ── Action buttons ────────────────────────────────────── */
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.modal-actions__primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 18px 32px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.modal-actions__primary:hover {
+  background: #2c2c2c;
+}
+
+.modal-actions__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-actions__outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 12px;
+  border: 1px solid var(--color-black);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.modal-actions__outline:hover {
+  background: #f5f5f5;
+}
+
+/* ── Modal register (Guest only) ──────────────────────── */
+.modal-register {
+  background: var(--color-primary-light);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.modal-register__title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-dark);
+  margin: 0 0 6px;
+}
+
+.modal-register__desc {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #444748;
+  margin: 0 0 16px;
+}
+
+.modal-register__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.modal-register__btn:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ── Back link ─────────────────────────────────────────── */
+.modal-back {
+  text-align: center;
+}
+
+.modal-back__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-black);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.modal-back__link:hover {
+  opacity: 0.65;
+}

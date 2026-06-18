@@ -1,3 +1,150 @@
-<div class="warranty-modal">
-  <p>warranty-modal placeholder</p>
+<div
+  class="warranty-modal-backdrop is-open"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Yêu cầu Bảo hành / Sửa chữa"
+  (click)="onClose()"
+>
+  <div class="warranty-modal is-active" (click)="$event.stopPropagation()">
+
+    @if (isSuccess()) {
+      <!-- ── Success state ── -->
+      <div class="warranty-success">
+        <div class="warranty-success__icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="23" fill="none" stroke="var(--color-primary)" stroke-width="2"/>
+            <path d="M14 24l7 7 13-14" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="warranty-success__title">Yêu cầu đã được gửi!</h2>
+        <p class="warranty-success__desc">
+          Yêu cầu bảo hành / sửa chữa cho đơn <strong>#{{ orderId() }}</strong> đã được ghi nhận thành công.
+          Đội ngũ RENGA sẽ liên hệ với bạn sớm nhất.
+        </p>
+        <button class="warranty-modal__btn warranty-modal__btn--primary warranty-success__btn" type="button" (click)="onClose()">
+          OK
+        </button>
+      </div>
+
+    } @else {
+      <!-- ── Normal state ── -->
+
+      <!-- Header -->
+      <div class="warranty-modal__header">
+        <div>
+          <h2 class="warranty-modal__title">Xử lý yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="warranty-modal__order-id">#{{ orderId() }}</p>
+        </div>
+        <button class="warranty-modal__close" aria-label="Đóng" (click)="onClose()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Thông tin sản phẩm & lỗi -->
+      <div class="warranty-info-card">
+        <div class="warranty-info-card__product">
+          <div class="warranty-info-card__thumb">
+            <img [src]="productImage()" [alt]="productName()" loading="lazy" />
+          </div>
+          <div class="warranty-info-card__details">
+            <p class="warranty-info-card__label">Sản phẩm</p>
+            <p class="warranty-info-card__product-name">{{ productName() }}</p>
+
+            <div class="warranty-info-card__meta-row">
+              <div>
+                <p class="warranty-info-card__label">Mã bảo hành</p>
+                <p class="warranty-info-card__meta-value">#{{ warrantyCode() }}</p>
+              </div>
+              <div>
+                <p class="warranty-info-card__label">Khách hàng</p>
+                <p class="warranty-info-card__meta-value">{{ customerName() }}</p>
+              </div>
+            </div>
+
+            <p class="warranty-info-card__label">Mô tả lỗi</p>
+            <p class="warranty-info-card__issue">{{ issueDescription() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ảnh minh chứng -->
+      @if (evidenceImages().length > 0) {
+        <div class="warranty-evidence">
+          <p class="warranty-evidence__label">Ảnh minh chứng</p>
+          <div class="warranty-evidence__grid">
+            @for (img of evidenceImages(); track img) {
+              <div class="warranty-evidence__item">
+                <img [src]="img" alt="Ảnh minh chứng" loading="lazy" />
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Báo giá sửa chữa -->
+      <div class="warranty-quote">
+        <p class="warranty-quote__tab-label">Báo giá sửa chữa</p>
+
+        @if (isFreeWarranty()) {
+          <p class="warranty-quote__free">
+            Sản phẩm của bạn đủ điều kiện bảo hành miễn phí theo chính sách RENGA.
+          </p>
+        } @else if (hasQuote()) {
+          <div class="warranty-quote__field">
+            <label class="warranty-quote__field-label" for="quote-note">Hạng mục sửa chữa</label>
+            <input
+              id="quote-note"
+              class="warranty-quote__field-input"
+              type="text"
+              placeholder="VD: Thay móc khóa Platinum, Gắn lại kim cương tấm"
+              [value]="quoteNote()"
+              (input)="onQuoteNoteChange($any($event.target).value)"
+            />
+          </div>
+        } @else {
+          <p class="warranty-quote__pending">
+            Yêu cầu của bạn đang được đội ngũ RENGA xem xét. Báo giá sẽ được cập nhật sớm nhất.
+          </p>
+        }
+      </div>
+
+      <!-- Actions -->
+      @if (isFreeWarranty()) {
+        <div class="warranty-modal__actions warranty-modal__actions--single">
+          <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onClose()">
+            Đóng
+          </button>
+        </div>
+      } @else if (hasQuote()) {
+        <div class="warranty-modal__actions">
+          <button class="warranty-modal__btn warranty-modal__btn--outline" type="button" (click)="onReject()">
+            Hủy bỏ
+          </button>
+          <button
+            class="warranty-modal__btn warranty-modal__btn--primary"
+            type="button"
+            [disabled]="isSubmitting()"
+            (click)="onConfirm()"
+          >
+            {{ isSubmitting() ? 'Đang xử lý...' : 'Xác nhận' }}
+          </button>
+        </div>
+      } @else {
+        <div class="warranty-modal__actions warranty-modal__actions--single">
+          <button
+            class="warranty-modal__btn warranty-modal__btn--primary"
+            type="button"
+            [disabled]="isSubmitting()"
+            (click)="onConfirm()"
+          >
+            {{ isSubmitting() ? 'Đang xử lý...' : 'Xác nhận' }}
+          </button>
+        </div>
+      }
+
+    }
+
+  </div>
 </div>

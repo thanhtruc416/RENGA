@@ -1,15 +1,10 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   DESIGN PAGE â€” The Designer flow (4 steps)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-.design-page {
+﻿.design-page {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-px) 120px;
   font-family: var(--font-sans);
 }
 
-/* â”€â”€ Step Progress â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .step-progress {
   display: flex;
   align-items: center;
@@ -83,7 +78,6 @@
   background: var(--color-primary);
 }
 
-/* â”€â”€ Step wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .design-step {
   padding-bottom: 40px;
 }
@@ -115,9 +109,6 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 1 â€” Designer Grid
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .designer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -319,9 +310,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 2 â€” Schedule
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ds-time-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -329,7 +317,6 @@
   align-items: start;
 }
 
-/* Designer panel */
 .ds-designer-panel {
   border: 1px solid var(--color-border);
   background: var(--color-white);
@@ -451,7 +438,6 @@
   }
 }
 
-/* Calendar */
 .ds-calendar-panel {
   display: flex;
   flex-direction: column;
@@ -548,7 +534,6 @@
   cursor: default;
 }
 
-/* Timeslots */
 .ds-timeslot-section {
   border: 1px solid var(--color-border);
   padding: 24px;
@@ -604,9 +589,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 3 â€” Idea Form
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ds-idea-form {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -682,7 +664,6 @@
   cursor: pointer;
 }
 
-/* Toggle buttons */
 .ds-toggle-group {
   display: flex;
   gap: 10px;
@@ -714,7 +695,6 @@
   }
 }
 
-/* Upload zone */
 .ds-upload-zone {
   display: flex;
   flex-direction: column;
@@ -752,9 +732,6 @@
   color: var(--color-muted);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 4 â€” Payment
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ds-payment-layout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -768,7 +745,6 @@
   gap: 32px;
 }
 
-/* Appointment details */
 .ds-appt-detail {
   border: 1px solid var(--color-border);
   padding: 28px;
@@ -814,7 +790,6 @@
   text-align: right;
 }
 
-/* Member card */
 .ds-member-card {
   border: 1px solid var(--color-primary);
   padding: 20px 24px;
@@ -858,7 +833,6 @@
   padding: 8px 16px;
 }
 
-/* Payment methods */
 .ds-pay-methods {
   border: 1px solid var(--color-border);
   padding: 28px;
@@ -919,7 +893,6 @@
   color: var(--color-dark);
 }
 
-/* Payment summary */
 .ds-pay-summary {
   border: 1px solid var(--color-border);
   padding: 28px;
@@ -1013,7 +986,6 @@
   margin: 0;
 }
 
-/* â”€â”€ Shared button styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn {
   font-family: var(--font-sans);
   font-size: 11px;
@@ -1033,7 +1005,6 @@
   &:hover { border-color: var(--color-dark); }
 }
 
-/* â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 1024px) {
   .designer-grid {
     grid-template-columns: repeat(2, 1fr);

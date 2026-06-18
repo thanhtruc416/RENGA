@@ -65,7 +65,7 @@
               <div class="designer-card__footer">
                 <div class="designer-card__fee">
                   <span class="designer-card__fee-label">PHÍ</span>
-                  <span class="designer-card__fee-amount">{{ formatVnd(designer.fee) }}</span>
+                  <span class="designer-card__fee-amount">{{ formatVnd(designer.fee) }}<u>đ</u></span>
                 </div>
                 <button class="designer-card__select" type="button" (click)="$event.stopPropagation(); selectDesigner(designer)">Chọn</button>
               </div>
@@ -406,20 +406,20 @@
           <div class="ds-pay-summary__rows">
             <div class="ds-pay-summary__row">
               <span>Phí tư vấn Designer</span>
-              <span>{{ formatVnd(consultationFee()) }}</span>
+              <span>{{ formatVnd(consultationFee()) }}<u>đ</u></span>
             </div>
             <div class="ds-pay-summary__row ds-pay-summary__row--discount">
               <span>Ưu đãi thành viên (10%)</span>
-              <span>- {{ formatVnd(memberDiscount()) }}</span>
+              <span>- {{ formatVnd(memberDiscount()) }}<u>đ</u></span>
             </div>
             <div class="ds-pay-summary__row">
               <span>Đặt cọc (50%)</span>
-              <span>{{ formatVnd(depositAmount()) }}</span>
+              <span>{{ formatVnd(depositAmount()) }}<u>đ</u></span>
             </div>
           </div>
           <div class="ds-pay-summary__total">
             <span class="ds-pay-summary__total-label">Tổng thanh toán</span>
-            <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}</span>
+            <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}<u>đ</u></span>
           </div>
           <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()">
             HOÀN TẤT ĐẶT LỊCH

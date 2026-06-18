@@ -1,17 +1,9 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STUDIO PAGE â€” RENGA Bespoke
-   Matches Figma frames: 197-5, 197-127, 197-811,
-   197-240, 197-404, 197-582
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-/* â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-*,
+﻿*,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -19,7 +11,6 @@
   font-family: var(--font-sans);
 }
 
-/* â”€â”€ Studio header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio__header {
   text-align: center;
   padding: 64px 0 40px;
@@ -54,9 +45,6 @@
   margin: 0 auto;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP PROGRESS BAR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .step-progress {
   display: flex;
   align-items: center;
@@ -122,7 +110,7 @@
   max-width: 160px;
   height: 1px;
   background: var(--color-border);
-  margin-bottom: 22px; /* align with circle center */
+  margin-bottom: 22px;
   transition: background 0.2s;
 }
 
@@ -130,9 +118,6 @@
   background: var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STUDIO CARD â€” main content wrapper
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -174,7 +159,6 @@
   margin: 0;
 }
 
-/* â”€â”€ Split card: left preview pane â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio-card__preview {
   position: relative;
   background: #f5f0f2;
@@ -220,7 +204,6 @@
   opacity: 0.75;
 }
 
-/* â”€â”€ Split card: right options pane â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio-card__options {
   padding: 48px;
   display: flex;
@@ -243,9 +226,6 @@
   margin-top: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   BUTTONS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -307,9 +287,6 @@
   &:hover { color: var(--color-dark); }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 1 â€” Category grid
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -402,9 +379,6 @@
   .category-card:hover & { background: #333; }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 2 â€” Material options
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .material-list {
   display: flex;
   flex-direction: column;
@@ -447,7 +421,7 @@
 }
 
 .material-option__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 400;
   color: var(--color-black);
@@ -462,16 +436,13 @@
 }
 
 .material-option__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 3 â€” Stone customization
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .stone-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -495,11 +466,11 @@
 }
 
 .stone-option--selected {
-  background: var(--color-black);
-  border-color: var(--color-black);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
 
-  .stone-option__label { color: var(--color-white); }
-  .stone-option__icon { filter: invert(1); }
+  .stone-option__label { color: var(--color-primary); }
+  .stone-option__icon { filter: none; }
 }
 
 .stone-option--muted {
@@ -513,6 +484,7 @@
   display: block;
 }
 
+
 .stone-option__label {
   font-family: var(--font-sans);
   font-size: 9px;
@@ -523,7 +495,6 @@
   text-align: center;
 }
 
-/* Carat slider */
 .carat-control {
   margin-bottom: 20px;
 }
@@ -587,15 +558,15 @@
 .carat-control__range-labels {
   display: flex;
   justify-content: space-between;
+  padding: 0 12px;
+  margin-top: 6px;
   font-family: var(--font-sans);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-muted);
-  margin-top: 6px;
 }
 
-/* Stone price breakdown */
 .stone-details {
   background: #faf5f7;
   border: 1px solid var(--color-border);
@@ -630,9 +601,6 @@
   font-weight: 700;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 4 â€” Engrave gallery + controls
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .engrave-gallery {
   display: flex;
   flex-direction: column;
@@ -711,7 +679,6 @@
   box-shadow: inset 0 0 0 2px var(--color-black);
 }
 
-/* Font selector */
 .font-selector {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -744,7 +711,6 @@
   color: var(--color-white);
 }
 
-/* Engrave text input */
 .engrave-input-wrap {
   display: flex;
   flex-direction: column;
@@ -813,9 +779,6 @@
   border-left: 3px solid var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 5A â€” Order confirmation card
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-card {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -861,7 +824,7 @@
 }
 
 .order-card__item-price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
@@ -891,10 +854,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
-    font-size: 28px;
-    color: #9a3f5c;
-    font-weight: 400;
+    font-family: var(--font-sans);
+    font-size: 24px;
+    color: var(--color-primary-dark);
+    font-weight: 500;
   }
 }
 
@@ -914,10 +877,10 @@
 }
 
 .order-card__deposit-amount {
-  font-family: var(--font-serif);
-  font-size: 22px;
+  font-family: var(--font-sans);
+  font-size: 20px;
   color: var(--color-primary);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .order-card__actions {
@@ -934,9 +897,6 @@
   padding-top: 8px;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 5B â€” Checkout form layout
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .checkout-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -952,6 +912,9 @@
 }
 
 .checkout-section__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
@@ -963,7 +926,20 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-/* Form grid */
+.checkout-section__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--color-dark);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  flex-shrink: 0;
+}
+
 .checkout-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1014,7 +990,6 @@
   color: #c0392b;
 }
 
-/* Payment methods */
 .payment-methods {
   display: flex;
   flex-direction: column;
@@ -1071,7 +1046,6 @@
   color: var(--color-dark);
 }
 
-/* â”€â”€ Checkout aside: order summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-layout__aside {
   position: sticky;
   top: 24px;
@@ -1110,7 +1084,7 @@
 }
 
 .checkout-summary__product-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   margin: 0 0 4px;
@@ -1153,7 +1127,6 @@
   }
 }
 
-/* Voucher row */
 .voucher-row {
   display: flex;
   gap: 8px;
@@ -1206,10 +1179,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 24px;
     color: var(--color-black);
-    font-weight: 400;
+    font-weight: 500;
   }
 }
 
@@ -1228,10 +1201,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 20px;
     color: var(--color-primary);
-    font-weight: 400;
+    font-weight: 500;
   }
 }
 
@@ -1248,9 +1221,6 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   FLOATING PRICE SUMMARY
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-price-summary {
   position: fixed;
   bottom: 0;
@@ -1276,7 +1246,7 @@
 }
 
 .studio-price-summary__amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 700;
   color: var(--color-white);
@@ -1291,9 +1261,6 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PREVIEW FOOT (label + icon buttons)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card__preview-foot {
   position: absolute;
   bottom: 0;
@@ -1341,9 +1308,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PREVIEW NAME OVERLAY (step 3)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card__preview-name {
   position: absolute;
   bottom: 48px;
@@ -1355,7 +1319,7 @@
 }
 
 .studio-card__preview-name-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 6px;
@@ -1368,9 +1332,6 @@
   opacity: 0.85;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CARD HEAD ROW (title + skip button)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card__head--row {
   display: flex;
   align-items: flex-start;
@@ -1385,9 +1346,6 @@
   flex-shrink: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   SECTION HEADERS (01. label + chip)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-section-header {
   display: flex;
   align-items: center;
@@ -1414,9 +1372,6 @@
   color: var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PRICE BREAKDOWN (step 3)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .price-breakdown {
   background: #faf5f7;
   border: 1px solid var(--color-border);
@@ -1462,16 +1417,13 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 22px;
-    color: #9a3f5c;
+    color: var(--color-primary-dark);
     font-weight: 400;
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ENGRAVE â€” input meta + fee row
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .engrave-input-wrap__free {
   font-family: var(--font-sans);
   font-size: 10px;
@@ -1501,14 +1453,11 @@
 }
 
 .engrave-fee-row__value {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 20px;
   color: var(--color-black);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ORDER CARD â€” step 5a
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-card__heading {
   font-family: var(--font-sans);
   font-size: 12px;
@@ -1534,9 +1483,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CHECKOUT SECTION â€” step 5b header row
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .checkout-section__header {
   display: flex;
   align-items: center;
@@ -1564,7 +1510,6 @@
   font-size: 10px;
 }
 
-/* Select field */
 .form-field__select {
   cursor: pointer;
   appearance: auto;
@@ -1572,7 +1517,6 @@
   position: relative;
 }
 
-/* Checkout summary additions */
 .checkout-summary__line {
   display: flex;
   justify-content: space-between;
@@ -1625,10 +1569,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 18px;
     color: var(--color-primary);
-    font-weight: 400;
+    font-weight: 500;
   }
 
 }
@@ -1651,9 +1595,6 @@
   margin: 2px 0 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   RESPONSIVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 1024px) {
   .studio {
     padding: 0 40px 100px;

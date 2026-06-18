@@ -1,0 +1,160 @@
+<div class="register">
+
+  <!-- Blurred background -->
+  <div class="register__bg" aria-hidden="true"></div>
+
+  <!-- Card -->
+  <div class="register__card">
+
+    <!-- Close Button -->
+    <a routerLink="/" class="register__close" aria-label="Đóng">
+      <img src="/icons/ic-close.png" alt="" />
+    </a>
+
+    <!-- Brand Header -->
+    <div class="register__header">
+      <h1 class="register__title">
+        Đăng kí tài khoản<br />RENGA
+      </h1>
+      <p class="register__subtitle">
+        Khám phá thế giới trang sức cao cấp dành riêng cho bạn
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form class="register__form" [formGroup]="form" (ngSubmit)="register()">
+      <div class="register__field" [class.register__field--error]="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+        <input
+          class="register__input"
+          type="text"
+          placeholder="Họ và Tên *"
+          formControlName="fullName"
+          autocomplete="name"
+        />
+        @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
+          <span class="register__error">Vui lòng nhập họ và tên</span>
+        }
+      </div>
+
+      <div class="register__field" [class.register__field--error]="form.get('email')?.invalid && form.get('email')?.touched">
+        <input
+          class="register__input"
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+          autocomplete="email"
+        />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="register__error">Email không hợp lệ</span>
+        }
+      </div>
+
+      <div class="register__field" [class.register__field--error]="form.get('phone')?.invalid && form.get('phone')?.touched">
+        <input
+          class="register__input"
+          type="tel"
+          placeholder="Số điện thoại *"
+          formControlName="phone"
+          inputmode="numeric"
+          autocomplete="tel"
+        />
+        @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+          <span class="register__error">Số điện thoại phải có đúng 10 chữ số</span>
+        }
+      </div>
+
+      <div class="register__field" [class.register__field--error]="form.get('password')?.invalid && form.get('password')?.touched">
+        <div class="register__input-wrap">
+          <input
+            class="register__input"
+            [type]="showPassword() ? 'text' : 'password'"
+            placeholder="Mật khẩu *"
+            formControlName="password"
+            autocomplete="new-password"
+          />
+          <button class="register__eye-btn" type="button" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+            @if (showPassword()) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            }
+          </button>
+        </div>
+        @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+          <span class="register__error">Vui lòng nhập mật khẩu</span>
+        } @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+          <span class="register__error">Mật khẩu tối thiểu 8 ký tự</span>
+        }
+      </div>
+
+      <div class="register__field" [class.register__field--error]="(form.get('confirmPassword')?.invalid || form.hasError('mismatch')) && form.get('confirmPassword')?.touched">
+        <div class="register__input-wrap">
+          <input
+            class="register__input"
+            [type]="showConfirmPassword() ? 'text' : 'password'"
+            placeholder="Xác nhận mật khẩu *"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+          />
+          <button class="register__eye-btn" type="button" (click)="toggleConfirmPassword()" [attr.aria-label]="showConfirmPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+            @if (showConfirmPassword()) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            }
+          </button>
+        </div>
+        @if (form.get('confirmPassword')?.hasError('required') && form.get('confirmPassword')?.touched) {
+          <span class="register__error">Vui lòng xác nhận mật khẩu</span>
+        } @else if (form.hasError('mismatch') && form.get('confirmPassword')?.touched) {
+          <span class="register__error">Mật khẩu không khớp</span>
+        }
+      </div>
+
+      @if (showSuccess()) {
+        <div class="register__success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          <span>Tạo tài khoản thành công! Đang chuyển đến trang đăng nhập...</span>
+        </div>
+      }
+
+      <button
+        class="register__submit"
+        type="submit"
+        [disabled]="isSubmitting() || showSuccess()"
+      >
+        {{ isSubmitting() ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ' }}
+      </button>
+    </form>
+
+    <!-- Footer Link -->
+    <p class="register__footer">
+      Đã có tài khoản?&nbsp;<a routerLink="/dang-nhap" class="register__login-link">Đăng nhập ngay</a>
+    </p>
+
+  </div>
+</div>
+
+@if (showOldOrders()) {
+  <app-old-orders-modal
+    (closed)="closeOldOrders()"
+    (confirmed)="confirmOldOrders()"
+    (skipped)="skipOldOrders()"
+  />
+}
