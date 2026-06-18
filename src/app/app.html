@@ -1,5 +1,8 @@
-<app-header></app-header> 
+<app-header />
+<router-outlet />
+<app-footer />
+<app-chatbot />
 
-<router-outlet></router-outlet> 
-
-<app-footer></app-footer>
+@if (modalService.showLoginRequired()) {
+  <app-login-required-modal (closed)="modalService.closeLoginRequired()" />
+}

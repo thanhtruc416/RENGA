@@ -1,0 +1,272 @@
+<div class="product-detail">
+
+  <!-- Breadcrumb -->
+  <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
+    <a routerLink="/" class="product-detail__breadcrumb-link">DANH MỤC SẢN PHẨM</a>
+    <span class="product-detail__breadcrumb-sep">›</span>
+    <a routerLink="/products" class="product-detail__breadcrumb-link">NHẪN</a>
+    <span class="product-detail__breadcrumb-sep">›</span>
+    <span class="product-detail__breadcrumb-current">{{ product().name }}</span>
+  </nav>
+
+  <!-- Product Main -->
+  <section class="product-detail__main">
+
+    <!-- Gallery -->
+    <div class="product-detail__gallery">
+      <div class="product-detail__gallery-thumbnails">
+        @for (img of product().images; track $index) {
+          <button
+            class="product-detail__thumb-btn"
+            [class.product-detail__thumb-btn--active]="activeImageIndex() === $index"
+            type="button"
+            (click)="selectImage($index)"
+          >
+            <img [src]="img" [alt]="product().name + ' - ảnh ' + ($index + 1)" class="product-detail__thumb-img" />
+          </button>
+        }
+      </div>
+      <div class="product-detail__gallery-main">
+        <img
+          [src]="product().images[activeImageIndex()]"
+          [alt]="product().name"
+          class="product-detail__main-img"
+        />
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-detail__info">
+      <p class="product-detail__collection">{{ product().collection }}</p>
+      <h1 class="product-detail__name">{{ product().name }}</h1>
+
+      <div class="product-detail__price-row">
+        <span class="product-detail__price">{{ formatPrice(product().price) }}</span>
+        @if (product().inStock) {
+          <span class="product-detail__stock-badge">SẴN CÓ</span>
+        }
+      </div>
+
+      <p class="product-detail__desc">{{ product().description }}</p>
+
+      <!-- Size Selector -->
+      <div class="product-detail__size-section">
+        <p class="product-detail__size-label">KÍCH THƯỚC (SIZE)</p>
+        <div class="product-detail__size-options">
+          @for (size of product().sizes; track size) {
+            <button
+              class="product-detail__size-btn"
+              [class.product-detail__size-btn--active]="selectedSize() === size"
+              type="button"
+              (click)="selectSize(size)"
+            >
+              {{ size }}
+            </button>
+          }
+        </div>
+        <a class="product-detail__size-guide" routerLink=".">HƯỚNG DẪN CHỌN SIZE</a>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="product-detail__cta">
+        <button class="product-detail__btn product-detail__btn--primary" type="button">
+          THÊM VÀO GIỎ HÀNG
+        </button>
+        <button class="product-detail__btn product-detail__btn--secondary" type="button">
+          MUA NGAY
+        </button>
+      </div>
+
+      <!-- Service Info -->
+      <div class="product-detail__services">
+        <div class="product-detail__service-item">
+          <img src="/icons/ic-feature-warranty.svg" alt="" class="product-detail__service-icon" />
+          <span class="product-detail__service-text">MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC</span>
+        </div>
+        <div class="product-detail__service-item">
+          <img src="/icons/ic-feature-quality.svg" alt="" class="product-detail__service-icon" />
+          <span class="product-detail__service-text">BẢO HÀNH TRỌN ĐỜI &amp; KIỂM ĐỊNH GIA</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Product Specs -->
+  <section class="product-detail__specs">
+    <h2 class="product-detail__specs-title">THÔNG SỐ CHI TIẾT</h2>
+    <div class="product-detail__specs-grid">
+      @for (spec of specs; track spec.label; let last = $last) {
+        <div class="product-detail__spec-item" [class.product-detail__spec-item--last]="last">
+          <p class="product-detail__spec-label">{{ spec.label }}</p>
+          <p class="product-detail__spec-value">{{ spec.value }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section class="product-detail__reviews">
+    <h2 class="product-detail__reviews-title">ĐÁNH GIÁ TỪ KHÁCH HÀNG ({{ reviewCount() }})</h2>
+    <div class="product-detail__reviews-grid">
+      @for (review of reviews(); track review.id) {
+        <div class="product-detail__review-card">
+          <div class="product-detail__review-header">
+            <span class="product-detail__review-name">{{ review.name }}</span>
+            <div class="product-detail__review-stars" aria-label="{{ review.rating }} sao">
+              @for (star of stars; track star) {
+                <img src="/icons/ic-star.svg" alt="★" class="product-detail__review-star" />
+              }
+            </div>
+          </div>
+          <img [src]="review.imageUrl" [alt]="review.name" class="product-detail__review-img" />
+          <p class="product-detail__review-quote">{{ review.quote }}</p>
+          <p class="product-detail__review-date">{{ review.date }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="product-detail__faq">
+    <h2 class="product-detail__faq-title">CÂU HỎI THƯỜNG GẶP</h2>
+    <div class="product-detail__faq-list">
+      @for (faq of faqs; track $index) {
+        <div class="product-detail__faq-item" [class.is-open]="openFaqIndex() === $index">
+          <button
+            class="product-detail__faq-question"
+            type="button"
+            (click)="toggleFaq($index)"
+            [attr.aria-expanded]="openFaqIndex() === $index"
+          >
+            <span>{{ faq.question }}</span>
+            <svg class="product-detail__faq-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
+              <path d="M1 1L6 7L11 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          @if (openFaqIndex() === $index) {
+            <div class="product-detail__faq-answer">
+              <p>{{ faq.answer }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Q&A -->
+  <section class="pd-qa">
+    <div class="pd-qa__header">
+      <div class="pd-qa__bot-icon">
+        <img src="/icons/ic-chatbot.png" alt="" />
+      </div>
+      <div>
+        <h3 class="pd-qa__title">Hãy đặt câu hỏi cho chúng tôi</h3>
+        <p class="pd-qa__subtitle">CellphoneS sẽ phản hồi trong vòng 1 giờ. Nếu Quý khách gửi câu hỏi sau 22h, chúng tôi sẽ trả lời vào sáng hôm sau. Thông tin có thể thay đổi theo thời gian, vui lòng đặt câu hỏi để nhận được cập nhật mới nhất!</p>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="pd-qa__input-wrap">
+      <input
+        class="pd-qa__input"
+        type="text"
+        placeholder="Viết câu hỏi của bạn tại đây"
+        [value]="qaInput()"
+        (input)="qaInput.set($any($event.target).value)"
+        (keydown.enter)="sendQa()"
+      />
+      <button class="pd-qa__send" type="button" (click)="sendQa()">
+        Gửi câu hỏi
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="pd-qa__messages">
+      @for (msg of qaMessages(); track msg.id) {
+        <div class="pd-qa__thread">
+          <!-- User question -->
+          <div class="pd-qa__msg">
+            <div class="pd-qa__avatar pd-qa__avatar--user">{{ msg.authorInitial }}</div>
+            <div class="pd-qa__msg-body">
+              <div class="pd-qa__msg-meta">
+                <span class="pd-qa__msg-name">{{ msg.author }}</span>
+                <span class="pd-qa__msg-time">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {{ msg.time }}
+                </span>
+              </div>
+              <p class="pd-qa__msg-text">{{ msg.text }}</p>
+              <div class="pd-qa__msg-actions">
+                @if (msg.reply) {
+                  <button class="pd-qa__action-btn" type="button" (click)="toggleReply(msg.id)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    {{ expandedReplies().has(msg.id) ? 'Thu gọn phản hồi' : 'Phản hồi' }}
+                    @if (expandedReplies().has(msg.id)) { <span>∧</span> }
+                  </button>
+                } @else {
+                  <button class="pd-qa__action-btn" type="button">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Phản hồi
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Staff reply card -->
+          @if (msg.reply && expandedReplies().has(msg.id)) {
+            <div class="pd-qa__reply-card">
+              <div class="pd-qa__msg">
+                <div class="pd-qa__avatar pd-qa__avatar--staff">S</div>
+                <div class="pd-qa__msg-body">
+                  <div class="pd-qa__msg-meta">
+                    <span class="pd-qa__msg-name">Quản Trị Viên</span>
+                    <span class="pd-qa__badge">QTV</span>
+                    <span class="pd-qa__msg-time">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {{ msg.replyTime }}
+                    </span>
+                  </div>
+                  <p class="pd-qa__msg-text">{{ msg.reply }}</p>
+                  <div class="pd-qa__msg-actions">
+                    <button class="pd-qa__action-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      Phản hồi
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Related Products -->
+  <section class="product-detail__related">
+    <h2 class="product-detail__related-title">SẢN PHẨM LIÊN QUAN</h2>
+    <div class="product-detail__related-grid">
+      @for (item of relatedProducts(); track item.id) {
+        <a [routerLink]="['/products', item.id]" class="product-detail__related-card">
+          <div class="product-detail__related-img-wrap">
+            <img [src]="item.imageUrl" [alt]="item.name" class="product-detail__related-img" />
+            <div class="product-detail__related-overlay">
+              <span class="product-detail__related-quick-view">QUICK VIEW</span>
+            </div>
+          </div>
+          <div class="product-detail__related-info">
+            <span class="product-detail__related-collection">{{ item.collection }}</span>
+            <h3 class="product-detail__related-name">{{ item.name }}</h3>
+            <p class="product-detail__related-price">{{ formatPrice(item.price) }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+</div>

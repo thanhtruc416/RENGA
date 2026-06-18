@@ -1,6 +1,5 @@
 <div class="order-detail-page">
 
-  <!-- Top: breadcrumb + title + actions -->
   <div class="order-detail-top">
     <div class="order-detail-top__inner">
 
@@ -12,7 +11,6 @@
         </span>
       </nav>
 
-      <!-- Title + buttons cùng hàng -->
       <div class="order-detail-title-row">
         <h1 class="order-detail-title">Chi tiết đơn hàng</h1>
         <div class="order-detail-actions">
@@ -28,14 +26,11 @@
     </div>
   </div>
 
-  <!-- Two-column layout -->
   <div class="order-detail-body">
     <div class="order-detail-body__inner">
 
-      <!-- ══ LEFT COLUMN ══ -->
       <div class="order-detail-left">
 
-        <!-- Status bar -->
         <div
           class="status-bar"
           role="region"
@@ -44,7 +39,6 @@
         >
           <p class="status-bar__heading">Trạng thái đơn hàng</p>
           <div class="status-bar__track">
-
             @for (step of statusSteps(); track step.code) {
               <div
                 class="status-step"
@@ -53,7 +47,6 @@
                 [class.status-step--pending]="step.state === 'pending'"
                 [attr.aria-current]="step.state === 'active' ? 'step' : null"
               >
-                <!-- CSS ::after vẽ checkmark cho done, dot-inner cho active -->
                 <div class="status-step__dot" [attr.aria-label]="step.dotLabel">
                   @if (step.state === 'active') {
                     <div class="status-step__dot-inner"></div>
@@ -62,16 +55,13 @@
                 <span class="status-step__label">{{ step.label }}</span>
               </div>
             }
-
           </div>
         </div>
 
-        <!-- Order ID -->
         <div class="order-id-row">
           <span class="order-id-row__text">#{{ order().id }}</span>
         </div>
 
-        <!-- Product list -->
         <div class="product-section">
           <div class="product-section__header">
             <span class="product-section__header-text">Các mặt hàng được đặt</span>
@@ -105,10 +95,8 @@
 
       </div>
 
-      <!-- ══ RIGHT COLUMN ══ -->
       <div class="order-detail-right">
 
-        <!-- Vertical timeline card -->
         <div class="timeline-card">
           <div class="timeline-card__heading">
             <span class="timeline-card__heading-text">Thời gian cập nhật</span>
@@ -153,7 +141,6 @@
           </button>
         </div>
 
-        <!-- Shipping info card — inline SVG icons, không cần file asset -->
         <div class="shipping-card">
           <div class="shipping-card__heading">
             <span class="shipping-card__heading-text">Thông tin giao hàng</span>
@@ -161,7 +148,6 @@
 
           <div class="shipping-rows">
 
-            <!-- Person icon -->
             <div class="shipping-row">
               <span class="shipping-row__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -170,13 +156,10 @@
               </span>
               <div class="shipping-row__info">
                 <p class="shipping-row__label">Khách hàng</p>
-                <p class="shipping-row__value shipping-row__value--bold">
-                  {{ order().shipping.name }}
-                </p>
+                <p class="shipping-row__value shipping-row__value--bold">{{ order().shipping.name }}</p>
               </div>
             </div>
 
-            <!-- Phone icon -->
             <div class="shipping-row">
               <span class="shipping-row__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -189,7 +172,6 @@
               </div>
             </div>
 
-            <!-- Location/address icon -->
             <div class="shipping-row">
               <span class="shipping-row__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -212,7 +194,6 @@
 
 </div>
 
-<!-- Modals -->
 @if (showWarrantyModal()) {
   <app-warranty-modal
     [orderId]="order().id"

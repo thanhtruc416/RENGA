@@ -1,4 +1,4 @@
-﻿/* ===== CHI TIẾT ĐƠN HÀNG TÙY BIẾN ===== */
+/* ===== CHI TIẾT ĐƠN HÀNG TÙY BIẾN ===== */
 
 /* -- Page shell ----------------------------------- */
 .order-detail-custom-page {
@@ -232,7 +232,6 @@
   font-weight: 400;
 }
 
-/* Shipping info card */
 .odc-shipping-card {
   border: 1px solid var(--color-black);
   padding: 33px;

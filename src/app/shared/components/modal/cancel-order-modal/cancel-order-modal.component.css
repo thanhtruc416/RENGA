@@ -1,4 +1,4 @@
-﻿.order-modal-backdrop {
+.order-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -54,6 +54,7 @@
 }
 
 /* ── FORM ───────────────────────────────────────── */
+
 .order-modal--cancel {
   width: 541px;
   border-radius: 20px;
@@ -220,6 +221,7 @@
 }
 
 /* ── SUCCESS ────────────────────────────────────── */
+
 .order-modal--cancel-success {
   width: 950px;
   border-radius: 30px;
@@ -265,16 +267,16 @@
 .cancel-success__card {
   display: grid;
   grid-template-columns: 300px 1fr;
-  gap: 24px;                /* thêm khoảng cách giữa ảnh và info */
+  gap: 24px;
   text-align: left;
-  overflow: visible;        /* đổi từ hidden để bo góc riêng từng phần không bị cắt lệch */
+  overflow: visible;
 }
 
 .cancel-success__img-col {
   background: #e8e8e8;
   position: relative;
-  overflow: hidden;   /* bo góc cho riêng khối ảnh */
-  aspect-ratio: 1 / 1;      /* giữ ảnh vuông, không bị kéo dài/sát viền dưới */
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
 }
 
 .cancel-success__product-img {
@@ -309,7 +311,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px 8px;        /* giảm padding 48px cũ vì giờ cột đã hẹp lại theo gap */
+  padding: 24px 8px;
 }
 
 .cancel-success__product-label {
@@ -363,7 +365,7 @@
 }
 
 .cancel-success__refund-amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
   line-height: 41.6px;
@@ -425,6 +427,7 @@
 }
 
 /* ── FAIL ───────────────────────────────────────── */
+
 .order-modal--cancel-fail {
   width: 800px;
   border-radius: 30px;
@@ -515,9 +518,9 @@
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s;
-  white-space: nowrap;      
-  width: 100%;              
-  box-sizing: border-box;   
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cancel-fail__btn-primary {

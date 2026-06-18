@@ -45,7 +45,7 @@ export class DesignComponent {
       badge: 'SIGNATURE WORK',
       bio: 'Bậc thầy thiết kế kim cương với hơn 20 năm kinh nghiệm tại các kinh đô trang sức châu Âu.',
       fee: 13_000_000,
-      image: 'https://www.figma.com/api/mcp/asset/d331c70c-a7eb-4fd4-925e-5103568cd8f0',
+      image: '/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -56,7 +56,7 @@ export class DesignComponent {
       badge: 'HERITAGE REVIVAL',
       bio: 'Chuyên gia phục hồi phong cách di sản, kết hợp nét cổ điển Ý với cảm quan hiện đại.',
       fee: 13_000_000,
-      image: 'https://www.figma.com/api/mcp/asset/b4caeee8-a646-4e0f-bed4-5c2f36e7c974',
+      image: '/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -67,7 +67,7 @@ export class DesignComponent {
       badge: 'AVANT-GARDE METALS',
       bio: 'Chuyên gia thiết kế trang sức cao cấp với phong cách avant-garde độc đáo.',
       fee: 13_000_000,
-      image: 'https://www.figma.com/api/mcp/asset/3fbcec17-e28e-4a1b-be69-0bbff5ae980c',
+      image: '/images/designer-photo.png',
       rating: 5,
     },
   ];

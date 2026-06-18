@@ -1,4 +1,4 @@
-﻿/* ===== TRA CỨU ĐƠN HÀNG (ORDER LOOKUP) PAGE ===== */
+/* ===== TRA CỨU ĐƠN HÀNG (ORDER LOOKUP) PAGE ===== */
 
 .order-lookup-page {
   background: var(--color-white);
@@ -255,27 +255,4 @@
   background: var(--color-white);
   mix-blend-mode: saturation;
   pointer-events: none;
-}
-
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 900;
-}
-
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
 }

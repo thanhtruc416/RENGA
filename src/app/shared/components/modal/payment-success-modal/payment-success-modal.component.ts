@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,11 +11,10 @@ import { RouterLink } from '@angular/router';
   styleUrl: './payment-success-modal.component.css',
 })
 export class PaymentSuccessModalComponent {
-  isOpen = input<boolean>(false);
-  isGuest = input<boolean>(false);
-  closed = output<void>();
+  readonly isOpen = input<boolean>(false);
+  readonly isGuest = input<boolean>(false);
+  readonly closed = output<void>();
 
-  readonly isModalOpen = computed(() => this.isOpen());
   close(): void {
     this.closed.emit();
   }

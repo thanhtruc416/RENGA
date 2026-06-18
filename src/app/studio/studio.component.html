@@ -65,7 +65,7 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/644d2dc6-de4c-49c0-96b9-5f97e1095c9e"
+          src="/images/studio-ring.png"
           alt="Nhẫn vàng Heritage"
           class="studio-card__preview-img"
           loading="eager"
@@ -129,7 +129,7 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/9668872f-01b4-4e57-9ebc-2b65b8ac1203"
+          src="/images/studio-ring.png"
           alt="Nhẫn kim cương Heritage"
           class="studio-card__preview-img"
           loading="eager"
@@ -195,18 +195,20 @@
             <input
               class="carat-slider"
               type="range"
-              min="0.5"
-              max="3.0"
+              min="0"
+              max="5"
               step="0.1"
               [value]="carat()"
               (input)="onCaratChange($event)"
               aria-label="Kích thước đá tính bằng carat"
             />
             <div class="carat-control__range-labels">
-              <span>0.5ct</span>
-              <span>1ct</span>
-              <span>5.0ct</span>
-              <span>6.0ct</span>
+              <span>0</span>
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
             </div>
           </div>
 
@@ -223,10 +225,20 @@
               <span>{{ selectedStone().label }} ({{ carat() }}ct)</span>
               <span>{{ formatVnd(stonePrice()) }}</span>
             </div>
+            <div class="price-breakdown__row">
+              <span>Công chế tác thủ công</span>
+              <span>{{ formatVnd(CRAFT_FEE) }}</span>
+            </div>
+            @if (engraveFee() > 0) {
+              <div class="price-breakdown__row">
+                <span>Khắc chữ ({{ engraveCharCount() }} ký tự)</span>
+                <span>{{ formatVnd(engraveFee()) }}</span>
+              </div>
+            }
             <div class="price-breakdown__divider"></div>
             <div class="price-breakdown__total">
               <span>TỔNG GIÁ TRỊ</span>
-              <strong>{{ formatVnd(MOUNT_FEE + selectedMaterial().priceVnd + stonePrice()) }}</strong>
+              <strong>{{ formatVnd(totalPrice()) }}</strong>
             </div>
           </div>
         }
@@ -321,7 +333,7 @@
             (click)="selectFont('serif-italic')"
             type="button"
           >
-            CHÂN NGHIÊNG
+            SERIF ITALIC
           </button>
           <button
             class="font-selector__option"
@@ -329,7 +341,7 @@
             (click)="selectFont('classic-sans')"
             type="button"
           >
-            KHÔNG CHÂN
+            CLASSIC SANS
           </button>
         </div>
 
@@ -357,7 +369,7 @@
 
         <div class="studio-card__preview">
           <img
-            src="https://www.figma.com/api/mcp/asset/a1f97ec8-6265-4ed5-9229-df98077a79c5"
+            src="/images/studio-ring.png"
             alt="Trang sức tùy chỉnh của bạn"
             class="studio-card__preview-img"
             loading="eager"
@@ -525,7 +537,7 @@
 
               <div class="checkout-summary__product">
                 <img
-                  src="https://www.figma.com/api/mcp/asset/48641a6f-72f5-4524-8109-67072e259627"
+                  src="/images/studio-ring.png"
                   alt="Sản phẩm tùy chỉnh"
                   class="checkout-summary__product-img"
                   loading="lazy"

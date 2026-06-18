@@ -1,4 +1,4 @@
-﻿.modal-backdrop {
+.modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -222,10 +222,11 @@
 
 .modal-actions__row {
   display: flex;
-  align-items: stretch; 
+  align-items: stretch;
   gap: var(--sp-md, 16px);
   width: 100%;
 }
+
 .modal-actions__outline {
   display: flex;
   align-items: center;
@@ -244,7 +245,6 @@
   cursor: pointer;
   transition: background 0.15s;
   flex: 1;
-  text-align: center;
 }
 
 .modal-actions__outline:hover {

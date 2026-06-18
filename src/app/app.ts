@@ -1,16 +1,17 @@
-﻿import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-// Đi từ thư mục hiện tại (app) -> shared -> components -> header -> file header.ts (bỏ đuôi .ts)
-import { HeaderComponent } from './shared/components/header/header'; 
-
-// Tương tự cho footer (bạn kiểm tra xem file ts của footer tên là gì nhé, ví dụ ở đây là footer.component)
+import { HeaderComponent } from './shared/components/header/header';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
+import { LoginRequiredModalComponent } from './shared/components/modal/login-required-modal/login-required-modal.component';
+import { ModalService } from './core/services/modal.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, LoginRequiredModalComponent],
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  protected readonly title = signal('renga-tmp');
+  readonly modalService = inject(ModalService);
+}

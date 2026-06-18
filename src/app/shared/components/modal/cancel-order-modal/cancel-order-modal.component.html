@@ -112,10 +112,10 @@
         <!-- Icon tam giác cảnh báo màu hồng — inline SVG, không cần file asset -->
         <svg class="cancel-fail__icon" width="80" height="72" viewBox="0 0 80 72" fill="none" aria-hidden="true">
         <path
-            d="M40 4L77.91 67.5H2.09L40 4Z" 
+            d="M40 4L77.91 67.5H2.09L40 4Z"
             stroke="var(--color-primary)"
-            stroke-width="4" 
-            stroke-linecap="round" 
+            stroke-width="4"
+            stroke-linecap="round"
             stroke-linejoin="round"
         />
         <text
@@ -142,7 +142,7 @@
               cho đơn vị vận chuyển, vì vậy không thể hủy. Quý khách có thể yêu cầu trả
               hàng sau khi nhận được sản phẩm, tùy theo Chính sách Đổi trả của chúng tôi.
             </p>
-            <a routerLink="/orders/{{ orderId() }}" class="cancel-fail__btn-primary" (click)="onClose()">
+            <a [routerLink]="['/orders', orderId()]" class="cancel-fail__btn-primary" (click)="onClose()">
               Theo dõi trạng thái đơn hàng
             </a>
             <a routerLink="/contact" class="cancel-fail__btn-outline" (click)="onClose()">

@@ -7,8 +7,6 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 export interface RepairLineItem {
   id: string;
@@ -16,18 +14,14 @@ export interface RepairLineItem {
   fee: number;
 }
 
-/**
- * Modal Bảo hành / Sửa chữa — BR-45, BR-46, BPMN 3.1.6
- *
- * ViewEncapsulation.None để CSS backdrop (position:fixed, display:flex)
- * không bị Angular scoped — tránh modal render sai vị trí.
- */
 @Component({
   selector: 'app-warranty-modal',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // ViewEncapsulation.None: backdrop (position:fixed, display:flex) phải là global
+  // để không bị Angular scoped attribute selector làm render sai vị trí.
   encapsulation: ViewEncapsulation.None,
-  imports: [DecimalPipe, FormsModule],
+  imports: [],
   templateUrl: './warranty-modal.component.html',
   styleUrl: './warranty-modal.component.css',
 })

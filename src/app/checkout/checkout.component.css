@@ -1,10 +1,9 @@
-﻿/* ===== CHECKOUT PAGE ===== */
+/* ===== CHECKOUT PAGE ===== */
 
 .checkout-page {
   background: var(--color-white);
 }
 
-/* ── Top: breadcrumb + title + timer ── */
 .checkout-top {
   padding: 0 var(--container-px);
   border-bottom: 1px solid var(--color-border);
@@ -16,7 +15,6 @@
   padding: 40px 0 48px;
 }
 
-/* ── Breadcrumb ── */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -50,7 +48,6 @@
   color: var(--color-border);
 }
 
-/* ── Title row ── */
 .checkout-title-row {
   display: flex;
   align-items: flex-start;
@@ -67,7 +64,6 @@
   color: var(--color-primary);
 }
 
-/* ── Countdown timer ── */
 .checkout-timer {
   flex-shrink: 0;
   background: var(--color-white);
@@ -98,7 +94,6 @@
   letter-spacing: 0.5px;
 }
 
-/* ── Body layout ── */
 .checkout-body {
   padding: 0 var(--container-px);
 }
@@ -113,7 +108,6 @@
   padding: 48px 0 80px;
 }
 
-/* ── Left: form ── */
 .checkout-form {
   padding-right: 56px;
 }
@@ -157,7 +151,6 @@
   color: var(--color-dark);
 }
 
-/* ── Shipping fields ── */
 .shipping-fields {
   display: flex;
   flex-direction: column;
@@ -214,7 +207,6 @@
   color: var(--color-primary);
 }
 
-/* ── Select ── */
 .field-group__select-wrap {
   position: relative;
   display: flex;
@@ -249,7 +241,6 @@
   pointer-events: none;
 }
 
-/* ── Payment options ── */
 .payment-options {
   display: flex;
   flex-direction: column;
@@ -316,7 +307,13 @@
   flex: 1;
 }
 
-/* ── Right: order summary ── */
+.payment-opt__icon {
+  width: 32px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .order-summary {
   background: var(--color-primary-light);
   padding: 32px;
@@ -339,7 +336,6 @@
   color: var(--color-dark);
 }
 
-/* ── Order items ── */
 .order-items {
   display: flex;
   flex-direction: column;
@@ -432,14 +428,13 @@
 }
 
 .order-item__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
   color: var(--color-dark);
   white-space: nowrap;
 }
 
-/* ── Pricing rows ── */
 .order-pricing {
   display: flex;
   flex-direction: column;
@@ -472,7 +467,6 @@
   color: #9a3f5c;
 }
 
-/* ── Voucher field ── */
 .voucher-field {
   padding-bottom: 20px;
   border-bottom: 1px solid #d4c8cc;
@@ -530,7 +524,6 @@
   background: #9a3f5c;
 }
 
-/* ── Order total ── */
 .order-total {
   display: flex;
   align-items: baseline;
@@ -550,7 +543,7 @@
 }
 
 .order-total__amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 28px;
   line-height: 1.2;
@@ -558,7 +551,6 @@
   white-space: nowrap;
 }
 
-/* ── CTA ── */
 .order-cta {
   display: flex;
   flex-direction: column;
@@ -597,7 +589,32 @@
   background: #9a3f5c;
 }
 
-.order-cta__btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.order-cta__btn-arrow {
+  width: 18px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.chat-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+}
+
+.chat-fab img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  display: block;
 }

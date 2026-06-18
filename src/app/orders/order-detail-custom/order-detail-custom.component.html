@@ -1,280 +1,169 @@
-<div class="order-detail-custom-page">
+<div class="odc-hero">
+  <div class="odc-hero__inner">
+    <div class="odc-hero__left">
 
-  <!-- ── Hero: breadcrumb + title + order ID + actions ── -->
-  <div class="odc-hero">
-    <div class="odc-hero__inner">
-      <div class="odc-hero__left">
+      <nav class="odc-breadcrumb" aria-label="Điều hướng trang">
+        <a routerLink="/orders" class="odc-breadcrumb__item">Đơn hàng</a>
+        <span class="odc-breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="odc-breadcrumb__item odc-breadcrumb__item--current" aria-current="page">
+          Chi tiết đơn hàng
+        </span>
+      </nav>
 
-        <!-- Breadcrumb -->
-        <nav class="odc-breadcrumb" aria-label="Điều hướng trang">
-          <a routerLink="/orders" class="odc-breadcrumb__item">Đơn hàng</a>
-          <span class="odc-breadcrumb__sep" aria-hidden="true">›</span>
-          <span
-            class="odc-breadcrumb__item odc-breadcrumb__item--current"
-            aria-current="page"
-          >
-            Chi tiết đơn hàng
-          </span>
-        </nav>
+      <h1 class="odc-hero__title">Chi tiết đơn hàng</h1>
+      <p class="odc-hero__order-id">#{{ order().id }}</p>
+    </div>
 
-        <h1 class="odc-hero__title">Chi tiết đơn hàng</h1>
-        <p class="odc-hero__order-id">#{{ order().id }}</p>
-      </div>
-
-      <div class="odc-hero__actions">
-        <button
-          type="button"
-          class="odc-hero__btn"
-          (click)="openWarrantyModal()"
-        >
-          Yêu cầu bảo hành
-        </button>
-
-        <button
-          type="button"
-          class="odc-hero__btn"
-          (click)="openCancelModal()"
-        >
-          Yêu cầu hủy đơn
-        </button>
-      </div>
+    <div class="odc-hero__actions">
+      <button type="button" class="odc-hero__btn" (click)="openWarrantyModal()">
+        Yêu cầu bảo hành
+      </button>
+      <button type="button" class="odc-hero__btn" (click)="openCancelModal()">
+        Yêu cầu hủy đơn
+      </button>
     </div>
   </div>
+</div>
 
-  <!-- Two-column body -->
-  <div class="odc-body">
-    <div class="odc-body__inner">
+<div class="odc-body">
+  <div class="odc-body__inner">
 
-      <!-- ══ LEFT COLUMN ══ -->
-      <div class="odc-left">
+    <div class="odc-left">
 
-        <!-- Status bar -->
-        <div class="odc-status-wrap">
-          <div
-            class="status-bar"
-            role="region"
-            aria-label="Trạng thái đơn hàng"
-            [style.--progress-pct]="progressPct()"
-          >
-            <p class="status-bar__heading">
-              TRẠNG THÁI ĐƠN HÀNG
-            </p>
+      <div class="odc-status-wrap">
+        <div
+          class="status-bar"
+          role="region"
+          aria-label="Trạng thái đơn hàng"
+          [style.--progress-pct]="progressPct()"
+        >
+          <p class="status-bar__heading">TRẠNG THÁI ĐƠN HÀNG</p>
 
-            <div class="status-bar__track">
-
-              @for (step of statusSteps(); track step.code) {
-                <div
-                  class="status-step"
-                  [class.status-step--done]="step.state === 'done'"
-                  [class.status-step--active]="step.state === 'active'"
-                  [class.status-step--pending]="step.state === 'pending'"
-                  [attr.aria-current]="step.state === 'active' ? 'step' : null"
-                >
-                  <div class="status-step__dot">
-
-                    @if (step.state === 'done') {
-                      <img
-                        src="assets/icons/check-white.svg"
-                        alt=""
-                        aria-hidden="true"
-                        class="status-step__check"
-                      />
-                    }
-
-                    @if (step.state === 'active') {
-                      <div class="status-step__dot-inner"></div>
-                    }
-
-                  </div>
-
-                  <span class="status-step__label">
-                    {{ step.label }}
-                  </span>
+          <div class="status-bar__track">
+            @for (step of statusSteps(); track step.code) {
+              <div
+                class="status-step"
+                [class.status-step--done]="step.state === 'done'"
+                [class.status-step--active]="step.state === 'active'"
+                [class.status-step--pending]="step.state === 'pending'"
+                [attr.aria-current]="step.state === 'active' ? 'step' : null"
+              >
+                <div class="status-step__dot">
+                  @if (step.state === 'active') {
+                    <div class="status-step__dot-inner"></div>
+                  }
                 </div>
-              }
-
-            </div>
+                <span class="status-step__label">{{ step.label }}</span>
+              </div>
+            }
           </div>
         </div>
-
-        <!-- Craft timeline -->
-        <div class="craft-timeline" role="list">
-      <span class="craft-timeline-heading">Tiến độ chế tác</span>
-
-
-          @for (step of order().craftSteps; track step.id) {
-            <div
-              class="craft-step"
-              [class.craft-step--done]="step.state === 'done'"
-              [class.craft-step--active]="step.state === 'active'"
-              [class.craft-step--pending]="step.state === 'pending'"
-              role="listitem"
-              [attr.aria-current]="step.state === 'active' ? 'step' : null"
-            >
-              <div class="craft-step__inner">
-
-                <span class="craft-step__num">
-                  Bước {{ step.num }}
-                </span>
-
-                <strong class="craft-step__title">
-                  {{ step.title }}
-                </strong>
-
-                @if (step.detail) {
-                  <span class="craft-step__detail">
-                    {{ step.detail }}
-                  </span>
-                }
-
-                <span class="craft-step__time">
-                  {{ step.time }}
-                </span>
-
-              </div>
-            </div>
-          }
-
-        </div>
-
       </div>
-      <!-- /odc-left -->
 
-      <!-- ══ RIGHT COLUMN ══ -->
-      <div class="odc-right">
+      <div class="craft-timeline" role="list">
+        <span class="craft-timeline-heading">Tiến độ chế tác</span>
 
-        <!-- Spec list -->
-        <div class="odc-spec-list">
-
-          <p class="odc-spec-list__heading">
-            Mô tả đơn hàng
-          </p>
-
-          @for (spec of order().specs; track spec.label) {
-            <div class="odc-spec-row">
-              <span class="odc-spec-row__label">
-                {{ spec.label }}
-              </span>
-
-              <span class="odc-spec-row__value">
-                {{ spec.value }}
-              </span>
+        @for (step of order().craftSteps; track step.id) {
+          <div
+            class="craft-step"
+            [class.craft-step--done]="step.state === 'done'"
+            [class.craft-step--active]="step.state === 'active'"
+            [class.craft-step--pending]="step.state === 'pending'"
+            role="listitem"
+            [attr.aria-current]="step.state === 'active' ? 'step' : null"
+          >
+            <div class="craft-step__inner">
+              <span class="craft-step__num">Bước {{ step.num }}</span>
+              <strong class="craft-step__title">{{ step.title }}</strong>
+              @if (step.detail) {
+                <span class="craft-step__detail">{{ step.detail }}</span>
+              }
+              <span class="craft-step__time">{{ step.time }}</span>
             </div>
-          }
+          </div>
+        }
+      </div>
 
-        </div>
+    </div>
 
-        <!-- Shipping info -->
-        <div class="odc-shipping-card">
+    <div class="odc-right">
 
-          <p class="odc-shipping-card__heading">
-            Thông tin giao hàng
-          </p>
+      <div class="odc-spec-list">
+        <p class="odc-spec-list__heading">Mô tả đơn hàng</p>
 
-          <div class="odc-shipping-rows">
+        @for (spec of order().specs; track spec.label) {
+          <div class="odc-spec-row">
+            <span class="odc-spec-row__label">{{ spec.label }}</span>
+            <span class="odc-spec-row__value">{{ spec.value }}</span>
+          </div>
+        }
+      </div>
 
-            <div class="odc-shipping-row">
+      <div class="odc-shipping-card">
+        <p class="odc-shipping-card__heading">Thông tin giao hàng</p>
+
+        <div class="odc-shipping-rows">
+
+          <div class="odc-shipping-row">
             <span class="odc-shipping-row__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </span>
-
-              <div>
-                <span class="odc-shipping-row__sublabel">
-                  Khách hàng
-                </span>
-
-                <p class="odc-shipping-row__value">
-                  {{ order().shipping.name }}
-                </p>
-              </div>
+            <div>
+              <span class="odc-shipping-row__sublabel">Khách hàng</span>
+              <p class="odc-shipping-row__value">{{ order().shipping.name }}</p>
             </div>
+          </div>
 
-            <div class="odc-shipping-row">
+          <div class="odc-shipping-row">
             <span class="odc-shipping-row__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
             </span>
-
-              <div>
-                <span class="odc-shipping-row__sublabel">
-                  Điện thoại
-                </span>
-
-                <p
-                  class="odc-shipping-row__value odc-shipping-row__value--normal"
-                >
-                  {{ order().shipping.phone }}
-                </p>
-              </div>
+            <div>
+              <span class="odc-shipping-row__sublabel">Điện thoại</span>
+              <p class="odc-shipping-row__value odc-shipping-row__value--normal">{{ order().shipping.phone }}</p>
             </div>
+          </div>
 
-            <div class="odc-shipping-row">
+          <div class="odc-shipping-row">
             <span class="odc-shipping-row__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
               </svg>
             </span>
-
-              <div>
-                <span class="odc-shipping-row__sublabel">
-                  Địa chỉ
-                </span>
-
-                <p
-                  class="odc-shipping-row__value odc-shipping-row__value--normal"
-                >
-                  {{ order().shipping.address }}
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Artisan card -->
-        <div class="odc-artisan-card">
-
-          <p class="odc-artisan-card__heading">
-            Thông tin thợ chế tác
-          </p>
-
-          <div class="odc-artisan-profile">
-            <div class="odc-artisan-avatar">
-              <img
-                [src]="order().artisan.avatarUrl"
-                [alt]="order().artisan.name"
-              />
-            </div>
-
             <div>
-              <p class="odc-artisan-name">
-                {{ order().artisan.name }}
-              </p>
-
-              <p class="odc-artisan-role">
-                {{ order().artisan.role }}
-              </p>
+              <span class="odc-shipping-row__sublabel">Địa chỉ</span>
+              <p class="odc-shipping-row__value odc-shipping-row__value--normal">{{ order().shipping.address }}</p>
             </div>
           </div>
 
-          <p class="odc-artisan-quote">
-            "{{ order().artisan.quote }}"
-          </p>
+        </div>
+      </div>
 
+      <div class="odc-artisan-card">
+        <p class="odc-artisan-card__heading">Thông tin thợ chế tác</p>
+
+        <div class="odc-artisan-profile">
+          <div class="odc-artisan-avatar">
+            <img [src]="order().artisan.avatarUrl" [alt]="order().artisan.name" />
+          </div>
+          <div>
+            <p class="odc-artisan-name">{{ order().artisan.name }}</p>
+            <p class="odc-artisan-role">{{ order().artisan.role }}</p>
+          </div>
         </div>
 
+        <p class="odc-artisan-quote">"{{ order().artisan.quote }}"</p>
       </div>
-      <!-- /odc-right -->
 
     </div>
-  </div>
 
+  </div>
 </div>
 
-<!-- Modals -->
 @if (showWarrantyModal()) {
   <app-warranty-modal
     [orderId]="order().id"
@@ -285,7 +174,6 @@
 @if (showCancelModal()) {
   <app-cancel-design-modal
     [orderId]="order().id"
-    [orderStatus]="order().status"
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
   />

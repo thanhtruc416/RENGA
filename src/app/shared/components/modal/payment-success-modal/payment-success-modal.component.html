@@ -1,12 +1,12 @@
-<div class="modal-backdrop" [class.is-open]="isModalOpen()">
-  <div class="payment-modal payment-modal--success" [class.is-active]="isModalOpen()">
+<div class="modal-backdrop" [class.is-open]="isOpen()">
+  <div class="payment-modal payment-modal--success" [class.is-active]="isOpen()">
 
     <button class="payment-modal__close" type="button" (click)="close()" aria-label="Đóng">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </button>
-    
+
     <div class="payment-modal__icon-area">
       <svg class="payment-modal__icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
         <circle cx="28" cy="28" r="20" stroke="#9a3f5c" stroke-width="2"/>
@@ -50,8 +50,9 @@
     @if (!isGuest()) {
       <div class="modal-actions__row">
         <a class="modal-actions__primary" routerLink="/orders" (click)="close()">
-          Xem đơn hàng của tôi </a>
-          <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
+          Xem đơn hàng của tôi
+        </a>
+        <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
       </div>
     }
 

@@ -10,10 +10,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CancelDesignModalComponent } from '../../shared/components/modal/cancel-design-modal/cancel-design-modal.component';
 import { WarrantyModalComponent } from '../../shared/components/modal/warranty-modal/warranty-modal.component';
 
-// ── Models ────────────────────────────────────────────────────────────────────
-
 export type CustomOrderStatus = 'P' | 'PC' | 'CR' | 'FN' | 'PF' | 'S' | 'CM' | 'C';
-
 export type StepState = 'done' | 'active' | 'pending';
 
 export interface StatusStep {
@@ -58,8 +55,6 @@ export interface CustomOrderDetail {
   craftSteps: CraftStep[];
 }
 
-// ── Step config ─────────────────────────────────────────────────────────────
-
 const CUSTOM_STEP_ORDER: CustomOrderStatus[] = ['P', 'PC', 'CR', 'FN', 'PF', 'S', 'CM'];
 
 const CUSTOM_STEP_LABELS: Record<CustomOrderStatus, string> = {
@@ -72,8 +67,6 @@ const CUSTOM_STEP_LABELS: Record<CustomOrderStatus, string> = {
   CM: 'HOÀN TẤT',
   C: 'ĐÃ HỦY',
 };
-
-// ── Mock data ───────────────────────────────────────────────────────────────
 
 const MOCK_CUSTOM_ORDER: CustomOrderDetail = {
   id: 'AH-8824019',
@@ -98,46 +91,13 @@ const MOCK_CUSTOM_ORDER: CustomOrderDetail = {
     quote: 'Mỗi viên đá là một câu chuyện — tôi chỉ là người giúp nó được kể đúng cách.',
   },
   craftSteps: [
-    {
-      id: 'cs-1',
-      num: '01',
-      title: 'Đã nhận ý tưởng',
-      time: 'Hoàn tất: 15/09/2026',
-      state: 'done',
-    },
-    {
-      id: 'cs-2',
-      num: '02',
-      title: 'Phác thảo & Xác nhận bản vẽ',
-      time: 'Hoàn tất: 22/09/2026',
-      state: 'done',
-    },
-    {
-      id: 'cs-3',
-      num: '03',
-      title: 'Đang chế tác',
-      detail: 'Nghệ nhân đang tiến hành khắc chữ lên thiết kế của bạn.',
-      time: 'Dự kiến hoàn tất: 15/10/2026',
-      state: 'active',
-    },
-    {
-      id: 'cs-4',
-      num: '04',
-      title: 'Hoàn thiện',
-      time: 'Dự kiến: 17/10/2026',
-      state: 'pending',
-    },
-    {
-      id: 'cs-5',
-      num: '05',
-      title: 'Giao hàng',
-      time: 'Dự kiến: 20/10/2026',
-      state: 'pending',
-    },
+    { id: 'cs-1', num: '01', title: 'Đã nhận ý tưởng', time: 'Hoàn tất: 15/09/2026', state: 'done' },
+    { id: 'cs-2', num: '02', title: 'Phác thảo & Xác nhận bản vẽ', time: 'Hoàn tất: 22/09/2026', state: 'done' },
+    { id: 'cs-3', num: '03', title: 'Đang chế tác', detail: 'Nghệ nhân đang tiến hành khắc chữ lên thiết kế của bạn.', time: 'Dự kiến hoàn tất: 15/10/2026', state: 'active' },
+    { id: 'cs-4', num: '04', title: 'Hoàn thiện', time: 'Dự kiến: 17/10/2026', state: 'pending' },
+    { id: 'cs-5', num: '05', title: 'Giao hàng', time: 'Dự kiến: 20/10/2026', state: 'pending' },
   ],
 };
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-order-detail-custom',
@@ -151,18 +111,14 @@ export class OrderDetailCustomComponent {
   private readonly route = inject(ActivatedRoute);
 
   readonly orderId = this.route.snapshot.paramMap.get('id') ?? '';
-
   readonly order = signal<CustomOrderDetail>(MOCK_CUSTOM_ORDER);
 
-  // ── Modal visibility ────────────────────────────────────────────────────────
   readonly showWarrantyModal = signal(false);
   readonly showCancelModal = signal(false);
 
-  // ── Status bar steps ────────────────────────────────────────────────────────
   readonly statusSteps = computed<StatusStep[]>(() => {
     const currentStatus = this.order().status;
     const currentIdx = CUSTOM_STEP_ORDER.indexOf(currentStatus);
-
     return CUSTOM_STEP_ORDER.map((code, idx) => ({
       code,
       label: CUSTOM_STEP_LABELS[code],
@@ -176,17 +132,7 @@ export class OrderDetailCustomComponent {
     return total > 0 ? currentIdx / total : 0;
   });
 
-  // ── Actions ─────────────────────────────────────────────────────────────────
-
-  openWarrantyModal(): void {
-    this.showWarrantyModal.set(true);
-  }
-
-  openCancelModal(): void {
-    this.showCancelModal.set(true);
-  }
-
-  onOrderCancelled(): void {
-    this.showCancelModal.set(false);
-  }
+  openWarrantyModal(): void { this.showWarrantyModal.set(true); }
+  openCancelModal(): void { this.showCancelModal.set(true); }
+  onOrderCancelled(): void { this.showCancelModal.set(false); }
 }

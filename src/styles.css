@@ -1,5 +1,17 @@
 ﻿@import './styles/_token.css';
 
+:root {
+  /* Section backgrounds */
+  --color-studio-bg: rgba(26, 26, 26, 0.9);
+  --color-designer-bg: rgba(196, 96, 126, 0.6);
+
+  /* Component-specific */
+  --color-badge-bg: #fff0f5;
+  --color-review-card-bg: #f9f9f9;
+  --color-price: #9a3f5c;
+  --color-product-card-bg: rgba(247, 240, 243, 0.7);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -53,3 +65,8 @@ p, span, a, li, label, input, select, textarea, button {
   font-family: var(--font-sans);
 }
 
+/* Chatbot FAB nhường chỗ khi panel giá Studio xuất hiện */
+body:has(.studio-price-summary) .chatbot__fab {
+  bottom: calc(100px + clamp(20px, 3vh, 40px));
+  transition: bottom 0.25s ease;
+}

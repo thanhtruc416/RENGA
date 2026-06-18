@@ -5,27 +5,19 @@ import {
   input,
   output,
   signal,
-  inject,
-  ChangeDetectorRef
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 export type CustomOrderStatus = 'P' | 'PC' | 'CR' | 'FN' | 'PF' | 'S' | 'CM' | 'C';
 
-/**
- * Modal hủy đơn tùy biến / thiết kế riêng — BR-25, BR-26
- */
 @Component({
   selector: 'app-cancel-design-modal',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
+  imports: [],
   templateUrl: './cancel-design-modal.component.html',
   styleUrl: './cancel-design-modal.component.css',
 })
 export class CancelDesignModalComponent {
-  private cdr = inject(ChangeDetectorRef);
-
   // ── Inputs ──────────────────────────────────────────────────────────────────
   readonly orderId     = input.required<string>();
   readonly orderStatus = input.required<CustomOrderStatus>();
@@ -65,28 +57,23 @@ export class CancelDesignModalComponent {
 
   onSubmit(): void {
     if (!this.canSubmit() || this.isSubmitting()) return;
-    
+
     this.isSubmitting.set(true);
 
     // TODO: gọi OrdersService.requestCancelDesign(orderId, reason)
     setTimeout(() => {
       this.isSubmitting.set(false);
       this.submitted.set(true);
-      
-      // Đảm bảo cập nhật UI khi xong tác vụ async
-      this.cdr.markForCheck();
-      
       this.cancelled.emit();
     }, 600);
   }
 
   onClose(): void {
-    // Reset state trước khi đóng để lần sau mở lại modal sạch sẽ
     this.submitted.set(false);
     this.reason.set('');
     this.acknowledged.set(false);
     this.isSubmitting.set(false);
-    
+
     this.closed.emit();
   }
 }

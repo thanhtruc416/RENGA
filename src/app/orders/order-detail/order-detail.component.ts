@@ -17,8 +17,6 @@ import { WarrantyModalComponent } from '../../shared/components/modal/warranty-m
 
 registerLocaleData(localeVi);
 
-// ── Models ────────────────────────────────────────────────────────────────────
-
 export type StepState = 'done' | 'active' | 'pending';
 export type TimelineState = 'done' | 'active' | 'pending';
 
@@ -62,8 +60,6 @@ export interface OrderDetail {
   timeline: TimelineEvent[];
 }
 
-// ── Step config ───────────────────────────────────────────────────────────────
-
 const STEP_ORDER: OrderStatus[] = ['P', 'PC', 'PF', 'S', 'CM'];
 
 const STEP_LABELS: Record<OrderStatus, string> = {
@@ -75,11 +71,8 @@ const STEP_LABELS: Record<OrderStatus, string> = {
   C: 'Đã hủy',
 };
 
-// ── Mock data ─────────────────────────────────────────────────────────────────
-
 const MOCK_ORDER: OrderDetail = {
   id: 'AH-8829104',
-  // Đổi thành 'PC' để test cancel thành công; 'S' để test cancel fail
   status: 'S',
   items: [
     {
@@ -131,8 +124,6 @@ const MOCK_ORDER: OrderDetail = {
   ],
 };
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 @Component({
   selector: 'app-order-detail',
   standalone: true,
@@ -154,7 +145,6 @@ export class OrderDetailComponent {
   readonly showWarrantyModal = signal(false);
   readonly showCancelModal   = signal(false);
 
-  // ── Status bar steps ────────────────────────────────────────────────────────
   readonly statusSteps = computed<StatusStep[]>(() => {
     const currentStatus = this.order().status;
     const currentIdx    = STEP_ORDER.indexOf(currentStatus);
@@ -187,10 +177,7 @@ export class OrderDetailComponent {
     return `${doneCount * 110}px`;
   });
 
-  // ── Computed: thông tin sản phẩm đầu tiên để truyền vào cancel modal ──────
   readonly firstItem = computed(() => this.order().items[0]);
-
-  // ── Actions ─────────────────────────────────────────────────────────────────
 
   openWarrantyModal(): void {
     this.showWarrantyModal.set(true);
@@ -200,16 +187,11 @@ export class OrderDetailComponent {
     this.showCancelModal.set(true);
   }
 
-  /** Nút "Hỗ trợ" trong timeline → mở chatbot bằng cách dispatch custom event
-   *  để ChatbotComponent (shared, nằm ngoài router-outlet) lắng nghe. */
   openSupport(): void {
     window.dispatchEvent(new CustomEvent('renga:open-chatbot'));
   }
 
-  onOrderCancelled(): void {
-    // Modal tự hiển thị success/fail step nên không đóng ngay
-    // Đóng modal chỉ khi user click nút trong success/fail popup (closed output)
-  }
+  onOrderCancelled(): void {}
 
   onModalClosed(): void {
     this.showCancelModal.set(false);

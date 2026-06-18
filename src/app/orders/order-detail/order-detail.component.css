@@ -1,10 +1,7 @@
-﻿/* ===== CHI TIET DON HANG (ORDER DETAIL) PAGE ===== */
-
 .order-detail-page {
   background: var(--color-white);
 }
 
-/* -- Top section ---------------------------------- */
 .order-detail-top {
   padding: 0 var(--container-px);
 }
@@ -15,7 +12,6 @@
   padding: 40px 0 36px;
 }
 
-/* -- Breadcrumb ----------------------------------- */
 .order-breadcrumb {
   display: flex;
   align-items: center;
@@ -50,7 +46,6 @@
   line-height: 1;
 }
 
-/* -- Title row ------------------------------------ */
 .order-detail-title-row {
   display: flex;
   align-items: flex-end;
@@ -92,7 +87,6 @@
   background: var(--color-primary-dark, #9a3f5c);
 }
 
-/* -- Body: two-column grid ----------------------- */
 .order-detail-body {
   padding: 0 var(--container-px);
 }
@@ -118,7 +112,6 @@
   gap: 16px;
 }
 
-/* ══ STATUS BAR ═══════════════════════════════════ */
 .status-bar {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -232,7 +225,6 @@
   color: var(--color-text-muted, #444748);
 }
 
-/* ══ ORDER ID ROW ═════════════════════════════════ */
 .order-id-row {
   padding: 20px 3px 12px;
 }
@@ -245,7 +237,6 @@
   color: var(--color-black);
 }
 
-/* ══ PRODUCT SECTION ══════════════════════════════ */
 .product-section {
   border: 1px solid var(--color-black);
   overflow: hidden;
@@ -329,7 +320,7 @@
 }
 
 .product-row__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 24px;
   line-height: 33.6px;
@@ -357,7 +348,7 @@
 }
 
 .product-section__total-amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
   letter-spacing: -0.32px;
@@ -365,7 +356,6 @@
   white-space: nowrap;
 }
 
-/* ══ TIMELINE CARD ════════════════════════════════ */
 .timeline-card {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -534,7 +524,6 @@
   background: var(--color-primary-dark, #9a3f5c);
 }
 
-/* ══ SHIPPING CARD ════════════════════════════════ */
 .shipping-card {
   background: var(--color-white);
   border: 1px solid var(--color-black);
@@ -569,7 +558,6 @@
   gap: 16px;
 }
 
-/* Icon wrapper — inline SVG, màu hồng theo Figma */
 .shipping-row__icon {
   width: 18px;
   height: 20px;
@@ -578,7 +566,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);   /* FIX: đổi từ muted sang primary */
+  color: var(--color-primary);
 }
 
 .shipping-row__icon svg {
@@ -612,41 +600,4 @@
 .shipping-row__value--bold {
   font-weight: 700;
   line-height: 24px;
-}
-/* -- Title row: title trái + buttons phải (đúng Figma) ---- */
-.order-detail-title-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
- 
-.order-detail-actions {
-  display: flex;
-  gap: 16px;
-  padding-bottom: 8px;
-  flex-shrink: 0;
-}
-
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 900;
-}
-
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
 }

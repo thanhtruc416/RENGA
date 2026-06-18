@@ -1,9 +1,7 @@
-﻿/* ── Page shell ── */
 .cart-page {
   background: var(--color-white);
 }
 
-/* ── Hero ── */
 .cart-hero {
   padding: 0 var(--container-px);
 }
@@ -26,7 +24,6 @@
   color: var(--color-primary);
 }
 
-/* Nhóm nút góc phải hero */
 .cart-hero__actions {
   display: flex;
   align-items: center;
@@ -34,7 +31,6 @@
   flex-shrink: 0;
 }
 
-/* Nút "Chọn nhiều" — góc phải hero */
 .cart-hero__select-many {
   font-family: var(--font-sans);
   font-weight: 600;
@@ -58,7 +54,6 @@
   background: #9a3f5c;
 }
 
-/* Nút "+" vuông cạnh Chọn nhiều */
 .cart-hero__add-studio {
   display: flex;
   align-items: center;
@@ -79,11 +74,11 @@
   background: #9a3f5c;
 }
 
-/* ── Tab bar ── */
 .cart-tabs {
   padding: 0;
   background: transparent;
 }
+
 .cart-tabs__inner {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -128,7 +123,6 @@
   color: var(--color-primary);
 }
 
-/* Nút "+" Studio */
 .cart-tabs__add-studio {
   font-family: var(--font-sans);
   font-size: 20px;
@@ -150,20 +144,17 @@
   background: #9a3f5c;
 }
 
-/* ── Cart section ── */
 .cart-section {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-px);
 }
 
-/* ── Cart list ── */
 .cart-list {
   display: flex;
   flex-direction: column;
 }
 
-/* ── Cart item ── */
 .cart-item {
   display: flex;
   gap: 24px;
@@ -178,7 +169,6 @@
   display: none;
 }
 
-/* Checkbox wrapper — ẩn mặc định */
 .cart-item__checkbox-wrap {
   display: none;
   align-items: center;
@@ -234,10 +224,9 @@
 
 .cart-list.is-selecting .cart-item.is-checked {
   background: gray(0.025/1);
-  border-bottom: 1px solid var(--color-primary); /* Thêm cái viền để phân biệt rõ item */
+  border-bottom: 1px solid var(--color-primary);
 }
 
-/* ── Thumbnail ── */
 .cart-item__thumb {
   position: relative;
   width: 130px;
@@ -262,7 +251,6 @@
   pointer-events: none;
 }
 
-/* ── Item body ── */
 .cart-item__body {
   flex: 1;
   min-width: 0;
@@ -286,7 +274,7 @@
 }
 
 .cart-item__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 24px;
   line-height: 1.4;
@@ -302,7 +290,6 @@
   color: var(--color-muted);
 }
 
-/* ── Qty row ── */
 .cart-item__qty-row {
   display: flex;
   align-items: center;
@@ -320,7 +307,6 @@
   margin-right: 16px;
 }
 
-/* ── Qty stepper ── */
 .qty-stepper {
   display: inline-flex;
   align-items: center;
@@ -356,7 +342,6 @@
   user-select: none;
 }
 
-/* ── Studio: saved date ── */
 .cart-item__saved-date {
   font-family: var(--font-sans);
   font-size: 12px;
@@ -366,7 +351,6 @@
   margin-top: 4px;
 }
 
-/* ── Studio: continue CTA ── */
 .cart-item__continue-btn {
   display: inline-flex;
   align-items: center;
@@ -388,7 +372,6 @@
   background: var(--color-primary);
 }
 
-/* ── Remove button ── */
 .cart-item__remove {
   background: none;
   border: none;
@@ -406,7 +389,13 @@
   color: var(--color-dark);
 }
 
-/* ── Item bottom ── */
+.cart-item__remove img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: block;
+}
+
 .cart-item__bottom {
   display: flex;
   align-items: baseline;
@@ -424,7 +413,7 @@
 }
 
 .cart-item__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 32px;
   line-height: 1.3;
@@ -432,7 +421,6 @@
   white-space: nowrap;
 }
 
-/* ── Empty state ── */
 .cart-empty-state {
   padding: 64px 0;
   text-align: center;
@@ -440,7 +428,6 @@
   color: var(--color-muted);
 }
 
-/* ── Summary bar ── */
 .cart-summary {
   display: flex;
   align-items: center;
@@ -506,7 +493,6 @@
   background: #9a3f5c;
 }
 
-/* ── Action bar (chọn nhiều) ── */
 .cart-action-bar {
   background: var(--color-primary);
   display: flex;

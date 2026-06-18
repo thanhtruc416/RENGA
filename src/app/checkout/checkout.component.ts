@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal, inject, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -35,14 +35,11 @@ interface CheckoutForm {
 })
 export class CheckoutComponent {
 
-  // ── Modal state ────────────────────────────────────────────
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
   readonly showSuccessGuestModal = signal(false);
   readonly showFailGuestModal = signal(false);
-  private cdr = inject(ChangeDetectorRef);
 
-  // ── Order items (giả lập từ giỏ hàng) ─────────────────────
   readonly orderItems = signal<OrderItem[]>([
     {
       id: 1,
@@ -68,15 +65,14 @@ export class CheckoutComponent {
     this.orderItems().reduce((sum, item) => sum + item.price * item.qty, 0)
   );
 
-  // ── Voucher ────────────────────────────────────────────────
   readonly voucherCode = signal('');
-  readonly voucherDiscount = signal(0); // số tiền giảm
+  readonly voucherDiscount = signal(0);
 
   readonly total = computed(() => Math.max(this.subtotal() - this.voucherDiscount(), 0));
 
   applyVoucher(): void {
     const code = this.voucherCode().trim().toUpperCase();
-    // TODO: gọi API kiểm tra voucher thật — đây là logic giả lập
+    // TODO: gọi API kiểm tra voucher
     if (code === 'RENGA10') {
       this.voucherDiscount.set(Math.round(this.subtotal() * 0.1));
     } else {
@@ -85,19 +81,16 @@ export class CheckoutComponent {
   }
 
   onVoucherInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.voucherCode.set(target.value);
+    this.voucherCode.set((event.target as HTMLInputElement).value);
   }
 
-  // ── Payment method ─────────────────────────────────────────
   readonly selectedPayment = signal<PaymentMethod>('cod');
 
   selectPayment(method: PaymentMethod): void {
     this.selectedPayment.set(method);
   }
 
-  // ── Countdown timer (60 phút) ────────────────────────────────
-  readonly remainingSeconds = signal(60 * 60 - 4); // demo: 59:56
+  readonly remainingSeconds = signal(60 * 60 - 4);
 
   readonly countdownDisplay = computed(() => {
     const total = this.remainingSeconds();
@@ -108,7 +101,6 @@ export class CheckoutComponent {
     return `${pad(h)}:${pad(m)}:${pad(s)}`;
   });
 
-  // ── Shipping form ─────────────────────────────────────────
   readonly shippingForm = new FormGroup<CheckoutForm>({
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^0\d{9}$/)] }),
@@ -118,7 +110,6 @@ export class CheckoutComponent {
     address: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
-  // ── Submit ────────────────────────────────────────────────
   readonly isSubmitting = signal(false);
 
   onSubmit(): void {
@@ -127,26 +118,10 @@ export class CheckoutComponent {
       return;
     }
     this.isSubmitting.set(true);
-// ── GIẢ LẬP SUCCESS (BẬT SẴN ĐỂ TEST GIAO DIỆN) ──
-    // Sau khi bấm Thanh toán, modal sẽ hiện ngay lập tức
+    // TODO: thay bằng API thật
     setTimeout(() => {
       this.isSubmitting.set(false);
-      this.showSuccessModal.set(true); 
-      this.showSuccessGuestModal.set(true); // Thử set cả 2 xem cái nào hiện
-      this.cdr.markForCheck();
+      this.showSuccessModal.set(true);
     }, 800);
-
-    /* ── LOGIC TƯƠNG LAI (COMMENT LẠI ĐỂ DÙNG SAU) ──
-    this.orderService.createOrder(this.shippingForm.value, this.orderItems()).subscribe({
-      next: (response) => {
-        this.isSubmitting.set(false);
-        this.showSuccessModal.set(true);
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        this.showFailModal.set(true);
-      }
-    });
-    */
   }
 }

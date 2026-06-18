@@ -1,6 +1,6 @@
 /* ===== DESIGN TOKENS (Quy tắc số 7) ===== */
 :root {
-  /* ── Brand colors (Chuẩn của bạn) ── */
+  /* ── Brand colors ── */
   --color-primary: #c4607e;
   --color-primary-light: #f7f0f3;
   --color-dark: #1a1a1a;
@@ -10,18 +10,18 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  /* Ánh xạ thêm để các component không bị lỗi CSS */
+  /* Alias cho component dùng tên dài hơn */
   --color-bg: var(--color-white);
   --color-surface: var(--color-bg-card);
   --color-text: var(--color-dark);
   --color-text-muted: var(--color-muted);
 
-  /* ── Typography (Chuẩn của bạn) ── */
+  /* ── Typography ── */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Montserrat', Arial, sans-serif;
   --font-ui: 'Montserrat', Arial, sans-serif;
 
-  /* ── Spacing scale (Chuẩn của bạn) ── */
+  /* ── Spacing scale ── */
   --sp-xs: 4px;
   --sp-sm: 8px;
   --sp-md: 16px;
@@ -29,7 +29,7 @@
   --sp-xl: 48px;
   --sp-2xl: 80px;
 
-  /* Ánh xạ thêm spacing để khớp với component nãy giờ */
+  /* Alias spacing cho component */
   --space-1: var(--sp-xs);
   --space-2: var(--sp-sm);
   --space-3: 12px;
@@ -37,7 +37,7 @@
   --space-6: var(--sp-lg);
   --space-8: 32px;
 
-  /* ── Layout (Chuẩn của bạn) ── */
+  /* ── Layout ── */
   --max-width: 1440px;
   --header-height: 169px;
   --container-px: 80px;
