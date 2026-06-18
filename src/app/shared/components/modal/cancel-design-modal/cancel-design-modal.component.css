@@ -1,0 +1,208 @@
+.order-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.order-modal-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.order-modal {
+  background: var(--color-white);
+  position: relative;
+  flex-shrink: 0;
+  max-width: 100%;
+  display: none;
+}
+
+.order-modal.is-active {
+  display: block;
+}
+
+.omodal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.omodal-close:hover {
+  opacity: 1;
+}
+
+.omodal-close__icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: block;
+}
+
+.order-modal--cancel-bespoke {
+  width: 750px;
+  border: 1px solid var(--color-black);
+  border-radius: 20px;
+  padding: 64px;
+}
+
+.cancel-bespoke__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 41.6px;
+  color: var(--color-black);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.cancel-bespoke__divider {
+  width: 64px;
+  height: 1px;
+  background: var(--color-primary-dark);
+  margin: 0 auto 16px;
+}
+
+.cancel-bespoke__desc {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 26px;
+  color: #444748;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 32px;
+  padding-top: 8px;
+}
+
+.cancel-bespoke__reason-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  color: var(--color-black);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cancel-bespoke__textarea {
+  width: 100%;
+  min-height: 140px;
+  border: none;
+  border-bottom: 1px solid var(--color-black);
+  padding: 16px 12px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 25.6px;
+  color: var(--color-primary);
+  background: transparent;
+  resize: none;
+  outline: none;
+  margin-bottom: 32px;
+}
+
+.cancel-bespoke__textarea::placeholder {
+  color: var(--color-primary);
+  opacity: 0.8;
+}
+
+.cancel-bespoke__ack {
+  background: #f3f3f4;
+  border-left: 4px solid var(--color-primary-dark);
+  padding: 16px 16px 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.cancel-bespoke__ack-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-black);
+  background: var(--color-white);
+  flex-shrink: 0;
+  margin-top: 4px;
+  appearance: none; /* Xóa style mặc định của trình duyệt */
+  cursor: pointer;
+  position: relative; /* Quan trọng để vẽ tick */
+  transition: all 0.2s;
+}
+
+/* Khi được check */
+.cancel-bespoke__ack-checkbox:checked {
+  background: var(--color-black);
+  border-color: var(--color-black);
+}
+
+/* Vẽ dấu tick bằng CSS ::after */
+.cancel-bespoke__ack-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.cancel-bespoke__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cancel-bespoke__submit {
+  padding: 24px 32px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cancel-bespoke__submit:hover {
+  background: #2c2c2c;
+}
+
+.cancel-bespoke__keep {
+  padding: 24px 32px;
+  border: 1px solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cancel-bespoke__keep:hover {
+  background: #f5f5f5;
+}

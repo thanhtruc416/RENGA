@@ -65,7 +65,7 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/644d2dc6-de4c-49c0-96b9-5f97e1095c9e"
+          src="/images/studio-ring.png"
           alt="Nhẫn vàng Heritage"
           class="studio-card__preview-img"
           loading="eager"
@@ -108,7 +108,7 @@
                 <span class="material-option__name">{{ mat.label }}</span>
                 <span class="material-option__tag">{{ mat.tag }}</span>
               </span>
-              <span class="material-option__price">{{ mat.price }}</span>
+              <span class="material-option__price">{{ mat.priceVnd | number:'1.0-0' }}<u>đ</u></span>
             </button>
           }
         </div>
@@ -129,14 +129,14 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/9668872f-01b4-4e57-9ebc-2b65b8ac1203"
+          src="/images/studio-ring.png"
           alt="Nhẫn kim cương Heritage"
           class="studio-card__preview-img"
           loading="eager"
         />
         <div class="studio-card__preview-name">
           <p class="studio-card__preview-name-title">Phôi Solitaire Heritage</p>
-          <p class="studio-card__preview-name-desc">Thiết kế đặc trưng chúng tôi được chế tác chính xác để làm tăng độ sáng và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn.</p>
+          <p class="studio-card__preview-name-desc">Thiết kế đặc trưng chúng tôi được chế tác chính xác để làm tăng độ sáng và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn</p>
         </div>
         <div class="studio-card__preview-foot">
           <div class="studio-card__preview-btns">
@@ -160,7 +160,7 @@
         <div class="studio-card__head studio-card__head--row">
           <div>
             <h2 class="studio-card__title">Tùy biến đá</h2>
-            <p class="studio-card__desc">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn.</p>
+            <p class="studio-card__desc">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn</p>
           </div>
           <button class="btn btn--primary btn--skip" (click)="goToStep(4)" type="button">BỎ QUA</button>
         </div>
@@ -195,45 +195,57 @@
             <input
               class="carat-slider"
               type="range"
-              min="0.5"
-              max="3.0"
+              min="0"
+              max="5"
               step="0.1"
               [value]="carat()"
               (input)="onCaratChange($event)"
               aria-label="Kích thước đá tính bằng carat"
             />
             <div class="carat-control__range-labels">
-              <span>0.5ct</span>
-              <span>1ct</span>
-              <span>5.0ct</span>
-              <span>6.0ct</span>
+              <span>0</span>
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
             </div>
           </div>
 
           <div class="price-breakdown">
             <div class="price-breakdown__row">
               <span>Phôi Di Sản</span>
-              <span>{{ formatVnd(MOUNT_FEE) }}</span>
+              <span>{{ formatVnd(MOUNT_FEE) }}<u>đ</u></span>
             </div>
             <div class="price-breakdown__row">
               <span>{{ selectedMaterial().label }}</span>
-              <span>{{ formatVnd(selectedMaterial().priceVnd) }}</span>
+              <span>{{ formatVnd(selectedMaterial().priceVnd) }}<u>đ</u></span>
             </div>
             <div class="price-breakdown__row">
               <span>{{ selectedStone().label }} ({{ carat() }}ct)</span>
-              <span>{{ formatVnd(stonePrice()) }}</span>
+              <span>{{ formatVnd(stonePrice()) }}<u>đ</u></span>
             </div>
+            <div class="price-breakdown__row">
+              <span>Công chế tác thủ công</span>
+              <span>{{ formatVnd(CRAFT_FEE) }}<u>đ</u></span>
+            </div>
+            @if (engraveFee() > 0) {
+              <div class="price-breakdown__row">
+                <span>Khắc chữ ({{ engraveCharCount() }} ký tự)</span>
+                <span>{{ formatVnd(engraveFee()) }}<u>đ</u></span>
+              </div>
+            }
             <div class="price-breakdown__divider"></div>
             <div class="price-breakdown__total">
               <span>TỔNG GIÁ TRỊ</span>
-              <strong>{{ formatVnd(MOUNT_FEE + selectedMaterial().priceVnd + stonePrice()) }}</strong>
+              <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
             </div>
           </div>
         }
 
         <div class="studio-card__actions">
           <button class="btn btn--ghost" (click)="goToStep(2)" type="button">← Trước đó</button>
-          <button class="btn btn--primary" (click)="goToStep(4)" type="button">XÁC NHẬN THIẾT KẾ</button>
+          <button class="btn btn--primary" (click)="goToStep(4)" type="button">TIẾP THEO</button>
         </div>
       </div>
     </div>
@@ -335,7 +347,7 @@
 
         <div class="engrave-fee-row">
           <span class="engrave-fee-row__label">PHÍ TRẢ THÊM:</span>
-          <span class="engrave-fee-row__value">{{ engraveFee() > 0 ? formatVnd(engraveFee()) : '0₫' }}</span>
+          <span class="engrave-fee-row__value">{{ engraveFee() > 0 ? formatVnd(engraveFee()) : '0' }}<u>đ</u></span>
         </div>
 
         <div class="studio-card__actions">
@@ -357,7 +369,7 @@
 
         <div class="studio-card__preview">
           <img
-            src="https://www.figma.com/api/mcp/asset/a1f97ec8-6265-4ed5-9229-df98077a79c5"
+            src="/images/studio-ring.png"
             alt="Trang sức tùy chỉnh của bạn"
             class="studio-card__preview-img"
             loading="eager"
@@ -380,14 +392,14 @@
                       <span class="order-card__item-sub">({{ item.subName }})</span>
                     }
                   </span>
-                  <span class="order-card__item-price">{{ formatVnd(item.price) }}</span>
+                  <span class="order-card__item-price">{{ formatVnd(item.price) }}<u>đ</u></span>
                 </li>
               }
             </ul>
             <div class="order-card__divider"></div>
             <div class="order-card__total">
               <span>TỔNG CỘNG</span>
-              <strong>{{ formatVnd(totalPrice()) }}</strong>
+              <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
             </div>
           </div>
 
@@ -438,7 +450,7 @@
 
             <div class="checkout-section">
               <div class="checkout-section__header">
-                <h3 class="checkout-section__title">① THÔNG TIN VẬN CHUYỂN</h3>
+                <h3 class="checkout-section__title"><span class="checkout-section__num">1</span>THÔNG TIN VẬN CHUYỂN</h3>
                 <button class="btn btn--ghost btn--sm" type="button" (click)="shippingExpanded.set(!shippingExpanded())">
                   CHỌN ĐỊA CHỈ {{ shippingExpanded() ? '∧' : '∨' }}
                 </button>
@@ -497,7 +509,7 @@
             </div>
 
             <div class="checkout-section">
-              <h3 class="checkout-section__title">② PHƯƠNG THỨC THANH TOÁN</h3>
+              <h3 class="checkout-section__title"><span class="checkout-section__num">2</span>PHƯƠNG THỨC THANH TOÁN</h3>
               <div class="payment-methods">
                 @for (method of paymentMethods; track method.id) {
                   <button
@@ -525,7 +537,7 @@
 
               <div class="checkout-summary__product">
                 <img
-                  src="https://www.figma.com/api/mcp/asset/48641a6f-72f5-4524-8109-67072e259627"
+                  src="/images/studio-ring.png"
                   alt="Sản phẩm tùy chỉnh"
                   class="checkout-summary__product-img"
                   loading="lazy"
@@ -536,7 +548,7 @@
                     Kích cỡ M | {{ selectedMaterial().label }}
                     @if (selectedStone().id !== 'none') { | {{ selectedStone().label }} {{ carat() }}ct }
                   </p>
-                  <p class="checkout-summary__product-price">SL: {{ formatVnd(totalPrice()) }}</p>
+                  <p class="checkout-summary__product-price">SL: {{ formatVnd(totalPrice()) }}<u>đ</u></p>
                 </div>
               </div>
 
@@ -544,7 +556,7 @@
 
               <div class="checkout-summary__line">
                 <span>Tạm tính</span>
-                <span>{{ formatVnd(totalPrice()) }}</span>
+                <span>{{ formatVnd(totalPrice()) }}<u>đ</u></span>
               </div>
               <div class="checkout-summary__line">
                 <span>Phí vận chuyển</span>
@@ -570,17 +582,17 @@
 
               <div class="checkout-summary__total">
                 <span>TỔNG CỘNG</span>
-                <strong>{{ formatVnd(totalPrice()) }}</strong>
+                <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
               </div>
 
               <div class="checkout-summary__deposit-block">
                 <div class="checkout-summary__deposit-row">
                   <span>50% ĐẶT CỌC BÂY GIỜ</span>
-                  <strong>{{ formatVnd(depositAmount()) }}</strong>
+                  <strong>{{ formatVnd(depositAmount()) }}<u>đ</u></strong>
                 </div>
                 <div class="checkout-summary__deposit-row checkout-summary__deposit-row--remain">
                   <span>SỐ TIỀN CÒN LẠI</span>
-                  <strong>{{ formatVnd(depositAmount()) }}</strong>
+                  <strong>{{ formatVnd(depositAmount()) }}<u>đ</u></strong>
                 </div>
               </div>
 
@@ -608,12 +620,21 @@
   }
 
 </section>
+<app-payment-success-modal
+  [isOpen]="showSuccessModal()"
+  (closed)="showSuccessModal.set(false)"
+/>
 
+<app-payment-fail-modal
+  [isOpen]="showFailModal()"
+  [countdownDisplay]="'00:59:56'"
+  (closed)="showFailModal.set(false)"
+/>
 <!-- Floating price summary (steps 2–5) -->
 @if (priceSummaryVisible()) {
   <div class="studio-price-summary" aria-live="polite">
     <p class="studio-price-summary__label">Tổng giá trị hiện tại</p>
-    <p class="studio-price-summary__amount">{{ priceSummaryAmount() }}</p>
+    <p class="studio-price-summary__amount">{{ priceSummaryAmount() }}<u>đ</u></p>
     <p class="studio-price-summary__detail">{{ priceSummaryDetail() }}</p>
   </div>
 }

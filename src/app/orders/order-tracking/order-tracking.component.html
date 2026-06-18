@@ -1,464 +1,204 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lịch sử đơn hàng | RENGA</title>
-  <link rel="stylesheet" href="../../css/main.css" />
-  <link rel="stylesheet" href="../../css/pages/order-list.css" />
-  <link rel="stylesheet" href="../../css/components/order-modals.css" />
-</head>
-<body class="order-list-page">
+<div class="order-tracking-page">
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header__inner">
-      <div class="site-header__top">
-        <a href="../../index.html" class="site-header__logo">
-          <img class="site-header__logo-icon"
-            src="https://www.figma.com/api/mcp/asset/7843ab26-ea6a-4365-adaf-8d8cb67731ba"
-            alt="RENGA" />
-        </a>
-        <div class="site-header__actions">
-          <a href="gio-hang.html" class="site-header__action-btn" aria-label="Giỏ hàng">
-            <img src="https://www.figma.com/api/mcp/asset/3bca4fc9-ffe2-4878-82e6-90e16688e10a" alt="Giỏ hàng" />
-          </a>
-          <a href="lich-su-don-hang.html" class="site-header__action-btn" aria-label="Đơn hàng">
-            <img src="https://www.figma.com/api/mcp/asset/393ab19c-59b0-462c-b931-7c540392ba8a" alt="Đơn hàng" />
-          </a>
-          <a href="../profile/ho-so.html" class="site-header__action-btn" aria-label="Tài khoản">
-            <img class="site-header__avatar"
-              src="https://www.figma.com/api/mcp/asset/8b20f83c-eed9-4f35-919e-973ebd4830b7"
-              alt="Tài khoản" />
-          </a>
+  <div class="order-tracking-top">
+    <div class="order-tracking-top__inner">
+
+      <!-- Breadcrumb -->
+      <nav class="order-tracking-breadcrumb" aria-label="Điều hướng trang">
+        <a routerLink="/" class="order-tracking-breadcrumb__item">Trang chủ</a>
+        <span class="order-tracking-breadcrumb__sep" aria-hidden="true">›</span>
+        <span class="order-tracking-breadcrumb__item order-tracking-breadcrumb__item--current"
+          aria-current="page">Đơn hàng</span>
+      </nav>
+
+      <!-- Hero -->
+      <div class="order-tracking-hero">
+        <div class="order-tracking-hero__left">
+          <h1 class="order-tracking-hero__title">Danh sách đơn hàng</h1>
+          <p class="order-tracking-desc">
+            Theo dõi các tác phẩm nghệ thuật vượt thời gian bạn đã<br />
+            sở hữu và quản lý các yêu cầu chế tác riêng biệt
+          </p>
+        </div>
+        <div class="order-tracking-hero__right">
+          <a routerLink="/orders/lookup" class="order-tracking-lookup-btn">Tra cứu đơn hàng</a>
+          <div class="order-tracking-member">
+            <span class="order-tracking-member__tier-label">Thành viên ưu tiên</span>
+            <span class="order-tracking-member__tier-value">{{ memberTier() }}</span>
+          </div>
         </div>
       </div>
-      <div class="site-header__bottom">
-        <nav class="site-header__nav" aria-label="Menu chính">
-          <div class="site-header__nav-item">
-            <a href="../../index.html" class="site-header__nav-link">Trang chủ</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/danh-muc-san-pham.html" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../product/bo-suu-tap.html" class="site-header__nav-link">Bộ sưu tập</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../studio/the-studio.html" class="site-header__nav-link">The Studio</a>
-          </div>
-          <div class="site-header__nav-item">
-            <a href="../designer/the-designer.html" class="site-header__nav-link">The Designer</a>
-          </div>
-        </nav>
-        <div class="site-header__search">
-          <img class="site-header__search-icon"
-            src="https://www.figma.com/api/mcp/asset/d254339a-9b1f-497b-b079-7f406ec93e86"
-            alt="" aria-hidden="true" />
-          <input class="site-header__search-input" type="search"
-            placeholder="Tìm kiếm..." aria-label="Tìm kiếm sản phẩm" />
-        </div>
-      </div>
+
     </div>
-  </header>
+  </div>
 
-  <!-- ===== MAIN ===== -->
-  <main>
+  <!-- Filters -->
+  <div class="order-tracking-filters-wrap">
+    <div class="order-tracking-filters">
 
-    <!-- Breadcrumb -->
-    <div class="order-list-bcrumb-wrap">
-      <div class="order-list-bcrumb-wrap__inner">
-        <nav class="order-list-bcrumb" aria-label="Điều hướng trang">
-          <a href="../profile/ho-so.html" class="order-list-bcrumb__item">Tài khoản</a>
-          <img class="order-list-bcrumb__sep"
-            src="https://www.figma.com/api/mcp/asset/84d4296f-a308-4952-965d-087067fc8763"
-            alt="" aria-hidden="true" />
-          <span class="order-list-bcrumb__item order-list-bcrumb__item--current" aria-current="page">Đơn hàng</span>
-        </nav>
-      </div>
-    </div>
-
-    <!-- Hero row -->
-    <div class="order-list-hero">
-      <div class="order-list-hero__left">
-        <h1 class="order-list-hero__title">Đơn hàng của bạn</h1>
-        <p class="order-list-hero__desc">Xem và quản lý tất cả đơn hàng trang sức của bạn.</p>
-      </div>
-      <div class="order-list-hero__right">
-        <a href="#" class="order-list-lookup-btn">TRA CỨU ĐƠN HÀNG</a>
-        <div>
-          <p class="order-list-tier__label">HẠNG THÀNH VIÊN</p>
-          <p class="order-list-tier__value">Pearl Member</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="order-list-filters-wrap">
-      <div class="order-list-filters">
-        <div class="order-list-filter">
-          <label class="order-list-filter__label" for="filter-status">Trạng thái</label>
-          <select class="order-list-filter__select" id="filter-status" name="status">
-            <option value="">Tất cả</option>
-            <option value="shipping">Đang giao</option>
-            <option value="in-progress">Đang xử lý</option>
-            <option value="completed">Hoàn tất</option>
-            <option value="cancelled">Đã hủy</option>
-          </select>
-        </div>
-        <div class="order-list-filter">
-          <label class="order-list-filter__label" for="filter-type">Loại đơn</label>
-          <select class="order-list-filter__select" id="filter-type" name="type">
-            <option value="">Tất cả</option>
+      <div class="order-tracking-filter">
+        <label class="order-tracking-filter__label" for="filter-type">Loại đơn hàng</label>
+        <div class="order-tracking-filter__select-wrap">
+          <select id="filter-type" class="order-tracking-filter__select"
+            [value]="pendingType()"
+            (change)="onFilterTypeChange($event)">
+            <option value="">Tất cả các loại</option>
             <option value="standard">Tiêu chuẩn</option>
             <option value="bespoke">Tùy biến</option>
           </select>
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
         </div>
-        <div class="order-list-filter">
-          <label class="order-list-filter__label" for="filter-year">Năm</label>
-          <select class="order-list-filter__select" id="filter-year" name="year">
-            <option value="">Tất cả</option>
-            <option value="2026">2026</option>
-            <option value="2025">2025</option>
-          </select>
-        </div>
-        <button class="order-list-filters__apply" type="button">
-          <img class="order-list-filters__apply-icon"
-            src="https://www.figma.com/api/mcp/asset/2ca05f25-ac78-41c1-96f4-a6e4e19f92cc"
-            alt="" aria-hidden="true" />
-          ÁP DỤNG
-        </button>
       </div>
-    </div>
 
-    <!-- Orders table -->
-    <div class="order-list-table-wrap">
-      <table class="order-list-table">
+      <div class="order-tracking-filter">
+        <label class="order-tracking-filter__label" for="filter-status">Trạng thái</label>
+        <div class="order-tracking-filter__select-wrap">
+          <select id="filter-status" class="order-tracking-filter__select"
+            [value]="pendingStatus()"
+            (change)="onFilterStatusChange($event)">
+            <option value="">Tất cả trạng thái</option>
+            <option value="shipping">Đang giao hàng</option>
+            <option value="in-progress">Đang chế tác</option>
+            <option value="completed">Đã hoàn thành</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+        </div>
+      </div>
+
+      <div class="order-tracking-filter">
+        <label class="order-tracking-filter__label" for="filter-time">Thời gian</label>
+        <div class="order-tracking-filter__select-wrap">
+          <select id="filter-time" class="order-tracking-filter__select"
+            [value]="pendingTime()"
+            (change)="onFilterTimeChange($event)">
+            <option value="3m">3 tháng gần nhất</option>
+            <option value="6m">6 tháng gần nhất</option>
+            <option value="1y">1 năm gần nhất</option>
+            <option value="all">Tất cả</option>
+          </select>
+          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+        </div>
+      </div>
+
+      <div class="order-tracking-filters__actions">
+        <button class="order-tracking-filters__apply" type="button" (click)="applyFilters()">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+            <line x1="1" y1="1" x2="13" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="3" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="5" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Áp dụng bộ lọc
+        </button>
+        @if (hasActiveFilters()) {
+          <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
+            Xóa bộ lọc
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Orders table -->
+  <div class="order-tracking-table-wrap">
+    <!-- div container căn max-width, giống .order-tracking-top__inner -->
+    <div class="order-tracking-table__container">
+      <table class="order-tracking-table">
         <thead>
-          <tr>
-            <th class="col-id">Mã đơn hàng</th>
-            <th class="col-date">Ngày đặt</th>
-            <th class="col-product">Sản phẩm</th>
-            <th class="col-amount">Giá trị</th>
-            <th class="col-status">Trạng thái</th>
-            <th class="col-action">Thao tác</th>
+          <tr class="order-tracking-table__head-row">
+            <th class="order-tracking-table__th order-tracking-table__th--id">Mã đơn hàng</th>
+            <th class="order-tracking-table__th order-tracking-table__th--date">Ngày đặt</th>
+            <th class="order-tracking-table__th order-tracking-table__th--product">Loại sản phẩm</th>
+            <th class="order-tracking-table__th order-tracking-table__th--amount">Tổng giá trị</th>
+            <th class="order-tracking-table__th order-tracking-table__th--status">Trạng thái</th>
+            <th class="order-tracking-table__th order-tracking-table__th--action"></th>
           </tr>
         </thead>
         <tbody>
 
-          <tr>
-            <td class="col-id">
-              <span class="order-list-table__id-value">#AH-8829104</span>
-              <span class="order-list-table__id-sub">Tiêu chuẩn</span>
-            </td>
-            <td class="col-date">24/10/2026</td>
-            <td class="col-product">Celestial Gold Choker × 1<br>Midnight Sapphire Band × 1</td>
-            <td class="col-amount">
-              <span class="order-list-table__amount">20.700.000đ</span>
-            </td>
-            <td class="col-status">
-              <span class="order-badge order-badge--shipping">Đang giao</span>
-            </td>
-            <td class="col-action">
-              <a href="chi-tiet-don-hang.html" class="order-list-detail-link">Xem chi tiết</a>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="col-id">
-              <span class="order-list-table__id-value">#AH-8824019</span>
-              <span class="order-list-table__id-sub">Tùy biến</span>
-            </td>
-            <td class="col-date">12/09/2026</td>
-            <td class="col-product">Bespoke Diamond Ring "Trúc" × 1</td>
-            <td class="col-amount">
-              <span class="order-list-table__amount">45.000.000đ</span>
-            </td>
-            <td class="col-status">
-              <span class="order-badge order-badge--in-progress">Đang chế tác</span>
-            </td>
-            <td class="col-action">
-              <a href="chi-tiet-don-hang-tuy-bien.html" class="order-list-detail-link">Xem chi tiết</a>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="col-id">
-              <span class="order-list-table__id-value">#AH-8817553</span>
-              <span class="order-list-table__id-sub">Tiêu chuẩn</span>
-            </td>
-            <td class="col-date">30/07/2026</td>
-            <td class="col-product">Lunar Pearl Earrings × 2</td>
-            <td class="col-amount">
-              <span class="order-list-table__amount">9.800.000đ</span>
-            </td>
-            <td class="col-status">
-              <span class="order-badge order-badge--completed">Hoàn tất</span>
-            </td>
-            <td class="col-action">
-              <a href="chi-tiet-don-hang.html" class="order-list-detail-link">Xem chi tiết</a>
-            </td>
-          </tr>
-
-          <tr class="row--cancelled">
-            <td class="col-id">
-              <span class="order-list-table__id-value">#AH-8812200</span>
-              <span class="order-list-table__id-sub">Tiêu chuẩn</span>
-            </td>
-            <td class="col-date">05/06/2026</td>
-            <td class="col-product">Aurora Sapphire Bracelet × 1</td>
-            <td class="col-amount">
-              <span class="order-list-table__amount">15.200.000đ</span>
-            </td>
-            <td class="col-status">
-              <span class="order-badge order-badge--cancelled">Đã hủy</span>
-            </td>
-            <td class="col-action">
-              <a href="chi-tiet-don-hang.html" class="order-list-detail-link">Xem chi tiết</a>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="col-id">
-              <span class="order-list-table__id-value">#AH-8808771</span>
-              <span class="order-list-table__id-sub">Tiêu chuẩn</span>
-            </td>
-            <td class="col-date">18/04/2026</td>
-            <td class="col-product">Soleil Gold Pendant × 1</td>
-            <td class="col-amount">
-              <span class="order-list-table__amount">7.400.000đ</span>
-            </td>
-            <td class="col-status">
-              <span class="order-badge order-badge--completed">Hoàn tất</span>
-            </td>
-            <td class="col-action">
-              <a href="chi-tiet-don-hang.html" class="order-list-detail-link">Xem chi tiết</a>
-            </td>
-          </tr>
+          @for (order of displayedOrders(); track order.id) {
+            <tr [class]="rowClass(order.status)">
+              <td class="order-tracking-table__td order-tracking-table__td--id">
+                <span class="order-tracking-table__order-id">{{ order.id }}</span>
+                <span class="order-tracking-table__order-sub">{{ order.sub }}</span>
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--date">
+                {{ order.date }}
+              </td>
+              <td class="order-tracking-table__td">
+                {{ order.product }}
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--amount">
+                {{ order.amount | number: '1.0-0' : 'vi' }}<u>đ</u>
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--status">
+                <span [class]="badgeClass(order.status)">
+                  {{ statusLabel[order.status] }}
+                </span>
+              </td>
+              <td class="order-tracking-table__td order-tracking-table__td--action">
+                <a
+                  [routerLink]="order.type === 'bespoke'
+                    ? ['/orders', 'custom', cleanId(order.id)]
+                    : ['/orders', cleanId(order.id)]"
+                  class="order-tracking-table__detail-link"
+                >Chi tiết</a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="order-tracking-table__empty" colspan="6">
+                Không có đơn hàng nào phù hợp
+              </td>
+            </tr>
+          }
 
         </tbody>
       </table>
     </div>
-
-    <!-- Pagination -->
-    <div class="order-list-pagination-wrap">
-      <div class="order-list-pagination">
-        <p class="order-list-pagination__info">Hiển thị 1–5 / 12 đơn hàng</p>
-        <div class="order-list-pagination__pages">
-          <button class="order-list-pagination__btn order-list-pagination__btn--prev"
-            aria-label="Trang trước" disabled>
-            <img class="order-list-pagination__arrow"
-              src="https://www.figma.com/api/mcp/asset/c582cdde-0dd9-4cf0-86bb-336fcd12dcd9"
-              alt="" aria-hidden="true" />
-          </button>
-          <button class="order-list-pagination__btn is-active" data-page="1">1</button>
-          <button class="order-list-pagination__btn" data-page="2">2</button>
-          <button class="order-list-pagination__btn" data-page="3">3</button>
-          <button class="order-list-pagination__btn order-list-pagination__btn--next"
-            aria-label="Trang sau">
-            <img class="order-list-pagination__arrow"
-              src="https://www.figma.com/api/mcp/asset/b0fb3f41-4355-436f-9c00-c97b13a5f117"
-              alt="" aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__grid">
-        <div class="site-footer__brand-col">
-          <a href="../../index.html" class="site-footer__brand">RENGA</a>
-          <p class="site-footer__tagline">Tôn vinh vẻ đẹp độc bản của mỗi cá nhân qua những tác phẩm trang sức được chế tác tỉ mỉ.</p>
-          <div class="site-footer__social">
-            <a href="#" class="site-footer__social-link" aria-label="Email">
-              <img src="https://www.figma.com/api/mcp/asset/6d3ce4cc-378a-45f8-8ead-e6c4adf8c06c" alt="Email" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Điện thoại">
-              <img src="https://www.figma.com/api/mcp/asset/156c8418-f7a2-4cb0-98fc-6dda0d0c9ada" alt="Phone" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Facebook">
-              <img src="https://www.figma.com/api/mcp/asset/7b91023b-7680-4cd8-b1e2-14b4d5d0f742" alt="Facebook" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="Instagram">
-              <img src="https://www.figma.com/api/mcp/asset/2da9309f-0588-4ed8-b3bc-c84f9fd6b96e" alt="Instagram" />
-            </a>
-            <a href="#" class="site-footer__social-link" aria-label="TikTok">
-              <img src="https://www.figma.com/api/mcp/asset/1e9564c5-1e21-4f2b-bcc5-9779846a7e4e" alt="TikTok" />
-            </a>
-          </div>
-        </div>
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">VỀ CHÚNG TÔI</p>
-          <a href="#" class="site-footer__link">Câu chuyện thương hiệu</a>
-          <a href="#" class="site-footer__link">The Studio</a>
-          <a href="#" class="site-footer__link">The Designer</a>
-          <a href="#" class="site-footer__link">Vật liệu bền vững</a>
-        </div>
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
-          <a href="#" class="site-footer__link">Chính sách bảo hành</a>
-          <a href="#" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-          <a href="#" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
-          <a href="#" class="site-footer__link">Câu hỏi thường gặp</a>
-        </div>
-        <div class="site-footer__col">
-          <p class="site-footer__col-title">NEWSLETTER</p>
-          <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền.</p>
-          <form class="newsletter-form" novalidate>
-            <div class="newsletter-form__field">
-              <input class="newsletter-form__input" type="email" placeholder="Email của bạn"
-                aria-label="Địa chỉ email đăng ký nhận tin" />
-              <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-                <img src="https://www.figma.com/api/mcp/asset/2b06ff60-07d1-42b1-93e0-2b5945c90e36" alt="" aria-hidden="true" />
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="site-footer__bottom">
-      <div class="site-footer__bottom-inner">
-        <p class="site-footer__copyright">© 2026 RENGA. All rights reserved.</p>
-        <div class="site-footer__bottom-links">
-          <a href="#" class="site-footer__bottom-link">Điều khoản bảo mật</a>
-          <a href="#" class="site-footer__bottom-link">Điều kiện sử dụng</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===== CHAT FAB ===== -->
-  <button class="chat-fab" aria-label="Mở chat hỗ trợ">
-    <img src="https://www.figma.com/api/mcp/asset/6a795c3a-1a85-4587-882b-bfe6ee2bd089" alt="Chat" />
-  </button>
-
-  <!-- ===== ORDER MODALS ===== -->
-  <div id="order-modal-backdrop" class="order-modal-backdrop" role="dialog" aria-modal="true">
-
-    <!-- Cancel order modal (222:1606) -->
-    <div class="order-modal order-modal--cancel" id="order-modal-cancel" role="document">
-      <div class="cancel-modal__header">
-        <div class="cancel-modal__header-text">
-          <h2 class="cancel-modal__title">Hủy đơn hàng</h2>
-          <p class="cancel-modal__order-id">#AH-8829104</p>
-        </div>
-        <button class="omodal-close" type="button" data-close-order-modal aria-label="Đóng">
-          <img class="omodal-close__icon"
-            src="https://www.figma.com/api/mcp/asset/ebc76efc-7e15-43ec-ada6-dac2aea87176"
-            alt="" aria-hidden="true" />
-        </button>
-      </div>
-      <div class="cancel-modal__policy">
-        <p class="cancel-modal__policy-text">Đơn hàng đã thanh toán sẽ được hoàn tiền trong vòng 7–14 ngày làm việc sau khi xác nhận hủy.</p>
-      </div>
-      <p class="cancel-modal__reason-heading">LÝ DO HỦY ĐƠN</p>
-      <form class="cancel-modal__form">
-        <div class="cancel-reasons" role="group" aria-label="Chọn lý do hủy đơn">
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="changed-mind" />
-            <span class="cancel-reason__label">Tôi đổi ý / không muốn mua nữa</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="found-cheaper" />
-            <span class="cancel-reason__label">Tìm được sản phẩm tương tự với giá rẻ hơn</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="wrong-item" />
-            <span class="cancel-reason__label">Đặt nhầm sản phẩm</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="delivery-too-long" />
-            <span class="cancel-reason__label">Thời gian giao hàng quá lâu</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="payment-issue" />
-            <span class="cancel-reason__label">Gặp vấn đề về thanh toán</span>
-          </label>
-          <label class="cancel-reason">
-            <input class="cancel-reason__checkbox" type="checkbox" value="other" />
-            <span class="cancel-reason__label">Lý do khác</span>
-          </label>
-          <textarea class="cancel-reasons__other" hidden rows="3"
-            placeholder="Nhập lý do của bạn..."
-            style="width:100%;border:1px solid #c4c7c7;padding:12px;font-family:inherit;font-size:15px;resize:vertical;"></textarea>
-        </div>
-        <div class="cancel-modal__actions">
-          <button class="cancel-modal__confirm" type="submit">Xác nhận hủy</button>
-          <button class="cancel-modal__dismiss" type="button" data-close-order-modal>Giữ đơn hàng</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Cancel success popup (222:1537) -->
-    <div class="order-modal order-modal--cancel-success" id="order-modal-cancel-success" role="document">
-      <img class="cancel-success__icon"
-        src="https://www.figma.com/api/mcp/asset/b39e4135-68c1-4dfe-b7b6-8b8aa22955d4"
-        alt="Hủy đơn thành công" />
-      <h2 class="cancel-success__title">Đã hủy đơn hàng</h2>
-      <p class="cancel-success__desc">Yêu cầu hủy của bạn đã được ghi nhận. <strong>Hoàn tiền sẽ được xử lý trong 7–14 ngày làm việc.</strong></p>
-      <div class="cancel-success__card">
-        <div class="cancel-success__img-col">
-          <img class="cancel-success__product-img"
-            src="https://www.figma.com/api/mcp/asset/9610ea2a-71da-4aaa-990e-602c8b28e146"
-            alt="Celestial Gold Choker" />
-          <div class="cancel-success__img-overlay"></div>
-          <span class="cancel-success__status-tag">ĐÃ HỦY</span>
-        </div>
-        <div class="cancel-success__info-col">
-          <p class="cancel-success__product-label">BST RENGA — #AH-8829104</p>
-          <h3 class="cancel-success__product-name">Celestial Gold Choker</h3>
-          <p class="cancel-success__product-spec">Vàng 18K · Dây chuyền cổ</p>
-          <div class="cancel-success__card-footer">
-            <div>
-              <span class="cancel-success__refund-label">HOÀN TIỀN</span>
-              <span class="cancel-success__refund-amount">20.700.000đ</span>
-            </div>
-            <div>
-              <span class="cancel-success__status-label">TRẠNG THÁI</span>
-              <span class="cancel-success__status-value">ĐANG XỬ LÝ</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cancel-success__actions">
-        <a href="lich-su-don-hang.html" class="cancel-success__btn-primary">XEM LỊCH SỬ ĐƠN HÀNG</a>
-        <a href="../../index.html" class="cancel-success__btn-outline">TIẾP TỤC MUA SẮM</a>
-      </div>
-    </div>
-
-    <!-- Cancel fail popup (222:1589) -->
-    <div class="order-modal order-modal--cancel-fail" id="order-modal-cancel-fail" role="document">
-      <div class="cancel-fail__top">
-        <img class="cancel-fail__icon"
-          src="https://www.figma.com/api/mcp/asset/49f6a9bf-99ec-4932-90a9-388eee5ee569"
-          alt="Hủy đơn không thành công" />
-        <h2 class="cancel-fail__title">Không thể hủy đơn hàng</h2>
-      </div>
-      <div class="cancel-fail__body">
-        <div class="cancel-fail__img-col">
-          <img class="cancel-fail__product-img"
-            src="https://www.figma.com/api/mcp/asset/ea16e6c2-0d3c-4ce6-9b33-8d921ab42f68"
-            alt="Sản phẩm" />
-          <span class="cancel-fail__status-tag">ĐANG GIAO HÀNG</span>
-        </div>
-        <div class="cancel-fail__info-col">
-          <p class="cancel-fail__desc">Đơn hàng của bạn đã chuyển sang giai đoạn <strong>đang giao hàng</strong> và không thể hủy tại thời điểm này. Vui lòng liên hệ bộ phận hỗ trợ để được tư vấn.</p>
-          <a href="#" class="cancel-fail__btn-primary">LIÊN HỆ HỖ TRỢ</a>
-          <button class="cancel-fail__btn-outline" type="button" data-close-order-modal>QUAY LẠI ĐƠN HÀNG</button>
-          <a href="#" class="cancel-fail__policy-link">Chính sách đổi trả &amp; hoàn tiền</a>
-        </div>
-      </div>
-    </div>
-
   </div>
-  <!-- /order-modal-backdrop -->
 
-  <script src="../../js/components/order-modals.js"></script>
-  <script src="../../js/pages/order-list.js"></script>
+  <!-- Pagination -->
+  <div class="order-tracking-pagination-wrap">
+    <div class="order-tracking-pagination">
+      <p class="order-tracking-pagination__info">{{ paginationInfo() }}</p>
+      <div class="order-tracking-pagination__pages">
 
-</body>
-</html>
+        <button
+          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+          aria-label="Trang trước"
+          [disabled]="currentPage() === 1"
+          (click)="goToPage(currentPage() - 1)"
+        >
+          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+            <path d="M6 1L1 5.5L6 10" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        @for (page of pageNumbers(); track page) {
+          <button
+            class="order-tracking-pagination__btn"
+            [class.order-tracking-pagination__btn--active]="page === currentPage()"
+            (click)="goToPage(page)"
+          >{{ page }}</button>
+        }
+
+        <button
+          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+          aria-label="Trang sau"
+          [disabled]="currentPage() === totalPages()"
+          (click)="goToPage(currentPage() + 1)"
+        >
+          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+            <path d="M1 1L6 5.5L1 10" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+</div>

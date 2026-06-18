@@ -1,11 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-phone-not-found-modal',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  encapsulation: ViewEncapsulation.None,
+  imports: [RouterLink],
   templateUrl: './phone-not-found-modal.component.html',
   styleUrl: './phone-not-found-modal.component.css',
 })
-export class PhoneNotFoundModalComponent {}
+export class PhoneNotFoundModalComponent {
+  @Output() closed = new EventEmitter<void>();
+}
