@@ -1,3 +1,202 @@
-<div class="voucher-management-page">
-  <p>voucher-management placeholder</p>
+<div class="voucher-page">
+  <!-- Page Header -->
+  <header class="voucher-page__header">
+    <div class="voucher-page__title-group">
+      <h1 class="voucher-page__title">Quản lý Voucher</h1>
+      <p class="voucher-page__subtitle">Cấu hình và quản lý các mã giảm giá</p>
+    </div>
+  </header>
+
+  <!-- Top Toolbar (Search & Create) -->
+  <div class="voucher-page__toolbar">
+    <div class="search-box">
+      <!-- Icon Search -->
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="search-input" placeholder="Tìm kiếm">
+    </div>
+    <button class="btn btn--black" (click)="openModal()">+ TẠO VOUCHER MỚI</button>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="voucher-page__filters-bar">
+    <div class="filter-group">
+      <label class="filter-label">TRẠNG THÁI</label>
+      <select class="filter-select"><option>Tất cả</option></select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">LOẠI GIẢM GIÁ</label>
+      <select class="filter-select"><option>Tất cả</option></select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">THỜI GIAN</label>
+      <div class="filter-date-group">
+        <input type="text" class="filter-input-date" placeholder="mm/dd/yyyy">
+        <span class="filter-to">to</span>
+        <input type="text" class="filter-input-date" placeholder="mm/dd/yyyy">
+      </div>
+    </div>
+    <button class="btn btn--primary-solid filter-clear-btn">XOÁ BỘ LỌC</button>
+  </div>
+
+  <!-- Data Table -->
+  <div class="voucher-table">
+    <div class="voucher-table__header">
+      <span>MÃ VOUCHER</span>
+      <span>CHIẾN DỊCH</span>
+      <span>LOẠI</span>
+      <span>LƯỢT SỬ DỤNG</span>
+      <span>NGÀY HẾT HẠN</span>
+      <span>TRẠNG THÁI</span>
+      <span class="text-right">THAO TÁC</span>
+    </div>
+
+    <div class="voucher-table__body">
+      @for (voucher of vouchers(); track voucher.id) {
+        <div class="voucher-table__row">
+          
+          <div class="table-cell">
+            <p class="table-cell__code">{{ voucher.code }}</p>
+          </div>
+
+          <div class="table-cell">
+            <p class="table-cell__campaign">{{ voucher.campaign }}</p>
+          </div>
+
+          <div class="table-cell">
+            <span class="badge-type badge-type--{{ voucher.type }}">{{ voucher.typeLabel }}</span>
+          </div>
+
+          <div class="table-cell">
+            <p class="table-cell__usage">{{ voucher.used }} / {{ voucher.limit }}</p>
+          </div>
+
+          <div class="table-cell">
+            <p class="table-cell__date">{{ voucher.expiryDate }}</p>
+          </div>
+
+          <div class="table-cell">
+            <div class="badge-status badge-status--{{ voucher.status }}">
+              <span class="badge-status__dot"></span>
+              {{ voucher.status === 'active' ? 'ACTIVE' : 'EXPIRED' }}
+            </div>
+          </div>
+
+          <div class="table-cell table-cell--actions text-right">
+            <button class="action-icon-btn" aria-label="Sửa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="action-icon-btn" aria-label="Xóa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="voucher-page__pagination">
+    <p class="voucher-page__pagination-info">HIỂN THỊ 1-10 TRÊN 258 VOUCHERS</p>
+    <div class="voucher-page__pagination-controls">
+      <button class="pagination-btn">&lsaquo;</button>
+      <button class="pagination-btn pagination-btn--active">1</button>
+      <button class="pagination-btn">2</button>
+      <button class="pagination-btn">3</button>
+      <button class="pagination-btn">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
+
+<!-- ================= MODAL THIẾT LẬP VOUCHER ================= -->
+@if (isModalOpen()) {
+  <div class="modal-overlay">
+    <div class="modal-container" [formGroup]="voucherForm">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2 class="modal-title">Thiết lập Voucher</h2>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <!-- Modal Body (Form) -->
+      <div class="modal-body">
+        
+        <div class="form-group form-group--full">
+          <label class="form-label">TÊN CHIẾN DỊCH</label>
+          <input type="text" class="form-input" formControlName="campaignName" placeholder="Ví dụ: Sale mùa hè 2024">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">MÃ VOUCHER</label>
+          <div class="form-input-with-btn">
+            <input type="text" class="form-input" formControlName="voucherCode" placeholder="Nhập mã hoặc tự động tạo">
+            <button class="btn btn--black" (click)="generateCode()">GENERATE</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">LOẠI GIẢM GIÁ</label>
+            <select class="form-input" formControlName="discountType">
+              <option value="percent">Phần trăm (%)</option>
+              <option value="fixed">Số tiền cố định</option>
+              <option value="freeship">Miễn phí vận chuyển</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">GIÁ TRỊ GIẢM GIÁ</label>
+            <input type="number" class="form-input" formControlName="discountValue" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ĐƠN HÀNG TỐI THIỂU (VND)</label>
+            <input type="number" class="form-input" formControlName="minOrder" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GIẢM TỐI ĐA (VND)</label>
+            <input type="text" class="form-input" formControlName="maxDiscount" placeholder="Không giới hạn">
+          </div>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">GIỚI HẠN LƯỢT DÙNG</label>
+          <input type="number" class="form-input" formControlName="usageLimit" placeholder="Số lượng mã phát hành">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">NGÀY BẮT ĐẦU</label>
+            <input type="text" class="form-input" formControlName="startDate" placeholder="mm/dd/yyyy">
+          </div>
+          <div class="form-group">
+            <label class="form-label">NGÀY HẾT HẠN</label>
+            <input type="text" class="form-input" formControlName="endDate" placeholder="mm/dd/yyyy">
+          </div>
+        </div>
+
+        <!-- Toggle Switch -->
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-label">Trạng thái hoạt động</p>
+            <p class="form-toggle-sub">Kích hoạt Voucher ngay sau khi lưu</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" formControlName="isActive">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary-solid" (click)="saveVoucher()">LƯU THÔNG TIN</button>
+      </div>
+
+    </div>
+  </div>
+}

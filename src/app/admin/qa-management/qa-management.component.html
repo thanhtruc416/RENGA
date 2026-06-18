@@ -1,3 +1,99 @@
-<div class="qa-management-page">
-  <p>qa-management placeholder</p>
+<div class="qa-page">
+  <!-- Page Header -->
+  <header class="qa-page__header">
+    <h1 class="qa-page__title">Kiểm duyệt và quản lý Q&A</h1>
+    <p class="qa-page__subtitle">Trả lời các thắc mắc của khách hàng</p>
+  </header>
+
+  <!-- Statistics Section -->
+  <div class="qa-page__stats">
+    @for (stat of stats(); track stat.id) {
+      <div class="stat-card" [class.stat-card--warning]="stat.isWarning">
+        <p class="stat-card__label">{{ stat.label }}</p>
+        <div class="stat-card__value-group">
+          <span class="stat-card__value">{{ stat.value }}</span>
+          @if (stat.subtext) {
+            <span class="stat-card__subtext">{{ stat.subtext }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Tabs -->
+  <nav class="qa-page__tabs">
+    <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'pending'" (click)="changeTab('pending')">
+      Câu hỏi chờ trả lời (18)
+    </button>
+    <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'replied'" (click)="changeTab('replied')">
+      Đã phản hồi (42)
+    </button>
+    <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'hidden'" (click)="changeTab('hidden')">
+      Câu hỏi bị ẩn
+    </button>
+  </nav>
+
+  <!-- Questions List (Gắn FormGroup tổng ở đây) -->
+  <div class="qa-page__list" [formGroup]="replyForm">
+    @for (question of questions(); track question.id) {
+      <article class="question-card">
+        
+        <!-- Cột Trái: Thông tin khách hàng -->
+        <div class="question-card__customer">
+          <img class="question-card__avatar" [src]="question.customer.avatarUrl" [alt]="question.customer.name" loading="lazy" />
+          <div class="question-card__customer-info">
+            <p class="question-card__customer-name">{{ question.customer.name }}</p>
+            <p class="question-card__customer-type">{{ question.customer.type }}</p>
+          </div>
+          <!-- Dùng DatePipe format trực tiếp trên template -->
+          <p class="question-card__date">{{ question.date | date:'dd/MM/yyyy - HH:mm' }}</p>
+        </div>
+
+        <!-- Cột Giữa: Sản phẩm & Nội dung câu hỏi -->
+        <div class="question-card__content">
+          <div class="question-card__product">
+            <img class="question-card__product-img" [src]="question.product.imageUrl" [alt]="question.product.name" loading="lazy" />
+            <div class="question-card__product-detail">
+              <span class="question-card__tag">SẢN PHẨM</span>
+              <p class="question-card__product-name">{{ question.product.name }}</p>
+            </div>
+          </div>
+
+          <div class="question-card__qna">
+            <span class="question-card__tag">CÂU HỎI</span>
+            <p class="question-card__text">{{ question.questionText }}</p>
+            
+            <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
+            <!-- Gắn formControlName bằng ID của câu hỏi -->
+            <textarea 
+              class="question-card__textarea" 
+              [formControlName]="question.id"
+              placeholder="Nhập câu trả lời...">
+            </textarea>
+          </div>
+        </div>
+
+        <!-- Cột Phải: Các nút thao tác -->
+        <div class="question-card__actions">
+          <button class="btn btn--primary" (click)="submitReply(question.id)">GỬI PHẢN HỒI</button>
+          <button class="btn btn--outline" (click)="hideQuestion(question.id)">ẨN CÂU HỎI</button>
+        </div>
+      </article>
+    } @empty {
+      <!-- Fallback giao diện khi mảng questions rỗng -->
+      <p class="qa-page__empty">Không có câu hỏi nào trong mục này.</p>
+    }
+  </div>
+
+  <!-- Pagination -->
+  <footer class="qa-page__pagination">
+    <p class="qa-page__pagination-info">HIỂN THỊ 1-10 TRÊN 18 CÂU HỎI</p>
+    <div class="qa-page__pagination-controls">
+      <button class="pagination-btn">&lsaquo;</button>
+      <button class="pagination-btn pagination-btn--active">1</button>
+      <button class="pagination-btn">2</button>
+      <button class="pagination-btn">3</button>
+      <button class="pagination-btn">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
