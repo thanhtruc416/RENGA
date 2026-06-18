@@ -21,21 +21,34 @@
   <div class="voucher-page__filters-bar">
     <div class="filter-group">
       <label class="filter-label">TRẠNG THÁI</label>
-      <select class="filter-select"><option>Tất cả</option></select>
+      <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+        <option value="">Tất cả</option>
+        <option value="active">Active</option>
+        <option value="expired">Expired</option>
+      </select>
     </div>
     <div class="filter-group">
       <label class="filter-label">LOẠI GIẢM GIÁ</label>
-      <select class="filter-select"><option>Tất cả</option></select>
+      <select class="filter-select" [value]="filterType()" (change)="filterType.set($any($event.target).value)">
+        <option value="">Tất cả</option>
+        <option value="percent">Phần trăm</option>
+        <option value="fixed">Cố định</option>
+        <option value="freeship">Freeship</option>
+      </select>
     </div>
     <div class="filter-group">
       <label class="filter-label">THỜI GIAN</label>
       <div class="filter-date-group">
-        <input type="text" class="filter-input-date" placeholder="mm/dd/yyyy">
-        <span class="filter-to">to</span>
-        <input type="text" class="filter-input-date" placeholder="mm/dd/yyyy">
+        <input type="date" class="filter-input-date" [value]="filterDateFrom()" (change)="filterDateFrom.set($any($event.target).value)">
+        <span class="filter-to">→</span>
+        <input type="date" class="filter-input-date" [value]="filterDateTo()" (change)="filterDateTo.set($any($event.target).value)">
       </div>
     </div>
-    <button class="btn btn--primary-solid filter-clear-btn">XOÁ BỘ LỌC</button>
+    @if (filterApplied()) {
+      <button class="btn vm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="btn vm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
   </div>
 
   <!-- Data Table -->
@@ -51,7 +64,7 @@
     </div>
 
     <div class="voucher-table__body">
-      @for (voucher of vouchers(); track voucher.id) {
+      @for (voucher of filteredVouchers(); track voucher.id) {
         <div class="voucher-table__row">
           
           <div class="table-cell">

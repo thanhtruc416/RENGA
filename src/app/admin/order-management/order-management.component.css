@@ -66,8 +66,8 @@
 
 .om__search-wrap {
   position: relative;
-  flex: 1;
-  min-width: 220px;
+  flex: 0 0 auto;
+  width: 520px;
 }
 
 .om__search-icon {
@@ -181,6 +181,40 @@
 
 .om__export-btn:hover { background: #f5f5f5; }
 
+.om__apply-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--color-dark);
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-white);
+  background: var(--color-dark);
+  white-space: nowrap;
+  align-self: flex-end;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.om__apply-btn:hover { background: #333; }
+
+.om__clear-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--color-primary);
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  background: var(--color-white);
+  white-space: nowrap;
+  align-self: flex-end;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.om__clear-btn:hover { background: #fdf2f5; }
+
 /* ── Table ── */
 .om__table-wrap {
   background: var(--color-white);
@@ -269,7 +303,9 @@
 }
 
 .om__action-primary {
-  padding: 6px 14px;
+  width: 90px;
+  padding: 6px 0;
+  text-align: center;
   background: var(--color-primary);
   color: var(--color-white);
   font-size: 11px;
@@ -283,7 +319,9 @@
 .om__action-primary:hover { background: #b05570; }
 
 .om__action-outline {
-  padding: 5px 14px;
+  width: 90px;
+  padding: 5px 0;
+  text-align: center;
   border: 1px solid var(--color-border);
   color: var(--color-dark);
   font-size: 11px;

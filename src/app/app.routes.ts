@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'appointment-history',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./appointment-history/appointment-history.component').then(
         (m) => m.AppointmentHistoryComponent,
@@ -34,11 +36,13 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./profile/profile.component').then((m) => m.ProfileComponent),
   },
   {
     path: 'profile/rewards',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./profile/profile-rewards.component').then(
         (m) => m.ProfileRewardsComponent,
@@ -53,11 +57,13 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./cart/cart.component').then((m) => m.CartComponent),
   },
   {
     path: 'checkout',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
@@ -77,6 +83,7 @@ export const routes: Routes = [
   },
   {
     path: 'orders/custom/:id',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./orders/order-detail-custom/order-detail-custom.component').then(
         (m) => m.OrderDetailCustomComponent,
@@ -84,6 +91,7 @@ export const routes: Routes = [
   },
   {
     path: 'orders/:id',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./orders/order-detail/order-detail.component').then(
         (m) => m.OrderDetailComponent,
@@ -115,6 +123,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/reset-password/reset-password.component').then(
         (m) => m.ResetPasswordComponent,
+      ),
+  },
+  {
+    path: 'quan-tri-vien',
+    loadComponent: () =>
+      import('./admin-login/admin-login.component').then(
+        (m) => m.AdminLoginComponent,
       ),
   },
   {

@@ -30,8 +30,11 @@ secrets.*
 # OS
 # ========================
 .DS_Store
+**/.DS_Store
 Thumbs.db
+**/Thumbs.db
 desktop.ini
+**/desktop.ini
 ehthumbs.db
 
 # ========================
@@ -43,9 +46,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # ========================
-# Test coverage
+# Test / Vitest
 # ========================
 coverage/
+.vitest-cache/
+vitest-results/
+test-results/
 
 # ========================
 # IDE
@@ -58,3 +64,4 @@ coverage/
 .claude/
 *.code-workspace
 *.orig
+*.bak

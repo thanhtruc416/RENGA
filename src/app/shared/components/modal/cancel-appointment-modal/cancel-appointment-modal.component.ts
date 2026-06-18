@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
 
 const CANCEL_REASONS = [
   { value: 'personal', label: 'Thay đổi kế hoạch cá nhân' },
@@ -22,6 +22,10 @@ export class CancelAppointmentModalComponent {
 
   readonly reasons = CANCEL_REASONS;
   readonly selectedReasons = signal<string[]>([]);
+  readonly otherReason = signal('');
+  readonly MAX_OTHER = 150;
+  readonly otherReasonLength = computed(() => this.otherReason().length);
+  readonly isOtherSelected = computed(() => this.selectedReasons().includes('other'));
 
   toggleReason(value: string): void {
     const current = this.selectedReasons();
@@ -38,12 +42,15 @@ export class CancelAppointmentModalComponent {
 
   onConfirm(): void {
     if (!this.selectedReasons().length) return;
+    if (this.isOtherSelected() && !this.otherReason().trim()) return;
     this.confirmed.emit(this.selectedReasons());
     this.selectedReasons.set([]);
+    this.otherReason.set('');
   }
 
   onClose(): void {
     this.selectedReasons.set([]);
+    this.otherReason.set('');
     this.closed.emit();
   }
 }

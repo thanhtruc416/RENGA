@@ -1,17 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-interface CartItem {
-  readonly id: number;
-  readonly type: 'available' | 'studio';
-  readonly name: string;
-  readonly spec: string;
-  readonly price: number;
-  readonly image: string;
-  quantity?: number;
-  readonly savedDate?: string;
-}
+import { CartService } from '../core/services/cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -22,88 +12,13 @@ interface CartItem {
   styleUrl: './cart.component.css',
 })
 export class CartComponent {
-
-  readonly initialItems: CartItem[] = [
-    {
-      id: 1,
-      type: 'available',
-      name: 'Vòng cổ kim cương Noir',
-      spec: 'Vàng Trắng 18K • 1.5 Carat Diamond',
-      price: 75_000_000,
-      quantity: 1,
-      image: 'assets/images/sp-vong-co-noir.webp',
-    },
-    {
-      id: 2,
-      type: 'available',
-      name: 'Nhẫn đính hôn Royal',
-      spec: 'Bạch Kim • 2 Carat Diamond',
-      price: 120_000_000,
-      quantity: 1,
-      image: 'assets/images/sp-nhan-royal.webp',
-    },
-    {
-      id: 3,
-      type: 'available',
-      name: 'Vòng cổ kim cương Noir',
-      spec: 'Vàng Trắng 18K • 1.5 Carat Diamond',
-      price: 75_000_000,
-      quantity: 1,
-      image: 'assets/images/sp-vong-co-noir.webp',
-    },
-    {
-      id: 4,
-      type: 'available',
-      name: 'Nhẫn đính hôn Royal',
-      spec: 'Bạch Kim • 2 Carat Diamond',
-      price: 120_000_000,
-      quantity: 1,
-      image: 'assets/images/sp-nhan-royal.webp',
-    },
-    {
-      id: 5,
-      type: 'studio',
-      name: 'Vòng tay Custom Tên',
-      spec: 'Vàng Hồng 18K',
-      price: 45_000_000,
-      savedDate: '15/09/2026  12:22',
-      image: 'assets/images/sp-vong-tay-custom.webp',
-    },
-    {
-      id: 6,
-      type: 'studio',
-      name: 'Khuyên tai Tối Giản',
-      spec: 'Vàng 18K',
-      price: 18_500_000,
-      savedDate: '20/09/2026  09:15',
-      image: 'assets/images/sp-khuyen-tai.webp',
-    },
-    {
-      id: 7,
-      type: 'studio',
-      name: 'Vòng tay Custom Tên',
-      spec: 'Vàng Hồng 18K',
-      price: 45_000_000,
-      savedDate: '15/09/2026  12:22',
-      image: 'assets/images/sp-vong-tay-custom.webp',
-    },
-    {
-      id: 8,
-      type: 'studio',
-      name: 'Khuyên tai Tối Giản',
-      spec: 'Vàng 18K',
-      price: 18_500_000,
-      savedDate: '20/09/2026  09:15',
-      image: 'assets/images/sp-khuyen-tai.webp',
-    },
-  ];
+  private readonly cartService = inject(CartService);
 
   readonly activeTab = signal<'available' | 'studio'>('available');
-  readonly cartItems = signal<CartItem[]>(this.initialItems);
   readonly selectedIds = signal<Set<number>>(new Set());
 
   readonly filteredItems = computed(() =>
-    this.cartItems().filter((item) => item.type === this.activeTab())
+    this.cartService.items().filter((item) => item.type === this.activeTab())
   );
 
   readonly totalCount = computed(() =>
@@ -156,25 +71,16 @@ export class CartComponent {
   }
 
   deleteSelected(): void {
-    const ids = this.selectedIds();
-    this.cartItems.update((items) => items.filter((item) => !ids.has(item.id)));
+    this.cartService.removeItems(this.selectedIds());
     this.selectedIds.set(new Set());
   }
 
   updateQty(id: number, delta: number): void {
-    this.cartItems.update((items) =>
-      items.map((item) => {
-        if (item.id === id && item.type === 'available') {
-          const newQty = (item.quantity ?? 1) + delta;
-          return newQty >= 1 ? { ...item, quantity: newQty } : item;
-        }
-        return item;
-      })
-    );
+    this.cartService.updateQty(id, delta);
   }
 
   removeItem(id: number): void {
-    this.cartItems.update((items) => items.filter((item) => item.id !== id));
+    this.cartService.removeItem(id);
   }
 
   onImgError(event: Event): void {

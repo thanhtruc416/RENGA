@@ -2,7 +2,7 @@
   <!-- ── Header ── -->
   <app-admin-header
     title="Quản lý sản phẩm"
-    subtitle="Quản lý bộ sưu tập cao cấp và tình trạng hàng hoá của bạn.">
+    subtitle="Quản lý bộ sưu tập cao cấp và tình trạng hàng hoá của bạn">
   </app-admin-header>
 
   <!-- ── Toolbar ── -->
@@ -40,10 +40,10 @@
       <div class="pm__select-wrap">
         <select class="pm__select" [value]="filterCategory()" (change)="filterCategory.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="nhan">Nhẫn</option>
-          <option value="vong-co">Vòng cổ</option>
-          <option value="bong-tai">Bông tai</option>
-          <option value="vong-tay">Vòng tay</option>
+          <option value="Nhẫn">Nhẫn</option>
+          <option value="Vòng cổ">Vòng cổ</option>
+          <option value="Bông tai">Bông tai</option>
+          <option value="Vòng tay">Vòng tay</option>
         </select>
         <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -53,9 +53,9 @@
       <div class="pm__select-wrap">
         <select class="pm__select" [value]="filterMaterial()" (change)="filterMaterial.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="vang-18k">Vàng 18K</option>
-          <option value="vang-trang">Vàng Trắng</option>
-          <option value="bac">Bạc</option>
+          <option value="Vàng 18K">Vàng 18K</option>
+          <option value="Vàng Trắng">Vàng Trắng</option>
+          <option value="Bạc">Bạc</option>
         </select>
         <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -72,7 +72,11 @@
         <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
-    <button class="pm__clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    @if (filterApplied()) {
+      <button class="pm__clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="pm__apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
   </div>
 
   <!-- ── Table ── -->
@@ -91,7 +95,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (product of products(); track product.id + $index) {
+        @for (product of filteredProducts(); track product.id + $index) {
           <tr class="pm__tr">
             <td class="pm__td pm__td--img">
               <img class="pm__product-img" [src]="product.imageUrl" [alt]="product.name">
@@ -230,7 +234,7 @@
               <label class="modal__label">GIÁ BÁN NIÊM YẾT (VNĐ)</label>
               <div class="modal__price-wrap">
                 <span class="modal__price-prefix">₫</span>
-                <input class="modal__input modal__input--price" type="number" [value]="newPrice()" (input)="newPrice.set(+$any($event.target).value)" min="0" placeholder="0">
+                <input class="modal__input modal__input--price" type="text" inputmode="numeric" [value]="formatPrice(newPrice())" (input)="onPriceInput($event)" placeholder="0">
               </div>
             </div>
 

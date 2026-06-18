@@ -1,0 +1,119 @@
+.al-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-dark);
+  padding: 24px;
+}
+
+.al-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-white);
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.al-header {
+  text-align: center;
+}
+
+.al-brand {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--color-dark);
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+
+.al-subtitle {
+  margin-top: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.al-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.al-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.al-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--color-muted);
+}
+
+.al-input {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-dark);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  outline: none;
+  padding: 10px 0;
+  transition: border-color 0.15s;
+}
+
+.al-input:focus {
+  border-bottom-color: var(--color-primary);
+}
+
+.al-error {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-error);
+}
+
+.al-submit {
+  margin-top: 8px;
+  padding: 16px;
+  background: var(--color-dark);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.al-submit:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.al-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.al-back {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  text-decoration: none;
+  text-align: center;
+  transition: color 0.15s;
+}
+
+.al-back:hover {
+  color: var(--color-dark);
+}

@@ -4,6 +4,7 @@ import { AbstractControl, ReactiveFormsModule, FormGroup, FormControl, Validator
 import { RouterLink } from '@angular/router';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
+import { CartService } from '../core/services/cart.service';
 
 interface OrderItem {
   readonly id: number;
@@ -40,30 +41,18 @@ function noWhitespace(control: AbstractControl) {
 export class CheckoutComponent {
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cartService = inject(CartService);
 
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
   readonly showSuccessGuestModal = signal(false);
   readonly showFailGuestModal = signal(false);
 
-  readonly orderItems = signal<OrderItem[]>([
-    {
-      id: 1,
-      name: 'Aurelia Infinity Collar',
-      spec: 'Kích cỡ: M | Vàng 18K',
-      qty: 1,
-      price: 45_000_000,
-      image: 'assets/images/sp-aurelia-collar.webp',
-    },
-    {
-      id: 2,
-      name: 'Heritage Emerald Signet',
-      spec: 'Kích cỡ: 52 | Ngọc Lục Bảo',
-      qty: 1,
-      price: 72_500_000,
-      image: 'assets/images/sp-heritage-signet.webp',
-    },
-  ]);
+  readonly orderItems = computed<OrderItem[]>(() =>
+    this.cartService.items()
+      .filter(i => i.type === 'available')
+      .map(i => ({ id: i.id, name: i.name, spec: i.spec, qty: i.quantity ?? 1, price: i.price, image: i.image }))
+  );
 
   readonly orderCount = computed(() => this.orderItems().length);
 

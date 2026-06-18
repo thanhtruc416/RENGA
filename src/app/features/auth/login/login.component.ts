@@ -54,6 +54,8 @@ export class LoginComponent {
     });
   }
 
+  mockLogin(): void { this.authService.mockLogin(); }
+
   closeLoginFail(): void { this.showLoginFail.set(false); }
   closePhoneNotFound(): void { this.showPhoneNotFound.set(false); }
 }

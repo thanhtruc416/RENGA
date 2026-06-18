@@ -12,15 +12,31 @@
     <div class="warranty-page__filters">
       <div class="filter-group">
         <label class="filter-label">DANH MỤC SẢN PHẨM</label>
-        <select class="filter-select"><option>Tất cả</option></select>
+        <select class="filter-select" [value]="filterCategory()" (change)="filterCategory.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          <option value="ring">Nhẫn</option>
+          <option value="pearl">Vòng cổ</option>
+        </select>
       </div>
       <div class="filter-group">
         <label class="filter-label">TRẠNG THÁI</label>
-        <select class="filter-select"><option>Tất cả</option></select>
+        <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          <option value="pending">Chờ xử lý</option>
+          <option value="repairing">Đang sửa chữa</option>
+          <option value="completed">Đã hoàn tất</option>
+        </select>
       </div>
       <div class="filter-group">
         <label class="filter-label">THỜI GIAN</label>
         <select class="filter-select"><option>30 Ngày trước</option></select>
+      </div>
+      <div class="filter-group" style="justify-content:flex-end">
+        @if (filterApplied()) {
+          <button class="wm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+        } @else {
+          <button class="wm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+        }
       </div>
     </div>
     <button class="btn btn--black">TẠO YÊU CẦU BẢO HÀNH MỚI</button>
@@ -48,12 +64,12 @@
       <span>ID</span>
       <span>KHÁCH HÀNG</span>
       <span>MÔ TẢ</span>
-      <span>TRẠNG THÁI</span>
+      <span class="text-center">TRẠNG THÁI</span>
       <span class="text-center">THAO TÁC</span>
     </div>
 
     <div class="warranty-table__body">
-      @for (req of requests(); track req.id) {
+      @for (req of filteredRequests(); track req.id) {
         <div class="warranty-table__row">
           
           <!-- Col 1: Product -->
@@ -82,7 +98,7 @@
           </div>
 
           <!-- Col 5: Status -->
-          <div class="table-cell">
+          <div class="table-cell text-center">
             @if (req.status === 'pending') { <span class="status-badge status-badge--pending">CHỜ XỬ LÝ</span> }
             @if (req.status === 'repairing') { <span class="status-badge status-badge--processing">ĐANG SỬA CHỮA</span> }
             @if (req.status === 'completed') { <span class="status-badge status-badge--completed">ĐÃ HOÀN TẤT</span> }

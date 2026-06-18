@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // --- INTERFACES ---
@@ -45,9 +45,28 @@ interface UpdateResultForm {
 })
 export class AppointmentManagementComponent {
   // --- STATE (SIGNALS) ---
-  // Quản lý xem Modal nào đang mở: 'none', 'change-designer', 'update-result'
   readonly activeModal = signal<'none' | 'change-designer' | 'update-result'>('none');
   readonly selectedAppointment = signal<Appointment | null>(null);
+
+  filterDesigner  = signal('');
+  filterStatus    = signal('');
+  filterDateFrom  = signal('');
+  filterDateTo    = signal('');
+  filterApplied   = signal(false);
+  showDatePicker  = signal(false);
+  activeDesigner  = signal('');
+  activeStatus    = signal('');
+  activeDateFrom  = signal('');
+  activeDateTo    = signal('');
+
+  readonly filterDateDisplay = computed(() => {
+    const from = this.filterDateFrom();
+    const to   = this.filterDateTo();
+    if (!from && !to) return '';
+    const fmt = (iso: string) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (from && to)  return `${fmt(from)} - ${fmt(to)}`;
+    return from ? fmt(from) : fmt(to);
+  });
 
   // Mock data danh sách lịch hẹn
   readonly appointments = signal<Appointment[]>([
@@ -83,6 +102,32 @@ export class AppointmentManagementComponent {
     }
   ]);
 
+  readonly filteredAppointments = computed(() => {
+    const designer = this.activeDesigner();
+    const status   = this.activeStatus();
+    const dateFrom = this.activeDateFrom();
+    const dateTo   = this.activeDateTo();
+    if (!designer && !status && !dateFrom && !dateTo) return this.appointments();
+    return this.appointments().filter(a => {
+      if (designer && a.designer.name !== designer) return false;
+      if (status   && a.status          !== status)   return false;
+      if (dateFrom || dateTo) {
+        const d = this._parseApptDate(a.date);
+        if (!d) return false;
+        if (dateFrom && d < new Date(dateFrom)) return false;
+        if (dateTo   && d > new Date(dateTo))   return false;
+      }
+      return true;
+    });
+  });
+
+  private _parseApptDate(s: string): Date | null {
+    const parts = s.split('/').map(Number);
+    if (parts.length !== 3) return null;
+    const [d, m, y] = parts;
+    return new Date(y, m - 1, d);
+  }
+
   // Mock data danh sách Designer (Cho Modal Đổi Designer)
   readonly designersList = signal<DesignerInfo[]>([
     { id: 'd1', name: 'Minh Anh (Hiện tại)', role: 'GOLDSMITH MASTER', avatarUrl: 'https://i.pravatar.cc/150?img=5', isCurrent: true },
@@ -100,6 +145,36 @@ export class AppointmentManagementComponent {
   });
 
   // --- METHODS ---
+  onDateFromChange(val: string): void {
+    this.filterDateFrom.set(val);
+    if (val && this.filterDateTo()) this.showDatePicker.set(false);
+  }
+
+  onDateToChange(val: string): void {
+    this.filterDateTo.set(val);
+    if (this.filterDateFrom() && val) this.showDatePicker.set(false);
+  }
+
+  applyFilters(): void {
+    this.activeDesigner.set(this.filterDesigner());
+    this.activeStatus.set(this.filterStatus());
+    this.activeDateFrom.set(this.filterDateFrom());
+    this.activeDateTo.set(this.filterDateTo());
+    this.filterApplied.set(true);
+  }
+
+  clearFilters(): void {
+    this.filterDesigner.set('');
+    this.filterStatus.set('');
+    this.filterDateFrom.set('');
+    this.filterDateTo.set('');
+    this.activeDesigner.set('');
+    this.activeStatus.set('');
+    this.activeDateFrom.set('');
+    this.activeDateTo.set('');
+    this.filterApplied.set(false);
+  }
+
   openChangeDesignerModal(appt: Appointment): void {
     this.selectedAppointment.set(appt);
     this.activeModal.set('change-designer');

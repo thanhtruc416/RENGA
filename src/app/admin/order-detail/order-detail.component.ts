@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface OrderItem {
   image: string;
@@ -63,7 +64,7 @@ export class AdminOrderDetailComponent {
     { label: 'Duyệt bản thiết kế',  desc: 'Bản thiết kế đã được duyệt bởi khách hàng',                                              time: 'Hôm qua, 9h12p',  done: true },
     { label: 'Tạo đơn đặt hàng',    desc: 'Đơn đặt hàng đã được tạo trên hệ thống, chờ khách hàng thanh toán cọc',                 time: 'Hôm nay, 10h30p', done: true },
     { label: 'Đã nhận thanh toán cọc', desc: 'Đã xác nhận khách hàng hoàn tất thanh toán đặt cọc',                                time: '',                done: false },
-    { label: 'Bắt đầu chế tác',     desc: 'Sản phẩm được chuyển đến xưởng bởi Trưởng ban phụ trách Alex Mercer.',                  time: '',                done: false },
+    { label: 'Bắt đầu chế tác',     desc: 'Sản phẩm được chuyển đến xưởng bởi Trưởng ban phụ trách Alex Mercer',                  time: '',                done: false },
   ];
 
   invoice = {
@@ -91,7 +92,7 @@ export class AdminOrderDetailComponent {
     },
   ];
 
-  formatPrice(p: number): string { return p.toLocaleString('vi-VN'); }
+  readonly formatPrice = formatPrice;
   openProgressModal()  { this.showProgressModal.set(true); }
   closeProgressModal() { this.showProgressModal.set(false); }
 

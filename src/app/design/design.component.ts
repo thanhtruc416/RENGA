@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { formatVnd } from '../shared/utils/currency.util';
 
 interface Designer {
   id: string;
@@ -224,9 +225,7 @@ export class DesignComponent {
     // TODO: gọi API đặt lịch
   }
 
-  formatVnd(value: number): string {
-    return value.toLocaleString('vi-VN');
-  }
+  readonly formatVnd = formatVnd;
 
   starsArray(n: number): number[] {
     return Array.from({ length: n });

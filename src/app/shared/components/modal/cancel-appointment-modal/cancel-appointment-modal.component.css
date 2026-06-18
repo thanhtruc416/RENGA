@@ -113,6 +113,48 @@
   color: var(--color-dark);
 }
 
+.ltv-cancel-modal__other-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-left: 30px;
+}
+
+.ltv-cancel-modal__other-input {
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-dark);
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ltv-cancel-modal__other-input:focus {
+  border-color: var(--color-primary);
+}
+
+.ltv-cancel-modal__other-input::placeholder {
+  color: #bbb;
+}
+
+.ltv-cancel-modal__other-count {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-muted);
+  text-align: right;
+}
+
+.ltv-cancel-modal__other-count--warn {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .ltv-cancel-modal__actions {
   display: flex;
   gap: 16px;

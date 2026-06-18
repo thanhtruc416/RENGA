@@ -1,6 +1,6 @@
-# RENGA — Trang web thương mại trang sức
+# RENGA — Nền tảng thương mại trang sức cao cấp
 
-> **Framework:** Angular 22 (Standalone API) · **Ngôn ngữ:** TypeScript · **Style:** CSS thuần với CSS Custom Properties
+> **Framework:** Angular 22 (Standalone API) · **Ngôn ngữ:** TypeScript · **Style:** CSS thuần + CSS Custom Properties
 
 ---
 
@@ -9,7 +9,7 @@
 1. [Tổng quan dự án](#1-tổng-quan-dự-án)
 2. [Cài đặt & Chạy dự án](#2-cài-đặt--chạy-dự-án)
 3. [Cấu trúc thư mục](#3-cấu-trúc-thư-mục)
-4. [Routing — Tất cả đường dẫn](#4-routing--tất-cả-đường-dẫn)
+4. [Routing](#4-routing)
 5. [CSS Token System](#5-css-token-system)
 6. [Shared Components](#6-shared-components)
 7. [Core — Services, Guards, Interceptors](#7-core--services-guards-interceptors)
@@ -35,11 +35,11 @@ RENGA là nền tảng thương mại điện tử trang sức cao cấp, gồm 
 | Thành phần | Công nghệ |
 |---|---|
 | Framework | Angular 22 Standalone |
-| State | Angular Signals |
+| State | Angular Signals (`signal`, `computed`) |
 | HTTP | Angular HttpClient + Interceptors |
 | Style | CSS thuần + CSS Custom Properties |
+| Locale | `vi` (Vietnamese — `LOCALE_ID` đăng ký trong `app.config.ts`) |
 | Test | Vitest |
-| Format | Prettier |
 | Package Manager | npm |
 
 **API Base URL:**
@@ -52,9 +52,10 @@ RENGA là nền tảng thương mại điện tử trang sức cao cấp, gồm 
 
 ```bash
 npm install
-npm start        # http://localhost:4200
+npm start        # Dev server → http://localhost:4200
 npm run build    # Build production → dist/
 npm test         # Chạy unit tests
+npm run watch    # Build watch mode
 ```
 
 ---
@@ -64,79 +65,80 @@ npm test         # Chạy unit tests
 ```
 src/
 ├── app/
-│   ├── app.ts                    # Root component
-│   ├── app.html                  # Root template
-│   ├── app.css                   # Root styles
-│   ├── app.routes.ts             # ← Tất cả routes định nghĩa ở đây
-│   ├── app.config.ts             # Providers: Router, HttpClient, Interceptors
+│   ├── app.ts                        # Root component
+│   ├── app.html                      # Root template
+│   ├── app.css                       # Root styles
+│   ├── app.routes.ts                 # ← Tất cả routes customer định nghĩa ở đây
+│   ├── app.config.ts                 # Providers: Router, HttpClient, Interceptors, LOCALE_ID
 │   │
-│   ├── home/                     # Trang chủ (/)
-│   ├── products/                 # Danh sách & chi tiết sản phẩm
-│   │   ├── product-list/         # /products
-│   │   └── product-detail/       # /products/:id
-│   ├── studio/                   # The Studio — thiết kế nhẫn tuỳ chỉnh (/studio)
-│   ├── design/                   # The Designer — đặt lịch chuyên gia (/the-designer)
-│   ├── categories/               # Danh mục sản phẩm (/danh-muc)
-│   ├── cart/                     # Giỏ hàng (/cart)
-│   ├── checkout/                 # Thanh toán (/checkout)
-│   ├── orders/                   # Quản lý đơn hàng
-│   │   ├── order-detail/         # /orders/:id
-│   │   ├── order-detail-custom/  # /orders/custom/:id
-│   │   ├── order-lookup/         # /orders/lookup
-│   │   └── order-tracking/       # /orders/tracking
-│   ├── appointment-history/      # Lịch sử lịch hẹn (/appointment-history)
-│   ├── account/                  # (chưa có route) Profile info & loyalty — tách từ /profile
-│   ├── profile/                  # Hồ sơ cá nhân (/profile)
-│   ├── reviews/                  # Đánh giá sản phẩm
-│   ├── not-found/                # Trang 404
+│   ├── home/                         # Trang chủ (/)
+│   ├── products/                     # Danh sách & chi tiết sản phẩm
+│   │   ├── product-list/             # /products
+│   │   └── product-detail/           # /products/:id
+│   ├── studio/                       # The Studio — thiết kế nhẫn tuỳ chỉnh (/studio)
+│   ├── design/                       # The Designer — đặt lịch chuyên gia (/the-designer)
+│   ├── categories/                   # Danh mục sản phẩm (/danh-muc)
+│   ├── cart/                         # Giỏ hàng (/cart)
+│   ├── checkout/                     # Thanh toán (/checkout)
+│   ├── orders/
+│   │   ├── order-detail/             # /orders/:id
+│   │   ├── order-detail-custom/      # /orders/custom/:id
+│   │   ├── order-lookup/             # /orders/lookup
+│   │   └── order-tracking/           # /orders/tracking
+│   ├── appointment-history/          # Lịch sử lịch hẹn (/appointment-history)
+│   ├── profile/                      # Hồ sơ cá nhân (/profile, /profile/rewards)
+│   ├── admin-login/                  # Trang đăng nhập admin (/quan-tri-vien)
+│   ├── not-found/                    # Trang 404 (**)
 │   │
 │   ├── features/
-│   │   └── auth/                 # Authentication
-│   │       ├── login/            # /dang-nhap
-│   │       ├── register/         # /dang-ki
-│   │       ├── forgot-password/  # /quen-mat-khau
-│   │       └── reset-password/   # /mat-khau-moi
+│   │   └── auth/                     # Authentication
+│   │       ├── login/                # /dang-nhap
+│   │       ├── register/             # /dang-ki
+│   │       ├── forgot-password/      # /quen-mat-khau
+│   │       └── reset-password/       # /mat-khau-moi
 │   │
-│   ├── admin/                    # Admin Dashboard (chưa có route — xem mục 9)
+│   ├── admin/                        # Admin Dashboard (/admin — xem mục 9)
+│   │   ├── admin-layout/             # Shell layout (header + sidebar)
+│   │   ├── admin.routes.ts           # ← Admin child routes
 │   │   ├── dashboard/
-│   │   ├── product-management/
-│   │   ├── order-management/
-│   │   ├── order-detail/
-│   │   ├── appointment-management/
-│   │   ├── design-order-create/
-│   │   ├── voucher-management/
-│   │   ├── warranty-management/
-│   │   └── qa-management/
+│   │   ├── product-management/       # /admin/san-pham
+│   │   ├── order-management/         # /admin/don-hang
+│   │   ├── order-detail/             # /admin/don-hang/:id
+│   │   ├── design-order-create/      # /admin/don-thiet-ke/tao
+│   │   ├── appointment-management/   # /admin/lich-hen
+│   │   ├── voucher-management/       # /admin/voucher
+│   │   ├── warranty-management/      # /admin/bao-hanh
+│   │   └── qa-management/            # /admin/hoi-dap
 │   │
 │   ├── shared/
-│   │   ├── components/           # Components tái sử dụng (xem mục 6)
-│   │   ├── data/                 # Data tĩnh (chatbot-faq.data.ts)
+│   │   ├── components/               # Components tái sử dụng (xem mục 6)
+│   │   ├── data/                     # Data tĩnh (chatbot-faq.data.ts)
 │   │   ├── modal-found-orders/
 │   │   └── modal-login-required/
 │   │
 │   ├── core/
-│   │   ├── services/             # AuthService, ModalService
-│   │   ├── guards/               # authGuard, adminGuard
-│   │   └── interceptors/         # authInterceptor, errorInterceptor
+│   │   ├── services/                 # AuthService, ModalService
+│   │   ├── guards/                   # authGuard, adminGuard
+│   │   └── interceptors/             # authInterceptor, errorInterceptor
 │   │
-│   └── models/                   # TypeScript interfaces
+│   └── models/
 │       ├── user.model.ts
 │       └── api-response.model.ts
 │
 ├── styles/
-│   └── _token.css                # ← CSS Design Tokens (màu sắc, font, spacing)
-├── styles.css                    # ← Global styles + biến bổ sung cho :root
-├── main.ts                       # Bootstrap Angular app
+│   └── _token.css                    # ← CSS Design Tokens (màu sắc, font, spacing)
+├── styles.css                        # ← Global styles + biến bổ sung cho :root
+├── main.ts                           # Bootstrap Angular app
 └── environments/
-    ├── environment.ts            # Dev config
-    └── environment.prod.ts       # Prod config
+    ├── environment.ts                # Dev config
+    └── environment.prod.ts           # Prod config
 ```
 
 ---
 
-## 4. Routing — Tất cả đường dẫn
+## 4. Routing
 
-File: [src/app/app.routes.ts](src/app/app.routes.ts)
+### Customer Routes — `src/app/app.routes.ts`
 
 Tất cả routes dùng **lazy loading** (`loadComponent` / `loadChildren`):
 
@@ -161,9 +163,25 @@ Tất cả routes dùng **lazy loading** (`loadComponent` / `loadChildren`):
 | `/dang-ki` | `RegisterComponent` | Đăng ký |
 | `/quen-mat-khau` | `ForgotPasswordComponent` | Quên mật khẩu |
 | `/mat-khau-moi` | `ResetPasswordComponent` | Đặt mật khẩu mới |
+| `/quan-tri-vien` | `AdminLoginComponent` | Trang đăng nhập admin riêng |
 | `/**` | `NotFoundComponent` | 404 |
 
-> **Lưu ý:** Admin module (`src/app/admin/`) chưa được gắn vào `app.routes.ts` — chưa có route `/admin`. Account module (`src/app/account/`) cũng chưa được gắn route.
+### Admin Routes — `src/app/admin/admin.routes.ts`
+
+Route cha `/admin` được bảo vệ bởi `adminGuard`. Tất cả children render bên trong `AdminLayoutComponent`:
+
+| URL | Component |
+|-----|-----------|
+| `/admin` | redirect → `/admin/dashboard` |
+| `/admin/dashboard` | `DashboardComponent` |
+| `/admin/san-pham` | `ProductManagementComponent` |
+| `/admin/don-hang` | `OrderManagementComponent` |
+| `/admin/don-hang/:id` | `AdminOrderDetailComponent` |
+| `/admin/don-thiet-ke/tao` | `DesignOrderCreateComponent` |
+| `/admin/lich-hen` | `AppointmentManagementComponent` |
+| `/admin/bao-hanh` | `WarrantyManagementComponent` |
+| `/admin/voucher` | `VoucherManagementComponent` |
+| `/admin/hoi-dap` | `QaManagementComponent` |
 
 ---
 
@@ -184,30 +202,26 @@ Có **2 file CSS global** — không được lẫn lộn:
 
 **Màu sắc:**
 ```css
---color-primary:       #c4607e   /* Hồng chủ đạo */
---color-primary-light: #f7f0f3   /* Hồng nhạt — dùng trên nền tối */
+--color-primary:       #c4607e      /* Hồng chủ đạo */
+--color-primary-dark:  #9a3f5c      /* Hồng đậm — hover, active */
+--color-primary-rgb:   196, 96, 126 /* Dùng với rgba() */
+--color-primary-light: #f7f0f3      /* Hồng nhạt — background nhẹ */
 --color-dark:          #1a1a1a
 --color-muted:         #444748
 --color-border:        #c4c7c7
 --color-bg-card:       #f3f3f4
 --color-white:         #ffffff
 --color-black:         #000000
+--color-error:         #e53935      /* Màu lỗi form validation */
 ```
 
 **Font:**
 ```css
 --font-serif: 'Playfair Display', Georgia, serif   /* Tiêu đề lớn */
---font-sans:  'Montserrat', Arial, sans-serif       /* Body text */
---font-ui:    'Montserrat', Arial, sans-serif       /* UI elements (search, badge) */
+--font-sans:  'Montserrat', Arial, sans-serif       /* Body text, UI */
 ```
 
-**Color aliases** (shorthand cho component dùng tên ngắn hơn):
-```css
---color-bg:         var(--color-white)    /* Nền trang */
---color-surface:    var(--color-bg-card)  /* Nền card */
---color-text:       var(--color-dark)     /* Text chính */
---color-text-muted: var(--color-muted)    /* Text phụ */
-```
+> **Lưu ý:** Các số liệu thống kê (stat cards) trong Admin dùng trực tiếp `'Montserrat', Arial, sans-serif` thay vì `var(--font-serif)` để đồng nhất phong cách số.
 
 **Spacing:**
 ```css
@@ -215,41 +229,44 @@ Có **2 file CSS global** — không được lẫn lộn:
 --sp-lg: 24px |  --sp-xl: 48px |  --sp-2xl: 80px
 ```
 
-**Spacing aliases** (dùng trong modal/card components):
+**Spacing aliases** (dùng trong modal/card):
 ```css
---space-1: var(--sp-xs)   /* 4px  */
---space-2: var(--sp-sm)   /* 8px  */
---space-3: 12px
---space-4: var(--sp-md)   /* 16px */
---space-6: var(--sp-lg)   /* 24px */
---space-8: 32px
+--space-1: 4px   --space-2: 8px   --space-3: 12px
+--space-4: 16px  --space-6: 24px  --space-8: 32px
 ```
 
 **Layout:**
 ```css
 --max-width:     1440px
 --header-height: 169px
---container-px:  80px   /* Padding ngang của các section */
+--container-px:  80px
 ```
 
 ### Tokens bổ sung trong `styles.css`
 
 ```css
---color-studio-bg:       rgba(26, 26, 26, 0.9)      /* Nền tối section Studio */
---color-designer-bg:     rgba(196, 96, 126, 0.6)    /* Nền hồng section Designer */
+--color-studio-bg:       rgba(26, 26, 26, 0.9)
+--color-designer-bg:     rgba(196, 96, 126, 0.6)
 --color-badge-bg:        #fff0f5
 --color-review-card-bg:  #f9f9f9
---color-price:           #9a3f5c
+--color-price:           var(--color-primary-dark)
 --color-product-card-bg: rgba(247, 240, 243, 0.7)
 --shadow-card:           0 2px 8px rgba(0, 0, 0, 0.08)
 ```
 
-### Quy tắc sử dụng CSS trong component
+### Quy tắc sử dụng CSS
 
-- Mỗi component có file `.css` riêng — Angular tự scope (không bị leak ra ngoài)
+- Mỗi component có file `.css` riêng — Angular tự scope
 - Đặt tên class theo BEM: `.block__element--modifier`
+- Không hardcode màu/font/spacing — luôn dùng CSS variable
 - Không dùng `!important`, không inline style
-- Tất cả màu sắc/font/spacing phải dùng CSS variables, không hardcode
+- Không dùng `::ng-deep` trừ trường hợp bất khả kháng
+
+### Đơn vị tiền tệ
+
+Toàn bộ project dùng ký hiệu `₫` (U+20AB — Vietnamese Dong có gạch chéo), **không** dùng `đ`, `VND`, hay `VNĐ`.
+
+Định dạng số: dùng pipe `| number:'1.0-0'` (locale `vi`) hoặc `.toLocaleString('vi-VN')` để tự động thêm dấu chấm phân nghìn.
 
 ---
 
@@ -266,13 +283,13 @@ Thư mục: [src/app/shared/components/](src/app/shared/components/)
 | `ChatbotComponent` | `app-chatbot` | Chatbot FAQ |
 | `ModalComponent` | `app-modal` | Base modal wrapper |
 
-**Modal con** (trong `shared/components/modal/`):
+**Modal con** — `shared/components/modal/`:
 
 | Modal | Khi nào dùng |
 |-------|-------------|
-| `CancelOrderModalComponent` | Huỷ đơn hàng |
+| `CancelOrderModalComponent` | Huỷ đơn hàng thường |
 | `CancelDesignModalComponent` | Huỷ đơn thiết kế |
-| `CancelAppointmentModalComponent` | Huỷ lịch hẹn |
+| `CancelAppointmentModalComponent` | Huỷ lịch hẹn (có textarea lý do khác, tối đa 150 ký tự) |
 | `PaymentSuccessModalComponent` | Thanh toán thành công |
 | `PaymentFailModalComponent` | Thanh toán thất bại |
 | `WarrantyModalComponent` | Thông tin bảo hành |
@@ -318,12 +335,14 @@ modalService.closeLoginRequired()
 | `authGuard` | `core/guards/auth.guard.ts` | `/dang-nhap` |
 | `adminGuard` | `core/guards/admin.guard.ts` | `/` (home) |
 
-### Interceptors (đăng ký trong `app.config.ts`)
+### Interceptors
+
+Đăng ký trong `app.config.ts`:
 
 | Interceptor | Chức năng |
 |-------------|-----------|
 | `authInterceptor` | Tự động thêm `Authorization: Bearer {token}` vào mọi request |
-| `errorInterceptor` | Handle lỗi: 401 → logout, 403 → về home, 500 → log lỗi |
+| `errorInterceptor` | 401 → logout, 403 → về home, 500 → log lỗi |
 
 ---
 
@@ -374,19 +393,23 @@ interface PaginatedResponse<T> {
 
 Thư mục: [src/app/admin/](src/app/admin/)
 
-| Component | Chức năng |
-|-----------|----------|
-| `DashboardComponent` | Dashboard tổng quan |
-| `ProductManagementComponent` | CRUD sản phẩm |
-| `OrderManagementComponent` | Quản lý đơn hàng |
-| `OrderDetailComponent` | Chi tiết đơn hàng (admin) |
-| `AppointmentManagementComponent` | Quản lý lịch hẹn |
-| `DesignOrderCreateComponent` | Tạo đơn thiết kế thủ công |
-| `VoucherManagementComponent` | Quản lý voucher |
-| `WarrantyManagementComponent` | Quản lý bảo hành |
-| `QaManagementComponent` | Quản lý Q&A |
+Tất cả trang admin có cơ chế **bộ lọc 2 tầng**:
+- **Pending signals** (`filterX`) — giá trị đang chọn trong dropdown
+- **Active signals** (`activeX`) — giá trị đang thực sự lọc bảng
+- `applyFilters()` sao chép pending → active; `clearFilters()` reset cả hai
+- `filteredItems = computed(...)` đọc từ active signals
 
-> **TODO:** Admin chưa được gắn vào `app.routes.ts` và chưa có sidebar layout. Cần thêm route `/admin` với `adminGuard` và xây dựng admin shell component.
+| Component | Route | Chức năng |
+|-----------|-------|----------|
+| `DashboardComponent` | `/admin/dashboard` | Tổng quan số liệu |
+| `ProductManagementComponent` | `/admin/san-pham` | CRUD sản phẩm + bộ lọc (danh mục, chất liệu, trạng thái) |
+| `OrderManagementComponent` | `/admin/don-hang` | Quản lý đơn hàng + bộ lọc (loại, trạng thái) |
+| `AdminOrderDetailComponent` | `/admin/don-hang/:id` | Chi tiết đơn hàng — hóa đơn, spec sản phẩm |
+| `DesignOrderCreateComponent` | `/admin/don-thiet-ke/tao` | Tạo đơn thiết kế thủ công — nhập giá có dấu chấm tự động, validate SĐT/email |
+| `AppointmentManagementComponent` | `/admin/lich-hen` | Quản lý lịch hẹn + bộ lọc + date range picker |
+| `WarrantyManagementComponent` | `/admin/bao-hanh` | Quản lý bảo hành + bộ lọc + modal xử lý |
+| `VoucherManagementComponent` | `/admin/voucher` | Quản lý voucher + bộ lọc + tạo mới |
+| `QaManagementComponent` | `/admin/hoi-dap` | Kiểm duyệt Q&A — trả lời, ẩn câu hỏi |
 
 ---
 
@@ -395,28 +418,23 @@ Thư mục: [src/app/admin/](src/app/admin/)
 ### Angular
 
 - **Tất cả components phải là Standalone** — không dùng NgModule
-- Dùng `ChangeDetectionStrategy.OnPush` khi có thể
+- Dùng `ChangeDetectionStrategy.OnPush` cho tất cả components
 - State trong component dùng `signal()`, computed dùng `computed()`
 - Lazy load tất cả routes bằng `loadComponent` hoặc `loadChildren`
 - Inject service bằng `inject()` function, không dùng constructor injection
 
 ### HTML Template
 
-- Dùng `@if`, `@for`, `@switch` (Angular 17+ control flow) thay vì `*ngIf`, `*ngFor`
+- Dùng `@if`, `@for`, `@switch` (Angular 17+ control flow) — **không** dùng `*ngIf`, `*ngFor`
 - Tránh logic phức tạp trong template — chuyển vào `computed()` trong component
-
-### CSS
-
-- **BEM naming:** `.component__element--modifier`
-- Không hardcode màu/font/spacing — luôn dùng CSS variable từ token system
-- File CSS của component chỉ chứa styles cho component đó
-- Không dùng `::ng-deep` trừ trường hợp bất khả kháng
+- Bind event filter với pattern: `(change)="signal.set($any($event.target).value)"`
 
 ### TypeScript
 
 - Strict mode bật (`noImplicitAny`, `strictNullChecks`)
 - Luôn type rõ return type của function public
 - Dùng `interface` cho data shapes, `type` cho unions/aliases
+- Khai báo signal sau các dependency của nó (field initializer chạy theo thứ tự — signal dùng `this.formGroup` phải đặt sau `formGroup`)
 
 ---
 
@@ -441,6 +459,7 @@ chore/[mô-tả]                   # Maintenance
    - `src/styles.css` — dễ mất `:root {`
    - `src/styles/_token.css` — không được xoá biến đang dùng
    - `src/app/app.routes.ts` — dễ bị conflict khi nhiều người thêm route
+   - `src/app/admin/admin.routes.ts` — tương tự
 3. **Build thành công** trước khi push: `npm run build`
 4. **Không commit file rỗng** — nếu tạo component mới, đảm bảo có nội dung
 
@@ -451,6 +470,7 @@ chore/[mô-tả]                   # Maintenance
 | `src/styles.css` | Mất `:root {` làm hỏng toàn bộ CSS variables |
 | `src/styles/_token.css` | Design tokens dùng chung toàn app |
 | `src/app/app.routes.ts` | Conflict route gây 404 hoặc mất route |
+| `src/app/admin/admin.routes.ts` | Conflict route admin |
 | `src/app/app.config.ts` | Providers bị duplicate hoặc mất |
 
 ---
@@ -477,25 +497,33 @@ chore/[mô-tả]                   # Maintenance
 
 ### Lỗi 2: Route bị 404 sau merge
 
-**Nguyên nhân:** Ai đó thêm route mới nhưng bị overwrite khi merge `app.routes.ts`.
+**Nguyên nhân:** Ai đó thêm route mới nhưng bị overwrite khi merge `app.routes.ts` hoặc `admin.routes.ts`.
 
-**Fix:** So sánh `app.routes.ts` với commit history của 2 branch, gộp lại đủ routes.
+**Fix:** So sánh với commit history của 2 branch, gộp lại đủ routes.
 
 ---
 
 ### Lỗi 3: Component không load được (lazy loading fail)
 
-**Nguyên nhân:** Path import trong `loadComponent()` bị sai sau khi ai đó rename/move file.
+**Nguyên nhân:** Path import trong `loadComponent()` bị sai sau khi rename/move file.
 
-**Fix:** `ng build` sẽ báo lỗi rõ ràng — sửa path trong `app.routes.ts`.
+**Fix:** `npm run build` sẽ báo lỗi rõ ràng — sửa path trong routes file.
 
 ---
 
 ### Lỗi 4: Text không hiển thị (gần như vô hình)
 
-**Nguyên nhân:** CSS variable màu nền bị mất (do Lỗi 1), dẫn đến text sáng trên nền trắng.
+**Nguyên nhân:** CSS variable màu nền bị mất (do Lỗi 1), text sáng trên nền trắng.
 
-**Ví dụ điển hình:** Section Studio dùng `--color-primary-light` (`#f7f0f3`) cho text bước — màu này chỉ đọc được trên nền tối `--color-studio-bg` (`rgba(26,26,26,0.9)`). Nếu `--color-studio-bg` bị undefined, nền trở thành trắng và text gần như vô hình.
+**Ví dụ điển hình:** Section Studio dùng `--color-primary-light` (`#f7f0f3`) cho text — chỉ đọc được trên nền tối `--color-studio-bg`. Nếu `--color-studio-bg` bị undefined, nền trắng, text gần như vô hình.
+
+---
+
+### Lỗi 5: Signal dùng `this.X` trước khi `X` được khai báo
+
+**Nguyên nhân:** Class field initializer chạy theo thứ tự khai báo. Signal được khởi tạo bằng `this.formGroup.value` nhưng đặt trước `formGroup`.
+
+**Fix:** Đảm bảo thứ tự khai báo: `formGroup` → `computedValues` → `displaySignals`.
 
 ---
 

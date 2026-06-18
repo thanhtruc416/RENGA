@@ -62,9 +62,9 @@ export class AuthService {
   mockLogin(): void {
     this._saveSession('mock-token-dev', {
       id: '1',
-      fullName: 'Nguyễn Văn A',
-      email: 'test@renga.vn',
-      role: 'customer',
+      fullName: 'Admin RENGA',
+      email: 'admin@renga.vn',
+      role: 'admin',
       avatarUrl: '',
     } as User);
     this.router.navigate(['/']);
@@ -95,6 +95,7 @@ export class AuthService {
 
   private _loadUser(): User | null {
     const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as User) : null;
+    if (!raw) return null;
+    try { return JSON.parse(raw) as User; } catch { return null; }
   }
 }

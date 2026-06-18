@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map } from 'rxjs';
 import { ProductsService } from '../products.service';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface FilterOption {
   key: string;
@@ -215,9 +216,7 @@ export class ProductListComponent {
   @HostListener('document:click')
   closeFilter(): void { this.openFilter.set(null); }
 
-  formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN');
-  }
+  readonly formatPrice = formatPrice;
 
   loadMore(): void {
     this.displayCount.update((c) => c + 8);

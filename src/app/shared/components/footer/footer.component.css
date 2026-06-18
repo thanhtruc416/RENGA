@@ -178,3 +178,21 @@
 .site-footer__bottom-link:hover {
   color: var(--color-white);
 }
+
+.site-footer__dev {
+  text-align: center;
+  padding: 8px 0 12px;
+}
+
+.site-footer__dev-link {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+
+.site-footer__dev-link:hover {
+  color: rgba(255, 255, 255, 0.5);
+}

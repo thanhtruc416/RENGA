@@ -309,6 +309,14 @@
   white-space: nowrap;
 }
 
+.appt-table th:nth-child(2),
+.appt-table th:nth-child(3),
+.appt-table th:nth-child(4) { text-align: center; }
+
+.appt-table td:nth-child(2),
+.appt-table td:nth-child(3),
+.appt-table td:nth-child(4) { text-align: center; }
+
 .appt-table td {
   padding: 20px;
   vertical-align: middle;
@@ -360,9 +368,10 @@
 }
 
 .appt-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-width: 110px;
 }
 
 .appt-status__dot {

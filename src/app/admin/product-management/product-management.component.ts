@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface Product {
   id: string;
@@ -37,17 +38,34 @@ export class ProductManagementComponent {
   showAddModal = signal(false);
   filterCategory = signal('');
   filterMaterial = signal('');
-  filterStatus = signal('');
+  filterStatus   = signal('');
+  filterApplied  = signal(false);
   currentPage = signal(1);
-  totalItems = 24;
+
+  activeCategory = signal('');
+  activeMaterial = signal('');
+  activeStatus   = signal('');
 
   products = signal<Product[]>([
-    { id: 'JWL-001', name: 'Serpentine Diamond Ring',  imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: '18K White Gold', price: 4000000, stock: 12, status: 'active' },
-    { id: 'JWL-001', name: 'Serpentine Diamond',       imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Vòng cổ', material: '18K White Gold', price: 4000000, stock: 0,  status: 'out-of-stock' },
-    { id: 'JWL-001', name: 'Serpentine Diamond Ring',  imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: '18K White Gold', price: 4000000, stock: 12, status: 'active' },
-    { id: 'JWL-001', name: 'Serpentine Diamond Ring',  imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: '18K White Gold', price: 4000000, stock: 12, status: 'active' },
-    { id: 'JWL-001', name: 'Serpentine Diamond Ring',  imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: '18K White Gold', price: 4000000, stock: 12, status: 'active' },
+    { id: 'JWL-001', name: 'Serpentine Diamond Ring',     imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: 'Vàng 18K',   price: 4200000, stock: 12, status: 'active' },
+    { id: 'JWL-002', name: 'Celestial Diamond Necklace',  imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Vòng cổ', material: 'Vàng Trắng', price: 6800000, stock: 0,  status: 'out-of-stock' },
+    { id: 'JWL-003', name: 'Aurora Stud Earrings',        imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Bông tai', material: 'Bạc',        price: 1500000, stock: 25, status: 'active' },
+    { id: 'JWL-004', name: 'Luna Bangle',                 imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Vòng tay', material: 'Vàng 18K',   price: 3500000, stock: 8,  status: 'draft' },
+    { id: 'JWL-005', name: 'Rose Petal Ring',             imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: 'Vàng Trắng', price: 2900000, stock: 0,  status: 'out-of-stock' },
   ]);
+
+  readonly filteredProducts = computed(() => {
+    const cat    = this.activeCategory();
+    const mat    = this.activeMaterial();
+    const status = this.activeStatus();
+    if (!cat && !mat && !status) return this.products();
+    return this.products().filter(p => {
+      if (cat    && p.category !== cat)    return false;
+      if (mat    && p.material !== mat)    return false;
+      if (status && p.status  !== status)  return false;
+      return true;
+    });
+  });
 
   editingProduct = signal<Product | null>(null);
 
@@ -131,10 +149,31 @@ export class ProductManagementComponent {
     this.bespokeEnabled.set(false);
   }
 
+  onPriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const raw = input.value.replace(/\./g, '').replace(/[^\d]/g, '');
+    const num = raw ? parseInt(raw, 10) : 0;
+    this.newPrice.set(num);
+    input.value = num ? num.toLocaleString('vi-VN') : '';
+  }
+
+  applyFilters() {
+    this.activeCategory.set(this.filterCategory());
+    this.activeMaterial.set(this.filterMaterial());
+    this.activeStatus.set(this.filterStatus());
+    this.filterApplied.set(true);
+    this.currentPage.set(1);
+  }
+
   clearFilters() {
     this.filterCategory.set('');
     this.filterMaterial.set('');
     this.filterStatus.set('');
+    this.activeCategory.set('');
+    this.activeMaterial.set('');
+    this.activeStatus.set('');
+    this.filterApplied.set(false);
+    this.currentPage.set(1);
   }
 
   removeMold(id: string) {
@@ -147,11 +186,10 @@ export class ProductManagementComponent {
     this.bespokeStones.update(list => list.filter((_, idx) => idx !== i));
   }
 
-  formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN');
-  }
+  readonly formatPrice = formatPrice;
 
-  get totalPages() { return Math.ceil(this.totalItems / 5); }
+  get totalItems() { return this.filteredProducts().length; }
+  get totalPages() { return Math.max(1, Math.ceil(this.totalItems / 5)); }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) this.currentPage.set(page);

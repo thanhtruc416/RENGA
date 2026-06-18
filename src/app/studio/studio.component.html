@@ -548,7 +548,7 @@
                     Kích cỡ M | {{ selectedMaterial().label }}
                     @if (selectedStone().id !== 'none') { | {{ selectedStone().label }} {{ carat() }}ct }
                   </p>
-                  <p class="checkout-summary__product-price">SL: {{ formatVnd(totalPrice()) }}<u>đ</u></p>
+                  <p class="checkout-summary__product-price">SL: 1</p>
                 </div>
               </div>
 
@@ -592,7 +592,7 @@
                 </div>
                 <div class="checkout-summary__deposit-row checkout-summary__deposit-row--remain">
                   <span>SỐ TIỀN CÒN LẠI</span>
-                  <strong>{{ formatVnd(depositAmount()) }}<u>đ</u></strong>
+                  <strong>{{ formatVnd(totalPrice() - depositAmount()) }}<u>đ</u></strong>
                 </div>
               </div>
 

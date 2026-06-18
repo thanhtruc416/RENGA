@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 
 // --- INTERFACES ---
 export interface WarrantyStat {
@@ -36,12 +35,18 @@ interface WarrantyProcessForm {
   selector: 'app-warranty-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CurrencyPipe, DatePipe],
+  imports: [ReactiveFormsModule],
   templateUrl: './warranty-management.component.html',
   styleUrl: './warranty-management.component.css'
 })
 export class WarrantyManagementComponent implements OnInit {
   // --- STATE (SIGNALS) ---
+  filterCategory = signal('');
+  filterStatus   = signal('');
+  filterApplied  = signal(false);
+  activeCategory = signal('');
+  activeStatus   = signal('');
+
   readonly stats = signal<WarrantyStat[]>([
     { id: 'received', label: 'YÊU CẦU ĐÃ NHẬN', value: 24 },
     { id: 'avg-time', label: 'THỜI GIAN SỬA CHỮA TB', value: '5.2 Days', subtext: '↑ 0.4 So với tháng trước' },
@@ -130,9 +135,35 @@ export class WarrantyManagementComponent implements OnInit {
     freeReason: new FormControl('', { nonNullable: true })
   });
 
+  readonly filteredRequests = computed(() => {
+    const cat    = this.activeCategory();
+    const status = this.activeStatus();
+    if (!cat && !status) return this.requests();
+    return this.requests().filter(r => {
+      if (cat    && r.sku.toLowerCase().indexOf(cat.toLowerCase()) === -1
+                 && r.productName.toLowerCase().indexOf(cat.toLowerCase()) === -1) return false;
+      if (status && r.status !== status) return false;
+      return true;
+    });
+  });
+
   ngOnInit(): void {}
 
   // --- METHODS ---
+  applyFilters(): void {
+    this.activeCategory.set(this.filterCategory());
+    this.activeStatus.set(this.filterStatus());
+    this.filterApplied.set(true);
+  }
+
+  clearFilters(): void {
+    this.filterCategory.set('');
+    this.filterStatus.set('');
+    this.activeCategory.set('');
+    this.activeStatus.set('');
+    this.filterApplied.set(false);
+  }
+
   openModal(request: WarrantyRequest): void {
     if (request.actionState === 'process') {
       this.selectedRequest.set(request);

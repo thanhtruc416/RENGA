@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { ModalService } from '../core/services/modal.service';
+import { formatPrice } from '../shared/utils/currency.util';
 
 interface Category {
   name: string;
@@ -81,7 +82,5 @@ export class HomeComponent {
 
   readonly stars = [1, 2, 3, 4, 5];
 
-  formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN') + '₫';
-  }
+  readonly formatPrice = formatPrice;
 }

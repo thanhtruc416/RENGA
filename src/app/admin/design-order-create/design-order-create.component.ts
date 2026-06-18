@@ -1,8 +1,6 @@
-import { ButtonComponent } from '../../shared/components/button/button.component'; 
-
 import { ChangeDetectionStrategy, Component, signal, computed, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CurrencyPipe, DecimalPipe  } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 // --- TYPED FORM ---
@@ -23,14 +21,14 @@ interface DesignOrderForm {
   selector: 'app-design-order-create',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CurrencyPipe, DecimalPipe, ButtonComponent],
+  imports: [ReactiveFormsModule, DecimalPipe],
   templateUrl: './design-order-create.component.html',
   styleUrl: './design-order-create.component.css'
 })
 export class DesignOrderCreateComponent {
   // --- STATE (SIGNALS) ---
   readonly customerFound = signal<boolean>(false);
-  
+
   // Giả lập danh sách ảnh được upload
   readonly uploadedImages = signal<string[]>(['https://picsum.photos/id/111/150/150']);
 
@@ -59,13 +57,33 @@ export class DesignOrderCreateComponent {
     return (total * percent) / 100;
   });
 
+  readonly priceDisplay = signal(
+    (this.orderForm.controls.totalPrice.value ?? 12500000).toLocaleString('vi-VN')
+  );
+
+  readonly searchError = computed(() => {
+    const val = (this.formValues().searchQuery ?? '').trim();
+    if (!val) return '';
+    const isPhone = /^\d{10}$/.test(val);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    return (isPhone || isEmail) ? '' : 'Vui lòng nhập số điện thoại 10 chữ số hoặc địa chỉ email hợp lệ.';
+  });
+
   // --- METHODS ---
+  onPriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const raw = input.value.replace(/\./g, '').replace(/[^\d]/g, '');
+    const num = raw ? parseInt(raw, 10) : 0;
+    this.orderForm.controls.totalPrice.setValue(num || null);
+    const formatted = num ? num.toLocaleString('vi-VN') : '';
+    this.priceDisplay.set(formatted);
+    input.value = formatted;
+  }
+
   searchCustomer(): void {
-    const query = this.orderForm.controls.searchQuery.value;
-    if (query) {
-      // Giả lập call API tìm thấy khách hàng
-      this.customerFound.set(true);
-    }
+    const query = this.orderForm.controls.searchQuery.value.trim();
+    if (!query || this.searchError()) return;
+    this.customerFound.set(true);
   }
 
   triggerUpload(): void {

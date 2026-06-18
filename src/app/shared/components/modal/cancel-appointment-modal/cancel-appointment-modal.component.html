@@ -25,6 +25,21 @@
           <input type="checkbox" [checked]="isSelected(reason.value)" (change)="toggleReason(reason.value)">
           <span class="ltv-cancel-modal__reason-label">{{ reason.label }}</span>
         </label>
+        @if (reason.value === 'other' && isOtherSelected()) {
+          <div class="ltv-cancel-modal__other-wrap">
+            <textarea
+              class="ltv-cancel-modal__other-input"
+              rows="2"
+              maxlength="150"
+              placeholder="Vui lòng mô tả lý do của bạn..."
+              [value]="otherReason()"
+              (input)="otherReason.set($any($event.target).value)"
+            ></textarea>
+            <p class="ltv-cancel-modal__other-count" [class.ltv-cancel-modal__other-count--warn]="otherReasonLength() >= MAX_OTHER">
+              {{ otherReasonLength() }} / {{ MAX_OTHER }}
+            </p>
+          </div>
+        }
       }
     </div>
 
@@ -33,7 +48,7 @@
       <button
         class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary"
         type="button"
-        [disabled]="!selectedReasons().length"
+        [disabled]="!selectedReasons().length || (isOtherSelected() && !otherReason().trim())"
         (click)="onConfirm()"
       >XÁC NHẬN HỦY</button>
     </div>

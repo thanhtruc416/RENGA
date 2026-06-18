@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map } from 'rxjs';
 import { ProductsService } from '../products.service';
+import { CartService } from '../../core/services/cart.service';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface ProductSpec {
   label: string;
@@ -28,7 +30,9 @@ interface Review {
 })
 export class ProductDetailComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
+  private readonly cartService = inject(CartService);
 
   // Đọc :id từ route → gọi service → sau này swap of() sang http.get() trong service là xong
   // Khi dùng http.get() (async): đổi requireSync thành initialValue: undefined và wrap template bằng @if (product(); as p)
@@ -185,7 +189,22 @@ export class ProductDetailComponent {
     this.selectedSize.set(size);
   }
 
-  formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN');
+  addToCart(): void {
+    const p = this.product();
+    this.cartService.addItem({
+      type: 'available',
+      name: p.name,
+      spec: `Size ${this.selectedSize() ?? '?'} | ${p.material ?? p.collection}`,
+      price: p.price,
+      image: p.imageUrl,
+      quantity: 1,
+    });
   }
+
+  buyNow(): void {
+    this.addToCart();
+    this.router.navigate(['/cart']);
+  }
+
+  readonly formatPrice = formatPrice;
 }

@@ -51,7 +51,7 @@ export class RegisterComponent {
       next: () => {
         this.isSubmitting.set(false);
         this.showSuccess.set(true);
-        const timer = setTimeout(() => this.router.navigate(['/dang-nhap']), 2000);
+        const timer = setTimeout(() => this.router.navigate(['/']), 2000);
         this.destroyRef.onDestroy(() => clearTimeout(timer));
       },
       error: (err: HttpErrorResponse) => {

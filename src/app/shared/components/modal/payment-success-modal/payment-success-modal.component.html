@@ -49,7 +49,7 @@
 
     @if (!isGuest()) {
       <div class="modal-actions__row">
-        <a class="modal-actions__primary" routerLink="/orders" (click)="close()">
+        <a class="modal-actions__primary" routerLink="/profile" (click)="close()">
           Xem đơn hàng của tôi
         </a>
         <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
@@ -67,7 +67,7 @@
       <div class="modal-register">
         <p class="modal-register__title">Tạo tài khoản để theo dõi đơn hàng &amp; tích điểm</p>
         <p class="modal-register__desc">Trở thành thành viên của RENGA để nhận các ưu đãi độc quyền dành riêng cho bạn.</p>
-        <a class="modal-register__btn" routerLink="/auth/register" (click)="close()">Đăng ký ngay</a>
+        <a class="modal-register__btn" routerLink="/dang-ki" (click)="close()">Đăng ký ngay</a>
       </div>
     }
 

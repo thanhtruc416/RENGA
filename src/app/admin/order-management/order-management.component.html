@@ -48,6 +48,12 @@
       </div>
     </div>
 
+    @if (filterApplied()) {
+      <button class="om__clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="om__apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
+
     <button class="om__export-btn" type="button">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       XUẤT BÁO CÁO
@@ -63,13 +69,13 @@
           <th class="om__th">KHÁCH HÀNG</th>
           <th class="om__th">NGÀY ĐẶT</th>
           <th class="om__th om__th--center">LOẠI ĐƠN</th>
-          <th class="om__th om__th--num">TỔNG TIỀN</th>
+          <th class="om__th om__th--num">TỔNG TIỀN (₫)</th>
           <th class="om__th om__th--center">TRẠNG THÁI</th>
           <th class="om__th om__th--center">THAO TÁC</th>
         </tr>
       </thead>
       <tbody>
-        @for (order of orders; track order.id + $index) {
+        @for (order of filteredOrders(); track order.id + $index) {
           <tr class="om__tr">
             <td class="om__td om__td--id">{{ order.id }}</td>
             <td class="om__td">

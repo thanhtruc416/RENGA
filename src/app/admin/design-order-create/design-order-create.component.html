@@ -22,9 +22,12 @@
         <div class="form-group form-group--full">
           <label class="form-label">SỐ ĐIỆN THOẠI HOẶC EMAIL</label>
           <div class="form-input-group">
-            <input type="text" class="form-input" formControlName="searchQuery" placeholder="Nhập SĐT/Email để bắt đầu...">
+            <input type="text" class="form-input" [class.form-input--error]="searchError()" formControlName="searchQuery" placeholder="Nhập SĐT/Email để bắt đầu...">
             <button class="btn btn--black" (click)="searchCustomer()">TÌM KIẾM KHÁCH HÀNG</button>
           </div>
+          @if (searchError()) {
+            <p class="search-error">{{ searchError() }}</p>
+          }
         </div>
 
         <!-- Thẻ khách hàng hiện ra khi tìm thấy -->
@@ -129,9 +132,9 @@
         </h3>
 
         <div class="form-group form-group--full">
-          <label class="form-label">GIÁ THỐNG NHẤT (VND)</label>
-          <!-- Căn giữa, chữ to màu hồng theo thiết kế -->
-          <input type="number" class="form-input input-giant-price" formControlName="totalPrice">
+          <label class="form-label">GIÁ THỐNG NHẤT (₫)</label>
+          <input type="text" inputmode="numeric" class="form-input input-giant-price"
+            [value]="priceDisplay()" (input)="onPriceInput($event)">
         </div>
 
         <div class="deposit-row">
@@ -145,14 +148,14 @@
           <div class="form-group">
             <label class="form-label">TIỀN CỌC TỐI THIỂU</label>
             <!-- Tự động tính toán bằng Signal computed() -->
-            <p class="calculated-price">{{ minDepositAmount() | number:'1.0-0' }}</p>
+            <p class="calculated-price">{{ minDepositAmount() | number:'1.0-0' }}₫</p>
           </div>
         </div>
 
         <div class="quote-details">
           <div class="quote-details__row">
             <span class="quote-details__label">Giá trị sản phẩm</span>
-            <span class="quote-details__value">{{ orderForm.controls.totalPrice.value | number:'1.0-0' }}đ</span>
+            <span class="quote-details__value">{{ orderForm.controls.totalPrice.value | number:'1.0-0' }}₫</span>
           </div>
           <div class="quote-details__row">
             <span class="quote-details__label">Phí thiết kế</span>

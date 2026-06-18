@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef, inject } from '@angular/core';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
+import { formatVnd } from '../shared/utils/currency.util';
 
 interface Category {
   id: string;
@@ -325,9 +326,7 @@ export class StudioComponent {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  formatVnd(value: number): string {
-    return value.toLocaleString('vi-VN');
-  }
+  readonly formatVnd = formatVnd;
 
   submitOrder(): void {
     if (this.checkoutForm.invalid) {

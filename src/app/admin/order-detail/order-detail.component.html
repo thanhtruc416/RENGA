@@ -38,31 +38,31 @@
             <div class="od__product-info">
               <div class="od__product-header">
                 <h4 class="od__product-name">{{ item.name }}</h4>
-                <span class="od__product-price">{{ formatPrice(item.price) }}VNĐ</span>
+                <span class="od__product-price">{{ formatPrice(item.price) }}₫</span>
               </div>
               <p class="od__product-note">{{ item.note }}</p>
               <div class="od__product-specs">
                 @if (item.material) {
                   <div class="od__spec-row">
-                    <span class="od__spec-label">CHẤT LIỆU</span>
+                    <span class="od__spec-label">CHẤT LIỆU:</span>
                     <span class="od__spec-value">{{ item.material }}</span>
                   </div>
                 }
                 @if (item.stone) {
                   <div class="od__spec-row">
-                    <span class="od__spec-label">ĐÁ</span>
+                    <span class="od__spec-label">ĐÁ:</span>
                     <span class="od__spec-value">{{ item.stone }}</span>
                   </div>
                 }
                 @if (item.size) {
                   <div class="od__spec-row">
-                    <span class="od__spec-label">SIZE</span>
+                    <span class="od__spec-label">SIZE:</span>
                     <span class="od__spec-value">{{ item.size }}</span>
                   </div>
                 }
                 @if (item.length) {
                   <div class="od__spec-row">
-                    <span class="od__spec-label">ĐỘ DÀI</span>
+                    <span class="od__spec-label">ĐỘ DÀI:</span>
                     <span class="od__spec-value">{{ item.length }}</span>
                   </div>
                 }
@@ -132,38 +132,38 @@
       <!-- Invoice card -->
       <div class="od__card od__card--invoice">
         <div class="od__card-header">
-          <h3 class="od__card-title od__card-title--sm od__card-title--light">HOÁ ĐƠN THANH TOÁN</h3>
+          <h3 class="od__card-title od__card-title--sm od__card-title--light">HÓA ĐƠN THANH TOÁN</h3>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" color="rgba(255,255,255,0.6)" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         </div>
         <div class="od__invoice-rows">
           <div class="od__invoice-row">
-            <span>Tổng hoá đơn</span>
-            <span>{{ formatPrice(invoice.subtotal) }}</span>
+            <span>Tổng hóa đơn</span>
+            <span>{{ formatPrice(invoice.subtotal) }}₫</span>
           </div>
           <div class="od__invoice-row">
             <span>Giảm giá</span>
-            <span class="od__invoice-discount">{{ formatPrice(invoice.discount) }}</span>
+            <span class="od__invoice-discount">{{ formatPrice(invoice.discount) }}₫</span>
           </div>
           <div class="od__invoice-row">
             <span>Phí vận chuyển</span>
-            <span>{{ formatPrice(invoice.shipping) }}</span>
+            <span>{{ formatPrice(invoice.shipping) }}₫</span>
           </div>
         </div>
         <div class="od__invoice-total">
           <span>Tổng đơn</span>
-          <span>{{ formatPrice(invoice.total) }}</span>
+          <span>{{ formatPrice(invoice.total) }}₫</span>
         </div>
         <div class="od__invoice-deposit">
           <div class="od__invoice-row od__invoice-row--paid">
             <span>ĐÃ THANH TOÁN CỌC</span>
-            <span>{{ formatPrice(invoice.paid) }}</span>
+            <span>{{ formatPrice(invoice.paid) }}₫</span>
           </div>
           <div class="od__invoice-row od__invoice-row--remaining">
             <span>CÒN LẠI</span>
-            <span>{{ formatPrice(invoice.remaining) }}</span>
+            <span>{{ formatPrice(invoice.remaining) }}₫</span>
           </div>
         </div>
-        <button class="od__invoice-export" type="button">XUẤT HOÁ ĐƠN</button>
+        <button class="od__invoice-export" type="button">XUẤT HÓA ĐƠN</button>
       </div>
 
       <!-- Notes card -->
@@ -222,7 +222,7 @@
         <div class="pm-modal__toggle-row">
           <div class="pm-modal__toggle-info">
             <p class="pm-modal__toggle-title">Gửi thông báo cho khách hàng</p>
-            <p class="pm-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ.</p>
+            <p class="pm-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ</p>
           </div>
           <button
             class="pm-modal__toggle"
