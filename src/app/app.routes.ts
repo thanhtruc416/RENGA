@@ -18,6 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'studio',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./studio/studio.component').then((m) => m.StudioComponent),
   },
@@ -57,13 +58,11 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('./cart/cart.component').then((m) => m.CartComponent),
   },
   {
     path: 'checkout',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
@@ -80,6 +79,12 @@ export const routes: Routes = [
       import('./orders/order-lookup/order-lookup.component').then(
         (m) => m.OrderLookupComponent,
       ),
+  },
+  {
+    path: 'orders/reviews',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./reviews/reviews.component').then((m) => m.ReviewsComponent),
   },
   {
     path: 'orders/custom/:id',

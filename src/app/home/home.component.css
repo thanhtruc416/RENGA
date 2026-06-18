@@ -216,15 +216,28 @@
   color: var(--color-primary);
 }
 
-.home__bestsellers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 320px);
-  gap: 24px;
-  overflow-x: auto;
+.home__bestsellers-track-wrap {
+  overflow: hidden;
   padding-top: 14px;
   margin-top: -14px;
   padding-bottom: 28px;
   margin-bottom: -28px;
+}
+
+.home__bestsellers-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: bs-scroll 28s linear infinite;
+}
+
+.home__bestsellers-track-wrap:hover .home__bestsellers-track {
+  animation-play-state: paused;
+}
+
+@keyframes bs-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 .home__product-card {
@@ -239,6 +252,7 @@
   color: inherit;
   transition: box-shadow 0.35s ease, transform 0.35s ease;
   flex-shrink: 0;
+  width: 260px;
   will-change: transform;
 }
 

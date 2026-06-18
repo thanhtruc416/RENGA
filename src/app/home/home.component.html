@@ -46,21 +46,35 @@
   <section class="home__bestsellers">
     <div class="home__bestsellers-header">
       <h3 class="home__bestsellers-title">Best Sellers</h3>
-      <a routerLink="/products" class="home__bestsellers-link">Xem tất cả</a>
+
     </div>
-    <div class="home__bestsellers-grid">
-      @for (product of bestSellers(); track product.id) {
-        <a [routerLink]="['/products', product.id]" class="home__product-card">
-          <span class="home__product-badge">BEST SELLER</span>
-          <div class="home__product-img-wrap">
-            <img [src]="product.imageUrl" [alt]="product.name" class="home__product-img" />
-          </div>
-          <div class="home__product-info">
-            <p class="home__product-name">{{ product.name }}</p>
-            <p class="home__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
-          </div>
-        </a>
-      }
+    <div class="home__bestsellers-track-wrap">
+      <div class="home__bestsellers-track">
+        @for (product of bestSellers(); track product.id) {
+          <a [routerLink]="['/products', product.id]" class="home__product-card">
+            <span class="home__product-badge">BEST SELLER</span>
+            <div class="home__product-img-wrap">
+              <img [src]="product.imageUrl" [alt]="product.name" class="home__product-img" />
+            </div>
+            <div class="home__product-info">
+              <p class="home__product-name">{{ product.name }}</p>
+              <p class="home__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
+            </div>
+          </a>
+        }
+        @for (product of bestSellers(); track 'dup-' + product.id) {
+          <a [routerLink]="['/products', product.id]" class="home__product-card" aria-hidden="true">
+            <span class="home__product-badge">BEST SELLER</span>
+            <div class="home__product-img-wrap">
+              <img [src]="product.imageUrl" [alt]="product.name" class="home__product-img" />
+            </div>
+            <div class="home__product-info">
+              <p class="home__product-name">{{ product.name }}</p>
+              <p class="home__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
+            </div>
+          </a>
+        }
+      </div>
     </div>
   </section>
 

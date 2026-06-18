@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { CartService } from '../core/services/cart.service';
+import { AuthService } from '../core/services/auth.service';
 
 interface OrderItem {
   readonly id: number;
@@ -42,6 +43,7 @@ export class CheckoutComponent {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly cartService = inject(CartService);
+  private readonly auth = inject(AuthService);
 
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
@@ -161,7 +163,11 @@ export class CheckoutComponent {
     // TODO: thay bằng API thật
     setTimeout(() => {
       this.isSubmitting.set(false);
-      this.showSuccessModal.set(true);
+      if (this.auth.isLoggedIn()) {
+        this.showSuccessModal.set(true);
+      } else {
+        this.showSuccessGuestModal.set(true);
+      }
     }, 800);
   }
 }

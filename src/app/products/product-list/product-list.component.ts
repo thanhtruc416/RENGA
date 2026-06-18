@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, HostListener, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { switchMap, map } from 'rxjs';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap, map, skip } from 'rxjs';
 import { ProductsService } from '../products.service';
 import { formatPrice } from '../../shared/utils/currency.util';
 
@@ -121,6 +121,12 @@ export class ProductListComponent {
   readonly displayCount = signal(8);
   readonly totalCount = computed(() => this.filteredProducts().length);
   readonly displayedProducts = computed(() => this.filteredProducts().slice(0, this.displayCount()));
+
+  constructor() {
+    toObservable(this.activeCategory).pipe(skip(1), takeUntilDestroyed()).subscribe(() => {
+      this.displayCount.set(8);
+    });
+  }
 
   // ── Panel open/close ──────────────────────────────────────
   toggleFilter(key: string, e: MouseEvent): void {

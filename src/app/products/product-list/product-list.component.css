@@ -232,10 +232,12 @@
   text-transform: uppercase;
   color: var(--color-white);
   background: var(--color-primary);
-  border: none;
+  border: 2px solid transparent;
   border-radius: 8px;
   cursor: pointer;
   padding: 10px 24px;
+  min-width: 140px;
+  text-align: center;
   white-space: nowrap;
   transition: opacity 0.15s;
   flex-shrink: 0;
@@ -247,21 +249,26 @@
 
 .product-list__reset-all {
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-muted);
-  background: none;
-  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: 2px solid var(--color-primary);
+  border-radius: 8px;
   cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  padding: 10px 24px;
+  min-width: 140px;
+  text-align: center;
   white-space: nowrap;
-  transition: color 0.15s;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
 }
 
 .product-list__reset-all:hover {
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 /* ── Price Range Slider ── */

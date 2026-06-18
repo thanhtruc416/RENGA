@@ -148,8 +148,11 @@
     }
 
     <div class="product-list__filter-actions">
-      <button class="product-list__apply-btn" type="button" (click)="applyAllFilters($event)">ÁP DỤNG</button>
-      <button class="product-list__reset-all" type="button" (click)="resetAllFilters($event)">Xóa bộ lọc</button>
+      @if (hasAnyActive()) {
+        <button class="product-list__reset-all" type="button" (click)="resetAllFilters($event)">Xóa bộ lọc</button>
+      } @else {
+        <button class="product-list__apply-btn" type="button" (click)="applyAllFilters($event)">ÁP DỤNG</button>
+      }
     </div>
   </div>
 
