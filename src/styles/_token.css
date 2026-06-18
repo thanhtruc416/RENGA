@@ -2,7 +2,10 @@
 :root {
   /* ── Brand colors ── */
   --color-primary: #c4607e;
+  --color-primary-rgb: 196, 96, 126;
+  --color-primary-dark: #9a3f5c;
   --color-primary-light: #f7f0f3;
+  --color-error: #e53935;
   --color-dark: #1a1a1a;
   --color-muted: #444748;
   --color-border: #c4c7c7;

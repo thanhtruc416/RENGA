@@ -56,7 +56,11 @@ export class OrderTrackingComponent {
   // ─── Member tier (TODO: lấy từ AuthService / AccountService) ─────────
   readonly memberTier = signal('Gold Heritage Tier');
 
-  // ─── Filter state ─────────────────────────────────────────────────────
+  // ─── Filter state: pending (UI) vs applied (table) ────────────────────
+  readonly pendingType   = signal('');
+  readonly pendingStatus = signal('');
+  readonly pendingTime   = signal('3m');
+
   readonly filterType   = signal('');
   readonly filterStatus = signal('');
   readonly filterTime   = signal('3m');
@@ -120,7 +124,24 @@ export class OrderTrackingComponent {
   }
 
   // ─── Actions ──────────────────────────────────────────────────────────
+  readonly hasActiveFilters = computed(() =>
+    this.filterType() !== '' || this.filterStatus() !== '' || this.filterTime() !== '3m'
+  );
+
   applyFilters(): void {
+    this.filterType.set(this.pendingType());
+    this.filterStatus.set(this.pendingStatus());
+    this.filterTime.set(this.pendingTime());
+    this.currentPage.set(1);
+  }
+
+  clearFilters(): void {
+    this.pendingType.set('');
+    this.pendingStatus.set('');
+    this.pendingTime.set('3m');
+    this.filterType.set('');
+    this.filterStatus.set('');
+    this.filterTime.set('3m');
     this.currentPage.set(1);
   }
 
@@ -131,17 +152,14 @@ export class OrderTrackingComponent {
   }
 
   onFilterStatusChange(event: Event): void {
-    this.filterStatus.set((event.target as HTMLSelectElement).value);
-    this.currentPage.set(1);
+    this.pendingStatus.set((event.target as HTMLSelectElement).value);
   }
 
   onFilterTypeChange(event: Event): void {
-    this.filterType.set((event.target as HTMLSelectElement).value);
-    this.currentPage.set(1);
+    this.pendingType.set((event.target as HTMLSelectElement).value);
   }
 
   onFilterTimeChange(event: Event): void {
-    this.filterTime.set((event.target as HTMLSelectElement).value);
-    this.currentPage.set(1);
+    this.pendingTime.set((event.target as HTMLSelectElement).value);
   }
 }

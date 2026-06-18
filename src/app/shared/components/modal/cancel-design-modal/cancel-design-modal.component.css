@@ -73,7 +73,7 @@
 .cancel-bespoke__divider {
   width: 64px;
   height: 1px;
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
   margin: 0 auto 16px;
 }
 
@@ -123,7 +123,7 @@
 
 .cancel-bespoke__ack {
   background: #f3f3f4;
-  border-left: 4px solid #9a3f5c;
+  border-left: 4px solid var(--color-primary-dark);
   padding: 16px 16px 16px 20px;
   display: flex;
   align-items: flex-start;

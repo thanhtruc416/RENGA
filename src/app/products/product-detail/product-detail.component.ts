@@ -186,6 +186,6 @@ export class ProductDetailComponent {
   }
 
   formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN') + '₫';
+    return price.toLocaleString('vi-VN');
   }
 }

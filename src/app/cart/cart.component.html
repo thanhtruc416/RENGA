@@ -4,11 +4,11 @@
     <div class="cart-hero__inner">
       <h1 class="cart-hero__title">Giỏ hàng của tôi</h1>
       <div class="cart-hero__actions">
-        <button
-          class="cart-hero__select-many"
-          [class.is-active]="isSelecting()"
-          (click)="toggleSelecting()"
-        >Chọn nhiều</button>
+        @if (!allSelected()) {
+          <button class="cart-hero__select-many" (click)="selectAll()">Chọn tất cả</button>
+        } @else {
+          <button class="cart-hero__select-many cart-hero__select-many--deselect" (click)="deselectAll()">Xóa chọn tất cả</button>
+        }
 
         @if (activeTab() === 'studio') {
           <a routerLink="/studio" class="cart-hero__add-studio" aria-label="Tạo thiết kế mới">+</a>
@@ -40,14 +40,13 @@
   </div>
 
   <div class="cart-section">
-    <div class="cart-list" [class.is-selecting]="isSelecting()" role="list">
+    <div class="cart-list" role="list">
 
       @for (item of filteredItems(); track item.id) {
         <div
           class="cart-item"
           [class.cart-item--studio]="item.type === 'studio'"
           [class.is-checked]="isSelected(item.id)"
-          (click)="toggleSelectItem(item.id)"
           role="listitem"
         >
           <label class="cart-item__checkbox-wrap" aria-label="Chọn sản phẩm" (click)="$event.stopPropagation()">
@@ -102,8 +101,7 @@
                 }
               </div>
 
-              @if (!isSelecting()) {
-                <button
+              <button
                   class="cart-item__remove"
                   type="button"
                   (click)="$event.stopPropagation(); removeItem(item.id)"
@@ -113,7 +111,6 @@
                     <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                   </svg>
                 </button>
-              }
             </div>
 
             <div class="cart-item__bottom">
@@ -124,7 +121,7 @@
                   Tiếp tục thiết kế
                 </a>
               }
-              <span class="cart-item__price">{{ item.price | number: '1.0-0' }}₫</span>
+              <span class="cart-item__price">{{ item.price | number: '1.0-0' }}<u>đ</u></span>
             </div>
           </div>
 
@@ -138,12 +135,12 @@
     </div>
   </div>
 
-  @if (filteredItems().length > 0 && !isSelecting()) {
+  @if (filteredItems().length > 0 && selectedCount() === 0) {
     <div class="cart-summary">
       <div class="cart-summary__inner">
         <span class="cart-summary__label">Tạm tính ({{ totalCount() }} sản phẩm)</span>
         <div class="cart-summary__right">
-          <span class="cart-summary__amount">{{ totalPrice() | number: '1.0-0' }}₫</span>
+          <span class="cart-summary__amount">{{ totalPrice() | number: '1.0-0' }}<u>đ</u></span>
           @if (activeTab() === 'available') {
             <a routerLink="/checkout" class="cart-summary__checkout-btn">Đặt hàng</a>
           }
@@ -152,13 +149,13 @@
     </div>
   }
 
-  @if (isSelecting()) {
+  @if (selectedCount() > 0) {
     <div class="cart-action-bar">
       <div class="cart-action-bar__inner">
         <span class="cart-action-bar__summary">
           Đã chọn {{ selectedCount() }} sản phẩm
           &nbsp;·&nbsp;
-          <strong>{{ selectedTotal() | number: '1.0-0' }}₫</strong>
+          <strong>{{ selectedTotal() | number: '1.0-0' }}<u>đ</u></strong>
         </span>
         <div class="cart-action-bar__btns">
           <button

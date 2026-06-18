@@ -1,4 +1,4 @@
-import { UpperCasePipe } from '@angular/common';
+import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -54,7 +54,7 @@ interface CheckoutForm {
   selector: 'app-studio',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, PaymentSuccessModalComponent, PaymentFailModalComponent],
+  imports: [DecimalPipe, ReactiveFormsModule, PaymentSuccessModalComponent, PaymentFailModalComponent],
   templateUrl: './studio.component.html',
   styleUrl: './studio.component.css',
 })
@@ -261,8 +261,8 @@ export class StudioComponent {
   readonly priceSummaryVisible = computed(() => this.currentStep() >= 2 && this.currentStep() < 5);
 
   readonly priceSummaryAmount = computed(() => {
-    if (this.currentStep() >= 3) return `${Math.round(this.totalPrice() / 1_000_000)} triệu`;
-    return this.selectedMaterial().price.replace(' VNĐ', '');
+    if (this.currentStep() >= 3) return this.formatVnd(this.totalPrice());
+    return this.formatVnd(this.selectedMaterial().priceVnd);
   });
 
   readonly priceSummaryDetail = computed(() =>
@@ -326,7 +326,7 @@ export class StudioComponent {
   }
 
   formatVnd(value: number): string {
-    return value.toLocaleString('vi-VN') + '₫';
+    return value.toLocaleString('vi-VN');
   }
 
   submitOrder(): void {

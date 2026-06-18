@@ -15,6 +15,10 @@
       <div class="order-tracking-hero">
         <div class="order-tracking-hero__left">
           <h1 class="order-tracking-hero__title">Danh sách đơn hàng</h1>
+          <p class="order-tracking-desc">
+            Theo dõi các tác phẩm nghệ thuật vượt thời gian bạn đã<br />
+            sở hữu và quản lý các yêu cầu chế tác riêng biệt
+          </p>
         </div>
         <div class="order-tracking-hero__right">
           <a routerLink="/orders/lookup" class="order-tracking-lookup-btn">Tra cứu đơn hàng</a>
@@ -24,11 +28,6 @@
           </div>
         </div>
       </div>
-
-      <p class="order-tracking-desc">
-        Theo dõi các tác phẩm nghệ thuật vượt thời gian bạn đã<br />
-        sở hữu và quản lý các yêu cầu chế tác riêng biệt.
-      </p>
 
     </div>
   </div>
@@ -41,6 +40,7 @@
         <label class="order-tracking-filter__label" for="filter-type">Loại đơn hàng</label>
         <div class="order-tracking-filter__select-wrap">
           <select id="filter-type" class="order-tracking-filter__select"
+            [value]="pendingType()"
             (change)="onFilterTypeChange($event)">
             <option value="">Tất cả các loại</option>
             <option value="standard">Tiêu chuẩn</option>
@@ -54,6 +54,7 @@
         <label class="order-tracking-filter__label" for="filter-status">Trạng thái</label>
         <div class="order-tracking-filter__select-wrap">
           <select id="filter-status" class="order-tracking-filter__select"
+            [value]="pendingStatus()"
             (change)="onFilterStatusChange($event)">
             <option value="">Tất cả trạng thái</option>
             <option value="shipping">Đang giao hàng</option>
@@ -69,6 +70,7 @@
         <label class="order-tracking-filter__label" for="filter-time">Thời gian</label>
         <div class="order-tracking-filter__select-wrap">
           <select id="filter-time" class="order-tracking-filter__select"
+            [value]="pendingTime()"
             (change)="onFilterTimeChange($event)">
             <option value="3m">3 tháng gần nhất</option>
             <option value="6m">6 tháng gần nhất</option>
@@ -79,13 +81,21 @@
         </div>
       </div>
 
-      <button class="order-tracking-filters__apply" type="button" (click)="applyFilters()">
-        <svg width="10" height="7" viewBox="0 0 10 7" fill="none" aria-hidden="true">
-          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Áp dụng bộ lọc
-      </button>
+      <div class="order-tracking-filters__actions">
+        <button class="order-tracking-filters__apply" type="button" (click)="applyFilters()">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+            <line x1="1" y1="1" x2="13" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="3" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="5" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Áp dụng bộ lọc
+        </button>
+        @if (hasActiveFilters()) {
+          <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
+            Xóa bộ lọc
+          </button>
+        }
+      </div>
 
     </div>
   </div>
@@ -120,7 +130,7 @@
                 {{ order.product }}
               </td>
               <td class="order-tracking-table__td order-tracking-table__td--amount">
-                {{ order.amount | number: '1.0-0' : 'vi' }}đ
+                {{ order.amount | number: '1.0-0' : 'vi' }}<u>đ</u>
               </td>
               <td class="order-tracking-table__td order-tracking-table__td--status">
                 <span [class]="badgeClass(order.status)">
@@ -139,7 +149,7 @@
           } @empty {
             <tr>
               <td class="order-tracking-table__empty" colspan="6">
-                Không có đơn hàng nào phù hợp.
+                Không có đơn hàng nào phù hợp
               </td>
             </tr>
           }

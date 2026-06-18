@@ -90,7 +90,7 @@
   font-weight: 800;
   font-size: 32px;
   line-height: 1.2;
-  color: #9a3f5c;
+  color: var(--color-primary-dark);
   letter-spacing: 0.5px;
 }
 
@@ -241,6 +241,26 @@
   pointer-events: none;
 }
 
+.field-group--error .field-group__input {
+  border-bottom-color: var(--color-error);
+}
+
+.field-group--error .field-group__select-wrap {
+  border-bottom-color: var(--color-error);
+}
+
+.field-group--error .field-group__label {
+  color: var(--color-error);
+}
+
+.field-group__error {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-error);
+}
+
 .payment-options {
   display: flex;
   flex-direction: column;
@@ -258,7 +278,7 @@
 }
 
 .payment-opt.is-active {
-  border-color: #9a3f5c;
+  border-color: var(--color-primary-dark);
   background: var(--color-bg-card);
 }
 
@@ -271,7 +291,6 @@
   opacity: 0;
   width: 0;
   height: 0;
-  pointer-events: none;
 }
 
 .payment-opt__radio-ui {
@@ -282,7 +301,7 @@
   height: 18px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 .payment-opt__radio-ui--empty {
@@ -464,7 +483,7 @@
   font-size: 12px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: #9a3f5c;
+  color: var(--color-primary-dark);
 }
 
 .voucher-field {
@@ -521,7 +540,7 @@
 }
 
 .voucher-field__apply:hover {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 .order-total {
@@ -586,7 +605,7 @@
 }
 
 .order-cta__btn:hover:not(:disabled) {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 .order-cta__btn-arrow {

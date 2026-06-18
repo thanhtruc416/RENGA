@@ -225,7 +225,7 @@ export class DesignComponent {
   }
 
   formatVnd(value: number): string {
-    return value.toLocaleString('vi-VN') + ' VNĐ';
+    return value.toLocaleString('vi-VN');
   }
 
   starsArray(n: number): number[] {

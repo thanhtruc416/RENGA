@@ -52,6 +52,7 @@ export class CancelOrderModalComponent {
   // ── State ───────────────────────────────────────────────────────────────────
   readonly step              = signal<ModalStep>('form');
   readonly selectedReasonIds = signal<Set<string>>(new Set());
+  readonly otherNote         = signal('');
   readonly isSubmitting      = signal(false);
 
   // ── Computed ────────────────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ export class CancelOrderModalComponent {
       return 'Bạn đã đủ điều kiện được hoàn tiền 100% nếu yêu cầu này được gửi trong vòng 1 giờ kể từ khi đặt hàng.';
     if (s === 'PF')
       return 'Sản phẩm đã được đóng gói. Khoản hoàn tiền sẽ trừ phí đóng gói và xử lý theo chính sách hiện hành.';
-    return 'Đơn hàng đang trong trạng thái không thể hủy trực tiếp.';
+    return 'Đơn hàng đang trong trạng thái không thể hủy trực tiếp';
   });
 
   /** Có thể hủy tự động (không cần Admin) — BR-24 */
@@ -73,9 +74,18 @@ export class CancelOrderModalComponent {
     return s === 'P' || s === 'PC' || s === 'PF';
   });
 
-  readonly canSubmit = computed<boolean>(() => this.selectedReasonIds().size > 0);
+  readonly otherSelected = computed<boolean>(() => this.selectedReasonIds().has('r5'));
+
+  readonly canSubmit = computed<boolean>(() =>
+    this.selectedReasonIds().size > 0 &&
+    (!this.otherSelected() || this.otherNote().trim().length > 0)
+  );
 
   // ── Actions ─────────────────────────────────────────────────────────────────
+  updateOtherNote(event: Event): void {
+    this.otherNote.set((event.target as HTMLTextAreaElement).value);
+  }
+
   toggleReason(id: string): void {
     this.selectedReasonIds.update((set) => {
       const next = new Set(set);

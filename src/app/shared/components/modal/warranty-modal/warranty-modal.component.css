@@ -65,7 +65,7 @@
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 1.8px;
-  color: #9a3f5c;
+  color: var(--color-primary-dark);
 }
 
 .warranty-modal__close {
@@ -317,7 +317,7 @@
 }
 
 .warranty-modal__btn--primary:hover:not(:disabled) {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 .warranty-modal__btn--primary:disabled {

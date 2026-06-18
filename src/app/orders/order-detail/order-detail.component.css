@@ -84,7 +84,7 @@
 }
 
 .order-detail-actions__btn:hover {
-  background: var(--color-primary-dark, #9a3f5c);
+  background: var(--color-primary-dark);
 }
 
 .order-detail-body {
@@ -521,7 +521,7 @@
 }
 
 .timeline-card__support-btn:hover {
-  background: var(--color-primary-dark, #9a3f5c);
+  background: var(--color-primary-dark);
 }
 
 .shipping-card {

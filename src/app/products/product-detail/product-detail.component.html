@@ -41,7 +41,7 @@
       <h1 class="product-detail__name">{{ product().name }}</h1>
 
       <div class="product-detail__price-row">
-        <span class="product-detail__price">{{ formatPrice(product().price) }}</span>
+        <span class="product-detail__price">{{ formatPrice(product().price) }}<u>đ</u></span>
         @if (product().inStock) {
           <span class="product-detail__stock-badge">SẴN CÓ</span>
         }
@@ -162,7 +162,7 @@
       </div>
       <div>
         <h3 class="pd-qa__title">Hãy đặt câu hỏi cho chúng tôi</h3>
-        <p class="pd-qa__subtitle">CellphoneS sẽ phản hồi trong vòng 1 giờ. Nếu Quý khách gửi câu hỏi sau 22h, chúng tôi sẽ trả lời vào sáng hôm sau. Thông tin có thể thay đổi theo thời gian, vui lòng đặt câu hỏi để nhận được cập nhật mới nhất!</p>
+        <p class="pd-qa__subtitle">RENGA sẽ phản hồi trong vòng 1 giờ. Nếu Quý khách gửi câu hỏi sau 22h, chúng tôi sẽ trả lời vào sáng hôm sau. Thông tin có thể thay đổi theo thời gian, vui lòng đặt câu hỏi để nhận được cập nhật mới nhất!</p>
       </div>
     </div>
 
@@ -262,7 +262,7 @@
           <div class="product-detail__related-info">
             <span class="product-detail__related-collection">{{ item.collection }}</span>
             <h3 class="product-detail__related-name">{{ item.name }}</h3>
-            <p class="product-detail__related-price">{{ formatPrice(item.price) }}</p>
+            <p class="product-detail__related-price">{{ formatPrice(item.price) }}<u>đ</u></p>
           </div>
         </a>
       }

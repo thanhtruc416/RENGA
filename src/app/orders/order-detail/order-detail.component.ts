@@ -95,8 +95,8 @@ const MOCK_ORDER: OrderDetail = {
   total: 20_700_000,
   shipping: {
     name: 'Nguyễn Minh Anh',
-    phone: '090 • 456 • 7890',
-    address: '88 Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh',
+    phone: '090.456.7890',
+    address: '88 Lê Lợi, Phường Bến Thành, TP. Hồ Chí Minh',
   },
   timeline: [
     {
@@ -112,7 +112,7 @@ const MOCK_ORDER: OrderDetail = {
       statusLabel: 'Hiện tại',
       name: 'Đang giao hàng',
       date: '25/10/2026   8:40',
-      note: 'Sản phẩm đang được kiểm tra chất lượng & đóng gói thủ công.',
+      note: 'Sản phẩm đang được kiểm tra chất lượng & đóng gói thủ công',
     },
     {
       id: 'tl-3',

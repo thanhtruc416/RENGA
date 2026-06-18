@@ -216,7 +216,7 @@ export class ProductListComponent {
   closeFilter(): void { this.openFilter.set(null); }
 
   formatPrice(price: number): string {
-    return price.toLocaleString('vi-VN') + 'đ';
+    return price.toLocaleString('vi-VN');
   }
 
   loadMore(): void {

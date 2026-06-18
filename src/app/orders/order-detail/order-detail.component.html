@@ -79,7 +79,7 @@
                   <p class="product-row__qty">Số lượng: {{ item.qty }}</p>
                 </div>
                 <p class="product-row__price">
-                  {{ item.price * item.qty | number: '1.0-0' : 'vi' }}đ
+                  {{ item.price * item.qty | number: '1.0-0' : 'vi' }}<u>đ</u>
                 </p>
               </div>
             }
@@ -88,7 +88,7 @@
           <div class="product-section__total">
             <span class="product-section__total-label">Tổng giá trị</span>
             <span class="product-section__total-amount">
-              {{ order().total | number: '1.0-0' : 'vi' }}đ
+              {{ order().total | number: '1.0-0' : 'vi' }}<u>đ</u>
             </span>
           </div>
         </div>

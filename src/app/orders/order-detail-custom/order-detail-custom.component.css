@@ -103,7 +103,7 @@
 }
 
 .odc-hero__btn:hover {
-  background: var(--color-primary-dark, #9a3f5c);
+  background: var(--color-primary-dark);
 }
 
 /* -- Two-column body layout ----------------------- */
@@ -265,7 +265,7 @@
   width: 17px;
   height: auto;
   object-fit: contain;
-  color: #9a3f5c;
+  color: var(--color-primary-dark);
   flex-shrink: 0;
   margin-top: 2px;
 }

@@ -100,7 +100,6 @@ export class CartComponent {
 
   readonly activeTab = signal<'available' | 'studio'>('available');
   readonly cartItems = signal<CartItem[]>(this.initialItems);
-  readonly isSelecting = signal(false);
   readonly selectedIds = signal<Set<number>>(new Set());
 
   readonly filteredItems = computed(() =>
@@ -124,26 +123,27 @@ export class CartComponent {
 
   readonly selectedCount = computed(() => this.selectedIds().size);
 
+  readonly allSelected = computed(() =>
+    this.filteredItems().length > 0 &&
+    this.filteredItems().every((item) => this.selectedIds().has(item.id))
+  );
+
   // ── Methods ──────────────────────────────────────────────
 
   switchTab(tab: 'available' | 'studio'): void {
     this.activeTab.set(tab);
-    this.resetSelection();
-  }
-
-  resetSelection(): void {
-    this.isSelecting.set(false);
     this.selectedIds.set(new Set());
   }
 
-  toggleSelecting(): void {
-    const next = !this.isSelecting();
-    this.isSelecting.set(next);
-    if (!next) this.selectedIds.set(new Set());
+  selectAll(): void {
+    this.selectedIds.set(new Set(this.filteredItems().map((item) => item.id)));
+  }
+
+  deselectAll(): void {
+    this.selectedIds.set(new Set());
   }
 
   toggleSelectItem(id: number): void {
-    if (!this.isSelecting()) return;
     this.selectedIds.update((set) => {
       const next = new Set(set);
       next.has(id) ? next.delete(id) : next.add(id);
@@ -159,7 +159,6 @@ export class CartComponent {
     const ids = this.selectedIds();
     this.cartItems.update((items) => items.filter((item) => !ids.has(item.id)));
     this.selectedIds.set(new Set());
-    this.isSelecting.set(false);
   }
 
   updateQty(id: number, delta: number): void {

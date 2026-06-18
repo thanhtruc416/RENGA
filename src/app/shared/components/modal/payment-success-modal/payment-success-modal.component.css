@@ -135,7 +135,7 @@
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 18px;
-  color: #9a3f5c;
+  color: var(--color-primary-dark);
 }
 
 .order-info-card__sep {
@@ -294,7 +294,7 @@
 }
 
 .modal-register__btn:hover {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 /* ── Back link ─────────────────────────────────────── */

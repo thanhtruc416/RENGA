@@ -74,9 +74,9 @@ export class HomeComponent {
   ];
 
   readonly studioSteps = [
-    'Chọn kiểu dáng nhẫn từ bộ sưu tập khung cơ bản đa dạng.',
-    'Lựa chọn chất liệu: Vàng trắng, Vàng hồng hoặc Platinum.',
-    'Cá nhân hóa với đá chủ Moissanite hoặc Kim cương thiên nhiên.',
+    'Chọn kiểu dáng nhẫn từ bộ sưu tập khung cơ bản đa dạng',
+    'Lựa chọn chất liệu: Vàng trắng, Vàng hồng hoặc Platinum',
+    'Cá nhân hóa với đá chủ Moissanite hoặc Kim cương thiên nhiên',
   ];
 
   readonly stars = [1, 2, 3, 4, 5];

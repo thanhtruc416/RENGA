@@ -138,9 +138,9 @@
 }
 
 .lookup-field__input {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 20px;
+  font-size: 16px;
   color: var(--color-dark);
   background: transparent;
   border: none;
@@ -196,7 +196,7 @@
 }
 
 .lookup-form__submit:hover:not(:disabled) {
-  background: #9a3f5c;
+  background: var(--color-primary-dark);
 }
 
 .lookup-form__submit:disabled {

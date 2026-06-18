@@ -61,9 +61,9 @@
               @case ('khoang-gia') {
                 <p class="filter-panel__title">Khoảng giá</p>
                 <div class="filter-panel__price-values">
-                  <span>{{ formatPrice(draftPriceMin()) }}</span>
+                  <span>{{ formatPrice(draftPriceMin()) }}<u>đ</u></span>
                   <span>—</span>
-                  <span>{{ formatPrice(draftPriceMax()) }}</span>
+                  <span>{{ formatPrice(draftPriceMax()) }}<u>đ</u></span>
                 </div>
                 <div class="filter-panel__price-slider">
                   <div class="price-slider__track">
@@ -166,7 +166,7 @@
         <div class="product-list__card-info">
           <span class="product-list__card-collection">{{ product.collection }}</span>
           <h3 class="product-list__card-name">{{ product.name }}</h3>
-          <p class="product-list__card-price">{{ formatPrice(product.price) }}</p>
+          <p class="product-list__card-price">{{ formatPrice(product.price) }}<u>đ</u></p>
         </div>
       </a>
     }

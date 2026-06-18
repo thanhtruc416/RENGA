@@ -41,6 +41,24 @@
           }
         </div>
 
+        @if (otherSelected()) {
+          <div class="cancel-other-note-wrap">
+            <textarea
+              class="cancel-other-note"
+              rows="2"
+              maxlength="150"
+              placeholder="Vui lòng mô tả lý do của bạn..."
+              [value]="otherNote()"
+              (input)="updateOtherNote($event)"
+              aria-label="Lý do khác"
+            ></textarea>
+            <span class="cancel-other-note__counter"
+              [class.cancel-other-note__counter--near]="otherNote().length >= 130">
+              {{ otherNote().length }}/150
+            </span>
+          </div>
+        }
+
         <div class="cancel-modal__actions">
           <button
             class="cancel-modal__confirm"

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
@@ -25,6 +25,10 @@ interface CheckoutForm {
   address: FormControl<string>;
 }
 
+function noWhitespace(control: AbstractControl) {
+  return control.value && !control.value.trim() ? { whitespace: true } : null;
+}
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -34,6 +38,8 @@ interface CheckoutForm {
   styleUrl: './checkout.component.css',
 })
 export class CheckoutComponent {
+
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
@@ -101,13 +107,58 @@ export class CheckoutComponent {
     return `${pad(h)}:${pad(m)}:${pad(s)}`;
   });
 
+  private readonly _countdownRef = (() => {
+    const id = setInterval(() => {
+      this.remainingSeconds.update(s => {
+        if (s <= 0) { clearInterval(id); return 0; }
+        return s - 1;
+      });
+    }, 1000);
+    this.destroyRef.onDestroy(() => clearInterval(id));
+  })();
+
+  readonly DISTRICTS: Record<string, { value: string; label: string }[]> = {
+    hcm: [
+      { value: 'q1', label: 'Quận 1' },
+      { value: 'q3', label: 'Quận 3' },
+      { value: 'q7', label: 'Quận 7' },
+      { value: 'binhth', label: 'Bình Thạnh' },
+      { value: 'pnhuan', label: 'Phú Nhuận' },
+    ],
+    hn: [
+      { value: 'hkieu', label: 'Hoàn Kiếm' },
+      { value: 'hntho', label: 'Hai Bà Trưng' },
+      { value: 'dongda', label: 'Đống Đa' },
+      { value: 'caugiay', label: 'Cầu Giấy' },
+      { value: 'tbthu', label: 'Tây Hồ' },
+    ],
+    dn: [
+      { value: 'hthanh', label: 'Hải Châu' },
+      { value: 'sontray', label: 'Sơn Trà' },
+      { value: 'nguhanhson', label: 'Ngũ Hành Sơn' },
+      { value: 'thankhoi', label: 'Thanh Khê' },
+      { value: 'lienchinh', label: 'Liên Chiểu' },
+    ],
+  };
+
+  readonly selectedProvince = signal('hcm');
+
+  readonly availableDistricts = computed(
+    () => this.DISTRICTS[this.selectedProvince()] ?? []
+  );
+
+  onProvinceChange(): void {
+    this.selectedProvince.set(this.shippingForm.get('province')!.value);
+    this.shippingForm.get('district')!.setValue('');
+  }
+
   readonly shippingForm = new FormGroup<CheckoutForm>({
-    fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^0\d{9}$/)] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
-    province: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    district: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    address: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    fullName: new FormControl('Nguyễn Minh Anh', { nonNullable: true, validators: [Validators.required] }),
+    phone: new FormControl('0901234567', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^0\d{9}$/)] }),
+    email: new FormControl('nguyenminhanh@gmail.com', { nonNullable: true, validators: [Validators.email, noWhitespace] }),
+    province: new FormControl('hcm', { nonNullable: true, validators: [Validators.required] }),
+    district: new FormControl('q1', { nonNullable: true, validators: [Validators.required] }),
+    address: new FormControl('88 Lê Lợi, Phường Bến Thành', { nonNullable: true, validators: [Validators.required] }),
   });
 
   readonly isSubmitting = signal(false);

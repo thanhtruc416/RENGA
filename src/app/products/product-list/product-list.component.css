@@ -461,9 +461,9 @@
 }
 
 .product-list__card-price {
-  font-family: var(--font-sans);
-  font-size: 32px;
-  font-weight: 400;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
   color: var(--color-price);
   line-height: 1.3;
 }

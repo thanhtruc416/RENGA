@@ -77,14 +77,15 @@ src/
 │   ├── studio/                   # The Studio — thiết kế nhẫn tuỳ chỉnh (/studio)
 │   ├── design/                   # The Designer — đặt lịch chuyên gia (/the-designer)
 │   ├── categories/               # Danh mục sản phẩm (/danh-muc)
-│   ├── cart/                     # Giỏ hàng
-│   ├── checkout/                 # Thanh toán
+│   ├── cart/                     # Giỏ hàng (/cart)
+│   ├── checkout/                 # Thanh toán (/checkout)
 │   ├── orders/                   # Quản lý đơn hàng
-│   │   ├── order-detail/
-│   │   ├── order-detail-custom/
-│   │   ├── order-lookup/
-│   │   └── order-tracking/
+│   │   ├── order-detail/         # /orders/:id
+│   │   ├── order-detail-custom/  # /orders/custom/:id
+│   │   ├── order-lookup/         # /orders/lookup
+│   │   └── order-tracking/       # /orders/tracking
 │   ├── appointment-history/      # Lịch sử lịch hẹn (/appointment-history)
+│   ├── account/                  # (chưa có route) Profile info & loyalty — tách từ /profile
 │   ├── profile/                  # Hồ sơ cá nhân (/profile)
 │   ├── reviews/                  # Đánh giá sản phẩm
 │   ├── not-found/                # Trang 404
@@ -142,11 +143,17 @@ Tất cả routes dùng **lazy loading** (`loadComponent` / `loadChildren`):
 | URL | Component | Ghi chú |
 |-----|-----------|---------|
 | `/` | `HomeComponent` | Trang chủ |
-| `/products` | `ProductListComponent` | Danh sách sản phẩm |
+| `/products` | `ProductListComponent` | Danh sách sản phẩm (lazy children) |
 | `/products/:id` | `ProductDetailComponent` | Chi tiết sản phẩm |
 | `/studio` | `StudioComponent` | Thiết kế nhẫn tuỳ chỉnh |
 | `/the-designer` | `DesignComponent` | Đặt lịch với chuyên gia |
-| `/danh-muc` | `CategoriesComponent` | Danh mục |
+| `/danh-muc` | `CategoriesComponent` | Danh mục sản phẩm |
+| `/cart` | `CartComponent` | Giỏ hàng |
+| `/checkout` | `CheckoutComponent` | Thanh toán |
+| `/orders/tracking` | `OrderTrackingComponent` | Theo dõi đơn hàng (member) |
+| `/orders/lookup` | `OrderLookupComponent` | Tra cứu đơn hàng (guest) |
+| `/orders/custom/:id` | `OrderDetailCustomComponent` | Chi tiết đơn thiết kế tuỳ chỉnh |
+| `/orders/:id` | `OrderDetailComponent` | Chi tiết đơn hàng thường |
 | `/appointment-history` | `AppointmentHistoryComponent` | Lịch sử lịch hẹn |
 | `/profile` | `ProfileComponent` | Hồ sơ cá nhân |
 | `/profile/rewards` | `ProfileRewardsComponent` | Điểm thưởng |
@@ -156,7 +163,7 @@ Tất cả routes dùng **lazy loading** (`loadComponent` / `loadChildren`):
 | `/mat-khau-moi` | `ResetPasswordComponent` | Đặt mật khẩu mới |
 | `/**` | `NotFoundComponent` | 404 |
 
-> **Lưu ý:** Admin module chưa được gắn vào routes. Cần gắn sidebar và routes cho admin (xem commit `88c108b`).
+> **Lưu ý:** Admin module (`src/app/admin/`) chưa được gắn vào `app.routes.ts` — chưa có route `/admin`. Account module (`src/app/account/`) cũng chưa được gắn route.
 
 ---
 
@@ -191,13 +198,31 @@ Có **2 file CSS global** — không được lẫn lộn:
 ```css
 --font-serif: 'Playfair Display', Georgia, serif   /* Tiêu đề lớn */
 --font-sans:  'Montserrat', Arial, sans-serif       /* Body text */
---font-ui:    'DM Sans', Arial, sans-serif          /* UI elements */
+--font-ui:    'Montserrat', Arial, sans-serif       /* UI elements (search, badge) */
+```
+
+**Color aliases** (shorthand cho component dùng tên ngắn hơn):
+```css
+--color-bg:         var(--color-white)    /* Nền trang */
+--color-surface:    var(--color-bg-card)  /* Nền card */
+--color-text:       var(--color-dark)     /* Text chính */
+--color-text-muted: var(--color-muted)    /* Text phụ */
 ```
 
 **Spacing:**
 ```css
 --sp-xs: 4px  |  --sp-sm: 8px  |  --sp-md: 16px
 --sp-lg: 24px |  --sp-xl: 48px |  --sp-2xl: 80px
+```
+
+**Spacing aliases** (dùng trong modal/card components):
+```css
+--space-1: var(--sp-xs)   /* 4px  */
+--space-2: var(--sp-sm)   /* 8px  */
+--space-3: 12px
+--space-4: var(--sp-md)   /* 16px */
+--space-6: var(--sp-lg)   /* 24px */
+--space-8: 32px
 ```
 
 **Layout:**
@@ -361,7 +386,7 @@ Thư mục: [src/app/admin/](src/app/admin/)
 | `WarrantyManagementComponent` | Quản lý bảo hành |
 | `QaManagementComponent` | Quản lý Q&A |
 
-> **TODO:** Admin chưa được gắn vào `app.routes.ts` và chưa có sidebar. Xem commit `88c108b`.
+> **TODO:** Admin chưa được gắn vào `app.routes.ts` và chưa có sidebar layout. Cần thêm route `/admin` với `adminGuard` và xây dựng admin shell component.
 
 ---
 
@@ -474,4 +499,4 @@ chore/[mô-tả]                   # Maintenance
 
 ---
 
-*Cập nhật lần cuối: 2026-06-17*
+*Cập nhật lần cuối: 2026-06-18*
