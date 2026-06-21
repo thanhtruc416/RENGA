@@ -80,6 +80,14 @@
   background: var(--color-primary-dark);
 }
 
+.appt-hero__cancel-btn.is-cancelled,
+.appt-hero__cancel-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: default;
+  pointer-events: none;
+}
+
 .appt-body {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -183,6 +191,11 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   padding: 5px 12px;
+}
+
+.appt-card__badge--cancelled {
+  border-color: #999;
+  color: #999;
 }
 
 .appt-card__name {
@@ -439,6 +452,82 @@
 
 .appt-load-more:hover {
   color: var(--color-dark);
+}
+
+/* ── Dev popup ──────────────────────────────────────── */
+.appt-dev-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.appt-dev-popup {
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 48px 40px 40px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  animation: appt-popup-in 0.25s ease;
+}
+
+@keyframes appt-popup-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.appt-dev-popup__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #fff8e1;
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.appt-dev-popup__title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.appt-dev-popup__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.appt-dev-popup__btn {
+  margin-top: 8px;
+  padding: 12px 40px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.appt-dev-popup__btn:hover {
+  opacity: 0.88;
 }
 
 @media (max-width: 1100px) {

@@ -2,82 +2,95 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-
-export interface RepairLineItem {
-  id: string;
-  label: string;
-  fee: number;
-}
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-warranty-modal',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // ViewEncapsulation.None: backdrop (position:fixed, display:flex) phải là global
-  // để không bị Angular scoped attribute selector làm render sai vị trí.
   encapsulation: ViewEncapsulation.None,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './warranty-modal.component.html',
   styleUrl: './warranty-modal.component.css',
 })
 export class WarrantyModalComponent {
-  // ── Inputs ──────────────────────────────────────────────────────────────────
-  readonly orderId          = input<string>('AH-8924102');
-  readonly warrantyCode     = input<string>('WR-8829-2023');
-  readonly customerName     = input<string>('Nguyễn Thu Thủy');
-  readonly productName      = input<string>('Vòng tay Kim cương Aurora - Platinum Edition');
-  readonly productImage     = input<string>('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=200&h=200&fit=crop');
-  readonly issueDescription = input<string>('Móc khóa bị lỏng, một viên kim cương tấm ở canh bên có dấu hiệu bị lung lay sau khi va chạm mạnh.');
-  readonly evidenceImages   = input<string[]>([
-    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=200&h=200&fit=crop',
-    'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&h=200&fit=crop',
-  ]);
-  readonly repairItems      = input<RepairLineItem[]>([]);
-  readonly isFreeWarranty   = input<boolean>(false);
+  private readonly auth = inject(AuthService);
 
-  // ── Outputs ─────────────────────────────────────────────────────────────────
-  readonly confirmed = output<{ quoteNote: string }>();
-  readonly rejected  = output<void>();
+  // ── Inputs ──────────────────────────────────────────
+  readonly orderId       = input<string>('');
+  readonly productName   = input<string>('');
+  readonly productImage  = input<string>('');
+  readonly customerName  = input<string>('');
+  readonly customerPhone = input<string>('');
+
+  // ── Computed từ auth ────────────────────────────────
+  readonly isGuest = computed(() => !this.auth.isLoggedIn());
+
+  // ── Outputs ─────────────────────────────────────────
   readonly closed    = output<void>();
+  readonly confirmed = output<void>();
 
-  // ── State ───────────────────────────────────────────────────────────────────
-  readonly isSubmitting = signal(false);
-  readonly isSuccess    = signal(false);
-  readonly quoteNote    = signal('');
+  // ── State ───────────────────────────────────────────
+  readonly mockShouldSucceed = input<boolean>(true);
+  readonly submitted   = signal(false);
+  readonly isSuccess   = signal(false);
+  readonly isFailure   = signal(false);
+  readonly previewUrls = signal<string[]>([]);
 
-  // ── Computed ────────────────────────────────────────────────────────────────
-  readonly hasQuote = computed<boolean>(() => this.repairItems().length > 0);
-  readonly totalFee = computed<number>(() =>
-    this.repairItems().reduce((sum, item) => sum + item.fee, 0),
-  );
+  readonly form = new FormGroup({
+    name:    new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    phone:   new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^\d{10}$/)] }),
+    issue:   new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
-  // ── Actions ─────────────────────────────────────────────────────────────────
-  onConfirm(): void {
-    if (this.isSubmitting()) return;
-    this.isSubmitting.set(true);
-    // TODO: gọi OrdersService.confirmWarrantyQuote(orderId, warrantyCode, quoteNote)
+  readonly imageError = computed(() => false);
+
+  constructor() {
     setTimeout(() => {
-      this.isSubmitting.set(false);
-      this.isSuccess.set(true);
-      this.confirmed.emit({ quoteNote: this.quoteNote() });
-    }, 500);
+      if (!this.isGuest()) {
+        this.form.controls.name.setValue(this.customerName());
+        this.form.controls.name.disable();
+        this.form.controls.phone.setValue(this.customerPhone());
+        this.form.controls.phone.disable();
+      }
+    });
   }
 
-  onReject(): void {
-    if (this.isSubmitting()) return;
-    this.rejected.emit();
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+    const urls: string[] = [...this.previewUrls()];
+    Array.from(input.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => urls.push(reader.result as string);
+      reader.readAsDataURL(file);
+      setTimeout(() => this.previewUrls.set([...urls]));
+    });
+  }
+
+  removeImage(index: number): void {
+    this.previewUrls.update(list => list.filter((_, i) => i !== index));
+  }
+
+  onSubmit(): void {
+    this.submitted.set(true);
+    if (this.form.invalid) return;
+    if (this.mockShouldSucceed()) {
+      this.isSuccess.set(true);
+      this.confirmed.emit();
+    } else {
+      this.isFailure.set(true);
+    }
   }
 
   onClose(): void {
     this.closed.emit();
-  }
-
-  onQuoteNoteChange(value: string): void {
-    this.quoteNote.set(value);
   }
 }

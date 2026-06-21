@@ -118,20 +118,22 @@
   flex-direction: column;
   gap: 6px;
   margin-top: 4px;
-  padding-left: 30px;
 }
 
 .ltv-cancel-modal__other-input {
   width: 100%;
   resize: none;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 10px 12px;
+  border-left: 3px solid var(--color-primary);
+  border-radius: 0;
+  padding: 14px 16px;
   font-family: var(--font-sans);
   font-size: 14px;
   color: var(--color-dark);
-  line-height: 1.5;
+  line-height: 1.6;
+  background: #faf7f8;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.15s;
 }
 

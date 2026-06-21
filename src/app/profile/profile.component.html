@@ -16,24 +16,8 @@
           </svg>
         </div>
         <div class="profile__gateway-text">
-          <p class="profile__gateway-title">ĐỔI THƯỞNG</p>
-          <p class="profile__gateway-desc">Sử dụng điểm tích lũy cho các đặc quyền cao cấp</p>
-        </div>
-      </div>
-      <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M1 1l4 4-4 4"/>
-      </svg>
-    </a>
-    <a routerLink="/profile/rewards" class="profile__gateway-card">
-      <div class="profile__gateway-body">
-        <div class="profile__gateway-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
-        </div>
-        <div class="profile__gateway-text">
-          <p class="profile__gateway-title">LỊCH SỬ TÍCH ĐIỂM</p>
-          <p class="profile__gateway-desc">Xem chi tiết các giao dịch và điểm thưởng</p>
+          <p class="profile__gateway-title">TÍCH ĐIỂM &amp; ĐỔI THƯỞNG</p>
+          <p class="profile__gateway-desc">Xem lịch sử tích điểm và đổi điểm lấy đặc quyền cao cấp</p>
         </div>
       </div>
       <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -140,7 +124,7 @@
       <div class="profile__loyalty-progress-section">
         <div class="profile__loyalty-progress-labels">
           <span class="profile__loyalty-points">{{ loyaltyPoints().toLocaleString('vi-VN') }} điểm</span>
-          <span class="profile__loyalty-remaining">{{ loyaltyRemaining().toLocaleString('vi-VN') }} nữa</span>
+          <span class="profile__loyalty-remaining">Còn {{ loyaltyRemaining().toLocaleString('vi-VN') }}</span>
         </div>
         <div class="profile__loyalty-progress-bg">
           <div class="profile__loyalty-progress-fill" [style.width.%]="loyaltyProgress()"></div>
@@ -160,15 +144,6 @@
 
   </div>
 
-  <!-- Success Toast -->
-  @if (showSuccess()) {
-    <div class="profile__toast" role="alert">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-      </svg>
-      Cập nhật thông tin thành công!
-    </div>
-  }
 
   <!-- Security Section -->
   <section class="profile__security">
@@ -200,6 +175,36 @@
     <button class="profile__security-btn" type="button" (click)="updatePassword()">
       CẬP NHẬT THÔNG TIN
     </button>
+
   </section>
 
 </div>
+
+<!-- Shared result popup -->
+@if (popupVisible()) {
+  <div class="profile-popup-backdrop" (click)="closePopup()">
+    <div class="profile-popup" (click)="$event.stopPropagation()">
+      <button class="profile-popup__close" type="button" (click)="closePopup()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="profile-popup__icon" [class.profile-popup__icon--fail]="!popupSuccess()">
+        @if (popupSuccess()) {
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        } @else {
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        }
+      </div>
+
+      <h2 class="profile-popup__title">{{ popupTitle() }}</h2>
+      <p class="profile-popup__desc">{{ popupDesc() }}</p>
+      <button class="profile-popup__btn" type="button" (click)="closePopup()">ĐÓNG</button>
+    </div>
+  </div>
+}

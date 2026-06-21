@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface VoucherCard {
@@ -20,12 +20,34 @@ interface PointHistoryRow {
   selector: 'app-profile-rewards',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   imports: [RouterLink],
   templateUrl: './profile-rewards.component.html',
   styleUrl: './profile-rewards.component.css',
 })
 export class ProfileRewardsComponent {
   readonly userName = signal('Hoàng Anh');
+
+  readonly showRedeemModal = signal(false);
+  readonly redeemSuccess   = signal(false);
+  readonly redeemFailure   = signal(false);
+  private redeemMockSuccessNext = true;
+
+  redeemVoucher(): void {
+    this.redeemSuccess.set(false);
+    this.redeemFailure.set(false);
+    this.showRedeemModal.set(true);
+    if (this.redeemMockSuccessNext) {
+      this.redeemSuccess.set(true);
+    } else {
+      this.redeemFailure.set(true);
+    }
+    this.redeemMockSuccessNext = !this.redeemMockSuccessNext;
+  }
+
+  closeRedeemModal(): void {
+    this.showRedeemModal.set(false);
+  }
 
   readonly vouchers = signal<VoucherCard[]>([
     {

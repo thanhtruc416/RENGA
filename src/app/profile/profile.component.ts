@@ -40,8 +40,28 @@ export class ProfileComponent {
   });
 
   readonly isEditing = signal(false);
+  readonly draft     = signal<UserProfile>({ ...this.user() });
+
+  // Shared popup
+  readonly popupVisible = signal(false);
+  readonly popupSuccess = signal(true);
+  readonly popupTitle   = signal('');
+  readonly popupDesc    = signal('');
+
+  // kept for template compat (unused now)
   readonly showSuccess = signal(false);
-  readonly draft = signal<UserProfile>({ ...this.user() });
+  readonly showFailure = signal(false);
+
+  private profileMockSuccessNext = true;
+
+  closePopup(): void { this.popupVisible.set(false); }
+
+  private showPopup(success: boolean, title: string, desc: string): void {
+    this.popupSuccess.set(success);
+    this.popupTitle.set(title);
+    this.popupDesc.set(desc);
+    this.popupVisible.set(true);
+  }
 
   // Converts "DD/MM/YYYY" → "YYYY-MM-DD" for <input type="date">
   readonly draftDateInput = computed(() => {
@@ -63,10 +83,14 @@ export class ProfileComponent {
 
   saveEdit(form: HTMLFormElement): void {
     if (!form.reportValidity()) return;
-    this.user.set({ ...this.draft() });
     this.isEditing.set(false);
-    this.showSuccess.set(true);
-    setTimeout(() => this.showSuccess.set(false), 3000);
+    if (this.profileMockSuccessNext) {
+      this.user.set({ ...this.draft() });
+      this.showPopup(true, 'Cập nhật thành công!', 'Thông tin hồ sơ của bạn đã được lưu.');
+    } else {
+      this.showPopup(false, 'Cập nhật thất bại!', 'Đã xảy ra lỗi khi lưu thông tin. Vui lòng thử lại.');
+    }
+    this.profileMockSuccessNext = !this.profileMockSuccessNext;
   }
 
   setDraft(field: keyof UserProfile, value: string): void {
@@ -138,8 +162,11 @@ export class ProfileComponent {
     },
   ];
 
-  readonly currentPassword = signal('');
-  readonly newPassword = signal('');
+  readonly currentPassword    = signal('');
+  readonly newPassword        = signal('');
+  readonly passwordSuccess    = signal(false);
+  readonly passwordFailure    = signal(false);
+  private passwordMockSuccessNext = true;
 
   setCurrentPassword(value: string): void {
     this.currentPassword.set(value);
@@ -150,6 +177,12 @@ export class ProfileComponent {
   }
 
   updatePassword(): void {
-    // Will connect to auth service
+    if (!this.currentPassword() || !this.newPassword()) return;
+    if (this.passwordMockSuccessNext) {
+      this.showPopup(true, 'Đổi mật khẩu thành công!', 'Mật khẩu mới của bạn đã được cập nhật.');
+    } else {
+      this.showPopup(false, 'Đổi mật khẩu thất bại!', 'Mật khẩu hiện tại không đúng. Vui lòng thử lại.');
+    }
+    this.passwordMockSuccessNext = !this.passwordMockSuccessNext;
   }
 }

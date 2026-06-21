@@ -128,6 +128,12 @@ export class OrderTrackingComponent {
     this.filterType() !== '' || this.filterStatus() !== '' || this.filterTime() !== '3m'
   );
 
+  readonly hasDraftChanges = computed(() =>
+    this.pendingType()   !== this.filterType()   ||
+    this.pendingStatus() !== this.filterStatus() ||
+    this.pendingTime()   !== this.filterTime()
+  );
+
   applyFilters(): void {
     this.filterType.set(this.pendingType());
     this.filterStatus.set(this.pendingStatus());

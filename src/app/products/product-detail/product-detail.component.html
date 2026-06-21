@@ -32,6 +32,24 @@
           [alt]="product().name"
           class="product-detail__main-img"
         />
+        <div class="product-detail__img-actions">
+          <button class="product-detail__img-btn" type="button" aria-label="Phóng to ảnh" (click)="openLightbox()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="11" y1="8" x2="11" y2="14"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+          </button>
+          <button class="product-detail__img-btn" type="button" aria-label="Ướm thử nhẫn AR" (click)="openArPopup()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+              <line x1="18" y1="5" x2="21" y2="2"/>
+              <line x1="21" y1="5" x2="18" y2="2"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -69,7 +87,7 @@
 
       <!-- CTA Buttons -->
       <div class="product-detail__cta">
-        <button class="product-detail__btn product-detail__btn--primary" type="button" (click)="addToCart()">
+        <button class="product-detail__btn product-detail__btn--primary" type="button" (click)="flyToCart($event)">
           THÊM VÀO GIỎ HÀNG
         </button>
         <button class="product-detail__btn product-detail__btn--secondary" type="button" (click)="buyNow()">
@@ -108,22 +126,34 @@
   <!-- Customer Reviews -->
   <section class="product-detail__reviews">
     <h2 class="product-detail__reviews-title">ĐÁNH GIÁ TỪ KHÁCH HÀNG ({{ reviewCount() }})</h2>
-    <div class="product-detail__reviews-grid">
-      @for (review of reviews(); track review.id) {
-        <div class="product-detail__review-card">
-          <div class="product-detail__review-header">
-            <span class="product-detail__review-name">{{ review.name }}</span>
-            <div class="product-detail__review-stars" aria-label="{{ review.rating }} sao">
-              @for (star of stars; track star) {
-                <img src="/icons/ic-star.svg" alt="★" class="product-detail__review-star" />
-              }
+    <div class="product-detail__reviews-wrapper">
+      <button class="product-detail__reviews-nav" (click)="scrollReviews('prev')" aria-label="Đánh giá trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="product-detail__reviews-grid" #reviewsTrack>
+        @for (review of reviews(); track review.id) {
+          <div class="product-detail__review-card">
+            <div class="product-detail__review-header">
+              <span class="product-detail__review-name">{{ review.name }}</span>
+              <div class="product-detail__review-stars" aria-label="{{ review.rating }} sao">
+                @for (star of stars; track star) {
+                  <img src="/icons/ic-star.svg" alt="★" class="product-detail__review-star" />
+                }
+              </div>
             </div>
+            <img [src]="review.imageUrl" [alt]="review.name" class="product-detail__review-img" />
+            <p class="product-detail__review-quote">{{ review.quote }}</p>
+            <p class="product-detail__review-date">{{ review.date }}</p>
           </div>
-          <img [src]="review.imageUrl" [alt]="review.name" class="product-detail__review-img" />
-          <p class="product-detail__review-quote">{{ review.quote }}</p>
-          <p class="product-detail__review-date">{{ review.date }}</p>
-        </div>
-      }
+        }
+      </div>
+      <button class="product-detail__reviews-nav" (click)="scrollReviews('next')" aria-label="Đánh giá tiếp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
     </div>
   </section>
 
@@ -256,7 +286,7 @@
           <div class="product-detail__related-img-wrap">
             <img [src]="item.imageUrl" [alt]="item.name" class="product-detail__related-img" />
             <div class="product-detail__related-overlay">
-              <span class="product-detail__related-quick-view">QUICK VIEW</span>
+              <span class="product-detail__related-quick-view">XEM CHI TIẾT</span>
             </div>
           </div>
           <div class="product-detail__related-info">
@@ -270,3 +300,67 @@
   </section>
 
 </div>
+
+@if (arPopupOpen()) {
+  <div class="product-detail__ar-backdrop" (click)="closeArPopup()">
+    <div class="product-detail__ar-popup" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <button class="product-detail__ar-close" type="button" (click)="closeArPopup()" aria-label="Đóng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="product-detail__ar-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 8h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/>
+          <path d="M2 8l2-4h16l2 4"/>
+          <circle cx="9" cy="13" r="2"/>
+          <circle cx="15" cy="13" r="2"/>
+          <line x1="11" y1="13" x2="13" y2="13"/>
+        </svg>
+      </div>
+      <h3 class="product-detail__ar-title">Tính năng đang phát triển</h3>
+      <p class="product-detail__ar-desc">
+        Tính năng ướm thử nhẫn AR qua camera đang được đội ngũ RENGA phát triển.
+        Sắp ra mắt trong thời gian tới!
+      </p>
+      <button class="product-detail__ar-cta" type="button" (click)="closeArPopup()">Đã hiểu</button>
+    </div>
+  </div>
+}
+
+@if (lightboxOpen()) {
+  <div class="product-detail__lightbox" (click)="closeLightbox()" role="dialog" aria-modal="true" aria-label="Xem ảnh lớn">
+    <button class="product-detail__lightbox-close" type="button" (click)="closeLightbox()" aria-label="Đóng">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    @if (product().images.length > 1) {
+      <button class="product-detail__lightbox-nav product-detail__lightbox-nav--prev" type="button" (click)="$event.stopPropagation(); lightboxPrev()" aria-label="Ảnh trước">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+    }
+
+    <div class="product-detail__lightbox-content" (click)="$event.stopPropagation()">
+      <img
+        [src]="product().images[activeImageIndex()]"
+        [alt]="product().name"
+        class="product-detail__lightbox-img"
+      />
+      @if (product().images.length > 1) {
+        <p class="product-detail__lightbox-counter">{{ activeImageIndex() + 1 }} / {{ product().images.length }}</p>
+      }
+    </div>
+
+    @if (product().images.length > 1) {
+      <button class="product-detail__lightbox-nav product-detail__lightbox-nav--next" type="button" (click)="$event.stopPropagation(); lightboxNext()" aria-label="Ảnh tiếp">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    }
+  </div>
+}

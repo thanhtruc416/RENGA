@@ -32,6 +32,13 @@ export class CartService {
       .reduce((n, i) => n + (i.quantity ?? 1), 0)
   );
 
+  readonly isBumping = signal(false);
+
+  triggerBump(): void {
+    this.isBumping.set(true);
+    setTimeout(() => this.isBumping.set(false), 400);
+  }
+
   readonly availableTotal = computed(() =>
     this._items()
       .filter(i => i.type === 'available')

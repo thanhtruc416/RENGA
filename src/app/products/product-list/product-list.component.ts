@@ -169,6 +169,16 @@ export class ProductListComponent {
       this.sortKey() !== '';
   }
 
+  readonly hasDraftChanges = computed(() => {
+    const arrEq = (a: string[], b: string[]) =>
+      a.length === b.length && a.every((v, i) => v === b[i]);
+    return !arrEq([...this.draftMaterials()].sort(), [...this.selectedMaterials()].sort()) ||
+      !arrEq([...this.draftStones()].sort(), [...this.selectedStones()].sort()) ||
+      this.draftPriceMin() !== this.priceMin() ||
+      this.draftPriceMax() !== this.priceMax() ||
+      this.draftSortKey() !== this.sortKey();
+  });
+
   // ── Apply: commit ALL drafts → applied, close panel ─────────
   applyAllFilters(e: MouseEvent): void {
     e.stopPropagation();

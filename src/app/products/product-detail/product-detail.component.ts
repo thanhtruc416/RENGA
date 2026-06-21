@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map } from 'rxjs';
@@ -77,6 +77,22 @@ export class ProductDetailComponent {
       rating: 5,
       quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
       date: '01 THÁNG 08, 2023',
+    },
+    {
+      id: 4,
+      name: 'NGỌC HÀ P.',
+      imageUrl: '/images/product-detail-nhan-aeterna-2.png',
+      rating: 5,
+      quote: '"Nhẫn đẹp hơn cả mong đợi, chất vàng rất tốt và viên đá sáng lung linh. Sẽ quay lại mua thêm làm quà cho người thân!"',
+      date: '10 THÁNG 07, 2023',
+    },
+    {
+      id: 5,
+      name: 'BẢO CHÂU T.',
+      imageUrl: '/images/product-detail-nhan-aeterna-1.png',
+      rating: 5,
+      quote: '"Thiết kế tinh tế, đóng gói sang trọng như quà tặng cao cấp. Được tặng kèm túi giấy và hộp nhung rất xịn!"',
+      date: '22 THÁNG 06, 2023',
     },
   ]);
 
@@ -169,9 +185,46 @@ export class ProductDetailComponent {
     this.qaInput.set('');
   }
 
+  constructor() {
+    afterNextRender(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  }
+
   readonly stars = [1, 2, 3, 4, 5];
   readonly reviewCount = signal(30);
   readonly activeImageIndex = signal(0);
+
+  @ViewChild('reviewsTrack') reviewsTrack!: ElementRef<HTMLDivElement>;
+
+  scrollReviews(dir: 'prev' | 'next'): void {
+    const el = this.reviewsTrack.nativeElement;
+    const card = el.querySelector<HTMLElement>('.product-detail__review-card');
+    const step = (card?.offsetWidth ?? 320) + 24;
+    el.scrollBy({ left: dir === 'next' ? step : -step, behavior: 'smooth' });
+  }
+  readonly lightboxOpen = signal(false);
+  readonly arPopupOpen = signal(false);
+
+  openLightbox(): void { this.lightboxOpen.set(true); }
+  closeLightbox(): void { this.lightboxOpen.set(false); }
+
+  openArPopup(): void { this.arPopupOpen.set(true); }
+  closeArPopup(): void { this.arPopupOpen.set(false); }
+
+  lightboxPrev(): void {
+    const images = this.product().images;
+    this.activeImageIndex.update(i => (i - 1 + images.length) % images.length);
+  }
+
+  lightboxNext(): void {
+    const images = this.product().images;
+    this.activeImageIndex.update(i => (i + 1) % images.length);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.lightboxOpen.set(false);
+    this.arPopupOpen.set(false);
+  }
   readonly selectedSize = signal<number | null>(10);
 
   readonly productImages = computed(() => {
@@ -201,9 +254,53 @@ export class ProductDetailComponent {
     });
   }
 
+  flyToCart(event: MouseEvent): void {
+    const btn = event.currentTarget as HTMLElement;
+    const cartEl = document.getElementById('cart-icon-btn');
+    if (!cartEl) { this.addToCart(); return; }
+
+    const btnRect = btn.getBoundingClientRect();
+    const cartRect = cartEl.getBoundingClientRect();
+
+    const fly = document.createElement('div');
+    const imgSrc = this.product().images?.[this.activeImageIndex()] ?? this.product().imageUrl;
+
+    fly.style.cssText = `
+      position: fixed;
+      left: ${btnRect.left + btnRect.width / 2 - 24}px;
+      top: ${btnRect.top + btnRect.height / 2 - 24}px;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--color-primary, #c4607e);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 9999;
+      pointer-events: none;
+      transition: left 0.65s cubic-bezier(0.25,0.46,0.45,0.94),
+                  top  0.65s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.65s ease,
+                  opacity 0.2s ease 0.45s;
+    `;
+    fly.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;" />`;
+    document.body.appendChild(fly);
+
+    fly.getBoundingClientRect(); // force reflow
+
+    fly.style.left    = `${cartRect.left + cartRect.width / 2 - 12}px`;
+    fly.style.top     = `${cartRect.top  + cartRect.height / 2 - 12}px`;
+    fly.style.transform = 'scale(0.15)';
+    fly.style.opacity   = '0';
+
+    setTimeout(() => {
+      document.body.removeChild(fly);
+      this.addToCart();
+      this.cartService.triggerBump();
+    }, 700);
+  }
+
   buyNow(): void {
     this.addToCart();
-    this.router.navigate(['/cart']);
+    this.router.navigate(['/checkout']);
   }
 
   readonly formatPrice = formatPrice;

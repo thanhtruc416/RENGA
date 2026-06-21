@@ -175,6 +175,7 @@
   <app-cancel-design-modal
     [orderId]="order().id"
     [orderStatus]="order().status"
+    [mockShouldSucceed]="cancelMockSuccessNext"
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
   />

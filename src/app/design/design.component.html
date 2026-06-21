@@ -35,7 +35,7 @@
       <h1 class="design-step__title">Chọn Designer</h1>
 
       <div class="designer-grid">
-        @for (designer of designers; track designer.id) {
+        @for (designer of designers(); track designer.id) {
           <article
             class="designer-card"
             [class.designer-card--selected]="selectedDesigner()?.id === designer.id"
@@ -74,9 +74,11 @@
         }
       </div>
 
-      <div class="designer-load-more-wrap">
-        <button class="designer-load-more" type="button">TẢI THÊM</button>
-      </div>
+      @if (hasMoreDesigners()) {
+        <div class="designer-load-more-wrap">
+          <button class="designer-load-more" type="button" (click)="loadMoreDesigners()">TẢI THÊM</button>
+        </div>
+      }
     </div>
   }
 
@@ -240,7 +242,7 @@
           <div class="ds-form__group">
             <label class="ds-form__label" for="budget">Ngân sách</label>
             <input class="ds-form__input" type="text" id="budget" formControlName="budget"
-              placeholder="VD: 5.000.000 VNĐ" />
+              placeholder="VD: 5.000.000đ" />
           </div>
 
           <div class="ds-form__group">
@@ -331,66 +333,14 @@
           <div class="ds-pay-methods">
             <h3 class="ds-pay-methods__title">Phương thức thanh toán</h3>
             @for (method of paymentMethods; track method.id) {
-              <label class="ds-pay-method" [class.is-selected]="selectedPayment() === method.id">
-                <input type="radio" name="payment" [value]="method.id"
+              <label class="ds-pay-method" [class.is-selected]="selectedPayment() === method.id"
+                (click)="selectPayment(method.id)">
+                <input class="ds-pay-method__radio" type="radio" name="payment" [value]="method.id"
                   [checked]="selectedPayment() === method.id"
-                  (change)="selectPayment(method.id)" />
-                <span class="ds-pay-method__icon">
-                  @switch (method.id) {
-                    @case ('momo') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#AE2070"/>
-                        <rect x="8" y="13" width="20" height="13" rx="2.5" fill="white"/>
-                        <rect x="8" y="17" width="20" height="3.5" fill="#AE2070"/>
-                        <rect x="11" y="21.5" width="6" height="2.5" rx="1.25" fill="#AE2070" fill-opacity="0.6"/>
-                        <circle cx="24.5" cy="22.75" r="1.75" fill="#AE2070" fill-opacity="0.6"/>
-                      </svg>
-                    }
-                    @case ('vnpay') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#003087"/>
-                        <rect x="7" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="9" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="12" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="9" y="12" width="2" height="2" fill="#003087"/>
-                        <rect x="20" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="22" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="25" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="22" y="12" width="2" height="2" fill="#003087"/>
-                        <rect x="7" y="20" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="9" y="22" width="2" height="2" fill="#003087"/>
-                        <rect x="9" y="25" width="2" height="2" fill="#003087"/>
-                        <rect x="12" y="22" width="2" height="2" fill="#003087"/>
-                        <rect x="20" y="20" width="2" height="2" fill="white"/>
-                        <rect x="23" y="20" width="2" height="2" fill="white"/>
-                        <rect x="26" y="20" width="2" height="2" fill="white"/>
-                        <rect x="20" y="23" width="2" height="2" fill="white"/>
-                        <rect x="24" y="23" width="4" height="2" fill="white"/>
-                        <rect x="20" y="26" width="2" height="2" fill="white"/>
-                        <rect x="23" y="26" width="2" height="2" fill="white"/>
-                      </svg>
-                    }
-                    @case ('bank') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#1a3c5e"/>
-                        <polygon points="18,8 6.5,15.5 29.5,15.5" fill="white"/>
-                        <rect x="9" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="13.5" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="19.5" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="24" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="7" y="26" width="22" height="2.5" rx="1.25" fill="white"/>
-                      </svg>
-                    }
-                    @case ('card') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#2c5f8a"/>
-                        <rect x="5" y="11" width="26" height="16" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
-                        <rect x="5" y="15" width="26" height="4.5" fill="white"/>
-                        <rect x="8" y="23" width="8" height="2.5" rx="1.25" fill="white" fill-opacity="0.8"/>
-                        <circle cx="24.5" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.8"/>
-                        <circle cx="27" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.5"/>
-                      </svg>
-                    }
+                  (click)="$event.stopPropagation()" />
+                <span class="ds-pay-method__radio-ui" [class.ds-pay-method__radio-ui--empty]="selectedPayment() !== method.id">
+                  @if (selectedPayment() === method.id) {
+                    <span class="ds-pay-method__radio-dot"></span>
                   }
                 </span>
                 <span class="ds-pay-method__label">{{ method.label }}</span>
@@ -438,3 +388,14 @@
   }
 
 </section>
+
+<app-payment-success-modal
+  [isOpen]="showSuccessModal()"
+  (closed)="showSuccessModal.set(false)"
+/>
+
+<app-payment-fail-modal
+  [isOpen]="showFailModal()"
+  [countdownDisplay]="'00:59:56'"
+  (closed)="showFailModal.set(false)"
+/>

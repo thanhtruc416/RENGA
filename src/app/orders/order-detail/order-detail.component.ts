@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import localeVi from '@angular/common/locales/vi';
 import {
   CancelOrderModalComponent,
@@ -128,7 +129,7 @@ const MOCK_ORDER: OrderDetail = {
   selector: 'app-order-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe, RouterLink, CancelOrderModalComponent, WarrantyModalComponent],
+  imports: [DecimalPipe, RouterLink, ReactiveFormsModule, CancelOrderModalComponent, WarrantyModalComponent],
   providers: [{ provide: LOCALE_ID, useValue: 'vi' }],
   templateUrl: './order-detail.component.html',
   styleUrl: './order-detail.component.css',
@@ -142,8 +143,20 @@ export class OrderDetailComponent {
   // TODO: thay bằng httpResource() khi có API
   readonly order = signal<OrderDetail>(MOCK_ORDER);
 
-  readonly showWarrantyModal = signal(false);
-  readonly showCancelModal   = signal(false);
+  readonly showWarrantyModal  = signal(false);
+  warrantyMockSuccessNext     = true;
+  readonly showCancelModal    = signal(false);
+  readonly showSupportModal   = signal(false);
+  readonly supportSubmitted   = signal(false);
+  readonly supportSuccess     = signal(false);
+  readonly supportFailure     = signal(false);
+  private supportMockSuccessNext = true;
+
+  readonly supportForm = new FormGroup({
+    name:    new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    phone:   new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^\d{10}$/)] }),
+    message: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
   readonly statusSteps = computed<StatusStep[]>(() => {
     const currentStatus = this.order().status;
@@ -181,14 +194,34 @@ export class OrderDetailComponent {
 
   openWarrantyModal(): void {
     this.showWarrantyModal.set(true);
+    this.warrantyMockSuccessNext = !this.warrantyMockSuccessNext;
   }
 
   openCancelModal(): void {
-    this.showCancelModal.set(true);
+    this.openSupport();
   }
 
   openSupport(): void {
-    window.dispatchEvent(new CustomEvent('renga:open-chatbot'));
+    this.supportForm.reset();
+    this.supportSubmitted.set(false);
+    this.supportSuccess.set(false);
+    this.supportFailure.set(false);
+    this.showSupportModal.set(true);
+  }
+
+  closeSupport(): void {
+    this.showSupportModal.set(false);
+  }
+
+  submitSupport(): void {
+    this.supportSubmitted.set(true);
+    if (this.supportForm.invalid) return;
+    if (this.supportMockSuccessNext) {
+      this.supportSuccess.set(true);
+    } else {
+      this.supportFailure.set(true);
+    }
+    this.supportMockSuccessNext = !this.supportMockSuccessNext;
   }
 
   onOrderCancelled(): void {}

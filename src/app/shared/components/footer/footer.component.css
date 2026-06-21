@@ -20,7 +20,7 @@
   font-family: var(--font-serif);
   font-size: 28px;
   font-weight: 700;
-  color: var(--color-white);
+  color: #c4607e;
   letter-spacing: 3px;
   text-decoration: none;
   display: block;
@@ -29,7 +29,7 @@
 
 .site-footer__tagline {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   color: rgba(255,255,255,0.6);
   margin-bottom: 24px;
@@ -45,22 +45,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.25);
-  transition: border-color 0.2s, background 0.2s;
+  color: var(--color-white);
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
 
 .site-footer__social-link:hover {
-  border-color: var(--color-primary);
-  background: rgba(196, 96, 126, 0.15);
-}
-
-.site-footer__social-link img {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
+  opacity: 1;
 }
 
 /* Nav columns */
@@ -72,16 +63,16 @@
 
 .site-footer__col-title {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: var(--color-white);
+  color: #c4607e;
   margin-bottom: 4px;
 }
 
 .site-footer__link {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   transition: color 0.2s;
@@ -94,7 +85,7 @@
 /* Newsletter */
 .site-footer__newsletter-desc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
   color: rgba(255,255,255,0.6);
   margin-bottom: 4px;
@@ -114,7 +105,7 @@
   outline: none;
   padding: 10px 14px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--color-white);
 }
 
@@ -158,7 +149,7 @@
 
 .site-footer__copyright {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255,255,255,0.4);
 }
 
@@ -169,7 +160,7 @@
 
 .site-footer__bottom-link {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255,255,255,0.4);
   text-decoration: none;
   transition: color 0.2s;

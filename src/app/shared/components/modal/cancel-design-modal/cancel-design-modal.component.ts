@@ -19,18 +19,21 @@ export type CustomOrderStatus = 'P' | 'PC' | 'CR' | 'FN' | 'PF' | 'S' | 'CM' | '
 })
 export class CancelDesignModalComponent {
   // ── Inputs ──────────────────────────────────────────────────────────────────
-  readonly orderId     = input.required<string>();
-  readonly orderStatus = input.required<CustomOrderStatus>();
+  readonly orderId         = input.required<string>();
+  readonly orderStatus     = input.required<CustomOrderStatus>();
+  readonly mockShouldSucceed = input<boolean>(true);
 
   // ── Outputs ─────────────────────────────────────────────────────────────────
   readonly cancelled = output<void>();
   readonly closed    = output<void>();
 
   // ── State ───────────────────────────────────────────────────────────────────
-  readonly reason       = signal<string>('');
-  readonly acknowledged = signal<boolean>(false);
-  readonly isSubmitting = signal<boolean>(false);
-  readonly submitted    = signal<boolean>(false);
+  readonly reason         = signal<string>('');
+  readonly acknowledged   = signal<boolean>(false);
+  readonly isSubmitting   = signal<boolean>(false);
+  readonly submitted      = signal<boolean>(false);
+  readonly isSuccess      = signal<boolean>(false);
+  readonly showValidation = signal<boolean>(false);
 
   // ── Computed ────────────────────────────────────────────────────────────────
   readonly policyText = computed<string>(() => {
@@ -56,6 +59,7 @@ export class CancelDesignModalComponent {
   }
 
   onSubmit(): void {
+    this.showValidation.set(true);
     if (!this.canSubmit() || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
@@ -63,17 +67,22 @@ export class CancelDesignModalComponent {
     // TODO: gọi OrdersService.requestCancelDesign(orderId, reason)
     setTimeout(() => {
       this.isSubmitting.set(false);
+      this.isSuccess.set(this.mockShouldSucceed());
       this.submitted.set(true);
-      this.cancelled.emit();
     }, 600);
   }
 
   onClose(): void {
+    const wasSuccess = this.submitted() && this.isSuccess();
+
     this.submitted.set(false);
+    this.isSuccess.set(false);
     this.reason.set('');
     this.acknowledged.set(false);
     this.isSubmitting.set(false);
+    this.showValidation.set(false);
 
-    this.closed.emit();
+    if (wasSuccess) this.cancelled.emit();
+    else this.closed.emit();
   }
 }

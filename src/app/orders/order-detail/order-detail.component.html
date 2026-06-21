@@ -197,6 +197,11 @@
 @if (showWarrantyModal()) {
   <app-warranty-modal
     [orderId]="order().id"
+    [customerName]="order().shipping.name"
+    [customerPhone]="order().shipping.phone"
+    [productName]="firstItem().name"
+    [productImage]="firstItem().imageUrl"
+    [mockShouldSucceed]="warrantyMockSuccessNext"
     (closed)="showWarrantyModal.set(false)"
   />
 }
@@ -208,4 +213,98 @@
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
   />
+}
+
+@if (showSupportModal()) {
+  <div class="support-backdrop" (click)="closeSupport()">
+    <div class="support-modal" (click)="$event.stopPropagation()" [formGroup]="supportForm">
+
+      <button class="support-modal__close" type="button" (click)="closeSupport()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      @if (supportSuccess()) {
+        <div class="support-modal__success">
+          <div class="support-modal__success-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h2 class="support-modal__title">Đã gửi thành công!</h2>
+          <p class="support-modal__subtitle">Chúng tôi đã nhận được yêu cầu của bạn và sẽ phản hồi trong thời gian sớm nhất</p>
+          <button class="support-modal__btn support-modal__btn--primary" style="width:100%" type="button" (click)="closeSupport()">ĐÓNG</button>
+        </div>
+      } @else if (supportFailure()) {
+        <div class="support-modal__success">
+          <div class="support-modal__success-icon support-modal__success-icon--fail">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L22 20H2L12 2Z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h2 class="support-modal__title">Gửi thất bại!</h2>
+          <p class="support-modal__subtitle">Rất tiếc, không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau hoặc gọi 1900-0607.</p>
+          <button class="support-modal__btn support-modal__btn--primary" style="width:100%" type="button" (click)="closeSupport()">ĐÓNG</button>
+        </div>
+      } @else {
+
+      <h2 class="support-modal__title">Liên hệ RENGA</h2>
+      <p class="support-modal__subtitle">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+
+      <a class="support-modal__phone" href="tel:19000607">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.05 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        1900-0607
+      </a>
+
+      <div class="support-modal__divider">
+        <span>HOẶC GỬI LỜI NHẮN</span>
+      </div>
+
+      <div class="support-modal__row">
+        <div class="support-modal__field">
+          <input class="support-modal__input" type="text" placeholder="Họ và tên"
+            formControlName="name"
+            [class.is-error]="supportSubmitted() && supportForm.controls.name.invalid" />
+          @if (supportSubmitted() && supportForm.controls.name.invalid) {
+            <span class="support-modal__error">Vui lòng nhập họ và tên</span>
+          }
+        </div>
+        <div class="support-modal__field">
+          <input class="support-modal__input" type="tel" placeholder="Số điện thoại"
+            formControlName="phone"
+            [class.is-error]="supportSubmitted() && supportForm.controls.phone.invalid" />
+          @if (supportSubmitted() && supportForm.controls.phone.invalid) {
+            <span class="support-modal__error">SĐT phải đủ 10 chữ số</span>
+          }
+        </div>
+      </div>
+
+      <div class="support-modal__field">
+        <textarea class="support-modal__input support-modal__textarea" rows="4"
+          placeholder="Lời nhắn của bạn..."
+          formControlName="message"
+          [class.is-error]="supportSubmitted() && supportForm.controls.message.invalid"></textarea>
+        @if (supportSubmitted() && supportForm.controls.message.invalid) {
+          <span class="support-modal__error">Vui lòng nhập lời nhắn</span>
+        }
+      </div>
+
+      <p class="support-modal__note">Thông tin của bạn sẽ được bảo mật tuyệt đối</p>
+
+      <div class="support-modal__actions">
+        <button class="support-modal__btn support-modal__btn--primary" type="button" (click)="submitSupport()">
+          GỬI YÊU CẦU
+        </button>
+        <button class="support-modal__btn support-modal__btn--outline" type="button" (click)="closeSupport()">
+          QUAY LẠI
+        </button>
+      </div>
+
+      } <!-- end @else -->
+
+    </div>
+  </div>
 }

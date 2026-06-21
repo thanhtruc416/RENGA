@@ -82,7 +82,12 @@
       </div>
 
       <div class="order-tracking-filters__actions">
-        <button class="order-tracking-filters__apply" type="button" (click)="applyFilters()">
+        @if (hasActiveFilters()) {
+          <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
+            Xóa bộ lọc
+          </button>
+        }
+        <button class="order-tracking-filters__apply" type="button" [disabled]="!hasDraftChanges()" (click)="applyFilters()">
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
             <line x1="1" y1="1" x2="13" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="3" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -90,11 +95,6 @@
           </svg>
           Áp dụng bộ lọc
         </button>
-        @if (hasActiveFilters()) {
-          <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
-            Xóa bộ lọc
-          </button>
-        }
       </div>
 
     </div>

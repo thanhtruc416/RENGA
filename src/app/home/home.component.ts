@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { ModalService } from '../core/services/modal.service';
@@ -33,9 +33,22 @@ interface Review {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
+  @ViewChild('reviewsTrack') reviewsTrack!: ElementRef<HTMLDivElement>;
+
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly modalService = inject(ModalService);
+
+  scrollToCategories(): void {
+    document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  scrollReviews(dir: 'prev' | 'next'): void {
+    const el = this.reviewsTrack.nativeElement;
+    const card = el.querySelector<HTMLElement>('.home__review-card');
+    const step = (card?.offsetWidth ?? 280) + 24;
+    el.scrollBy({ left: dir === 'next' ? step : -step, behavior: 'smooth' });
+  }
 
   guardedNav(route: string): void {
     if (this.authService.isLoggedIn()) {
@@ -65,6 +78,10 @@ export class HomeComponent {
     { id: 2, quote: '"Dịch vụ tư vấn rất chuyên nghiệp và tận tâm!"', author: 'Minh Tú', imageUrl: '/images/review-customer.png' },
     { id: 3, quote: '"Trang sức đẹp, chất lượng vượt trội!"', author: 'Thu Hương', imageUrl: '/images/review-customer.png' },
     { id: 4, quote: '"Sẽ quay lại mua thêm cho người thân!"', author: 'Ngọc Hà', imageUrl: '/images/review-customer.png' },
+    { id: 5, quote: '"Thiết kế tinh tế, đóng gói rất cẩn thận!"', author: 'Bảo Châu', imageUrl: '/images/review-customer.png' },
+    { id: 6, quote: '"Nhân viên tư vấn nhiệt tình, chu đáo!"', author: 'Khánh Linh', imageUrl: '/images/review-customer.png' },
+    { id: 7, quote: '"Chiếc dây chuyền y hệt hình, rất hài lòng!"', author: 'Phương Mai', imageUrl: '/images/review-customer.png' },
+    { id: 8, quote: '"Giao hàng nhanh, sản phẩm chất lượng cao!"', author: 'Trúc Anh', imageUrl: '/images/review-customer.png' },
   ]);
 
   readonly features = [

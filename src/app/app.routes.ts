@@ -28,6 +28,11 @@ export const routes: Routes = [
       import('./design/design.component').then((m) => m.DesignComponent),
   },
   {
+    path: 'consultation',
+    redirectTo: 'the-designer',
+    pathMatch: 'full',
+  },
+  {
     path: 'appointment-history',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -88,7 +93,6 @@ export const routes: Routes = [
   },
   {
     path: 'orders/custom/:id',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('./orders/order-detail-custom/order-detail-custom.component').then(
         (m) => m.OrderDetailCustomComponent,
@@ -96,7 +100,6 @@ export const routes: Routes = [
   },
   {
     path: 'orders/:id',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('./orders/order-detail/order-detail.component').then(
         (m) => m.OrderDetailComponent,

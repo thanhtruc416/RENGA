@@ -141,8 +141,8 @@
 }
 
 .order-info-card__total {
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: 18px;
   color: var(--color-black);
 }
@@ -178,7 +178,7 @@
 /* Timer cùng hàng với icon + desc, màu hồng theo icon cảnh báo */
 .order-info-card__timer {
   display: inline;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 24px;
   letter-spacing: 1.5px;

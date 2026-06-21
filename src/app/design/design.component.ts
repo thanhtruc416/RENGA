@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { formatVnd } from '../shared/utils/currency.util';
+import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
+import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 
 interface Designer {
   id: string;
@@ -24,7 +26,7 @@ interface CalendarDay {
   selector: 'app-design',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PaymentSuccessModalComponent, PaymentFailModalComponent],
   templateUrl: './design.component.html',
   styleUrl: './design.component.css',
 })
@@ -37,7 +39,7 @@ export class DesignComponent {
     { n: 4, label: 'Xác nhận' },
   ];
 
-  readonly designers: Designer[] = [
+  private readonly allDesigners: Designer[] = [
     {
       id: 'henri-de-luca',
       name: 'Master Henri de Luca',
@@ -71,7 +73,51 @@ export class DesignComponent {
       image: '/images/designer-photo.png',
       rating: 5,
     },
+    {
+      id: 'rafael-de-souza',
+      name: 'Rafael de Souza',
+      role: 'Nhà thiết kế kim hoàn cao cấp',
+      specialty: 'Nhà thiết kế nhẫn cưới',
+      badge: 'ETERNAL BOND',
+      bio: 'Nghệ nhân chuyên thiết kế nhẫn cưới và trang sức đính hôn với ngôn ngữ thiết kế lãng mạn.',
+      fee: 15_000_000,
+      image: '/images/designer-photo.png',
+      rating: 5,
+    },
+    {
+      id: 'mei-lin-chen',
+      name: 'Mei Lin Chen',
+      role: 'Nhà thiết kế kim hoàn cao cấp',
+      specialty: 'Nhà thiết kế hoa tai',
+      badge: 'DELICATE FORMS',
+      bio: 'Chuyên gia tạo hình hoa tai tinh xảo, lấy cảm hứng từ nghệ thuật điêu khắc châu Á.',
+      fee: 11_000_000,
+      image: '/images/designer-photo.png',
+      rating: 5,
+    },
+    {
+      id: 'lucas-fontaine',
+      name: 'Lucas Fontaine',
+      role: 'Nhà thiết kế kim hoàn cao cấp',
+      specialty: 'Nhà thiết kế lắc tay',
+      badge: 'FLUID LUXURY',
+      bio: 'Phong cách tối giản Pháp — từng đường nét được tính toán để tôn lên vẻ đẹp tự nhiên.',
+      fee: 12_000_000,
+      image: '/images/designer-photo.png',
+      rating: 5,
+    },
   ];
+
+  private readonly designerPageSize = 3;
+  private readonly designerVisible = signal(this.designerPageSize);
+
+  readonly designers = computed(() =>
+    this.allDesigners.slice(0, this.designerVisible())
+  );
+
+  readonly hasMoreDesigners = computed(() =>
+    this.designerVisible() < this.allDesigners.length
+  );
 
   readonly timeSlots = ['09:00', '10:30', '13:00', '14:30', '16:00', '17:30'];
   readonly unavailableSlots = new Set(['17:30']);
@@ -114,6 +160,9 @@ export class DesignComponent {
 
   // Step 4
   readonly selectedPayment = signal('momo');
+  readonly showSuccessModal = signal(false);
+  readonly showFailModal = signal(false);
+  private bookingSuccessNext = true;
   readonly MEMBER_DISCOUNT = 0.1;
   readonly DEPOSIT_RATIO = 0.5;
 
@@ -165,6 +214,10 @@ export class DesignComponent {
   goToStep(n: number): void {
     this.currentStep.set(n);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  loadMoreDesigners(): void {
+    this.designerVisible.update(n => n + this.designerPageSize);
   }
 
   selectDesigner(designer: Designer): void {
@@ -222,7 +275,13 @@ export class DesignComponent {
   }
 
   completeBooking(): void {
-    // TODO: gọi API đặt lịch
+    // TODO: gọi API đặt lịch — mock xen kẽ để test cả 2 case
+    if (this.bookingSuccessNext) {
+      this.showSuccessModal.set(true);
+    } else {
+      this.showFailModal.set(true);
+    }
+    this.bookingSuccessNext = !this.bookingSuccessNext;
   }
 
   readonly formatVnd = formatVnd;

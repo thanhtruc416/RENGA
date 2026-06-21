@@ -41,7 +41,7 @@
   --space-8: 32px;
 
   /* ── Layout ── */
-  --max-width: 1440px;
+  --max-width: 1920px;
   --header-height: 169px;
-  --container-px: 80px;
+  --container-px: clamp(20px, 5.5vw, 80px);
 }

@@ -196,3 +196,18 @@
   opacity: 0.75;
 }
 
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .categories__title { font-size: 52px; }
+  .categories__card-img-wrap { height: 340px; }
+}
+
+@media (max-width: 960px) {
+  .categories { padding: 0 28px 80px; }
+  .categories__title { font-size: 38px; letter-spacing: -0.5px; }
+  .categories__top-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .categories__bottom-grid { grid-template-columns: 1fr; gap: 20px; }
+  .categories__card-img-wrap,
+  .categories__card-img-wrap--short { height: 280px; }
+}
+

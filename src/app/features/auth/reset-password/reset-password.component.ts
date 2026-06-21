@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-reset-password',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   imports: [],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
@@ -14,10 +15,34 @@ export class ResetPasswordComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
-  readonly newPassword = signal('');
+  readonly newPassword     = signal('');
   readonly confirmPassword = signal('');
-  readonly isSubmitting = signal(false);
-  readonly error = signal('');
+  readonly isSubmitting    = signal(false);
+  readonly error           = signal('');
+  readonly showPassword    = signal(false);
+  readonly popupVisible    = signal(false);
+  readonly popupSuccess    = signal(true);
+  readonly submitted       = signal(false);
+
+  private mockSuccessNext = true;
+
+  readonly newPasswordError = computed(() => {
+    if (!this.submitted()) return '';
+    const v = this.newPassword();
+    if (!v) return 'Vui lòng nhập mật khẩu mới.';
+    if (v.length < 8) return 'Mật khẩu tối thiểu 8 ký tự.';
+    return '';
+  });
+
+  readonly confirmPasswordError = computed(() => {
+    if (!this.submitted()) return '';
+    if (!this.confirmPassword()) return 'Vui lòng xác nhận mật khẩu.';
+    if (this.newPassword() !== this.confirmPassword()) return 'Mật khẩu xác nhận không khớp.';
+    return '';
+  });
+
+  togglePassword(): void { this.showPassword.update(v => !v); }
+  closePopup(): void { this.popupVisible.set(false); }
 
   readonly passwordsMatch = computed(() =>
     this.newPassword() === this.confirmPassword()
@@ -28,22 +53,16 @@ export class ResetPasswordComponent {
 
   updatePassword(): void {
     if (this.isSubmitting()) return;
-    if (!this.newPassword().trim()) {
-      this.error.set('Vui lòng nhập mật khẩu mới.');
-      return;
-    }
-    if (!this.passwordsMatch()) {
-      this.error.set('Mật khẩu xác nhận không khớp.');
-      return;
-    }
+    this.submitted.set(true);
+    if (this.newPasswordError() || this.confirmPasswordError()) return;
     this.error.set('');
     this.isSubmitting.set(true);
-    // TODO: call API to update password
-    // this.authService.resetPassword(this.newPassword()).subscribe({
-    //   next: () => this.router.navigate(['/dang-nhap']),
-    //   error: () => { this.isSubmitting.set(false); this.error.set('Có lỗi xảy ra, vui lòng thử lại.'); }
-    // });
-    this.isSubmitting.set(false);
-    this.router.navigate(['/dang-nhap']);
+    const willSucceed = this.mockSuccessNext;
+    this.mockSuccessNext = !this.mockSuccessNext;
+    setTimeout(() => {
+      this.isSubmitting.set(false);
+      this.popupSuccess.set(willSucceed);
+      this.popupVisible.set(true);
+    }, 400);
   }
 }

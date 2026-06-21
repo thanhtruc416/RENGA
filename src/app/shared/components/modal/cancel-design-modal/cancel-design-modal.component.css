@@ -113,12 +113,12 @@
   background: transparent;
   resize: none;
   outline: none;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 }
 
 .cancel-bespoke__textarea::placeholder {
-  color: var(--color-primary);
-  opacity: 0.8;
+  color: #aaa;
+  opacity: 1;
 }
 
 .cancel-bespoke__ack {
@@ -128,7 +128,7 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 }
 
 .cancel-bespoke__ack-checkbox {
@@ -167,6 +167,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+  margin-top: 24px;
 }
 
 .cancel-bespoke__submit {
@@ -205,4 +206,37 @@
 
 .cancel-bespoke__keep:hover {
   background: #f5f5f5;
+}
+
+.cancel-bespoke__result-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.cancel-bespoke__result-icon--success {
+  background: #fdf0f3;
+  color: var(--color-primary);
+}
+
+.cancel-bespoke__result-icon--fail {
+  background: #fff8e1;
+  color: #f59e0b;
+}
+
+.cancel-bespoke__textarea--error {
+  border-color: #dc2626;
+}
+
+.cancel-bespoke__error {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 20px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #dc2626;
 }

@@ -131,7 +131,12 @@ export class OrderDetailCustomComponent {
     return total > 0 ? currentIdx / total : 0;
   });
 
+  cancelMockSuccessNext = true;
+
   openWarrantyModal(): void { this.showWarrantyModal.set(true); }
-  openCancelModal(): void { this.showCancelModal.set(true); }
+  openCancelModal(): void {
+    this.cancelMockSuccessNext = !this.cancelMockSuccessNext;
+    this.showCancelModal.set(true);
+  }
   onOrderCancelled(): void { this.showCancelModal.set(false); }
 }

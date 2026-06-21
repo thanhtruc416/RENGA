@@ -28,11 +28,9 @@ export class RegisterComponent {
   readonly isSubmitting = signal(false);
   readonly showOldOrders = signal(false);
   readonly showPassword = signal(false);
-  readonly showConfirmPassword = signal(false);
   readonly showSuccess = signal(false);
 
   togglePassword(): void { this.showPassword.update(v => !v); }
-  toggleConfirmPassword(): void { this.showConfirmPassword.update(v => !v); }
 
   readonly form = new FormGroup({
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),

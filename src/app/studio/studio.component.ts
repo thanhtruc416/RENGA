@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef, inject } from '@angular/core';
+import { CartService } from '../core/services/cart.service';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { formatVnd } from '../shared/utils/currency.util';
@@ -191,6 +192,20 @@ export class StudioComponent {
 
   // Step 3
   readonly selectedStone = signal<Stone>(this.stones[0]);
+
+  readonly savedToast = signal(false);
+  readonly sharePopupOpen = signal(false);
+  private saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+  saveDesign(): void {
+    if (this.saveTimer) clearTimeout(this.saveTimer);
+    this.savedToast.set(true);
+    this.saveTimer = setTimeout(() => this.savedToast.set(false), 2500);
+  }
+
+  openSharePopup(): void {
+    this.sharePopupOpen.set(true);
+  }
   readonly carat = signal(1.0);
 
   // Step 4
@@ -235,6 +250,7 @@ export class StudioComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cartService = inject(CartService);
 
   readonly depositAmount = computed(() => Math.round(this.totalPrice() / 2));
 
@@ -283,6 +299,63 @@ export class StudioComponent {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  flyToCart(event: MouseEvent): void {
+    const btn = event.currentTarget as HTMLElement;
+    const cartEl = document.getElementById('cart-icon-btn');
+    if (!cartEl) { this.addToCartSilent(); return; }
+
+    const btnRect = btn.getBoundingClientRect();
+    const cartRect = cartEl.getBoundingClientRect();
+
+    const cat = this.categories.find(c => c.id === this.selectedCategoryId());
+    const imgSrc = cat?.image ?? '/images/category-nhan.png';
+
+    const fly = document.createElement('div');
+    fly.style.cssText = `
+      position: fixed;
+      left: ${btnRect.left + btnRect.width / 2 - 24}px;
+      top: ${btnRect.top + btnRect.height / 2 - 24}px;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--color-primary, #c4607e);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 9999;
+      pointer-events: none;
+      transition: left 0.65s cubic-bezier(0.25,0.46,0.45,0.94),
+                  top  0.65s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.65s ease,
+                  opacity 0.2s ease 0.45s;
+    `;
+    fly.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;" />`;
+    document.body.appendChild(fly);
+
+    fly.getBoundingClientRect();
+
+    fly.style.left    = `${cartRect.left + cartRect.width / 2 - 12}px`;
+    fly.style.top     = `${cartRect.top  + cartRect.height / 2 - 12}px`;
+    fly.style.transform = 'scale(0.15)';
+    fly.style.opacity   = '0';
+
+    setTimeout(() => {
+      document.body.removeChild(fly);
+      this.addToCartSilent();
+      this.cartService.triggerBump();
+    }, 700);
+  }
+
+  private addToCartSilent(): void {
+    const cat = this.categories.find(c => c.id === this.selectedCategoryId());
+    this.cartService.addItem({
+      type: 'studio',
+      name: `${cat?.name ?? 'Trang sức'} Studio`,
+      spec: `${this.selectedMaterial().label} • ${this.selectedStone().label}`,
+      price: this.totalPrice(),
+      image: cat?.image ?? '/images/category-nhan.png',
+      quantity: 1,
+    });
+  }
+
   selectCategory(id: string): void {
     this.selectedCategoryId.set(id);
     this.goToStep(2);
@@ -328,13 +401,20 @@ export class StudioComponent {
 
   readonly formatVnd = formatVnd;
 
+  private mockSuccessNext = true;
+
   submitOrder(): void {
     if (this.checkoutForm.invalid) {
       this.checkoutForm.markAllAsTouched();
       return;
     }
-    // TODO: gọi API — giả lập thành công
-    this.showSuccessModal.set(true);
+    // TODO: gọi API — mock xen kẽ để test cả 2 case
+    if (this.mockSuccessNext) {
+      this.showSuccessModal.set(true);
+    } else {
+      this.showFailModal.set(true);
+    }
+    this.mockSuccessNext = !this.mockSuccessNext;
   }
 
   applyVoucher(): void {

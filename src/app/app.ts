@@ -30,4 +30,10 @@ export class App {
   readonly isAdminRoute = computed(() =>
     this.currentUrl().startsWith('/admin') || this.currentUrl().startsWith('/quan-tri-vien')
   );
+
+  readonly isAuthRoute = computed(() => {
+    const url = this.currentUrl();
+    return url.startsWith('/dang-nhap') || url.startsWith('/dang-ki')
+        || url.startsWith('/quen-mat-khau') || url.startsWith('/mat-khau-moi');
+  });
 }

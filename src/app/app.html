@@ -1,6 +1,6 @@
-@if (!isAdminRoute()) { <app-header /> }
+@if (!isAdminRoute() && !isAuthRoute()) { <app-header /> }
 <router-outlet />
-@if (!isAdminRoute()) {
+@if (!isAdminRoute() && !isAuthRoute()) {
   <app-footer />
   <app-chatbot />
 }

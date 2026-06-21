@@ -15,8 +15,14 @@
   <div class="appt-hero">
     <div class="appt-hero__inner">
       <h1 class="appt-hero__title">Danh sách lịch tư vấn</h1>
-      <button class="appt-hero__cancel-btn" type="button" (click)="openCancel()">
-        HỦY LỊCH TƯ VẤN
+      <button
+        class="appt-hero__cancel-btn"
+        type="button"
+        [disabled]="upcomingAppointment().status === 'cancelled'"
+        [class.is-cancelled]="upcomingAppointment().status === 'cancelled'"
+        (click)="openCancel()"
+      >
+        {{ upcomingAppointment().status === 'cancelled' ? 'ĐÃ HỦY' : 'HỦY LỊCH TƯ VẤN' }}
       </button>
     </div>
   </div>
@@ -35,15 +41,19 @@
 
     <!-- Upcoming appointment card -->
     @if (activeTab() === 'sap-toi') {
-      <div class="appt-card">
+      <div class="appt-card" [class.appt-card--cancelled]="upcomingAppointment().status === 'cancelled'">
         <div class="appt-card__photo">
-          <img [src]="upcomingAppointment.designerThumb" [alt]="upcomingAppointment.designer">
+          <img [src]="upcomingAppointment().designerThumb" [alt]="upcomingAppointment().designer">
           <div class="appt-card__photo-overlay"></div>
         </div>
 
         <div class="appt-card__content">
-          <span class="appt-card__badge">SẮP TỚI</span>
-          <p class="appt-card__name">{{ upcomingAppointment.designer }}</p>
+          @if (upcomingAppointment().status === 'cancelled') {
+            <span class="appt-card__badge appt-card__badge--cancelled">ĐÃ HỦY</span>
+          } @else {
+            <span class="appt-card__badge">SẮP TỚI</span>
+          }
+          <p class="appt-card__name">{{ upcomingAppointment().designer }}</p>
           <div class="appt-card__detail-rows">
             <div class="appt-card__row">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -52,21 +62,21 @@
                 <line x1="8" y1="2" x2="8" y2="6"/>
                 <line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
-              <span>{{ upcomingAppointment.date }}</span>
+              <span>{{ upcomingAppointment().date }}</span>
             </div>
             <div class="appt-card__row">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <circle cx="12" cy="12" r="10"/>
                 <polyline points="12 6 12 12 16 14"/>
               </svg>
-              <span>{{ upcomingAppointment.timeStart }} - {{ upcomingAppointment.timeEnd }} (GMT+7)</span>
+              <span>{{ upcomingAppointment().timeStart }} - {{ upcomingAppointment().timeEnd }} (GMT+7)</span>
             </div>
             <div class="appt-card__row">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                 <circle cx="12" cy="10" r="3"/>
               </svg>
-              <span>{{ upcomingAppointment.location }}</span>
+              <span>{{ upcomingAppointment().location }}</span>
             </div>
           </div>
         </div>
@@ -108,7 +118,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (appt of historyAppointments; track appt.id) {
+            @for (appt of historyAppointments(); track appt.id) {
               <tr>
                 <td>
                   <div class="appt-designer-cell">
@@ -137,7 +147,7 @@
                 </td>
                 <td>
                   @if (appt.status === 'done') {
-                    <button class="appt-action-link" type="button">XEM BẢN PHÁC THẢO</button>
+                    <button class="appt-action-link" type="button" (click)="sketchPopupOpen.set(true)">XEM BẢN PHÁC THẢO</button>
                   } @else if (appt.status === 'cancelled') {
                     <a routerLink="/the-designer" class="appt-action-link">ĐẶT LẠI LỊCH</a>
                   }
@@ -148,17 +158,37 @@
         </table>
       </div>
 
-      <div class="appt-load-more-wrap">
-        <button class="appt-load-more" type="button">XEM THÊM LỊCH SỬ ∨</button>
-      </div>
+      @if (hasMore()) {
+        <div class="appt-load-more-wrap">
+          <button class="appt-load-more" type="button" (click)="loadMore()">XEM THÊM LỊCH SỬ ∨</button>
+        </div>
+      }
     </div>
 
   </div>
 
+  <!-- Sketch dev popup -->
+  @if (sketchPopupOpen()) {
+    <div class="appt-dev-backdrop" (click)="sketchPopupOpen.set(false)">
+      <div class="appt-dev-popup" (click)="$event.stopPropagation()">
+        <div class="appt-dev-popup__icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h3 class="appt-dev-popup__title">Tính năng đang phát triển</h3>
+        <p class="appt-dev-popup__desc">Tính năng xem bản phác thảo đang được xây dựng. Vui lòng quay lại sau!</p>
+        <button class="appt-dev-popup__btn" type="button" (click)="sketchPopupOpen.set(false)">Đã hiểu</button>
+      </div>
+    </div>
+  }
+
   <!-- Cancel modal -->
   @if (cancelModalOpen()) {
     <app-cancel-appointment-modal
-      [appointmentId]="upcomingAppointment.id"
+      [appointmentId]="upcomingAppointment().id"
       (closed)="closeCancel()"
       (confirmed)="confirmCancel($event)"
     />

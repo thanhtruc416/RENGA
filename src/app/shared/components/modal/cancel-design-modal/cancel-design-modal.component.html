@@ -26,10 +26,14 @@
         <textarea
           id="design-cancel-reason"
           class="cancel-bespoke__textarea"
+          [class.cancel-bespoke__textarea--error]="showValidation() && !reason().trim()"
           placeholder="Vui lòng cung cấp chi tiết lý do cho yêu cầu hủy đơn của quý khách. Đội ngũ RENGA sẽ xem xét từng trường hợp cụ thể để đánh giá khả năng dừng quá trình sản xuất và chuẩn bị nguyên vật liệu."
           [value]="reason()"
           (input)="onReasonInput($event)"
         ></textarea>
+        @if (showValidation() && !reason().trim()) {
+          <span class="cancel-bespoke__error">Vui lòng nhập lý do hủy đơn</span>
+        }
 
         <div class="cancel-bespoke__ack">
           <label class="cancel-bespoke__ack-label" for="design-cancel-ack">
@@ -41,16 +45,19 @@
               (change)="toggleAck()"
             />
             <span class="cancel-bespoke__ack-text">
-              Tôi hiểu rằng yêu cầu này sẽ được gửi đến đội ngũ RENGA để xem xét chính thức và khoản đặt cọc của tôi có thể không được hoàn lại do sản phẩm đã bước vào giai đoạn thiết kế và chuẩn bị nguyên vật liệu.
+              Tôi hiểu rằng yêu cầu này sẽ được gửi đến đội ngũ RENGA để xem xét chính thức và khoản đặt cọc của tôi có thể không được hoàn lại do sản phẩm đã bước vào giai đoạn thiết kế và chuẩn bị nguyên vật liệu
             </span>
           </label>
         </div>
+        @if (showValidation() && !acknowledged()) {
+          <span class="cancel-bespoke__error">Vui lòng xác nhận bạn đã đọc và hiểu điều khoản</span>
+        }
 
         <div class="cancel-bespoke__actions">
           <button
             type="button"
             class="cancel-bespoke__submit"
-            [disabled]="!canSubmit() || isSubmitting()"
+            [disabled]="isSubmitting()"
             (click)="onSubmit()"
           >
             {{ isSubmitting() ? 'Đang gửi...' : 'Gửi yêu cầu đến Quản trị viên' }}
@@ -68,12 +75,29 @@
           </button>
         </div>
 
-        <h2 class="cancel-bespoke__title">Đã gửi yêu cầu</h2>
-        <div class="cancel-bespoke__divider" aria-hidden="true"></div>
-
-        <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
-          Yêu cầu hủy đơn của bạn đã được gửi thành công. Đội ngũ RENGA sẽ liên hệ với bạn trong vòng 1–2 ngày làm việc để xác nhận kết quả xử lý.
-        </p>
+        @if (isSuccess()) {
+          <div class="cancel-bespoke__result-icon cancel-bespoke__result-icon--success">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h2 class="cancel-bespoke__title">Đã gửi yêu cầu</h2>
+          <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+          <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
+            Yêu cầu hủy đơn của bạn đã được gửi thành công. Đội ngũ RENGA sẽ liên hệ với bạn trong vòng 1–2 ngày làm việc để xác nhận kết quả xử lý.
+          </p>
+        } @else {
+          <div class="cancel-bespoke__result-icon cancel-bespoke__result-icon--fail">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <h2 class="cancel-bespoke__title">Gửi thất bại</h2>
+          <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+          <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
+            Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại hoặc liên hệ trực tiếp với đội ngũ RENGA để được hỗ trợ.
+          </p>
+        }
 
         <div class="cancel-bespoke__actions" style="grid-template-columns: 1fr;">
           <button type="button" class="cancel-bespoke__submit" (click)="onClose()">Đóng</button>

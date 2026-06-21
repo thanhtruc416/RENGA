@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../core/services/cart.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,6 +14,9 @@ import { CartService } from '../core/services/cart.service';
 })
 export class CartComponent {
   private readonly cartService = inject(CartService);
+  private readonly authService = inject(AuthService);
+
+  readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
   readonly activeTab = signal<'available' | 'studio'>('available');
   readonly selectedIds = signal<Set<number>>(new Set());

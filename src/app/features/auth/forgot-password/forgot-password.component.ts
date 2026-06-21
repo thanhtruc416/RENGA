@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
@@ -9,13 +10,12 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
@@ -25,22 +25,31 @@ export class ForgotPasswordComponent {
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  readonly phoneControl = new FormControl('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.pattern(/^[0-9]{10,11}$/)],
-  });
-
-  readonly codeSent = signal(false);
-  readonly countdown = signal(0);
-  readonly otpDigits = signal(['', '', '', '', '', '']);
-  readonly isSubmitting = signal(false);
+  readonly phone           = signal('');
+  readonly phoneAttempted  = signal(false);
+  readonly codeSent        = signal(false);
+  readonly countdown       = signal(0);
+  readonly otpDigits       = signal(['', '', '', '', '', '']);
+  readonly isSubmitting    = signal(false);
 
   readonly otpIndices = [0, 1, 2, 3, 4, 5];
 
+  readonly phoneError = computed(() => {
+    if (!this.phoneAttempted()) return '';
+    const v = this.phone().trim();
+    if (!v) return 'Vui lòng nhập số điện thoại.';
+    if (!/^[0-9]{10}$/.test(v)) return 'Số điện thoại phải có đúng 10 chữ số.';
+    return '';
+  });
+
+  setPhone(value: string): void {
+    this.phone.set(value.replace(/\D/g, ''));
+  }
+
   sendCode(): void {
-    if (this.phoneControl.invalid) return;
+    this.phoneAttempted.set(true);
+    if (this.phoneError()) return;
     this.codeSent.set(true);
-    this.phoneControl.disable();
     this.startCountdown();
   }
 
