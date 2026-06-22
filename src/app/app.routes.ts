@@ -52,6 +52,7 @@ export const routes: Routes = [
   },
   {
     path: 'the-designer',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./design/design.component').then((m) => m.DesignComponent),
   },
@@ -114,7 +115,13 @@ export const routes: Routes = [
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
   {
+    path: 'orders',
+    loadComponent: () =>
+      import('./orders/order-list/order-list.component').then((m) => m.OrderListComponent),
+  },
+  {
     path: 'orders/tracking',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./orders/order-tracking/order-tracking.component').then(
         (m) => m.OrderTrackingComponent,

@@ -147,7 +147,8 @@
   margin: 0 auto;
   display: flex;
   align-items: flex-end;
-  gap: 32px;
+  flex-wrap: wrap;
+  gap: 16px 32px;
   padding: 32px 0;
 }
 
@@ -155,7 +156,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 180px;
+  min-width: 150px;
+  flex: 0 0 auto;
 }
 
 .order-tracking-filter__label {
@@ -269,21 +271,27 @@
    tính width của table theo content, không theo parent width.
    Cần div wrapper để giới hạn max-width.
 ══════════════════════════════════════════════════ */
+.order-tracking-scroll-wrap {
+  overflow-x: auto;
+}
+
+.order-tracking-filters-wrap {
+  min-width: 760px;
+}
+
 .order-tracking-table-wrap {
-  /* background: var(--color-primary-light); */
-  padding-bottom: 32px;
+  background: var(--color-primary-light);
+  padding: 0 var(--container-px) 32px;
 }
 
 .order-tracking-table__container {
   max-width: var(--max-width);
   margin: 0 auto;
-  width: 100%;
-  background: var(--color-primary-light);
-  box-sizing: border-box;
 }
 
 .order-tracking-table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   table-layout: fixed;
 }

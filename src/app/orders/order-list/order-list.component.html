@@ -1,0 +1,71 @@
+<div class="order-list-page">
+
+  <div class="order-list-top">
+    <div class="order-list-top__inner">
+      <nav class="order-list-breadcrumb">
+        <a routerLink="/profile" class="order-list-breadcrumb__item">Hồ sơ</a>
+        <span class="order-list-breadcrumb__sep">›</span>
+        <span class="order-list-breadcrumb__item order-list-breadcrumb__item--current">Đơn hàng</span>
+      </nav>
+      <h1 class="order-list-title">Đơn hàng của tôi</h1>
+    </div>
+  </div>
+
+  <div class="order-list-body">
+    <div class="order-list-body__inner">
+
+      @if (orders().length === 0) {
+        <div class="order-list-empty">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-muted)" stroke-width="1.2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <p class="order-list-empty__text">Bạn chưa có đơn hàng nào</p>
+          <a routerLink="/danh-muc" class="order-list-empty__btn">KHÁM PHÁ SẢN PHẨM</a>
+        </div>
+      } @else {
+        <div class="order-list-table">
+          <div class="order-list-table__head">
+            <span>Sản phẩm</span>
+            <span>Mã đơn</span>
+            <span>Ngày đặt</span>
+            <span>Tổng tiền</span>
+            <span>Trạng thái</span>
+            <span></span>
+          </div>
+
+          @for (order of orders(); track order.id) {
+            <div class="order-list-row">
+              <div class="order-list-row__product">
+                <img class="order-list-row__img" [src]="order.imageUrl" [alt]="order.productName" />
+                <div>
+                  <p class="order-list-row__name">{{ order.productName }}</p>
+                  @if (order.itemCount > 1) {
+                    <p class="order-list-row__more">+{{ order.itemCount - 1 }} sản phẩm khác</p>
+                  }
+                </div>
+              </div>
+              <span class="order-list-row__id">#{{ order.id }}</span>
+              <span class="order-list-row__date">{{ order.date }}</span>
+              <span class="order-list-row__total">
+                {{ order.total | number:'1.0-0':'vi' }}<u>đ</u>
+              </span>
+              <span class="order-list-row__status" [class]="getStatusClass(order.status)">
+                {{ order.statusLabel }}
+              </span>
+              <a [routerLink]="['/orders', order.id]" class="order-list-row__action">
+                Xem chi tiết
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </a>
+            </div>
+          }
+        </div>
+      }
+
+    </div>
+  </div>
+
+</div>

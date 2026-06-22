@@ -386,12 +386,7 @@
             <ul class="order-card__list">
               @for (item of orderItems(); track item.name) {
                 <li class="order-card__item">
-                  <span class="order-card__item-name">
-                    {{ item.name }}
-                    @if (item.subName) {
-                      <span class="order-card__item-sub">({{ item.subName }})</span>
-                    }
-                  </span>
+                  <span class="order-card__item-name">{{ item.name }}</span>
                   <span class="order-card__item-price">{{ formatVnd(item.price) }}<u>đ</u></span>
                 </li>
               }
@@ -627,7 +622,6 @@
 
 <app-payment-fail-modal
   [isOpen]="showFailModal()"
-  [countdownDisplay]="'00:59:56'"
   (closed)="showFailModal.set(false)"
 />
 <!-- Floating price summary (steps 2–5) -->

@@ -49,10 +49,20 @@
 
     @if (!isGuest()) {
       <div class="modal-actions__row">
-        <a class="modal-actions__primary" routerLink="/orders/AH-8829104" (click)="close()">
-          Xem chi tiết đơn hàng
-        </a>
-        <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
+        @if (mode() === 'appointment') {
+          <a class="modal-actions__primary" routerLink="/appointment-history" (click)="close()">
+            Xem chi tiết lịch tư vấn
+          </a>
+        } @else {
+          <a class="modal-actions__primary" routerLink="/orders/AH-8829104" (click)="close()">
+            Xem chi tiết đơn hàng
+          </a>
+        }
+        @if (mode() === 'appointment') {
+          <button class="modal-actions__outline" type="button" (click)="onScheduleAgain()">Đặt lịch khác</button>
+        } @else {
+          <a class="modal-actions__outline" routerLink="/products" (click)="close()">Tiếp tục mua sắm</a>
+        }
       </div>
     }
 

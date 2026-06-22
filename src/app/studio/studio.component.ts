@@ -256,7 +256,7 @@ export class StudioComponent {
 
   readonly orderItems = computed((): OrderItem[] => {
     const items: OrderItem[] = [
-      { name: this.selectedMaterial().label, subName: 'Dòng Di Sản', price: this.selectedMaterial().priceVnd },
+      { name: this.selectedMaterial().label, price: this.selectedMaterial().priceVnd },
     ];
     if (this.selectedStone().id !== 'none') {
       items.push({

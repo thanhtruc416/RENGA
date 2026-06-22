@@ -38,22 +38,24 @@ const REASONS: CancelReason[] = [
 })
 export class CancelOrderModalComponent {
   // ── Inputs ──────────────────────────────────────────────────────────────────
-  readonly orderId      = input.required<string>();
-  readonly orderStatus  = input.required<OrderStatus>();
-  readonly productName  = input<string>('');
-  readonly productSpec  = input<string>('');
-  readonly productImage = input<string>('assets/images/product-placeholder.webp');
-  readonly refundAmount = input<string>('');
+  readonly orderId           = input.required<string>();
+  readonly orderStatus       = input.required<OrderStatus>();
+  readonly productName       = input<string>('');
+  readonly productSpec       = input<string>('');
+  readonly productImage      = input<string>('assets/images/product-placeholder.webp');
+  readonly refundAmount      = input<string>('');
+  readonly mockShouldSucceed = input<boolean>(true);
 
   // ── Outputs ─────────────────────────────────────────────────────────────────
-  readonly cancelled = output<void>();
-  readonly closed    = output<void>();
+  readonly cancelled         = output<void>();
+  readonly closed            = output<void>();
+  readonly contactRequested  = output<void>();
 
   // ── State ───────────────────────────────────────────────────────────────────
-  readonly step              = signal<ModalStep>('form');
-  readonly selectedReasonIds = signal<Set<string>>(new Set());
-  readonly otherNote         = signal('');
-  readonly isSubmitting      = signal(false);
+  readonly step             = signal<ModalStep>('form');
+  readonly selectedReasonId = signal<string>('');
+  readonly otherNote        = signal('');
+  readonly isSubmitting     = signal(false);
 
   // ── Computed ────────────────────────────────────────────────────────────────
   readonly reasons = REASONS;
@@ -74,10 +76,10 @@ export class CancelOrderModalComponent {
     return s === 'P' || s === 'PC' || s === 'PF';
   });
 
-  readonly otherSelected = computed<boolean>(() => this.selectedReasonIds().has('r5'));
+  readonly otherSelected = computed<boolean>(() => this.selectedReasonId() === 'r5');
 
   readonly canSubmit = computed<boolean>(() =>
-    this.selectedReasonIds().size > 0 &&
+    this.selectedReasonId() !== '' &&
     (!this.otherSelected() || this.otherNote().trim().length > 0)
   );
 
@@ -86,16 +88,12 @@ export class CancelOrderModalComponent {
     this.otherNote.set((event.target as HTMLTextAreaElement).value);
   }
 
-  toggleReason(id: string): void {
-    this.selectedReasonIds.update((set) => {
-      const next = new Set(set);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  selectReason(id: string): void {
+    this.selectedReasonId.set(id);
   }
 
   isReasonSelected(id: string): boolean {
-    return this.selectedReasonIds().has(id);
+    return this.selectedReasonId() === id;
   }
 
   onSubmit(): void {
@@ -105,7 +103,7 @@ export class CancelOrderModalComponent {
     // TODO: gọi OrdersService.cancelOrder(orderId, reasons)
     setTimeout(() => {
       this.isSubmitting.set(false);
-      if (this.canCancelDirectly()) {
+      if (this.mockShouldSucceed()) {
         this.step.set('success');
         this.cancelled.emit();
       } else {
@@ -116,5 +114,10 @@ export class CancelOrderModalComponent {
 
   onClose(): void {
     this.closed.emit();
+  }
+
+  onContactRequested(): void {
+    this.closed.emit();
+    this.contactRequested.emit();
   }
 }

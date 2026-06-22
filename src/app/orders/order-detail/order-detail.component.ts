@@ -15,6 +15,7 @@ import {
   OrderStatus,
 } from '../../shared/components/modal/cancel-order-modal/cancel-order-modal.component';
 import { WarrantyModalComponent } from '../../shared/components/modal/warranty-modal/warranty-modal.component';
+import { AuthService } from '../../core/services/auth.service';
 
 registerLocaleData(localeVi);
 
@@ -135,8 +136,11 @@ const MOCK_ORDER: OrderDetail = {
   styleUrl: './order-detail.component.css',
 })
 export class OrderDetailComponent {
-  private readonly route  = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+  private readonly route       = inject(ActivatedRoute);
+  private readonly router      = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
   readonly orderId = this.route.snapshot.paramMap.get('id') ?? '';
 
@@ -146,6 +150,9 @@ export class OrderDetailComponent {
   readonly showWarrantyModal  = signal(false);
   warrantyMockSuccessNext     = true;
   readonly showCancelModal    = signal(false);
+  cancelMockSuccessNext       = true;
+
+  readonly isAhOrder = computed(() => this.order().id.startsWith('AH'));
   readonly showSupportModal   = signal(false);
   readonly supportSubmitted   = signal(false);
   readonly supportSuccess     = signal(false);
@@ -198,7 +205,8 @@ export class OrderDetailComponent {
   }
 
   openCancelModal(): void {
-    this.openSupport();
+    this.cancelMockSuccessNext = !this.cancelMockSuccessNext;
+    this.showCancelModal.set(true);
   }
 
   openSupport(): void {

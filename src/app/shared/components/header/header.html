@@ -15,8 +15,8 @@
         <a routerLink="/cart" id="cart-icon-btn" class="site-header__action-btn" aria-label="Giỏ hàng">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="site-header__tooltip">Giỏ hàng</span>
-          @if (cart.availableCount() > 0) {
-            <span class="site-header__cart-badge" [class.is-bump]="cart.isBumping()">{{ cart.availableCount() }}</span>
+          @if (cart.totalCount() > 0) {
+            <span class="site-header__cart-badge" [class.is-bump]="cart.isBumping()">{{ cart.totalCount() }}</span>
           }
         </a>
 

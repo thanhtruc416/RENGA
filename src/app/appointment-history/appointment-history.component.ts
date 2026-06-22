@@ -131,9 +131,7 @@ export class AppointmentHistoryComponent {
   }
 
   confirmCancel(reasons: string[]): void {
-    // TODO: gọi API hủy lịch
     console.log('Hủy lịch với lý do:', reasons);
     this.upcomingAppointment.update(a => ({ ...a, status: 'cancelled' }));
-    this.closeCancel();
   }
 }

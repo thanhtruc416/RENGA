@@ -121,6 +121,14 @@
   color: var(--color-muted);
 }
 
+.rl__filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .rl__filter-btn {
   display: flex;
   align-items: center;
@@ -137,12 +145,39 @@
   border: none;
   cursor: pointer;
   white-space: nowrap;
-  margin-left: auto;
   transition: background 0.15s;
 }
 
-.rl__filter-btn:hover {
+.rl__filter-btn:hover:not(:disabled) {
   background: var(--color-primary);
+}
+
+.rl__filter-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.rl__filter-clear {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.rl__filter-clear:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 /* ── Table ── */
@@ -188,6 +223,7 @@
 /* ── Body rows ── */
 .rl__row {
   border-top: 1px solid #c4c7c7;
+  cursor: pointer;
 }
 
 .rl__row:first-child {

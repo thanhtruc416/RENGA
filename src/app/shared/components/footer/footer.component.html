@@ -36,7 +36,7 @@
         <p class="site-footer__col-title">HỖ TRỢ KHÁCH HÀNG</p>
         <a routerLink="/chinh-sach-bao-hanh" class="site-footer__link">Chính sách bảo hành</a>
         <a routerLink="/doi-tra-hoan-tien" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
-        <a routerLink="/" class="site-footer__link">Hướng dẫn đo size nhẫn</a>
+        <a href="#" class="site-footer__link" (click)="openSizeGuide($event)">Hướng dẫn đo size nhẫn</a>
         <a routerLink="/" class="site-footer__link">Câu hỏi thường gặp</a>
       </div>
 
@@ -73,3 +73,7 @@
     </div>
   </div>
 </footer>
+
+@if (showSizeGuide()) {
+  <app-ring-size-guide-modal (closed)="closeSizeGuide()" />
+}

@@ -29,12 +29,13 @@
   line-height: 1.6;
 }
 
-/* ── Dashboard Gateway ── */
-.profile__gateway {
+/* ── Main Grid (gateway + info left, loyalty right spans both rows) ── */
+.profile__main-grid {
   display: grid;
   grid-template-columns: 1fr 540px;
   gap: 33px;
   margin-bottom: 32px;
+  align-items: start;
 }
 
 .profile__gateway-card {
@@ -106,14 +107,7 @@
   stroke: var(--color-muted);
 }
 
-/* ── Main Sections ── */
-.profile__sections {
-  display: grid;
-  grid-template-columns: 1fr 540px;
-  gap: 33px;
-  margin-bottom: 32px;
-  align-items: start;
-}
+/* ── Loyalty card spans rows 1-2 in the main grid ── */
 
 /* ── Personal Info Card ── */
 .profile__info-card {
@@ -266,12 +260,14 @@
 .profile__loyalty-card {
   background-color: var(--color-black);
   padding: 40px;
-  min-height: 487px;
   display: flex;
   flex-direction: column;
   gap: 32px;
   position: relative;
   overflow: hidden;
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: stretch;
 }
 
 .profile__loyalty-sparkle {
@@ -451,8 +447,41 @@
   color: var(--color-dark);
 }
 
+.profile__security-input:not(:placeholder-shown) {
+  color: var(--color-dark);
+}
+
 .profile__security-input::placeholder {
   color: rgba(68, 71, 72, 0.3);
+}
+
+.profile__security-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile__security-input-wrap .profile__security-input {
+  padding-right: 44px;
+}
+
+.profile__security-eye {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.profile__security-eye:hover {
+  color: var(--color-dark);
 }
 
 .profile__security-btn {
@@ -569,8 +598,8 @@
   margin-bottom: 20px;
 }
 .profile-popup__icon--fail {
-  background: #fff8e1;
-  color: #f59e0b;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .profile-popup__title {

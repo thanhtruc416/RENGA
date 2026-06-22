@@ -125,19 +125,10 @@
         }
       </div>
 
-      @if (showSuccess()) {
-        <div class="register__success">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M20 6L9 17l-5-5"/>
-          </svg>
-          <span>Tạo tài khoản thành công! Đang chuyển đến trang đăng nhập...</span>
-        </div>
-      }
-
       <button
         class="register__submit"
         type="submit"
-        [disabled]="isSubmitting() || showSuccess()"
+        [disabled]="isSubmitting()"
       >
         {{ isSubmitting() ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ' }}
       </button>
@@ -150,6 +141,37 @@
 
   </div>
 </div>
+
+@if (popupVisible()) {
+  <div class="reg-popup-backdrop" (click)="closePopup()">
+    <div class="reg-popup" (click)="$event.stopPropagation()">
+      <button class="reg-popup__close" type="button" (click)="closePopup()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="reg-popup__icon" [class.reg-popup__icon--fail]="!popupSuccess()">
+        @if (popupSuccess()) {
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        } @else {
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        }
+      </div>
+      @if (popupSuccess()) {
+        <h2 class="reg-popup__title">Đăng ký thành công!</h2>
+        <p class="reg-popup__desc">Tài khoản RENGA của bạn<br>đã được tạo thành công</p>
+      } @else {
+        <h2 class="reg-popup__title">Đăng ký thất bại!</h2>
+        <p class="reg-popup__desc">Đã xảy ra lỗi khi tạo tài khoản<br>Vui lòng thử lại sau!</p>
+      }
+      <button class="reg-popup__btn" type="button" (click)="closePopup()">ĐÓNG</button>
+    </div>
+  </div>
+}
 
 @if (showOldOrders()) {
   <app-old-orders-modal

@@ -405,8 +405,13 @@
   color: #1b1c1c;
   text-transform: uppercase;
   border-bottom: 1px solid var(--color-dark);
-  padding-bottom: 2px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 0 0 2px;
+  background: none;
   width: fit-content;
+  cursor: pointer;
 }
 
 /* ── CTA Buttons ── */
@@ -794,7 +799,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 36px;
+  margin-bottom: 0;
 }
 
 .pd-qa__input {
@@ -832,10 +837,18 @@
 
 .pd-qa__send:hover { opacity: 0.88; }
 
+.pd-qa__guest-error {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #d32f2f;
+  margin: 6px 0 24px;
+}
+
 .pd-qa__messages {
   display: flex;
   flex-direction: column;
   gap: 28px;
+  margin-top: 36px;
 }
 
 .pd-qa__thread {

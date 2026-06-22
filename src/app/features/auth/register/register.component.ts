@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, ViewEncapsulation } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   selector: 'app-register',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   imports: [RouterLink, ReactiveFormsModule, OldOrdersModalComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
@@ -25,10 +26,12 @@ export class RegisterComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly isSubmitting = signal(false);
+  readonly isSubmitting  = signal(false);
   readonly showOldOrders = signal(false);
-  readonly showPassword = signal(false);
-  readonly showSuccess = signal(false);
+  readonly showPassword  = signal(false);
+  readonly popupVisible  = signal(false);
+  readonly popupSuccess  = signal(true);
+  private mockSuccessNext = true;
 
   togglePassword(): void { this.showPassword.update(v => !v); }
 
@@ -48,17 +51,30 @@ export class RegisterComponent {
     this.authService.register({ fullName, email, phone, password }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.showSuccess.set(true);
-        const timer = setTimeout(() => this.router.navigate(['/']), 2000);
-        this.destroyRef.onDestroy(() => clearTimeout(timer));
+        this.popupSuccess.set(true);
+        this.popupVisible.set(true);
       },
       error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
         if (err.status === 409 && err.error?.code === 'EXISTING_ORDERS') {
           this.showOldOrders.set(true);
+          return;
         }
+        if (!environment.production) {
+          const willSucceed = this.mockSuccessNext;
+          this.mockSuccessNext = !this.mockSuccessNext;
+          this.popupSuccess.set(willSucceed);
+          this.popupVisible.set(true);
+          return;
+        }
+        this.popupSuccess.set(false);
+        this.popupVisible.set(true);
       },
     });
+  }
+
+  closePopup(): void {
+    this.popupVisible.set(false);
   }
 
   closeOldOrders(): void { this.showOldOrders.set(false); }

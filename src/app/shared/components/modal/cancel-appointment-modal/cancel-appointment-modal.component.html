@@ -1,6 +1,30 @@
 <div class="ltv-modal-backdrop" (click)="onClose()">
   <div class="ltv-cancel-modal" (click)="$event.stopPropagation()">
 
+    @if (result() === 'success') {
+      <div class="ltv-cancel-modal__result">
+        <div class="ltv-cancel-modal__result-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="ltv-cancel-modal__result-title">Hủy lịch thành công!</h3>
+        <p class="ltv-cancel-modal__result-desc">Lịch hẹn {{ appointmentId }} đã được hủy. Đặt cọc sẽ được hoàn trả theo chính sách.</p>
+        <button class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary" type="button" (click)="onClose()">ĐÓNG</button>
+      </div>
+    } @else if (result() === 'fail') {
+      <div class="ltv-cancel-modal__result">
+        <div class="ltv-cancel-modal__result-icon ltv-cancel-modal__result-icon--fail">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L22 20H2L12 2Z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="ltv-cancel-modal__result-title">Hủy lịch thất bại!</h3>
+        <p class="ltv-cancel-modal__result-desc">Rất tiếc, không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.</p>
+        <button class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary" type="button" (click)="onClose()">ĐÓNG</button>
+      </div>
+    } @else {
+
     <div class="ltv-cancel-modal__header">
       <div class="ltv-cancel-modal__heading">
         <p class="ltv-cancel-modal__title">Hủy lịch hẹn</p>
@@ -22,7 +46,7 @@
       <p class="ltv-cancel-modal__reason-heading">Lý do hủy</p>
       @for (reason of reasons; track reason.value) {
         <label class="ltv-cancel-modal__reason">
-          <input type="checkbox" [checked]="isSelected(reason.value)" (change)="toggleReason(reason.value)">
+          <input type="radio" name="cancel-appointment-reason" [checked]="isSelected(reason.value)" (change)="selectReason(reason.value)">
           <span class="ltv-cancel-modal__reason-label">{{ reason.label }}</span>
         </label>
         @if (reason.value === 'other' && isOtherSelected()) {
@@ -48,10 +72,12 @@
       <button
         class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary"
         type="button"
-        [disabled]="!selectedReasons().length || (isOtherSelected() && !otherReason().trim())"
+        [disabled]="!selectedReason() || (isOtherSelected() && !otherReason().trim())"
         (click)="onConfirm()"
       >XÁC NHẬN HỦY</button>
     </div>
+
+    } <!-- end @else -->
 
   </div>
 </div>

@@ -224,8 +224,8 @@
 }
 
 .cancel-bespoke__result-icon--fail {
-  background: #fff8e1;
-  color: #f59e0b;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .cancel-bespoke__textarea--error {

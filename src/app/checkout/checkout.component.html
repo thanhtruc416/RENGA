@@ -278,13 +278,11 @@
 <app-payment-fail-modal
   [isOpen]="showFailModal()"
   [isGuest]="false"
-  [countdownDisplay]="countdownDisplay()"
   (closed)="showFailModal.set(false)"
 />
 
 <app-payment-fail-modal
   [isOpen]="showFailGuestModal()"
   [isGuest]="true"
-  [countdownDisplay]="countdownDisplay()"
   (closed)="showFailGuestModal.set(false)"
 />

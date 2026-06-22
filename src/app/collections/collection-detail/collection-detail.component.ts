@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CtaSectionComponent } from '../../shared/components/cta-section/cta-section.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
@@ -100,7 +101,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
   selector: 'app-collection-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, CtaSectionComponent],
   templateUrl: './collection-detail.component.html',
   styleUrl: './collection-detail.component.css',
 })

@@ -347,9 +347,20 @@
 }
 
 /* ══════════════════════════════════════
-   SUCCESS STATE
+   SUCCESS POPUP
 ══════════════════════════════════════ */
+.review-success-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
 .review-success {
+  background: var(--color-white);
   border: 1px solid #080808;
   padding: 64px 48px;
   display: flex;
@@ -357,14 +368,16 @@
   align-items: center;
   text-align: center;
   gap: 16px;
+  max-width: 480px;
+  width: 90%;
 }
 
 .review-success__icon {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #e8f5e9;
-  color: #388e3c;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;

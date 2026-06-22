@@ -4,7 +4,7 @@
   <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
     <a routerLink="/" class="product-detail__breadcrumb-link">DANH MỤC SẢN PHẨM</a>
     <span class="product-detail__breadcrumb-sep">›</span>
-    <a routerLink="/products" class="product-detail__breadcrumb-link">NHẪN</a>
+    <a routerLink="/products" class="product-detail__breadcrumb-link">{{ categoryLabel() }}</a>
     <span class="product-detail__breadcrumb-sep">›</span>
     <span class="product-detail__breadcrumb-current">{{ product().name }}</span>
   </nav>
@@ -82,7 +82,7 @@
             </button>
           }
         </div>
-        <a class="product-detail__size-guide" routerLink=".">HƯỚNG DẪN CHỌN SIZE</a>
+        <button class="product-detail__size-guide" type="button" (click)="openSizeGuide()">HƯỚNG DẪN CHỌN SIZE</button>
       </div>
 
       <!-- CTA Buttons -->
@@ -203,7 +203,7 @@
         type="text"
         placeholder="Viết câu hỏi của bạn tại đây"
         [value]="qaInput()"
-        (input)="qaInput.set($any($event.target).value)"
+        (input)="onQaInput($event)"
         (keydown.enter)="sendQa()"
       />
       <button class="pd-qa__send" type="button" (click)="sendQa()">
@@ -213,6 +213,9 @@
         </svg>
       </button>
     </div>
+    @if (isGuest() && qaGuestError()) {
+      <p class="pd-qa__guest-error">Vui lòng đăng nhập để đặt câu hỏi</p>
+    }
 
     <!-- Messages -->
     <div class="pd-qa__messages">
@@ -363,4 +366,8 @@
       </button>
     }
   </div>
+}
+
+@if (showSizeGuide()) {
+  <app-ring-size-guide-modal (closed)="closeSizeGuide()" />
 }

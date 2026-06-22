@@ -166,6 +166,39 @@ export class DesignComponent {
   readonly MEMBER_DISCOUNT = 0.1;
   readonly DEPOSIT_RATIO = 0.5;
 
+  readonly voucherInput = signal('');
+  readonly appliedVoucher = signal('');
+  readonly voucherError = signal(false);
+
+  private readonly VALID_VOUCHERS: Record<string, number> = {
+    'RENGA10': 0.10,
+    'RENGA20': 0.20,
+    'MEMBER5': 0.05,
+  };
+
+  readonly voucherDiscount = computed(() => {
+    const code = this.appliedVoucher().toUpperCase();
+    const rate = this.VALID_VOUCHERS[code] ?? 0;
+    return Math.round(this.consultationFee() * rate);
+  });
+
+  applyVoucher(): void {
+    const code = this.voucherInput().trim().toUpperCase();
+    if (this.VALID_VOUCHERS[code]) {
+      this.appliedVoucher.set(code);
+      this.voucherError.set(false);
+    } else {
+      this.appliedVoucher.set('');
+      this.voucherError.set(true);
+    }
+  }
+
+  removeVoucher(): void {
+    this.appliedVoucher.set('');
+    this.voucherInput.set('');
+    this.voucherError.set(false);
+  }
+
   // ─── Computed ─────────────────────────────────────────────────────────
   readonly calendarMonthLabel = computed(() => {
     const d = new Date(this.calendarYear(), this.calendarMonth(), 1);
@@ -207,7 +240,7 @@ export class DesignComponent {
   readonly consultationFee = computed(() => this.selectedDesigner()?.fee ?? 0);
   readonly memberDiscount = computed(() => Math.round(this.consultationFee() * this.MEMBER_DISCOUNT));
   readonly depositAmount = computed(() =>
-    Math.round((this.consultationFee() - this.memberDiscount()) * this.DEPOSIT_RATIO),
+    Math.round((this.consultationFee() - this.memberDiscount() - this.voucherDiscount()) * this.DEPOSIT_RATIO),
   );
 
   // ─── Methods ──────────────────────────────────────────────────────────

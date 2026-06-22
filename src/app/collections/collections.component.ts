@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CtaSectionComponent } from '../shared/components/cta-section/cta-section.component';
 
 interface Collection {
   id: string;
@@ -16,7 +17,7 @@ interface Collection {
   selector: 'app-collections',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, CtaSectionComponent],
   templateUrl: './collections.component.html',
   styleUrl: './collections.component.css',
 })

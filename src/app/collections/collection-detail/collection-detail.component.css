@@ -269,7 +269,7 @@
 ════════════════════════════════════════ */
 .coll-detail__cta {
   background: var(--color-primary-light);
-  padding: 120px var(--container-px);
+  padding: var(--sp-lg) var(--container-px);
 }
 
 .coll-detail__cta-inner {

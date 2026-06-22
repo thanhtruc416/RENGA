@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, computed, input, signal } from '@angular/core';
 
 const CANCEL_REASONS = [
   { value: 'personal', label: 'Thay đổi kế hoạch cá nhân' },
@@ -20,37 +20,32 @@ export class CancelAppointmentModalComponent {
   @Output() closed = new EventEmitter<void>();
   @Output() confirmed = new EventEmitter<string[]>();
 
+  readonly mockShouldSucceed = input<boolean>(true);
+
   readonly reasons = CANCEL_REASONS;
-  readonly selectedReasons = signal<string[]>([]);
+  readonly selectedReason = signal<string>('');
   readonly otherReason = signal('');
+  readonly result = signal<'success' | 'fail' | null>(null);
   readonly MAX_OTHER = 150;
   readonly otherReasonLength = computed(() => this.otherReason().length);
-  readonly isOtherSelected = computed(() => this.selectedReasons().includes('other'));
+  readonly isOtherSelected = computed(() => this.selectedReason() === 'other');
 
-  toggleReason(value: string): void {
-    const current = this.selectedReasons();
-    if (current.includes(value)) {
-      this.selectedReasons.set(current.filter(r => r !== value));
-    } else {
-      this.selectedReasons.set([...current, value]);
-    }
-  }
+  selectReason(value: string): void { this.selectedReason.set(value); }
 
-  isSelected(value: string): boolean {
-    return this.selectedReasons().includes(value);
-  }
+  isSelected(value: string): boolean { return this.selectedReason() === value; }
 
   onConfirm(): void {
-    if (!this.selectedReasons().length) return;
+    if (!this.selectedReason()) return;
     if (this.isOtherSelected() && !this.otherReason().trim()) return;
-    this.confirmed.emit(this.selectedReasons());
-    this.selectedReasons.set([]);
-    this.otherReason.set('');
+    const success = this.mockShouldSucceed();
+    this.result.set(success ? 'success' : 'fail');
+    if (success) this.confirmed.emit([this.selectedReason()]);
   }
 
   onClose(): void {
-    this.selectedReasons.set([]);
+    this.selectedReason.set('');
     this.otherReason.set('');
+    this.result.set(null);
     this.closed.emit();
   }
 }

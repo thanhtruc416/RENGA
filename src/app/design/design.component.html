@@ -362,11 +362,44 @@
               <span>Ưu đãi thành viên (10%)</span>
               <span>- {{ formatVnd(memberDiscount()) }}<u>đ</u></span>
             </div>
+            @if (voucherDiscount() > 0) {
+              <div class="ds-pay-summary__row ds-pay-summary__row--discount">
+                <span>Voucher ({{ appliedVoucher() }})</span>
+                <span>- {{ formatVnd(voucherDiscount()) }}<u>đ</u></span>
+              </div>
+            }
             <div class="ds-pay-summary__row">
               <span>Đặt cọc (50%)</span>
               <span>{{ formatVnd(depositAmount()) }}<u>đ</u></span>
             </div>
           </div>
+
+          <!-- Voucher input -->
+          <div class="ds-voucher">
+            @if (appliedVoucher()) {
+              <div class="ds-voucher__applied">
+                <span class="ds-voucher__applied-code">{{ appliedVoucher() }}</span>
+                <button type="button" class="ds-voucher__remove" (click)="removeVoucher()">✕</button>
+              </div>
+            } @else {
+              <div class="ds-voucher__row">
+                <input
+                  class="ds-voucher__input"
+                  [class.ds-voucher__input--error]="voucherError()"
+                  type="text"
+                  placeholder="Nhập mã voucher"
+                  [value]="voucherInput()"
+                  (input)="voucherInput.set($any($event.target).value); voucherError.set(false)"
+                  (keydown.enter)="applyVoucher()"
+                />
+                <button type="button" class="ds-voucher__btn" (click)="applyVoucher()">Áp dụng</button>
+              </div>
+              @if (voucherError()) {
+                <p class="ds-voucher__error">Mã voucher không hợp lệ</p>
+              }
+            }
+          </div>
+
           <div class="ds-pay-summary__total">
             <span class="ds-pay-summary__total-label">Tổng thanh toán</span>
             <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}<u>đ</u></span>
@@ -391,11 +424,12 @@
 
 <app-payment-success-modal
   [isOpen]="showSuccessModal()"
+  [mode]="'appointment'"
   (closed)="showSuccessModal.set(false)"
+  (scheduleAgain)="showSuccessModal.set(false); goToStep(1)"
 />
 
 <app-payment-fail-modal
   [isOpen]="showFailModal()"
-  [countdownDisplay]="'00:59:56'"
   (closed)="showFailModal.set(false)"
 />

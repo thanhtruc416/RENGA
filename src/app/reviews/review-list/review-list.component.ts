@@ -2,9 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 interface ReviewOrder {
   id: string;
@@ -41,15 +42,39 @@ const PAGE_SIZE = 4;
   styleUrl: './review-list.component.css',
 })
 export class ReviewListComponent {
-  readonly orderTypeFilter = signal('');
-  readonly statusFilter    = signal('');
-  readonly timeFilter      = signal('3months');
-  readonly currentPage     = signal(1);
+  private readonly router = inject(Router);
+
+  navigateToReview(orderId: string): void {
+    this.router.navigate(['/orders/reviews/write'], { queryParams: { orderId } });
+  }
+  // Draft — what user selected but not yet applied
+  readonly pendingType   = signal('');
+  readonly pendingStatus = signal('');
+  readonly pendingTime   = signal('3months');
+
+  // Active — what's actually used for filtering
+  readonly activeType   = signal('');
+  readonly activeStatus = signal('');
+  readonly activeTime   = signal('3months');
+
+  readonly currentPage = signal(1);
+
+  readonly hasDraftChanges = computed(() =>
+    this.pendingType()   !== this.activeType()   ||
+    this.pendingStatus() !== this.activeStatus() ||
+    this.pendingTime()   !== this.activeTime()
+  );
+
+  readonly hasActiveFilters = computed(() =>
+    this.activeType()   !== '' ||
+    this.activeStatus() !== '' ||
+    this.activeTime()   !== '3months'
+  );
 
   readonly filtered = computed(() => {
     let list = ALL_ORDERS;
-    const type   = this.orderTypeFilter();
-    const status = this.statusFilter();
+    const type   = this.activeType();
+    const status = this.activeStatus();
     if (type)   list = list.filter(o => o.type === type);
     if (status === 'unreviewed') list = list.filter(o => !o.reviewed);
     if (status === 'reviewed')   list = list.filter(o => o.reviewed);
@@ -67,21 +92,36 @@ export class ReviewListComponent {
   readonly pageNumbers = computed(() =>
     Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
-  applyFilter(): void { this.currentPage.set(1); }
+  applyFilters(): void {
+    this.activeType.set(this.pendingType());
+    this.activeStatus.set(this.pendingStatus());
+    this.activeTime.set(this.pendingTime());
+    this.currentPage.set(1);
+  }
+
+  clearFilters(): void {
+    this.pendingType.set('');
+    this.pendingStatus.set('');
+    this.pendingTime.set('3months');
+    this.activeType.set('');
+    this.activeStatus.set('');
+    this.activeTime.set('3months');
+    this.currentPage.set(1);
+  }
 
   goTo(page: number): void {
     if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page);
   }
 
   onOrderTypeChange(event: Event): void {
-    this.orderTypeFilter.set((event.target as HTMLSelectElement).value);
+    this.pendingType.set((event.target as HTMLSelectElement).value);
   }
 
   onStatusChange(event: Event): void {
-    this.statusFilter.set((event.target as HTMLSelectElement).value);
+    this.pendingStatus.set((event.target as HTMLSelectElement).value);
   }
 
   onTimeChange(event: Event): void {
-    this.timeFilter.set((event.target as HTMLSelectElement).value);
+    this.pendingTime.set((event.target as HTMLSelectElement).value);
   }
 }

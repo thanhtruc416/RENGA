@@ -32,6 +32,10 @@ export class CartService {
       .reduce((n, i) => n + (i.quantity ?? 1), 0)
   );
 
+  readonly totalCount = computed(() =>
+    this._items().reduce((n, i) => n + (i.quantity ?? 1), 0)
+  );
+
   readonly isBumping = signal(false);
 
   triggerBump(): void {

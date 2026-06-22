@@ -4,7 +4,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map } from 'rxjs';
 import { ProductsService } from '../products.service';
 import { CartService } from '../../core/services/cart.service';
+import { AuthService } from '../../core/services/auth.service';
 import { formatPrice } from '../../shared/utils/currency.util';
+import { RingSizeGuideModalComponent } from '../../shared/components/modal/ring-size-guide-modal/ring-size-guide-modal.component';
 
 interface ProductSpec {
   label: string;
@@ -24,7 +26,7 @@ interface Review {
   selector: 'app-product-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, RingSizeGuideModalComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
 })
@@ -33,6 +35,9 @@ export class ProductDetailComponent {
   private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
   private readonly cartService = inject(CartService);
+  private readonly authService = inject(AuthService);
+
+  readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
   // Đọc :id từ route → gọi service → sau này swap of() sang http.get() trong service là xong
   // Khi dùng http.get() (async): đổi requireSync thành initialValue: undefined và wrap template bằng @if (product(); as p)
@@ -157,7 +162,18 @@ export class ProductDetailComponent {
   ]);
 
   readonly qaInput = signal('');
+  readonly qaGuestError = signal(false);
   readonly expandedReplies = signal(new Set([1, 2]));
+
+  onQaInput(e: Event): void {
+    if (this.isGuest()) {
+      (e.target as HTMLInputElement).value = '';
+      this.qaGuestError.set(true);
+      return;
+    }
+    this.qaGuestError.set(false);
+    this.qaInput.set((e.target as HTMLInputElement).value);
+  }
 
   toggleReply(id: number): void {
     this.expandedReplies.update(s => {
@@ -168,6 +184,7 @@ export class ProductDetailComponent {
   }
 
   sendQa(): void {
+    if (this.isGuest()) { this.qaGuestError.set(true); return; }
     const text = this.qaInput().trim();
     if (!text) return;
     this.qaMessages.update(msgs => [
@@ -225,7 +242,10 @@ export class ProductDetailComponent {
     this.lightboxOpen.set(false);
     this.arPopupOpen.set(false);
   }
-  readonly selectedSize = signal<number | null>(10);
+  readonly selectedSize    = signal<number | null>(10);
+  readonly showSizeGuide   = signal(false);
+  openSizeGuide(): void { this.showSizeGuide.set(true); }
+  closeSizeGuide(): void { this.showSizeGuide.set(false); }
 
   readonly productImages = computed(() => {
     const p = this.product();
@@ -304,4 +324,17 @@ export class ProductDetailComponent {
   }
 
   readonly formatPrice = formatPrice;
+
+  private static readonly CATEGORY_LABELS: Record<string, string> = {
+    'nhan':       'NHẪN',
+    'day-chuyen': 'DÂY CHUYỀN',
+    'hoa-tai':    'HOA TAI',
+    'lac-tay':    'LẮC TAY',
+    'charm':      'CHARM',
+  };
+
+  readonly categoryLabel = computed(() => {
+    const cat = this.product()?.category ?? '';
+    return ProductDetailComponent.CATEGORY_LABELS[cat] ?? cat.toUpperCase();
+  });
 }

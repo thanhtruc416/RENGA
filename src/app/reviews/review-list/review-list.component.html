@@ -2,10 +2,7 @@
 
   <!-- ══ BREADCRUMB ══ -->
   <nav class="rl__breadcrumb" aria-label="Đường dẫn">
-    <a routerLink="/appointment-history" class="rl__breadcrumb-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </a>
-    <a routerLink="/appointment-history" class="rl__breadcrumb-link rl__breadcrumb-link--parent">Đơn hàng</a>
+    <a routerLink="/orders/tracking" class="rl__breadcrumb-link rl__breadcrumb-link--parent">Đơn hàng</a>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="rl__breadcrumb-arrow"><polyline points="9 6 15 12 9 18"/></svg>
     <span class="rl__breadcrumb-current">Danh sách đánh giá</span>
   </nav>
@@ -18,7 +15,7 @@
     <div class="rl__filter-group">
       <label class="rl__filter-label" for="filter-type">LOẠI ĐƠN HÀNG</label>
       <div class="rl__select-wrap">
-        <select id="filter-type" class="rl__select" (change)="onOrderTypeChange($event)">
+        <select id="filter-type" class="rl__select" [value]="pendingType()" (change)="onOrderTypeChange($event)">
           <option value="">Tất cả</option>
           <option value="LUXURY PACKAGING">Luxury Packaging</option>
           <option value="CERTIFIED GIA">Certified GIA</option>
@@ -31,7 +28,7 @@
     <div class="rl__filter-group">
       <label class="rl__filter-label" for="filter-status">TRẠNG THÁI</label>
       <div class="rl__select-wrap">
-        <select id="filter-status" class="rl__select" (change)="onStatusChange($event)">
+        <select id="filter-status" class="rl__select" [value]="pendingStatus()" (change)="onStatusChange($event)">
           <option value="">Tất cả</option>
           <option value="unreviewed">Chưa đánh giá</option>
           <option value="reviewed">Đã đánh giá</option>
@@ -43,7 +40,7 @@
     <div class="rl__filter-group">
       <label class="rl__filter-label" for="filter-time">THỜI GIAN</label>
       <div class="rl__select-wrap">
-        <select id="filter-time" class="rl__select" (change)="onTimeChange($event)">
+        <select id="filter-time" class="rl__select" [value]="pendingTime()" (change)="onTimeChange($event)">
           <option value="3months">3 tháng gần nhất</option>
           <option value="6months">6 tháng gần nhất</option>
           <option value="1year">1 năm gần nhất</option>
@@ -53,7 +50,12 @@
       </div>
     </div>
 
-    <button type="button" class="rl__filter-btn" (click)="applyFilter()">ÁP DỤNG BỘ LỌC</button>
+    <div class="rl__filter-actions">
+      @if (hasActiveFilters()) {
+        <button type="button" class="rl__filter-clear" (click)="clearFilters()">XÓA BỘ LỌC</button>
+      }
+      <button type="button" class="rl__filter-btn" [disabled]="!hasDraftChanges()" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    </div>
   </section>
 
   <!-- ══ TABLE ══ -->
@@ -71,7 +73,7 @@
       </thead>
       <tbody>
         @for (order of pageItems(); track order.id) {
-          <tr class="rl__row">
+          <tr class="rl__row" (dblclick)="navigateToReview(order.id)">
             <td class="rl__td rl__td--id">
               <span class="rl__order-id">{{ order.id }}</span>
               <span class="rl__order-type">{{ order.type }}</span>

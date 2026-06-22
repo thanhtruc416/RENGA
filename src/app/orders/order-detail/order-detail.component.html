@@ -4,7 +4,7 @@
     <div class="order-detail-top__inner">
 
       <nav class="order-breadcrumb" aria-label="Điều hướng trang">
-        <a routerLink="/profile" class="order-breadcrumb__item">Đơn hàng</a>
+        <a [routerLink]="isGuest() ? '/dang-nhap' : '/orders/tracking'" class="order-breadcrumb__item">Đơn hàng</a>
         <span class="order-breadcrumb__sep" aria-hidden="true">›</span>
         <span class="order-breadcrumb__item order-breadcrumb__item--current" aria-current="page">
           Chi tiết đơn hàng
@@ -17,9 +17,11 @@
           <button type="button" class="order-detail-actions__btn" (click)="openWarrantyModal()">
             Yêu cầu bảo hành
           </button>
-          <button type="button" class="order-detail-actions__btn" (click)="openCancelModal()">
-            Hủy đơn hàng
-          </button>
+          @if (isAhOrder()) {
+            <button type="button" class="order-detail-actions__btn" (click)="openCancelModal()">
+              Hủy đơn hàng
+            </button>
+          }
         </div>
       </div>
 
@@ -210,8 +212,10 @@
   <app-cancel-order-modal
     [orderId]="order().id"
     [orderStatus]="order().status"
+    [mockShouldSucceed]="cancelMockSuccessNext"
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
+    (contactRequested)="showCancelModal.set(false); openSupport()"
   />
 }
 

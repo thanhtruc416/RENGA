@@ -164,6 +164,7 @@ export class ProfileComponent {
 
   readonly currentPassword    = signal('');
   readonly newPassword        = signal('');
+  readonly showPasswords      = signal(false);
   readonly passwordSuccess    = signal(false);
   readonly passwordFailure    = signal(false);
   private passwordMockSuccessNext = true;

@@ -312,9 +312,10 @@
 
 .ds-time-layout {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 300px 420px;
   gap: 48px;
   align-items: start;
+  justify-content: center;
 }
 
 .ds-designer-panel {
@@ -441,14 +442,13 @@
 .ds-calendar-panel {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .ds-calendar {
   border: 1px solid var(--color-border);
   padding: 20px;
   background: var(--color-white);
-  max-width: 600px;
 }
 
 .ds-calendar__header {
@@ -542,7 +542,7 @@
 
 .ds-timeslot-section {
   border: 1px solid var(--color-border);
-  padding: 24px;
+  padding: 16px;
   background: var(--color-white);
 }
 
@@ -563,7 +563,7 @@
 }
 
 .ds-timeslot {
-  padding: 12px 8px;
+  padding: 9px 8px;
   border: 1px solid var(--color-border);
   background: var(--color-white);
   font-family: var(--font-sans);
@@ -961,6 +961,83 @@
   color: #27ae60;
 }
 
+.ds-voucher {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 12px;
+}
+
+.ds-voucher__row {
+  display: flex;
+  gap: 8px;
+}
+
+.ds-voucher__input {
+  flex: 1;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-dark);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ds-voucher__input:focus { border-color: var(--color-primary); }
+
+.ds-voucher__input--error { border-color: #d32f2f; }
+
+.ds-voucher__btn {
+  height: 36px;
+  padding: 0 14px;
+  background: var(--color-dark);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.ds-voucher__btn:hover { background: var(--color-primary); }
+
+.ds-voucher__error {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: #d32f2f;
+  margin: 6px 0 0;
+}
+
+.ds-voucher__applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-primary-light);
+  padding: 8px 12px;
+}
+
+.ds-voucher__applied-code {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.08em;
+}
+
+.ds-voucher__remove {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
 .ds-pay-summary__total {
   display: flex;
   justify-content: space-between;
@@ -1039,7 +1116,7 @@
   }
 
   .ds-time-layout {
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 240px 380px;
     gap: 32px;
   }
 

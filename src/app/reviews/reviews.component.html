@@ -2,7 +2,7 @@
 
   <!-- ══ BREADCRUMB ══ -->
   <nav class="review-page__breadcrumb" aria-label="Đường dẫn">
-    <a routerLink="/appointment-history" class="review-page__breadcrumb-link">Đơn hàng</a>
+    <a routerLink="/orders/tracking" class="review-page__breadcrumb-link">Đơn hàng</a>
     <span class="review-page__breadcrumb-sep">›</span>
     <span class="review-page__breadcrumb-current">Đánh giá sản phẩm</span>
   </nav>
@@ -39,17 +39,7 @@
     <!-- RIGHT: Review form -->
     <section class="review-form-wrap">
 
-      @if (isSubmitted()) {
-        <!-- SUCCESS STATE -->
-        <div class="review-success">
-          <div class="review-success__icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <h2 class="review-success__title">Cảm ơn bạn!</h2>
-          <p class="review-success__desc">Đánh giá của bạn đã được ghi nhận. Bạn vừa nhận <strong>50 Điểm Thưởng Thành Viên</strong>.</p>
-          <a routerLink="/appointment-history" class="review-success__btn">Quay lại đơn hàng</a>
-        </div>
-      } @else {
+      @if (!isSubmitted()) {
         <!-- FORM -->
         <div class="review-form">
           <div class="review-form__badge">50 Điểm Thưởng Thành Viên</div>
@@ -143,3 +133,16 @@
   </div>
 
 </main>
+
+@if (isSubmitted()) {
+  <div class="review-success-backdrop">
+    <div class="review-success">
+      <div class="review-success__icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2 class="review-success__title">Cảm ơn bạn!</h2>
+      <p class="review-success__desc">Đánh giá của bạn đã được ghi nhận. Bạn vừa nhận <strong>50 Điểm Thưởng Thành Viên</strong>.</p>
+      <a routerLink="/orders/reviews" class="review-success__btn">QUAY LẠI DANH SÁCH ĐÁNH GIÁ</a>
+    </div>
+  </div>
+}

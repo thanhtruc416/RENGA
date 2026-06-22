@@ -99,7 +99,7 @@
   cursor: pointer;
 }
 
-.ltv-cancel-modal__reason input[type="checkbox"] {
+.ltv-cancel-modal__reason input[type="radio"] {
   width: 18px;
   height: 18px;
   accent-color: var(--color-primary);
@@ -193,4 +193,46 @@
   background: var(--color-primary-light);
   color: var(--color-dark);
   border: 1px solid #c4607e;
+}
+
+.ltv-cancel-modal__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0 4px;
+  text-align: center;
+}
+
+.ltv-cancel-modal__result-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ltv-cancel-modal__result-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+.ltv-cancel-modal__result-desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+.ltv-cancel-modal__result .ltv-cancel-modal__btn {
+  flex: none;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 8px;
 }
