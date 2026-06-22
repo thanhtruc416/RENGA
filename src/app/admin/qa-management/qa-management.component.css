@@ -284,3 +284,51 @@
   color: var(--color-white);
   border-color: var(--color-dark);
 }
+
+/* --- TOAST MESSAGE --- */
+.toast-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary); /* Success */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-black); /* Error */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Thêm style cho trạng thái empty */
+.qa-page__empty {
+  text-align: center;
+  padding: var(--sp-2xl);
+  color: var(--color-muted);
+  font-style: italic;
+  border: 1px dashed var(--color-border);
+}

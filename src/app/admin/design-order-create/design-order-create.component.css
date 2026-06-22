@@ -102,6 +102,11 @@
   border: 2px dashed var(--color-border); border-radius: var(--sp-xs);
   padding: var(--sp-xl); text-align: center; cursor: pointer;
   background-color: var(--color-bg-card); transition: 0.2s;
+  display: flex;
+  flex-direction: column; /* Xếp icon và chữ theo chiều dọc */
+  align-items: center;    /* Căn giữa theo chiều ngang */
+  justify-content: center;/* Căn giữa theo chiều dọc */
+  text-align: center;
 }
 .upload-zone:hover { border-color: var(--color-primary); background-color: var(--color-primary-light); }
 .upload-icon { width: 32px; height: 32px; color: var(--color-muted); margin-bottom: var(--sp-sm); }
@@ -190,4 +195,53 @@
   .sticky-action-bar__left { justify-content: center; }
   .sticky-action-bar__right { width: 100%; justify-content: stretch; }
   .sticky-action-bar__right .btn { flex: 1; }
+}
+
+/* 👇 THÊM: Ẩn thẻ input file mặc định xấu xí */
+.hidden-file-input {
+  display: none;
+}
+
+/* --- TOAST MESSAGE --- */
+.toast-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary); /* Success */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-black); /* Màu thất bại: color-black theo yêu cầu */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Ẩn thẻ input file mặc định của trình duyệt */
+.hidden-file-input {
+  display: none;
 }

@@ -95,10 +95,6 @@
 
 .text-center { text-align: center; }
 .text-right { text-align: right; justify-content: flex-end; }
-.center {
-  position: absolute;
-    right: 8%;
-}
 
 /* Table Elements */
 .table-cell--customer { display: flex; align-items: center; gap: var(--sp-md); }
@@ -123,10 +119,7 @@
 .table-cell--actions { display: flex; gap: var(--sp-xs); justify-content: center; }
 
 .appt-apply-btn {
-  padding: 0 16px;
-  height: 40px;
-  border: 1px solid var(--color-dark);
-  border-radius: 2px;
+  padding: 0 16px; height: 40px; border: 1px solid var(--color-dark); border-radius: 2px;
   font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
   color: var(--color-white); background: var(--color-dark);
   white-space: nowrap; cursor: pointer; transition: background 0.15s;
@@ -134,21 +127,19 @@
 .appt-apply-btn:hover { background: #333; }
 
 .appt-clear-btn {
-  padding: 0 16px;
-  height: 40px;
-  border: 1px solid var(--color-primary);
-  border-radius: 2px;
+  padding: 0 16px; height: 40px; border: 1px solid var(--color-primary); border-radius: 2px;
   font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
   color: var(--color-primary); background: var(--color-white);
   white-space: nowrap; cursor: pointer; transition: background 0.15s;
 }
 .appt-clear-btn:hover { background: #fdf2f5; }
+
 .action-btn {
   background: none; border: none; cursor: pointer; color: var(--color-muted);
-  padding: 6px;  display: flex; align-items: center; justify-content: center;
+  padding: 6px; display: flex; align-items: center; justify-content: center;
 }
 .action-btn svg { width: 18px; height: 18px; }
-.action-btn:hover { color: var(--color-dark); background-color: var(--color-bg-card); }
+.action-btn:hover:not(:disabled) { color: var(--color-dark); background-color: var(--color-bg-card); }
 .text-completed { font-size: 12px; color: var(--color-muted); font-style: italic; width: 100%; text-align: center; }
 
 /* Pagination */
@@ -161,7 +152,7 @@
   font-size: 14px; cursor: pointer; color: var(--color-dark);
 }
 .pagination-btn--active { background-color: var(--color-black); color: var(--color-white); border-color: var(--color-black); }
-
+.pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; background-color: var(--color-surface); }
 
 /* ================= MODAL STYLES ================= */
 .modal-overlay {
@@ -170,9 +161,7 @@
   display: flex; align-items: center; justify-content: center; z-index: 9999;
 }
 
-.modal-container { background-color: var(--color-white); width: 600px; max-height: 95vh; overflow-y: auto; display: flex; flex-direction: column; 
-  scrollbar-width: none;
-}
+.modal-container { background-color: var(--color-white); width: 600px; max-height: 95vh; overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: none; }
 .modal-container--sm { width: 500px; }
 
 .modal-header {
@@ -183,12 +172,30 @@
 .modal-subtitle { font-family: var(--font-sans); font-size: 14px; color: var(--color-primary); opacity: 0.8; }
 .modal-close { font-size: 24px; color: var(--color-primary); background: none; border: none; cursor: pointer; }
 
-.modal-body { padding: var(--sp-lg); display: flex; flex-direction: column; gap: var(--sp-lg); }
+/* Style cho Tabs trong Modal 1 */
+.modal-tabs {
+  display: flex; gap: var(--sp-lg);
+  padding: 0 var(--sp-lg);
+  background-color: var(--color-white);
+}
+.modal-tab-btn {
+  padding: 16px 0 12px;
+  font-size: 12px; font-weight: 700; color: var(--color-muted);
+  text-transform: uppercase; background: none; border: none;
+  cursor: pointer; position: relative; letter-spacing: 0.5px;
+}
+.modal-tab-btn--active { color: var(--color-dark); }
+.modal-tab-btn--active::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background-color: var(--color-dark);
+}
+
+.modal-body { padding: var(--sp-lg); display: flex; flex-direction: column; gap: var(--sp-lg); background-color: #fdfafb;} /* Màu nền nhạt cho tab */
 .modal-body--no-pad-bottom { padding-bottom: 0; }
 
 .modal-footer {
   padding: var(--sp-lg);
-  display: flex; justify-content: flex-end; gap: var(--sp-md);
+  display: flex; justify-content: flex-end; gap: var(--sp-md); background-color: var(--color-white);
 }
 .modal-footer--gray { background-color: var(--color-bg-card); border-top: 1px solid var(--color-border); }
 
@@ -216,7 +223,7 @@
 .designer-item__status { font-size: 11px; font-weight: 600; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .text-muted { color: var(--color-muted); }
 
-/* --- Style Riêng Cho Modal 2: Form Cập Nhật --- */
+/* --- Style Riêng Cho Form --- */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-md); }
 .form-group { display: flex; flex-direction: column; gap: var(--sp-xs); }
 .form-group--full { width: 100%; }
@@ -237,12 +244,31 @@
 
 /* Fake Rich Text Editor */
 .rich-textarea-wrap { border: 1px solid var(--color-border); overflow: hidden; }
-.rich-textarea-toolbar {
-  display: flex; gap: var(--sp-md); padding: var(--sp-sm) var(--sp-md);
-  border-bottom: 1px solid var(--color-border); background-color: var(--color-white);
-  font-family: var(--font-serif); font-size: 16px; color: var(--color-dark); cursor: pointer;
-}
 .form-textarea {
   width: 100%; min-height: 120px; padding: var(--sp-md); border: none; resize: vertical;
   font-family: var(--font-sans); font-size: 14px; background-color: var(--color-white); outline: none;
 }
+
+/* ================= HIỆU ỨNG ẨN ROW ================= */
+.appt-table__row--hidden { background-color: #f9f9f9; transition: all 0.3s ease; }
+.appt-table__row--hidden > div:not(.table-cell--actions) {
+  opacity: 0.4; filter: grayscale(100%); pointer-events: none; user-select: none;
+}
+.appt-table__row--hidden .action-btn:disabled { cursor: not-allowed; opacity: 0.3; filter: grayscale(100%); }
+.appt-table__row--hidden .action-btn:not(:disabled) {
+  opacity: 1; color: var(--color-primary); transform: scale(1.1); transition: all 0.2s ease;
+}
+
+/* ================= TOAST MESSAGE ================= */
+.toast-message {
+  position: fixed; bottom: 32px; right: 32px; background-color: var(--color-primary); color: white;
+  padding: 12px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-sans, sans-serif); font-size: 14px; font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+.toast-message--error { background-color: var(--color-dark); }
+.toast-icon { width: 20px; height: 20px; }
+
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }

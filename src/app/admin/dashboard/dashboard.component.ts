@@ -65,8 +65,8 @@ export class DashboardComponent {
       value: '15',
       subVariant: 'tags',
       tags: [
-        { text: '8 Platinum', variant: 'platinum' },
-        { text: '7 Gold', variant: 'gold' },
+        { text: '8 Bạch Kim', variant: 'platinum' },
+        { text: '7 Vàng', variant: 'gold' },
       ],
     },
     {

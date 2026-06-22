@@ -102,7 +102,6 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
-  border-radius: 2px;
   white-space: nowrap;
   transition: background 0.15s;
 }
@@ -207,7 +206,6 @@
 .pm__apply-btn {
   padding: 9px 16px;
   border: 1px solid var(--color-dark);
-  border-radius: 2px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -855,3 +853,77 @@
 }
 
 .modal__btn--primary:hover { background: #b05570; }
+
+/* ================= HIỆU ỨNG ẨN SẢN PHẨM ================= */
+.pm__tr--hidden {
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+/* Làm mờ các cột trừ cột Thao tác */
+.pm__tr--hidden > td:not(.pm__td--center:last-child) {
+  opacity: 0.4;
+  filter: grayscale(100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Nút bị disable (VD: Nút Edit) */
+.pm__tr--hidden .pm__action-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+/* Nút Mắt sáng màu khi row đang bị ẩn */
+.pm__tr--hidden .pm__action-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-primary);
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+/* ================= TOAST MESSAGE ================= */
+.toast-message {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-dark); /* Màu tối cho lỗi */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Fix nhỏ cho Upload Zone Modal */
+.modal__upload-zone {
+  padding: 12px; /* Thu gọn padding để ảnh preview được full khung */
+  overflow: hidden;
+}
