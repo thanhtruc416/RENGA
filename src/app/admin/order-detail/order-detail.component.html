@@ -14,7 +14,7 @@
     </div>
     <div class="od__meta-actions">
       <a class="od__action-btn od__action-btn--outline" routerLink="/admin/don-hang">QUAY LẠI</a>
-      <button class="od__action-btn od__action-btn--danger" type="button">HỦY ĐƠN</button>
+      <button class="od__action-btn od__action-btn--danger" type="button" (click)="cancelOrder()">HỦY ĐƠN</button>
       <button class="od__action-btn od__action-btn--primary" type="button" (click)="openProgressModal()">CẬP NHẬT TIẾN ĐỘ</button>
     </div>
   </div>
@@ -167,21 +167,29 @@
       </div>
 
       <!-- Notes card -->
-      <div class="od__card od__card--sidebar">
-        <div class="od__card-header">
-          <h3 class="od__card-title od__card-title--sm">GHI CHÚ</h3>
-          <button class="od__icon-btn-sm" type="button" aria-label="Thêm ghi chú">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-        </div>
-        @for (note of notes; track $index) {
-          <div class="od__note">
-            <p class="od__note-text">{{ note.text }}</p>
-            <p class="od__note-author">{{ note.author }}</p>
-          </div>
-        }
-        <button class="od__add-note" type="button">THÊM GHI CHÚ MỚI</button>
-      </div>
+      <div class="od__card od__card--sidebar" [formGroup]="noteForm">
+  <div class="od__card-header">
+    <h3 class="od__card-title od__card-title--sm">GHI CHÚ</h3>
+  </div>
+
+  @for (note of notes; track $index) {
+    <div class="od__note">
+      @if (isEditingNote()) {
+        <textarea class="od__note-textarea" formControlName="text"></textarea>
+        <textarea class="od__note-textarea od__note-textarea--author" formControlName="author"></textarea>
+      } @else {
+        <p class="od__note-text">{{ note.text }}</p>
+        <p class="od__note-author">{{ note.author }}</p>
+      }
+    </div>
+  }
+
+  @if (isEditingNote()) {
+    <button class="od__add-note" type="button" (click)="saveNote()">LƯU</button>
+  } @else {
+    <button class="od__add-note" type="button" (click)="isEditingNote.set(true)">CHỈNH SỬA GHI CHÚ</button>
+  }
+</div>
     </aside>
   </div>
 </div>
@@ -190,66 +198,79 @@
      MODAL: Cập nhật tiến độ đơn hàng
 ═══════════════════════════════════════════ -->
 @if (showProgressModal()) {
-  <div class="pm-overlay" (click)="closeProgressModal()" role="dialog" aria-modal="true" aria-label="Cập nhật tiến độ đơn hàng">
-    <div class="pm-modal" (click)="$event.stopPropagation()">
+  <div class="od-overlay" (click)="closeProgressModal()" role="dialog" aria-modal="true" aria-label="Cập nhật tiến độ đơn hàng">
+    <div class="od-modal" (click)="$event.stopPropagation()">
 
       <!-- Header -->
-      <div class="pm-modal__content">
-        <div class="pm-modal__header">
+      <div class="od-modal__content">
+        <div class="od-modal__header">
           <div>
-            <h2 class="pm-modal__title">Cập nhật tiến độ đơn hàng</h2>
-            <p class="pm-modal__subtitle">Cập nhật tiến độ đơn hàng theo từng giai đoạn</p>
+            <h2 class="od-modal__title">Cập nhật tiến độ đơn hàng</h2>
+            <p class="od-modal__subtitle">Cập nhật tiến độ đơn hàng theo từng giai đoạn</p>
           </div>
-          <button class="pm-modal__close" type="button" (click)="closeProgressModal()" aria-label="Đóng">
+          <button class="od-modal__close" type="button" (click)="closeProgressModal()" aria-label="Đóng">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
         <!-- Status select -->
-        <div class="pm-modal__field">
-          <label class="pm-modal__label">TRẠNG THÁI</label>
-          <div class="pm-modal__select-wrap">
-            <select class="pm-modal__select" [value]="progressStatus()" (change)="progressStatus.set($any($event.target).value)">
+        <div class="od-modal__field">
+          <label class="od-modal__label">TRẠNG THÁI</label>
+          <div class="od-modal__select-wrap">
+            <select class="od-modal__select" [value]="progressStatus()" (change)="progressStatus.set($any($event.target).value)">
               @for (s of progressStatuses; track s.value) {
                 <option [value]="s.value">{{ s.label }}</option>
               }
             </select>
-            <svg class="pm-modal__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="od-modal__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
 
         <!-- Notify toggle -->
-        <div class="pm-modal__toggle-row">
-          <div class="pm-modal__toggle-info">
-            <p class="pm-modal__toggle-title">Gửi thông báo cho khách hàng</p>
-            <p class="pm-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ</p>
+        <div class="od-modal__toggle-row">
+          <div class="od-modal__toggle-info">
+            <p class="od-modal__toggle-title">Gửi thông báo cho khách hàng</p>
+            <p class="od-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ</p>
           </div>
           <button
-            class="pm-modal__toggle"
-            [class.pm-modal__toggle--on]="notifyCustomer()"
+            class="od-modal__toggle"
+            [class.od-modal__toggle--on]="notifyCustomer()"
             type="button"
             role="switch"
             [attr.aria-checked]="notifyCustomer()"
             (click)="notifyCustomer.set(!notifyCustomer())"
             aria-label="Gửi thông báo">
-            <span class="pm-modal__toggle-thumb"></span>
+            <span class="od-modal__toggle-thumb"></span>
           </button>
         </div>
 
         <!-- Info note -->
-        <div class="pm-modal__info-box">
+        <div class="od-modal__info-box">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <p class="pm-modal__info-text">
+          <p class="od-modal__info-text">
             Cập nhật trạng thái này sẽ được lưu vào lịch sử chế tác. Đảm bảo các tài liệu đính kèm là phiên bản cuối cùng trước khi chuyển sang phê duyệt.
           </p>
         </div>
       </div>
 
       <!-- Footer -->
-      <div class="pm-modal__footer">
-        <button class="pm-modal__btn pm-modal__btn--cancel" type="button" (click)="closeProgressModal()">HỦY BỎ</button>
-        <button class="pm-modal__btn pm-modal__btn--save" type="button">LƯU CẬP NHẬT</button>
+      <div class="od-modal__footer">
+        <button class="od-modal__btn od-modal__btn--cancel" type="button" (click)="closeProgressModal()">HỦY BỎ</button>
+        <button class="od-modal__btn od-modal__btn--save" type="button"  (click)="saveProgressUpdate()">LƯU CẬP NHẬT</button>
+
+        
       </div>
     </div>
+    
+  </div>
+}
+
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    {{ toastMessage() }}
   </div>
 }

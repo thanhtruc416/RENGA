@@ -326,3 +326,70 @@
   border-bottom-left-radius: var(--sp-sm);
   border-bottom-right-radius: var(--sp-sm);
 }
+
+/* --- TOAST MESSAGE --- */
+.toast-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary); /* Màu xanh lá báo thành công */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-black); /* Màu đỏ báo lỗi */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+/* ================= HIỆU ỨNG ẨN VOUCHER =====================
+.voucher-table__row--hidden {
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+/* 2. Làm mờ, tô xám và khóa click ở TẤT CẢ các cột NGOẠI TRỪ cột Thao tác */
+.voucher-table__row--hidden > div:not(.table-cell--actions) {
+  opacity: 0.4;
+  filter: grayscale(100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 3. Ở cột thao tác: Nút nào bị disable (như nút Sửa) thì cho mờ đi */
+.voucher-table__row--hidden .action-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+/* 4. Nút Mắt (không bị disable) lúc này sẽ hiển thị 100% rõ nét và sáng màu */
+.voucher-table__row--hidden .action-icon-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-primary); /* Đổi màu nút thành màu hồng để dụ user click mở lại */
+  transform: scale(1.1); /* Phóng to lên một xíu cho nổi bật */
+  transition: all 0.2s ease;
+}

@@ -23,19 +23,19 @@
   <!-- Tabs -->
   <nav class="qa-page__tabs">
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'pending'" (click)="changeTab('pending')">
-      Câu hỏi chờ trả lời (18)
+      Câu hỏi chờ trả lời ({{ pendingCount() }})
     </button>
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'replied'" (click)="changeTab('replied')">
-      Đã phản hồi (42)
+      Đã phản hồi ({{ repliedCount() }})
     </button>
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'hidden'" (click)="changeTab('hidden')">
-      Câu hỏi bị ẩn
+      Câu hỏi bị ẩn ({{ hiddenCount() }})
     </button>
   </nav>
 
   <!-- Questions List (Gắn FormGroup tổng ở đây) -->
   <div class="qa-page__list" [formGroup]="replyForm">
-    @for (question of questions(); track question.id) {
+    @for (question of paginatedQuestions(); track question.id) {
       <article class="question-card">
         
         <!-- Cột Trái: Thông tin khách hàng -->
@@ -62,7 +62,7 @@
           <div class="question-card__qna">
             <span class="question-card__tag">CÂU HỎI</span>
             <p class="question-card__text">{{ question.questionText }}</p>
-            
+              @if (currentTab() === 'pending') {
             <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
             <!-- Gắn formControlName bằng ID của câu hỏi -->
             <textarea 
@@ -70,13 +70,18 @@
               [formControlName]="question.id"
               placeholder="Nhập câu trả lời...">
             </textarea>
+          }
           </div>
         </div>
 
         <!-- Cột Phải: Các nút thao tác -->
         <div class="question-card__actions">
+           @if (currentTab() === 'pending') {
           <button class="btn btn--primary" (click)="submitReply(question.id)">GỬI PHẢN HỒI</button>
           <button class="btn btn--outline" (click)="hideQuestion(question.id)">ẨN CÂU HỎI</button>
+           } @else if (currentTab() === 'hidden') {
+            <button class="btn btn--outline" (click)="changeTab('pending')">BỎ ẨN</button>
+          }
         </div>
       </article>
     } @empty {
@@ -87,13 +92,38 @@
 
   <!-- Pagination -->
   <footer class="qa-page__pagination">
-    <p class="qa-page__pagination-info">HIỂN THỊ 1-10 TRÊN 18 CÂU HỎI</p>
+    <p class="qa-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > totalItems() ? totalItems() : currentPage() * itemsPerPage }} TRÊN {{ totalItems() }} CÂU HỎI
+    </p>
     <div class="qa-page__pagination-controls">
-      <button class="pagination-btn">&lsaquo;</button>
-      <button class="pagination-btn pagination-btn--active">1</button>
-      <button class="pagination-btn">2</button>
-      <button class="pagination-btn">3</button>
-      <button class="pagination-btn">&rsaquo;</button>
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">
+          {{ page }}
+        </button>
+      }
+      
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
     </div>
   </footer>
 </div>
+
+<!-- Toast Message -->
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    @if (toastType() === 'success') {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    } @else {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    }
+    <span>{{ toastMessage() }}</span>
+  </div>
+}

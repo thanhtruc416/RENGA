@@ -12,6 +12,7 @@ export interface Voucher {
   readonly limit: number;
   readonly expiryDate: string;
   readonly status: 'active' | 'expired';
+  isHidden?: boolean; 
 }
 
 // --- TYPED FORM ---
@@ -39,6 +40,26 @@ interface VoucherForm {
 export class VoucherManagementComponent {
   // --- STATE (SIGNALS) ---
   readonly isModalOpen = signal<boolean>(false);
+
+  readonly showToast = signal<boolean>(false);
+  readonly toastType = signal<'success' | 'error'>('success');
+  readonly toastMessage = signal<string>('');
+
+  readonly currentPage = signal<number>(1);
+  readonly itemsPerPage = 5; 
+
+   readonly totalItems = computed(() => this.filteredVouchers().length);
+  
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)));
+  
+  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+
+  readonly paginatedVouchers = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage;
+    return this.filteredVouchers().slice(startIndex, startIndex + this.itemsPerPage);
+  });
+
+  private editingVoucherId: string | null = null;
 
   filterStatus    = signal('');
   filterType      = signal('');
@@ -74,6 +95,31 @@ export class VoucherManagementComponent {
     },
     {
       id: 'v5', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
+      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
+      expiryDate: '10/10/2024', status: 'expired'
+    },
+    {
+      id: 'v6', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
+      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
+      expiryDate: '10/10/2024', status: 'expired'
+    },
+    {
+      id: 'v7', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
+      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
+      expiryDate: '10/10/2024', status: 'expired'
+    },
+    {
+      id: 'v8', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
+      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
+      expiryDate: '10/10/2024', status: 'expired'
+    },
+    {
+      id: 'v9', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
+      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
+      expiryDate: '10/10/2024', status: 'expired'
+    },
+    {
+      id: 'v10', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
       type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
       expiryDate: '10/10/2024', status: 'expired'
     }
@@ -126,6 +172,8 @@ export class VoucherManagementComponent {
     this.activeDateFrom.set(this.filterDateFrom());
     this.activeDateTo.set(this.filterDateTo());
     this.filterApplied.set(true);
+    this.filterApplied.set(true);
+    this.currentPage.set(1);
   }
 
   clearFilters(): void {
@@ -138,8 +186,15 @@ export class VoucherManagementComponent {
     this.activeDateFrom.set('');
     this.activeDateTo.set('');
     this.filterApplied.set(false);
+    this.filterApplied.set(false);
+    this.currentPage.set(1);
   }
 
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
   openModal(): void {
     this.voucherForm.reset({ discountType: 'percent', isActive: true });
     this.isModalOpen.set(true);
@@ -149,14 +204,81 @@ export class VoucherManagementComponent {
     this.isModalOpen.set(false);
   }
 
+  editVoucher(voucher: Voucher): void {
+    if (voucher.isHidden) return;
+    this.editingVoucherId = voucher.id;
+    
+    // Điền dữ liệu vào form. 
+    // Lưu ý: Vì mock data của bạn chưa có đủ các trường như minOrder, maxDiscount... 
+    // nên tôi sẽ map tạm các trường có sẵn. Trong thực tế, bạn sẽ gọi API lấy chi tiết voucher.
+    this.voucherForm.patchValue({
+      campaignName: voucher.campaign,
+      voucherCode: voucher.code,
+      discountType: voucher.type,
+      // Giả lập tách số từ chuỗi '15% OFF' hoặc '50K FIXED'
+      discountValue: parseInt(voucher.typeLabel.replace(/\D/g, '')) || 0, 
+      usageLimit: voucher.limit,
+      startDate: '01/01/2024', // Mock data
+      endDate: voucher.expiryDate,
+      isActive: voucher.status === 'active'
+    });
+
+    this.isModalOpen.set(true);
+  }
+
+  
+
+
   generateCode(): void {
     const randomCode = 'RENGA_' + Math.random().toString(36).substring(2, 8).toUpperCase();
     this.voucherForm.controls.voucherCode.setValue(randomCode);
   }
 
   saveVoucher(): void {
-    console.log('Dữ liệu lưu Voucher:', this.voucherForm.value);
-    // Gọi API lưu dữ liệu ở đây
+    if (this.voucherForm.invalid) {
+      this.displayToast('Vui lòng điền đầy đủ các trường bắt buộc!','error');
+      return; 
+    }
+
+    const formData = this.voucherForm.value;
+    
+    if (this.editingVoucherId) {
+      console.log(`Cập nhật Voucher ID ${this.editingVoucherId}:`, formData);
+      this.displayToast('Cập nhật voucher thành công!', 'success');
+      // TODO: Gọi API PUT /vouchers/:id
+    } else {
+      console.log('Tạo Voucher mới:', formData);
+      this.displayToast('Tạo voucher mới thành công!', 'success');
+      // TODO: Gọi API POST /vouchers
+    }
+
     this.closeModal();
+  }
+
+  // Thêm hàm xử lý Ẩn/Hiện Voucher
+  toggleVisibility(voucher: Voucher): void {
+    // 1. Cập nhật mảng vouchers trong Signal để Angular render lại giao diện
+    this.vouchers.update(currentVouchers => 
+      currentVouchers.map(v => 
+        v.id === voucher.id ? { ...v, isHidden: !v.isHidden } : v
+      )
+    );
+
+    // 2. Lấy trạng thái mới để hiện Toast
+    const isNowHidden = !voucher.isHidden; 
+    const actionName = isNowHidden ? 'Ẩn' : 'Hiện';
+    
+    // 3. Gọi hàm displayToast có sẵn của bạn
+    this.displayToast(`${actionName} voucher thành công!`, 'success');
+  }
+
+  private displayToast(message: string, type: 'success' | 'error' = 'success'): void {
+    this.toastMessage.set(message);
+    this.toastType.set(type); // Set loại màu sắc
+    this.showToast.set(true);
+
+    setTimeout(() => {
+      this.showToast.set(false);
+    }, 3000);
   }
 }

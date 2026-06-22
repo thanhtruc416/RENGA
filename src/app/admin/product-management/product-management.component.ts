@@ -13,6 +13,7 @@ interface Product {
   price: number;
   stock: number;
   status: 'active' | 'out-of-stock' | 'draft';
+  isHidden?: boolean; // Đã thêm để ẩn hiện
 }
 
 interface BespokeMaterial {
@@ -40,11 +41,20 @@ export class ProductManagementComponent {
   filterMaterial = signal('');
   filterStatus   = signal('');
   filterApplied  = signal(false);
-  currentPage = signal(1);
-
+  
   activeCategory = signal('');
   activeMaterial = signal('');
   activeStatus   = signal('');
+
+  // --- STATE UPLOAD ẢNH VÀ TOAST ---
+  uploadedImage = signal<string | null>(null);
+  showToast = signal(false);
+  toastMessage = signal('');
+  toastType = signal<'success' | 'error'>('success');
+
+  // --- STATE PHÂN TRANG ---
+  currentPage = signal(1);
+  readonly itemsPerPage = 5;
 
   products = signal<Product[]>([
     { id: 'JWL-001', name: 'Serpentine Diamond Ring',     imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: 'Vàng 18K',   price: 4200000, stock: 12, status: 'active' },
@@ -52,8 +62,9 @@ export class ProductManagementComponent {
     { id: 'JWL-003', name: 'Aurora Stud Earrings',        imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Bông tai', material: 'Bạc',        price: 1500000, stock: 25, status: 'active' },
     { id: 'JWL-004', name: 'Luna Bangle',                 imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Vòng tay', material: 'Vàng 18K',   price: 3500000, stock: 8,  status: 'draft' },
     { id: 'JWL-005', name: 'Rose Petal Ring',             imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: 'Vàng Trắng', price: 2900000, stock: 0,  status: 'out-of-stock' },
+    { id: 'JWL-006', name: 'Ocean Blue Sapphire Ring',    imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png', category: 'Nhẫn',    material: 'Vàng Trắng', price: 8500000, stock: 3,  status: 'active' },
   ]);
-
+  
   readonly filteredProducts = computed(() => {
     const cat    = this.activeCategory();
     const mat    = this.activeMaterial();
@@ -66,6 +77,20 @@ export class ProductManagementComponent {
       return true;
     });
   });
+
+  // --- LOGIC PHÂN TRANG ---
+  readonly paginatedProducts = computed(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage;
+    return this.filteredProducts().slice(start, start + this.itemsPerPage);
+  });
+
+  get totalItems() { return this.filteredProducts().length; }
+  get totalPages() { return Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage)); }
+  get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.currentPage.set(page);
+  }
 
   editingProduct = signal<Product | null>(null);
 
@@ -92,6 +117,36 @@ export class ProductManagementComponent {
     { name: 'Đá Moissanite 5ly',  priceDiff: 0 },
   ]);
 
+  // --- LOGIC ẨN/HIỆN SẢN PHẨM ---
+  toggleVisibility(product: Product) {
+    this.products.update(list => list.map(p => 
+      p.id === product.id ? { ...p, isHidden: !p.isHidden } : p
+    ));
+    this.displayToast(`${product.isHidden ? 'Hiện' : 'Ẩn'} sản phẩm thành công!`, 'success');
+  }
+
+  // --- LOGIC UPLOAD ẢNH ---
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        this.displayToast('File quá lớn. Vui lòng chọn ảnh dưới 10MB!', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => this.uploadedImage.set(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // --- LOGIC TOAST MESSAGE ---
+  private displayToast(message: string, type: 'success' | 'error') {
+    this.toastMessage.set(message);
+    this.toastType.set(type);
+    this.showToast.set(true);
+    setTimeout(() => this.showToast.set(false), 3000);
+  }
+
   openAddModal() {
     this.resetForm();
     this.editingProduct.set(null);
@@ -99,11 +154,13 @@ export class ProductManagementComponent {
   }
 
   openEditModal(product: Product) {
+    if (product.isHidden) return; // Chặn edit khi row đang bị ẩn
     this.newName.set(product.name);
     this.newCategory.set(product.category);
     this.newMaterial.set(product.material);
     this.newPrice.set(product.price);
     this.newStock.set(product.stock);
+    this.uploadedImage.set(product.imageUrl); // Load ảnh cũ lên preview
     this.editingProduct.set(product);
     this.showAddModal.set(true);
   }
@@ -114,12 +171,21 @@ export class ProductManagementComponent {
     this.resetForm();
   }
 
-  saveProduct() {
+  // --- LOGIC LƯU SẢN PHẨM CÓ VALIDATE ---
+  saveProduct(status: 'active' | 'draft') {
+    // 1. Kiểm tra validate
+    if (!this.newName().trim() || this.newPrice() <= 0 || !this.uploadedImage()) {
+      this.displayToast('Vui lòng điền đủ thông tin và tải ảnh lên!', 'error');
+      return;
+    }
+
     const editing = this.editingProduct();
+    const finalImage = this.uploadedImage() as string;
+
     if (editing) {
       this.products.update(list =>
         list.map(p => p === editing
-          ? { ...p, name: this.newName(), category: this.newCategory(), material: this.newMaterial(), price: this.newPrice(), stock: this.newStock() }
+          ? { ...p, name: this.newName(), category: this.newCategory(), material: this.newMaterial(), price: this.newPrice(), stock: this.newStock(), imageUrl: finalImage, status: status }
           : p
         )
       );
@@ -127,15 +193,17 @@ export class ProductManagementComponent {
       const next: Product = {
         id: `JWL-${String(this.products().length + 1).padStart(3, '0')}`,
         name: this.newName(),
-        imageUrl: 'assets/fb5bb58e3e5f9c8520c4c858877baa6ffc50afac.png',
+        imageUrl: finalImage,
         category: this.newCategory(),
         material: this.newMaterial(),
         price: this.newPrice(),
         stock: this.newStock(),
-        status: 'active',
+        status: status,
       };
-      this.products.update(list => [...list, next]);
+      this.products.update(list => [next, ...list]); // Thêm lên đầu danh sách
     }
+    
+    this.displayToast(`Lưu ${status === 'active' ? 'công khai' : 'nháp'} thành công!`, 'success');
     this.closeAddModal();
   }
 
@@ -147,6 +215,7 @@ export class ProductManagementComponent {
     this.newDesc.set('');
     this.newStock.set(0);
     this.bespokeEnabled.set(false);
+    this.uploadedImage.set(null); // Xóa ảnh preview
   }
 
   onPriceInput(event: Event): void {
@@ -187,15 +256,4 @@ export class ProductManagementComponent {
   }
 
   readonly formatPrice = formatPrice;
-
-  get totalItems() { return this.filteredProducts().length; }
-  get totalPages() { return Math.max(1, Math.ceil(this.totalItems / 5)); }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage.set(page);
-  }
-
-  get pageNumbers(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
 }

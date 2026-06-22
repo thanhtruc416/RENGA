@@ -76,7 +76,7 @@
       </thead>
       <tbody>
         @for (order of filteredOrders(); track order.id + $index) {
-          <tr class="om__tr">
+          <tr class="om__tr om__tr--clickable" (click)="goToDetail(order.id)">
             <td class="om__td om__td--id">{{ order.id }}</td>
             <td class="om__td">
               <span class="om__customer-name">{{ order.customer }}</span>
@@ -108,13 +108,17 @@
             <td class="om__td om__td--center">
               <div class="om__actions">
                 @if (isPrimaryAction(order.status)) {
-                  <button class="om__action-primary" type="button" [routerLink]="['/admin/don-hang', order.id]">{{ actionLabel(order.status) }}</button>
+                  <button class="om__action-primary" type="button"
+                    (click)="handleAction(order, $event)">
+                    {{ actionLabel(order.status) }}
+                  </button>
                 } @else {
-                  <button class="om__action-outline" type="button" [routerLink]="['/admin/don-hang', order.id]">{{ actionLabel(order.status) }}</button>
+                  <button class="om__action-outline" type="button" 
+                    (click)="handleAction(order, $event)">
+                    {{ actionLabel(order.status) }}
+                  </button>
                 }
-                <a class="om__view-btn" [routerLink]="['/admin/don-hang', order.id]" aria-label="Xem chi tiết">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </a>
+                
               </div>
             </td>
           </tr>
@@ -141,3 +145,73 @@
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL: Cập nhật tiến độ đơn hàng
+═══════════════════════════════════════════ -->
+@if (showProgressModal()) {
+  <div class="om-overlay" (click)="closeProgressModal()">
+    <div class="om-modal" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="om-modal__content">
+        <div class="om-modal__header">
+          <div>
+            <h2 class="om-modal__title">Cập nhật tiến độ đơn hàng</h2>
+            <p class="om-modal__subtitle">Cập nhật tiến độ đơn hàng theo từng giai đoạn</p>
+          </div>
+          <button class="om-modal__close" type="button" (click)="closeProgressModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- Status select -->
+        <div class="om-modal__field">
+          <label class="om-modal__label">TRẠNG THÁI</label>
+          <div class="om-modal__select-wrap">
+            <select class="om-modal__select" [value]="progressStatus()" (change)="progressStatus.set($any($event.target).value)">
+              @for (s of progressStatuses; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+              }
+            </select>
+            <svg class="om-modal__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <!-- Notify toggle -->
+        <div class="om-modal__toggle-row">
+          <div class="om-modal__toggle-info">
+            <p class="om-modal__toggle-title">Gửi thông báo cho khách hàng</p>
+            <p class="om-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ</p>
+          </div>
+          <button class="om-modal__toggle" [class.om-modal__toggle--on]="notifyCustomer()" type="button" (click)="notifyCustomer.set(!notifyCustomer())">
+            <span class="om-modal__toggle-thumb"></span>
+          </button>
+        </div>
+
+        <!-- Info note -->
+        <div class="om-modal__info-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <p class="om-modal__info-text">
+            Cập nhật trạng thái này sẽ được lưu vào lịch sử chế tác. Đảm bảo các tài liệu đính kèm là phiên bản cuối cùng.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="om-modal__footer">
+        <button class="om-modal__btn om-modal__btn--cancel" type="button" (click)="closeProgressModal()">HỦY BỎ</button>
+        <button class="om-modal__btn om-modal__btn--save" type="button" (click)="saveProgressUpdate()">LƯU CẬP NHẬT</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- TOAST MESSAGE ĐỘC LẬP TƯƠNG TỰ NHƯ TRANG CHI TIẾT -->
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    {{ toastMessage() }}
+  </div>
+}

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router  } from '@angular/router';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
 import { formatPrice } from '../../shared/utils/currency.util';
 
@@ -26,6 +26,7 @@ interface Order {
   styleUrl: './order-management.component.css',
 })
 export class OrderManagementComponent {
+  private readonly router = inject(Router);
   filterType   = signal('');
   filterStatus = signal('');
   filterApplied = signal(false);
@@ -53,6 +54,14 @@ export class OrderManagementComponent {
     });
   });
 
+  goToDetail(orderId: string): void {
+    // Bỏ dấu '#' ở đầu ID nếu có (vì URL thường không chứa '#')
+    // Ví dụ: '#JM-88201' -> 'JM-88201'
+    const cleanId = orderId.replace('#', ''); 
+    
+    this.router.navigate(['/admin/don-hang', cleanId]); 
+  }
+
   statusLabel(s: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
       'waiting-payment': 'CHỜ THANH TOÁN',
@@ -67,7 +76,7 @@ export class OrderManagementComponent {
   typeLabel(t: OrderType): string {
     const map: Record<OrderType, string> = {
       available: 'CÓ SẴN',
-      bespoke:   'TUY BIẾN',
+      bespoke:   'TUỲ BIẾN',
       design:    'THIẾT KẾ',
     };
     return map[t];
@@ -89,6 +98,68 @@ export class OrderManagementComponent {
     this.currentPage.set(1);
   }
 
+  // ==========================================
+  // STATE MODAL VÀ TOAST MESSAGE
+  // ==========================================
+  showToast = signal(false);
+  toastMessage = signal('');
+  toastType = signal<'success' | 'error'>('success');
+
+  showProgressModal = signal(false);
+  progressStatus = signal('crafting');
+  notifyCustomer = signal(true);
+  
+  progressStatuses = [
+    { value: 'confirmed', label: 'Đã xác nhận' },
+    { value: 'crafting', label: 'Đang chế tác' },
+    { value: 'finishing', label: 'Đang hoàn thiện' },
+    { value: 'ready', label: 'Sẵn sàng giao' }
+  ];
+
+  private triggerToast(message: string, type: 'success' | 'error') {
+    this.toastMessage.set(message);
+    this.toastType.set(type);
+    this.showToast.set(true);
+    setTimeout(() => this.showToast.set(false), 3000);
+  }
+
+  openProgressModal() {
+    this.showProgressModal.set(true);
+  }
+
+  closeProgressModal() {
+    this.showProgressModal.set(false);
+  }
+
+  saveProgressUpdate() {
+    this.closeProgressModal(); // Tắt modal
+    this.triggerToast('Cập nhật tiến độ đơn hàng thành công!', 'success'); // Bật toast
+  }
+
+  // Hàm xử lý nút Thao Tác trên bảng
+  handleAction(order: Order, event: Event) {
+    event.stopPropagation(); // Ngăn sự kiện click lan ra hàng (table row)
+    const cleanId = order.id.replace('#', '');
+
+    if (order.status === 'waiting-payment') {
+      // Nhấn XÁC NHẬN
+      this.triggerToast('Xác nhận đơn hàng thành công!', 'success');
+      setTimeout(() => this.router.navigate(['/admin/don-hang', cleanId]), 1000); // Đợi 1s để kịp nhìn thấy toast rồi mới chuyển trang
+    } 
+    else if (order.status === 'cancelled') {
+      // Nhấn KHÔI PHỤC
+      this.triggerToast('Khôi phục đơn hàng thành công!', 'success');
+      setTimeout(() => this.router.navigate(['/admin/don-hang', cleanId]), 1000);
+    } 
+    else if (order.status === 'crafting' || order.status === 'paid') {
+      // Nhấn CẬP NHẬT -> Mở modal
+      this.openProgressModal();
+    } 
+    else {
+      // Mặc định (CHI TIẾT)
+      this.router.navigate(['/admin/don-hang', cleanId]);
+    }
+  }
   readonly formatPrice = formatPrice;
 
   get totalItems() { return this.filteredOrders().length; }

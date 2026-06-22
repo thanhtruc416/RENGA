@@ -39,7 +39,7 @@
         }
       </div>
     </div>
-    <button class="btn btn--black">TẠO YÊU CẦU BẢO HÀNH MỚI</button>
+    <button class="btn btn--black " (click)="openCreateModal()">TẠO YÊU CẦU BẢO HÀNH MỚI</button>
   </div>
 
   <!-- Statistics Section -->
@@ -69,7 +69,7 @@
     </div>
 
     <div class="warranty-table__body">
-      @for (req of filteredRequests(); track req.id) {
+      @for (req of paginatedRequests(); track req.id) {
         <div class="warranty-table__row">
           
           <!-- Col 1: Product -->
@@ -110,7 +110,7 @@
               <button class="btn-action btn-action--primary" (click)="openModal(req)">XỬ LÝ</button>
             }
             @if (req.actionState === 'view') {
-              <button class="btn-action btn-action--outline">XEM CHI TIẾT</button>
+              <button class="btn-action btn-action--outline"(click)="openViewModal(req)">XEM CHI TIẾT</button>
             }
             @if (req.actionState === 'delivered') {
               <span class="text-delivered">✓ ĐÃ GIAO HÀNG</span>
@@ -123,22 +123,29 @@
   </div>
 
   <!-- Pagination (Giả lập) -->
+  <!-- Pagination -->
   <footer class="warranty-page__pagination">
-    <p class="warranty-page__pagination-info">HIỂN THỊ 1-5 TRÊN 20 YÊU CẦU BẢO HÀNH</p>
+    <p class="warranty-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > totalFilteredRequests().length ? totalFilteredRequests().length : currentPage() * itemsPerPage }} TRÊN {{ totalFilteredRequests().length }} YÊU CẦU BẢO HÀNH
+    </p>
     <div class="warranty-page__pagination-controls">
-      <button class="pagination-btn">&lsaquo;</button>
-      <button class="pagination-btn pagination-btn--active">1</button>
-      <button class="pagination-btn">2</button>
-      <button class="pagination-btn">3</button>
-      <button class="pagination-btn">&rsaquo;</button>
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">
+          {{ page }}
+        </button>
+      }
+
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
     </div>
   </footer>
 </div>
 
 <!-- ================= MODAL XỬ LÝ BẢO HÀNH ================= -->
 @if (selectedRequest(); as req) {
-  <div class="modal-overlay">
-    <div class="modal-container" [formGroup]="processForm">
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()" [formGroup]="processForm">
       
       <!-- Modal Header -->
       <div class="modal-header">
@@ -235,5 +242,222 @@
       </div>
 
     </div>
+  </div>
+}
+
+<!-- ================= MODAL TẠO YÊU CẦU BẢO HÀNH MỚI ================= -->
+@if (isCreateModalOpen()) {
+  <div class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()" [formGroup]="createForm">
+      
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Tạo yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="modal-subtitle">Thiết lập phương án xử lý cho yêu cầu số #WR-TẠO-MỚI</p>
+        </div>
+        <button class="modal-close" (click)="closeCreateModal()">✕</button>
+      </div>
+
+      <!-- Ô Nhập Mã Đơn -->
+      <div class="search-group">
+        <label class="search-group__label">NHẬP MÃ ĐƠN HÀNG</label>
+        <div style="position: relative;">
+          
+          <input type="text" class="search-group__input" formControlName="orderCode" placeholder="WR-8829-2023">
+          
+        </div>
+      </div>
+
+      <!-- Card Sản phẩm -->
+      <div class="modal-info-card">
+        <img class="modal-info__img" src="https://picsum.photos/id/1015/200/200" alt="Product">
+        <div class="modal-info__details">
+          <p class="modal-info__label">Sản phẩm</p>
+          <p class="modal-info__product-name">Vòng tay Kim cương Aurora - Platinum Edition</p>
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Mã bảo hành</p>
+              <p class="modal-info__text">#WR-8829-2023</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">Nguyễn Thu Thủy</p>
+            </div>
+          </div>
+          <p class="modal-info__label">Mô tả lỗi</p>
+          <p class="modal-info__text">Móc khóa bị lỏng, một viên kim cương tấm ở cạnh bên có dấu hiệu bị lung lay sau khi va chạm mạnh.</p>
+        </div>
+      </div>
+
+      <!-- Upload Box (Đã gắn Logic) -->
+      <div class="modal-section">
+        <p class="modal-section__title">ẢNH MINH CHỨNG</p>
+        
+        <!-- Thẻ Input ẩn để hệ thống nhận diện file -->
+        <input type="file" #fileInput style="display: none" accept="image/jpeg, image/png, image/webp" multiple (change)="onFileSelected($event)">
+
+        <!-- Khung to để bấm vào mở file -->
+        <div class="upload-box" (click)="fileInput.click()">
+          <p style="font-size: 24px; margin-bottom: 8px;">📷</p>
+          <p class="modal-info__label">KÉO VÀ THẢ HÌNH ẢNH HOẶC NHẤN ĐỂ TẢI LÊN</p>
+          <p class="modal-info__text" style="font-size: 11px;">ĐỊNH DẠNG HỖ TRỢ: JPG, PNG, WEBP (TỐI ĐA 10MB)</p>
+        </div>
+
+        <!-- Khung nhỏ hiển thị ảnh đã tải lên bên dưới -->
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+          @for (img of uploadedImages(); track $index) {
+            <div style="position: relative;">
+              <!-- Hiển thị ảnh -->
+              <img [src]="img" style="width: 56px; height: 56px; object-fit: cover; border-radius: 2px; border: 1px solid var(--color-border);" alt="Minh chứng">
+              
+              <!-- Nút Xóa (Màu đỏ góc phải) -->
+              <button (click)="removeImage($index)" style="position: absolute; top: -6px; right: -6px; background: red; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; border: none; cursor: pointer;">✕</button>
+            </div>
+          }
+          
+          
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="modal-tabs">
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="createModalTab() === 'quote'" (click)="switchCreateTab('quote')">BÁO GIÁ SỬA CHỮA</button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="createModalTab() === 'free'" (click)="switchCreateTab('free')">XÁC NHẬN MIỄN PHÍ</button>
+      </div>
+
+      <!-- Tab Báo Giá -->
+      @if (createModalTab() === 'quote') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Hạng mục sửa chữa</label>
+            <input type="text" class="form-input" formControlName="repairItems" placeholder="VD: Thay móc khóa Platinum...">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Chi phí dự kiến (VND)</label>
+              <div class="form-input-suffix">
+                <input type="text" class="form-input" formControlName="estimatedCost" placeholder="2.500.000">
+                <span>VND</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thời gian hoàn thành dự kiến</label>
+              <input type="text" class="form-input" formControlName="estimatedTime" placeholder="VD: 3 - 5 ngày làm việc">
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Tab Miễn phí -->
+      @if (createModalTab() === 'free') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Lý do miễn phí</label>
+            <textarea class="form-textarea" formControlName="freeReason" placeholder="VD: Lỗi do nhà sản xuất..."></textarea>
+          </div>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="modal-actions">
+        <button class="btn btn--outline" (click)="closeCreateModal()">HỦY BỎ</button>
+        <button class="btn btn--primary" style="width: auto;" (click)="submitCreate()">GỬI THÔNG BÁO CHO KHÁCH HÀNG</button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- ================= MODAL XEM CHI TIẾT ================= -->
+@if (viewingRequest(); as req) {
+  <div class="modal-overlay" (click)="closeViewModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title vm-text-pink vm-title">Yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="modal-subtitle vm-text-pink">Thông tin yêu cầu bảo hành/sửa chữa số {{ req.productId }}</p>
+        </div>
+        <button class="modal-close vm-text-pink" (click)="closeViewModal()">✕</button>
+      </div>
+
+      <!-- Modal Info Section -->
+      <div class="modal-info-card">
+        <img class="modal-info__img" [src]="req.productImage" [alt]="req.productName">
+        <div class="modal-info__details">
+          <p class="modal-info__label">Sản phẩm</p>
+          <p class="modal-info__product-name">{{ req.productName }}</p>
+          
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Mã bảo hành</p>
+              <p class="modal-info__text">{{ req.productId }}</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">{{ req.customerName }}</p>
+            </div>
+          </div>
+
+          <p class="modal-info__label">Mô tả lỗi</p>
+          <p class="modal-info__text">{{ req.description }}</p>
+        </div>
+      </div>
+
+      <!-- Evidence Images -->
+      <div class="modal-section vm-border-bottom">
+        <p class="modal-section__title">ẢNH MINH CHỨNG</p>
+        <div class="modal-evidence-grid">
+          @for (img of req.evidenceImages; track $index) {
+            <img class="modal-evidence__img" [src]="img" alt="Ảnh minh chứng">
+          } @empty {
+            <p class="modal-info__text">Khách hàng không đính kèm ảnh.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Kết quả báo giá (Dựa theo thiết kế ảnh) -->
+      <div class="modal-section vm-mt-24">
+        <p class="modal-section__title vm-mb-8">Hạng mục sửa chữa</p>
+        <p class="vm-text-pink vm-font-600 vm-mb-24" style="font-size: 14px;">Thay móc khóa Platinum, Gắn lại kim cương tấm</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+          <div>
+            <p class="modal-section__title vm-mb-8">Tổng chi phí</p>
+            <p class="vm-text-pink vm-font-600 vm-text-xl">2.500.000 VNĐ</p>
+          </div>
+          <div>
+            <p class="modal-section__title vm-mb-8">Thời gian hoàn thành dự kiến</p>
+            <p class="vm-text-pink vm-font-600" style="font-size: 14px; margin-top: 12px;">3 - 5 ngày làm việc</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- ================= TOAST MESSAGE ================= -->
+@if (toastConfig().show) {
+  <div class="toast toast--{{ toastConfig().type }}">
+    <span class="toast__icon">
+      <!-- Icon Success -->
+      @if (toastConfig().type === 'success') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      }
+      <!-- Icon Error -->
+      @if (toastConfig().type === 'error') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      }
+    </span>
+    <span class="toast__message">{{ toastConfig().message }}</span>
   </div>
 }
