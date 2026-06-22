@@ -29,6 +29,7 @@ export class HeaderComponent {
     { initialValue: this.router.url }
   );
   readonly isOnProducts = computed(() => this.currentUrl()?.startsWith('/products') ?? false);
+  readonly isOnCollections = computed(() => this.currentUrl()?.startsWith('/bo-suu-tap') ?? false);
   readonly isOnDesigner = computed(() => {
     const url = this.currentUrl() ?? '';
     return url.startsWith('/the-designer') || url.startsWith('/consultation') || url.startsWith('/appointment-history');

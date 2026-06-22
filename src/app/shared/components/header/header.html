@@ -121,7 +121,7 @@
         </div>
 
         <div class="site-header__nav-item" [class.is-open]="openNav() === 'bo-suu-tap'" (mouseenter)="openNav.set('bo-suu-tap')" (mouseleave)="openNav.set(null)">
-          <span class="site-header__nav-link">Bộ sưu tập</span>
+          <a routerLink="/bo-suu-tap" class="site-header__nav-link" [class.is-active]="isOnCollections()" (click)="closeAll()">Bộ sưu tập</a>
           <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('bo-suu-tap')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Bộ sưu tập</p>

@@ -1,0 +1,44 @@
+<main class="collections">
+
+  <!-- ── Hero ── -->
+  <section class="collections__hero">
+    <h1 class="collections__hero-title">Bộ Sưu Tập</h1>
+    <div class="collections__hero-divider"></div>
+    <p class="collections__hero-subtitle">
+      Khám phá nghệ thuật chế tác thủ công tinh xảo qua những bộ sưu tập trang sức<br>
+      cao cấp, nơi truyền thống hòa quyện cùng sự sang trọng hiện đại.
+    </p>
+  </section>
+
+  <!-- ── Collections Grid ── -->
+  <section class="collections__grid">
+    @for (col of collections; track col.id) {
+      <article class="collections__card" [class.collections__card--reversed]="col.reversed">
+        <div class="collections__card-image">
+          <img [src]="col.imageUrl" [alt]="col.titleLine1 + ' ' + col.titleLine2">
+        </div>
+        <div class="collections__card-info">
+          <span class="collections__card-tag">{{ col.tag }}</span>
+          <h2 class="collections__card-title">{{ col.titleLine1 }}<br>{{ col.titleLine2 }}</h2>
+          <p class="collections__card-desc">{{ col.description }}</p>
+          <a [routerLink]="['/bo-suu-tap', col.slug]" class="collections__card-cta">
+            KHÁM PHÁ<span class="collections__card-cta-line"></span>
+          </a>
+        </div>
+      </article>
+    }
+  </section>
+
+  <!-- ── Secondary CTA ── -->
+  <section class="collections__cta">
+    <div class="collections__cta-inner">
+      <h2 class="collections__cta-title">Trải nghiệm cá nhân hóa</h2>
+      <p class="collections__cta-desc">
+        Mỗi món đồ trang sức tại RENGA đều có thể được tùy chỉnh để<br>
+        phản ánh câu chuyện của riêng bạn.
+      </p>
+      <a routerLink="/the-designer" class="collections__cta-btn">ĐẶT LỊCH TƯ VẤN</a>
+    </div>
+  </section>
+
+</main>

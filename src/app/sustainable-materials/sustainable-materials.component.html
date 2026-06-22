@@ -1,0 +1,145 @@
+<main class="sustain">
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="sustain__hero">
+    <div class="sustain__hero-inner">
+      <span class="sustain__hero-tag">TRÁCH NHIỆM & MINH BẠCH</span>
+      <h1 class="sustain__hero-title">Vật Liệu<br>Bền Vững</h1>
+      <div class="sustain__hero-divider"></div>
+      <p class="sustain__hero-sub">
+        Tại RENGA, chúng tôi tin rằng vẻ đẹp thực sự không thể tách rời<br>
+        khỏi trách nhiệm với con người và hành tinh chúng ta đang sống.
+      </p>
+    </div>
+    <div class="sustain__hero-watermark" aria-hidden="true">ECO</div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CAM KẾT — Commitment
+  ══════════════════════════════════════ -->
+  <section class="sustain__commitment">
+    <div class="sustain__commitment-image">
+      <img src="/images/collection-story-cap-doi.png" alt="Nghệ nhân RENGA kiểm định nguyên liệu">
+    </div>
+    <div class="sustain__commitment-text">
+      <span class="sustain__section-tag">CAM KẾT CỦA CHÚNG TÔI</span>
+      <h2 class="sustain__section-title">Đẹp có trách nhiệm</h2>
+      <div class="sustain__section-divider"></div>
+      <p class="sustain__section-body">
+        Ngay từ những ngày đầu thành lập, RENGA đã xây dựng chuỗi cung ứng dựa trên hai nguyên tắc không thỏa hiệp: <strong>minh bạch nguồn gốc</strong> và <strong>tối thiểu hóa tác động môi trường</strong>.
+      </p>
+      <p class="sustain__section-body">
+        Chúng tôi là thành viên của Responsible Jewellery Council (RJC) — tổ chức thiết lập tiêu chuẩn đạo đức và môi trường cho ngành kim hoàn toàn cầu. Mỗi sản phẩm RENGA là lời cam kết rằng vẻ đẹp bạn mang trên mình không gây tổn hại đến bất kỳ ai.
+      </p>
+      <div class="sustain__cert-badges">
+        <div class="sustain__cert-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span>RJC Certified</span>
+        </div>
+        <div class="sustain__cert-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+          <span>Conflict-Free</span>
+        </div>
+        <div class="sustain__cert-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Traceable Origin</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       MATERIALS — 4 cards
+  ══════════════════════════════════════ -->
+  <section class="sustain__materials">
+    <div class="sustain__materials-header">
+      <span class="sustain__section-tag">NGUYÊN LIỆU</span>
+      <h2 class="sustain__section-title sustain__section-title--center">
+        Những vật liệu<br>chúng tôi lựa chọn
+      </h2>
+      <p class="sustain__materials-subtitle">
+        Mỗi nguyên liệu đều được lựa chọn có chủ đích — cho vẻ đẹp, cho sự bền vững và cho một tương lai tốt hơn.
+      </p>
+    </div>
+    <div class="sustain__materials-grid">
+      @for (m of materials; track m.title) {
+        <div class="sustain__material-card">
+          <div class="sustain__material-icon" [innerHTML]="m.icon"></div>
+          <span class="sustain__material-tag">{{ m.tag }}</span>
+          <h3 class="sustain__material-title">{{ m.title }}</h3>
+          <p class="sustain__material-body">{{ m.body }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       STATS — Tác động
+  ══════════════════════════════════════ -->
+  <section class="sustain__stats">
+    <div class="sustain__stats-inner">
+      <div class="sustain__stats-header">
+        <span class="sustain__section-tag sustain__section-tag--light">TÁC ĐỘNG</span>
+        <h2 class="sustain__section-title sustain__section-title--center sustain__section-title--light">
+          Con số nói lên<br>tất cả
+        </h2>
+      </div>
+      <div class="sustain__stats-grid">
+        @for (s of stats; track s.label) {
+          <div class="sustain__stat">
+            <div class="sustain__stat-value">{{ s.value }}</div>
+            <p class="sustain__stat-label">{{ s.label }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       PROCESS — Quy trình thẩm định
+  ══════════════════════════════════════ -->
+  <section class="sustain__process">
+    <div class="sustain__process-text">
+      <span class="sustain__section-tag">QUY TRÌNH</span>
+      <h2 class="sustain__section-title">Thẩm định nguyên liệu<br>nghiêm ngặt</h2>
+      <div class="sustain__section-divider"></div>
+      <ol class="sustain__steps">
+        @for (step of steps; track step.num) {
+          <li class="sustain__step">
+            <span class="sustain__step-num">{{ step.num }}</span>
+            <div class="sustain__step-content">
+              <strong>{{ step.title }}</strong>
+              <p>{{ step.desc }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+    </div>
+    <div class="sustain__process-image">
+      <img src="/images/collection-hoang-gia.png" alt="Trang sức RENGA từ vật liệu bền vững">
+      <div class="sustain__process-image-caption">
+        <p>Mỗi viên đá trong bộ sưu tập Hoàng Gia đều có chứng nhận nguồn gốc đầy đủ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CTA
+  ══════════════════════════════════════ -->
+  <section class="sustain__cta">
+    <div class="sustain__cta-inner">
+      <h2 class="sustain__cta-title">Vẻ đẹp bạn tự hào được đeo</h2>
+      <p class="sustain__cta-desc">
+        Khám phá những tác phẩm trang sức được chế tác từ vật liệu<br>
+        có trách nhiệm, kể câu chuyện của bạn và của hành tinh.
+      </p>
+      <div class="sustain__cta-actions">
+        <a routerLink="/bo-suu-tap" class="sustain__cta-btn sustain__cta-btn--primary">Xem Bộ sưu tập</a>
+        <a routerLink="/cau-chuyen-thuong-hieu" class="sustain__cta-btn sustain__cta-btn--outline">Câu chuyện thương hiệu</a>
+      </div>
+    </div>
+  </section>
+
+</main>

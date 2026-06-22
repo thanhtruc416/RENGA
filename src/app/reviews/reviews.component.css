@@ -1,0 +1,425 @@
+/* ═══════════════════════════════════════
+   REVIEW PAGE
+═══════════════════════════════════════ */
+
+.review-page {
+  padding-inline: var(--container-px);
+  padding-bottom: 80px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ── Breadcrumb ── */
+.review-page__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 28px;
+  padding-bottom: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.review-page__breadcrumb-link {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.review-page__breadcrumb-link:hover {
+  color: var(--color-primary);
+}
+
+.review-page__breadcrumb-sep {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.review-page__breadcrumb-current {
+  color: var(--color-dark);
+}
+
+/* ── Hero ── */
+.review-page__hero {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 20px 0 40px;
+}
+
+.review-page__title {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.review-page__order-id {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+/* ── Two-column body ── */
+.review-page__body {
+  display: grid;
+  grid-template-columns: 448px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ══════════════════════════════════════
+   LEFT: Product info
+══════════════════════════════════════ */
+.review-product {}
+
+.review-product__image-wrap {
+  background: #e8e8e8;
+  overflow: hidden;
+  aspect-ratio: 448 / 447;
+}
+
+.review-product__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.review-product__specs {
+  background: rgba(196, 96, 126, 0.6);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.review-product__specs-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}
+
+.review-product__spec-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.review-product__spec-key {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+}
+
+.review-product__spec-val {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  text-align: right;
+}
+
+/* ══════════════════════════════════════
+   RIGHT: Form
+══════════════════════════════════════ */
+.review-form-wrap {}
+
+.review-form {
+  border: 1px solid #080808;
+  padding: 33px 33px 49px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.review-form__badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #080808;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 8px 24px;
+}
+
+.review-form__title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: #080808;
+  margin: 0;
+  padding-top: 8px;
+}
+
+.review-form__desc {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin: -24px 0 0;
+}
+
+/* ── Field wrapper ── */
+.review-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-form__label {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  color: #080808;
+}
+
+/* ── Stars ── */
+.review-form__stars {
+  display: flex;
+  gap: 6px;
+}
+
+.review-form__star {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #ccc;
+  transition: color 0.1s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-form__star:hover,
+.review-form__star--active {
+  color: var(--color-primary);
+  transform: scale(1.15);
+}
+
+.review-form__star--active svg {
+  fill: var(--color-primary);
+  stroke: var(--color-primary);
+}
+
+/* ── Textarea ── */
+.review-form__textarea {
+  width: 100%;
+  border: 1px solid #080808;
+  padding: 16px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-dark);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.review-form__textarea::placeholder {
+  color: #c4c7c7;
+}
+
+.review-form__textarea:focus {
+  border-color: var(--color-primary);
+}
+
+/* ── Upload ── */
+.review-form__upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 192px;
+  border: 1.5px dashed rgba(8, 8, 8, 0.25);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  color: var(--color-muted);
+  background: #fafafa;
+}
+
+.review-form__upload:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.review-form__upload-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.review-form__upload-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  color: #080808;
+}
+
+.review-form__upload-hint {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.review-form__file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.review-form__file-chip {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+/* ── Submit ── */
+.review-form__submit-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.review-form__submit {
+  background: #080808;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: none;
+  padding: 20px 48px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.review-form__submit:hover:not(:disabled) {
+  background: var(--color-primary);
+}
+
+.review-form__submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.review-form__submit-hint {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* ══════════════════════════════════════
+   SUCCESS STATE
+══════════════════════════════════════ */
+.review-success {
+  border: 1px solid #080808;
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.review-success__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  color: #388e3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.review-success__title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.review-success__desc {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin: 0;
+  max-width: 400px;
+}
+
+.review-success__btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #080808;
+  color: #fff;
+  padding: 16px 40px;
+  margin-top: 16px;
+  transition: background 0.2s;
+}
+
+.review-success__btn:hover {
+  background: var(--color-primary);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .review-page__body {
+    grid-template-columns: 1fr;
+  }
+
+  .review-product__image-wrap {
+    aspect-ratio: 16 / 9;
+  }
+
+  .review-page__hero {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

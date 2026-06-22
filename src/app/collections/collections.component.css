@@ -1,0 +1,215 @@
+.collections {}
+
+/* ════════════════════════════════════════
+   Hero
+════════════════════════════════════════ */
+.collections__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-lg);
+  padding: var(--sp-xl) var(--container-px) var(--sp-2xl);
+  text-align: center;
+}
+
+.collections__hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(40px, 4.5vw, 64px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--color-dark);
+  margin: 0;
+  line-height: 1.125;
+}
+
+.collections__hero-divider {
+  width: 64px;
+  height: 1px;
+  background: var(--color-black);
+  opacity: 0.2;
+  flex-shrink: 0;
+}
+
+.collections__hero-subtitle {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-muted);
+  margin: var(--sp-sm) 0 0;
+}
+
+/* ════════════════════════════════════════
+   Grid
+════════════════════════════════════════ */
+.collections__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xl);
+  padding: 0 var(--container-px) var(--sp-2xl);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* ════════════════════════════════════════
+   Card
+════════════════════════════════════════ */
+.collections__card {
+  display: flex;
+  height: 716px;
+  border: 1px solid var(--color-black);
+  overflow: hidden;
+}
+
+.collections__card--reversed {
+  flex-direction: row-reverse;
+}
+
+/* Image pane — ~60% */
+.collections__card-image {
+  flex: 3;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.collections__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Info pane — ~40% */
+.collections__card-info {
+  flex: 2;
+  min-width: 0;
+  background: #f9f9f9;
+  border-left: 1px solid var(--color-black);
+  padding: var(--sp-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.collections__card--reversed .collections__card-info {
+  border-left: none;
+  border-right: 1px solid var(--color-black);
+}
+
+/* Tag */
+.collections__card-tag {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--sp-md);
+}
+
+/* Title */
+.collections__card-title {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  line-height: 1.3;
+  margin: 0 0 var(--sp-lg);
+}
+
+/* Description */
+.collections__card-desc {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.625;
+  color: var(--color-muted);
+  margin: 0 0 var(--sp-lg);
+}
+
+/* CTA link */
+.collections__card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-md);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.collections__card-cta-line {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-black);
+  flex-shrink: 0;
+  transition: width 0.25s ease;
+}
+
+.collections__card-cta:hover .collections__card-cta-line {
+  width: 64px;
+}
+
+/* ════════════════════════════════════════
+   Secondary CTA Section
+════════════════════════════════════════ */
+.collections__cta {
+  background: var(--color-primary-light);
+  padding: 120px var(--container-px);
+}
+
+.collections__cta-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-lg);
+  text-align: center;
+  max-width: 672px;
+  margin: 0 auto;
+}
+
+.collections__cta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  margin: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.collections__cta-desc {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-black);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.collections__cta-btn {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 16px 48px;
+  transition: background 0.2s;
+}
+
+.collections__cta-btn:hover {
+  background: var(--color-primary-dark);
+}

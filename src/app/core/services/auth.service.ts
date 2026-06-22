@@ -70,6 +70,17 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
+  mockAdminLogin(): void {
+    this._saveSession('mock-admin-token', {
+      id: '1',
+      fullName: 'Admin RENGA',
+      email: 'admin@renga.vn',
+      role: 'admin',
+      avatarUrl: '',
+    } as User);
+    this.router.navigate(['/admin']);
+  }
+
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);

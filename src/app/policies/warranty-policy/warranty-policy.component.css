@@ -1,0 +1,543 @@
+/* ═══════════════════════════════════════
+   WARRANTY POLICY — Full Page
+═══════════════════════════════════════ */
+
+/* ── HERO ── */
+.warranty__hero {
+  background: var(--color-primary-light);
+  padding-top: 64px;
+  padding-bottom: 80px;
+  padding-inline: var(--container-px);
+}
+
+.warranty__hero-inner {
+  max-width: 960px;
+}
+
+.warranty__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.warranty__breadcrumb a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.warranty__breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.warranty__hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 400;
+  color: var(--color-dark);
+  line-height: 1.1;
+  margin: 0 0 24px;
+}
+
+.warranty__hero-sub {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* ── TYPES (12 tháng / Trọn đời) ── */
+.warranty__types {
+  padding: 72px var(--container-px);
+  background: #fff;
+}
+
+.warranty__types-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.warranty__type-card {
+  border-radius: 16px;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.warranty__type-card--standard {
+  background: var(--color-primary-light);
+  border: 2px solid rgba(196, 96, 126, 0.15);
+}
+
+.warranty__type-card--lifetime {
+  background: var(--color-dark);
+  color: #fff;
+}
+
+.warranty__type-badge {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 4px;
+}
+
+.warranty__type-card--lifetime .warranty__type-badge {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.warranty__type-badge em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.warranty__type-card--lifetime .warranty__type-badge em {
+  color: #e9aabb;
+}
+
+.warranty__type-duration {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.warranty__type-card--lifetime .warranty__type-duration {
+  color: #fff;
+}
+
+.warranty__type-note {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.warranty__type-card--lifetime .warranty__type-note {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── SCOPE ── */
+.warranty__scope {
+  background: var(--color-primary-light);
+  padding: 72px var(--container-px);
+}
+
+.warranty__scope-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.warranty__scope-col {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+}
+
+.warranty__scope-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.warranty__scope-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.warranty__scope-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.warranty__scope-icon--yes {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.warranty__scope-icon--no {
+  background: #fce8ec;
+  color: #c4607e;
+}
+
+.warranty__scope-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.warranty__scope-desc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin: 0 0 20px;
+}
+
+.warranty__scope-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.warranty__scope-list li {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-dark);
+  padding-left: 20px;
+  position: relative;
+}
+
+.warranty__scope-col--yes .warranty__scope-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #388e3c;
+  font-weight: 700;
+}
+
+.warranty__scope-col--no .warranty__scope-list li::before {
+  content: '×';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ── EXTRAS ── */
+.warranty__extras {
+  background: #fff;
+  padding: 72px var(--container-px);
+}
+
+.warranty__extras-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.warranty__extras-header {
+  margin-bottom: 48px;
+}
+
+.warranty__label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+
+.warranty__extras-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.warranty__extras-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.warranty__extra-item {
+  display: flex;
+  gap: 20px;
+  padding: 32px;
+  background: var(--color-primary-light);
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.warranty__extra-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(196, 96, 126, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.warranty__extra-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.warranty__extra-content {
+  flex: 1;
+}
+
+.warranty__extra-content strong {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.warranty__extra-content p {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.warranty__extra-content strong + p strong {
+  color: var(--color-dark);
+}
+
+.warranty__extra-tag {
+  font-style: italic;
+  color: var(--color-primary);
+}
+
+/* ── CTA ── */
+.warranty__cta {
+  background: var(--color-dark);
+  padding: 80px var(--container-px);
+  text-align: center;
+}
+
+.warranty__cta-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.warranty__cta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+.warranty__cta-desc {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 40px;
+}
+
+.warranty__cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.warranty__cta-btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 32px;
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+
+.warranty__cta-btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.warranty__cta-btn--primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.warranty__cta-btn--outline {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.warranty__cta-btn--outline:hover {
+  border-color: #fff;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .warranty__types-inner,
+  .warranty__scope-inner,
+  .warranty__extras-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .warranty__type-card {
+    padding: 36px 28px;
+  }
+
+  .warranty__scope-col {
+    padding: 28px 24px;
+  }
+
+  .warranty__extra-item {
+    padding: 24px;
+  }
+}
+
+/* ── CONTACT MODAL ── */
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.contact-modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+}
+
+.contact-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary-light);
+  color: var(--color-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.contact-modal__close:hover {
+  background: rgba(196, 96, 126, 0.2);
+}
+
+.contact-modal__brand {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.contact-modal__title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0 0 6px;
+}
+
+.contact-modal__sub {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  margin: 0 0 28px;
+}
+
+.contact-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-modal__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-primary-light);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.contact-modal__item:not(.contact-modal__item--static):hover {
+  background: rgba(196, 96, 126, 0.15);
+}
+
+.contact-modal__item--static {
+  cursor: default;
+}
+
+.contact-modal__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.contact-modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact-modal__label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.contact-modal__value {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-dark);
+}

@@ -23,6 +23,34 @@ export const routes: Routes = [
       import('./studio/studio.component').then((m) => m.StudioComponent),
   },
   {
+    path: 'chinh-sach-bao-hanh',
+    loadComponent: () =>
+      import('./policies/warranty-policy/warranty-policy.component').then(
+        (m) => m.WarrantyPolicyComponent,
+      ),
+  },
+  {
+    path: 'doi-tra-hoan-tien',
+    loadComponent: () =>
+      import('./policies/returns-policy/returns-policy.component').then(
+        (m) => m.ReturnsPolicyComponent,
+      ),
+  },
+  {
+    path: 'vat-lieu-ben-vung',
+    loadComponent: () =>
+      import('./sustainable-materials/sustainable-materials.component').then(
+        (m) => m.SustainableMaterialsComponent,
+      ),
+  },
+  {
+    path: 'cau-chuyen-thuong-hieu',
+    loadComponent: () =>
+      import('./brand-story/brand-story.component').then(
+        (m) => m.BrandStoryComponent,
+      ),
+  },
+  {
     path: 'the-designer',
     loadComponent: () =>
       import('./design/design.component').then((m) => m.DesignComponent),
@@ -52,6 +80,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./profile/profile-rewards.component').then(
         (m) => m.ProfileRewardsComponent,
+      ),
+  },
+  {
+    path: 'bo-suu-tap',
+    loadComponent: () =>
+      import('./collections/collections.component').then(
+        (m) => m.CollectionsComponent,
+      ),
+  },
+  {
+    path: 'bo-suu-tap/:slug',
+    loadComponent: () =>
+      import('./collections/collection-detail/collection-detail.component').then(
+        (m) => m.CollectionDetailComponent,
       ),
   },
   {
@@ -87,6 +129,12 @@ export const routes: Routes = [
   },
   {
     path: 'orders/reviews',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./reviews/review-list/review-list.component').then((m) => m.ReviewListComponent),
+  },
+  {
+    path: 'orders/reviews/write',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./reviews/reviews.component').then((m) => m.ReviewsComponent),

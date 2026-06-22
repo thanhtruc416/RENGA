@@ -85,10 +85,11 @@
 /* Newsletter */
 .site-footer__newsletter-desc {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.6;
   color: rgba(255,255,255,0.6);
   margin-bottom: 4px;
+  white-space: nowrap;
 }
 
 .newsletter-form__field {
