@@ -17,7 +17,7 @@
             <p class="cancel-modal__order-id">#{{ orderId() }}</p>
           </div>
           <button class="omodal-close" aria-label="Đóng" (click)="onClose()">
-            <img class="omodal-close__icon" src="assets/icons/ic-close.svg" alt="" aria-hidden="true" />
+            <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
           </button>
         </div>
 
@@ -78,6 +78,10 @@
     @if (step() === 'success') {
       <div class="order-modal order-modal--cancel-success is-active">
 
+        <button class="omodal-close omodal-close--abs" aria-label="Đóng" (click)="onClose()">
+          <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+
         <svg class="cancel-success__icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
             <circle cx="28" cy="28" r="26" stroke="var(--color-primary)" stroke-width="2" />
             <path d="M17 29l7 7 15-16" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -113,7 +117,7 @@
         </div>
 
         <div class="cancel-success__actions">
-          <a routerLink="/profile" class="cancel-success__btn-primary" (click)="onClose()">
+          <a routerLink="/orders/tracking" class="cancel-success__btn-primary" (click)="onClose()">
             Quay lại danh sách đơn hàng
           </a>
           <a routerLink="/" class="cancel-success__btn-outline" (click)="onClose()">
@@ -128,16 +132,19 @@
     @if (step() === 'fail') {
       <div class="order-modal order-modal--cancel-fail is-active">
 
-        <!-- Icon tam giác cảnh báo màu hồng — inline SVG, không cần file asset -->
+        <button class="omodal-close omodal-close--abs" aria-label="Đóng" (click)="onClose()">
+          <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+
         <svg class="cancel-fail__icon" width="80" height="72" viewBox="0 0 80 72" fill="none" aria-hidden="true">
-        <path
+          <path
             d="M40 4L77.91 67.5H2.09L40 4Z"
             stroke="var(--color-primary)"
             stroke-width="4"
             stroke-linecap="round"
             stroke-linejoin="round"
-        />
-        <text
+          />
+          <text
             x="40"
             y="55"
             text-anchor="middle"
@@ -145,32 +152,45 @@
             font-size="40"
             font-weight="bold"
             fill="var(--color-primary)"
-        >!</text>
+          >!</text>
         </svg>
 
         <h2 class="cancel-fail__title">Hủy đơn không thành công</h2>
+        <p class="cancel-fail__desc">
+          Đơn hàng này hiện đã ở giai đoạn hoàn tất cuối cùng hoặc đã được bàn giao
+          cho đơn vị vận chuyển, vì vậy không thể hủy. Quý khách có thể yêu cầu trả
+          hàng sau khi nhận được sản phẩm, tùy theo Chính sách Đổi trả của chúng tôi.
+        </p>
 
-        <div class="cancel-fail__body">
+        <div class="cancel-fail__card">
           <div class="cancel-fail__img-col">
             <img class="cancel-fail__product-img" [src]="productImage()" [alt]="productName()" />
-            <span class="cancel-fail__status-tag">STATUS: DISPATCHED</span>
+            <div class="cancel-fail__img-overlay" aria-hidden="true"></div>
+            <span class="cancel-fail__status-tag">Đang vận chuyển</span>
           </div>
           <div class="cancel-fail__info-col">
-            <p class="cancel-fail__desc">
-              Đơn hàng này hiện đã ở giai đoạn hoàn tất cuối cùng hoặc đã được bàn giao
-              cho đơn vị vận chuyển, vì vậy không thể hủy. Quý khách có thể yêu cầu trả
-              hàng sau khi nhận được sản phẩm, tùy theo Chính sách Đổi trả của chúng tôi.
-            </p>
-            <a [routerLink]="['/orders', orderId()]" class="cancel-fail__btn-primary" (click)="onClose()">
-              Theo dõi trạng thái đơn hàng
-            </a>
-            <button type="button" class="cancel-fail__btn-outline" (click)="onContactRequested()">
-              Liên hệ
-            </button>
-            <a routerLink="/chinh-sach-doi-tra" class="cancel-fail__policy-link" (click)="onClose()">
-              Chính sách Đổi trả
-            </a>
+            <p class="cancel-fail__product-label">Sản phẩm</p>
+            <p class="cancel-fail__product-name">{{ productName() }}</p>
+            <p class="cancel-fail__product-spec">{{ productSpec() }}</p>
+            <div class="cancel-fail__card-footer">
+              <div>
+                <span class="cancel-fail__status-label">Trạng thái</span>
+                <p class="cancel-fail__status-value">DISPATCHED</p>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div class="cancel-fail__actions">
+          <a [routerLink]="['/orders', orderId()]" class="cancel-fail__btn-primary" (click)="onClose()">
+            Theo dõi trạng thái đơn hàng
+          </a>
+          <button type="button" class="cancel-fail__btn-outline" (click)="onContactRequested()">
+            Liên hệ
+          </button>
+          <a routerLink="/doi-tra-hoan-tien" class="cancel-fail__policy-link" (click)="onClose()">
+            Chính sách Đổi trả
+          </a>
         </div>
 
       </div>

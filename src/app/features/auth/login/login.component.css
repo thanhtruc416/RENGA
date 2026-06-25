@@ -1,4 +1,4 @@
-/* ── Split Layout ── */
+﻿/* ── Split Layout ── */
 .login {
   display: grid;
   grid-template-columns: 58fr 42fr;
@@ -16,7 +16,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/images/login-bg.png');
+  background-image: url('../../../../assets/images/login-bg.png');
   background-size: cover;
   background-position: center;
   pointer-events: none;

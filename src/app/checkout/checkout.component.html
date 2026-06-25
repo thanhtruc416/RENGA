@@ -241,6 +241,11 @@
               aria-label="Mã voucher hoặc gift code" />
             <button class="voucher-field__apply" type="button" (click)="applyVoucher()">Áp dụng</button>
           </div>
+          @if (voucherMsg()) {
+            <p class="voucher-field__msg" [class.voucher-field__msg--success]="voucherStatus() === 'success'" [class.voucher-field__msg--error]="voucherStatus() === 'error'">
+              {{ voucherMsg() }}
+            </p>
+          }
         </div>
 
         <div class="order-total">

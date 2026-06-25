@@ -1,4 +1,4 @@
-/* ============================
+﻿/* ============================
    HOME PAGE — BEM Styles
    ============================ */
 
@@ -13,7 +13,7 @@
 .home__hero {
   position: relative;
   height: 832px;
-  background-image: url('/images/hero-bg.png');
+  background-image: url('../../assets/images/hero-bg.png');
   background-size: cover;
   background-position: center top;
   display: flex;

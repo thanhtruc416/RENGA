@@ -56,7 +56,6 @@
 .order-modal--cancel-bespoke {
   width: 750px;
   border: 1px solid var(--color-black);
-  border-radius: 20px;
   padding: 64px;
 }
 

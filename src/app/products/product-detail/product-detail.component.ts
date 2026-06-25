@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map } from 'rxjs';
@@ -62,7 +62,7 @@ export class ProductDetailComponent {
     {
       id: 1,
       name: 'MINH THƯ H.',
-      imageUrl: '/images/product-detail-nhan-aeterna-3.png',
+      imageUrl: 'assets/images/product-detail-nhan-aeterna-3.png',
       rating: 5,
       quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
       date: '20 THÁNG 10, 2023',
@@ -70,7 +70,7 @@ export class ProductDetailComponent {
     {
       id: 2,
       name: 'LAN ANH T.',
-      imageUrl: '/images/product-detail-nhan-aeterna-2.png',
+      imageUrl: 'assets/images/product-detail-nhan-aeterna-2.png',
       rating: 5,
       quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
       date: '15 THÁNG 09, 2023',
@@ -78,7 +78,7 @@ export class ProductDetailComponent {
     {
       id: 3,
       name: 'THU HƯƠNG N.',
-      imageUrl: '/images/product-detail-nhan-aeterna-3.png',
+      imageUrl: 'assets/images/product-detail-nhan-aeterna-3.png',
       rating: 5,
       quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
       date: '01 THÁNG 08, 2023',
@@ -86,7 +86,7 @@ export class ProductDetailComponent {
     {
       id: 4,
       name: 'NGỌC HÀ P.',
-      imageUrl: '/images/product-detail-nhan-aeterna-2.png',
+      imageUrl: 'assets/images/product-detail-nhan-aeterna-2.png',
       rating: 5,
       quote: '"Nhẫn đẹp hơn cả mong đợi, chất vàng rất tốt và viên đá sáng lung linh. Sẽ quay lại mua thêm làm quà cho người thân!"',
       date: '10 THÁNG 07, 2023',
@@ -94,7 +94,7 @@ export class ProductDetailComponent {
     {
       id: 5,
       name: 'BẢO CHÂU T.',
-      imageUrl: '/images/product-detail-nhan-aeterna-1.png',
+      imageUrl: 'assets/images/product-detail-nhan-aeterna-1.png',
       rating: 5,
       quote: '"Thiết kế tinh tế, đóng gói sang trọng như quà tặng cao cấp. Được tặng kèm túi giấy và hộp nhung rất xịn!"',
       date: '22 THÁNG 06, 2023',

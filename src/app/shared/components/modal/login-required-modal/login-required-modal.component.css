@@ -10,7 +10,6 @@
 
 .lrm-card {
   background: var(--color-primary-light);
-  border-radius: 20px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;

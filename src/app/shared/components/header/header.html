@@ -1,4 +1,4 @@
-<header class="site-header">
+﻿<header class="site-header">
   <div class="site-header__inner">
 
     <a routerLink="/" class="site-header__logo-left">
@@ -64,7 +64,7 @@
             @if (auth.isLoggedIn()) {
               <img
                 class="site-header__avatar"
-                [src]="auth.currentUser()?.avatarUrl || '/images/header-avatar.jpg'"
+                [src]="auth.currentUser()?.avatarUrl || 'assets/images/header-avatar.jpg'"
                 alt="Tài khoản"
               >
             } @else {
@@ -77,7 +77,7 @@
           </button>
           <div class="user-menu__dropdown" (click)="$event.stopPropagation()">
             @if (auth.isLoggedIn()) {
-              <a routerLink="/profile" class="user-menu__item" (click)="closeAll()">
+              <a routerLink="/account/thong-tin" class="user-menu__item" (click)="closeAll()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Hồ sơ
               </a>

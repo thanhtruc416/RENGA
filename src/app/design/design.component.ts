@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { formatVnd } from '../shared/utils/currency.util';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
@@ -48,7 +48,7 @@ export class DesignComponent {
       badge: 'SIGNATURE WORK',
       bio: 'Bậc thầy thiết kế kim cương với hơn 20 năm kinh nghiệm tại các kinh đô trang sức châu Âu.',
       fee: 13_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -59,7 +59,7 @@ export class DesignComponent {
       badge: 'HERITAGE REVIVAL',
       bio: 'Chuyên gia phục hồi phong cách di sản, kết hợp nét cổ điển Ý với cảm quan hiện đại.',
       fee: 13_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -70,7 +70,7 @@ export class DesignComponent {
       badge: 'AVANT-GARDE METALS',
       bio: 'Chuyên gia thiết kế trang sức cao cấp với phong cách avant-garde độc đáo.',
       fee: 13_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -81,7 +81,7 @@ export class DesignComponent {
       badge: 'ETERNAL BOND',
       bio: 'Nghệ nhân chuyên thiết kế nhẫn cưới và trang sức đính hôn với ngôn ngữ thiết kế lãng mạn.',
       fee: 15_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -92,7 +92,7 @@ export class DesignComponent {
       badge: 'DELICATE FORMS',
       bio: 'Chuyên gia tạo hình hoa tai tinh xảo, lấy cảm hứng từ nghệ thuật điêu khắc châu Á.',
       fee: 11_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
     {
@@ -103,7 +103,7 @@ export class DesignComponent {
       badge: 'FLUID LUXURY',
       bio: 'Phong cách tối giản Pháp — từng đường nét được tính toán để tôn lên vẻ đẹp tự nhiên.',
       fee: 12_000_000,
-      image: '/images/designer-photo.png',
+      image: 'assets/images/designer-photo.png',
       rating: 5,
     },
   ];

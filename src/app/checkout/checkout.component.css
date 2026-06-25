@@ -25,7 +25,7 @@
 .breadcrumb__item {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -541,6 +541,21 @@
 
 .voucher-field__apply:hover {
   background: var(--color-primary-dark);
+}
+
+.voucher-field__msg {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.voucher-field__msg--success {
+  color: #2d7a3a;
+}
+
+.voucher-field__msg--error {
+  color: #dc2626;
 }
 
 .order-total {

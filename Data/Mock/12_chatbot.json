@@ -1,0 +1,710 @@
+{
+  "CHATBOT_SESSION": [
+    {
+      "session_id": "SES000001",
+      "client_id": "CLT000009",
+      "browser_token": null,
+      "started_at": "2026-06-10T02:50:00",
+      "ended_at": "2026-06-10T14:50:00",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000002",
+      "client_id": "CLT000073",
+      "browser_token": null,
+      "started_at": "2026-06-20T17:33:09",
+      "ended_at": "2026-06-21T05:33:09",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000003",
+      "client_id": "CLT000095",
+      "browser_token": null,
+      "started_at": "2026-01-18T16:34:09",
+      "ended_at": "2026-01-18T23:34:09",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000004",
+      "client_id": "CLT000045",
+      "browser_token": null,
+      "started_at": "2026-05-16T23:42:41",
+      "ended_at": "2026-05-17T14:42:41",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000005",
+      "client_id": "CLT000080",
+      "browser_token": null,
+      "started_at": "2026-05-23T09:09:52",
+      "ended_at": "2026-05-23T17:09:52",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000006",
+      "client_id": "CLT000085",
+      "browser_token": null,
+      "started_at": "2026-02-05T14:54:44",
+      "ended_at": "2026-02-06T03:54:44",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000007",
+      "client_id": null,
+      "browser_token": "btkn_387075",
+      "started_at": "2026-02-16T13:03:39",
+      "ended_at": "2026-02-16T19:03:39",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000008",
+      "client_id": null,
+      "browser_token": "btkn_831952",
+      "started_at": "2026-02-26T16:18:14",
+      "ended_at": "2026-02-27T01:18:14",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000009",
+      "client_id": null,
+      "browser_token": "btkn_227119",
+      "started_at": "2026-03-21T20:41:42",
+      "ended_at": "2026-03-22T05:41:42",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000010",
+      "client_id": null,
+      "browser_token": "btkn_628896",
+      "started_at": "2026-05-27T16:24:16",
+      "ended_at": "2026-05-28T01:24:16",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000011",
+      "client_id": null,
+      "browser_token": "btkn_630647",
+      "started_at": "2026-02-19T01:58:40",
+      "ended_at": "2026-02-19T11:58:40",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000012",
+      "client_id": null,
+      "browser_token": "btkn_499670",
+      "started_at": "2026-05-05T01:20:03",
+      "ended_at": "2026-05-05T13:20:03",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000013",
+      "client_id": null,
+      "browser_token": "btkn_111258",
+      "started_at": "2026-03-19T00:38:10",
+      "ended_at": "2026-03-19T05:38:10",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000014",
+      "client_id": null,
+      "browser_token": "btkn_443000",
+      "started_at": "2026-05-18T16:38:37",
+      "ended_at": "2026-05-19T06:38:37",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000015",
+      "client_id": null,
+      "browser_token": "btkn_788938",
+      "started_at": "2026-01-17T00:42:16",
+      "ended_at": "2026-01-17T09:42:16",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000016",
+      "client_id": null,
+      "browser_token": "btkn_593656",
+      "started_at": "2026-03-26T23:56:24",
+      "ended_at": "2026-03-27T09:56:24",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000017",
+      "client_id": null,
+      "browser_token": "btkn_285846",
+      "started_at": "2026-04-28T20:46:18",
+      "ended_at": "2026-04-29T01:46:18",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000018",
+      "client_id": null,
+      "browser_token": "btkn_276636",
+      "started_at": "2026-04-14T19:40:02",
+      "ended_at": "2026-04-15T07:40:02",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000019",
+      "client_id": null,
+      "browser_token": "btkn_562063",
+      "started_at": "2026-02-23T01:26:52",
+      "ended_at": "2026-02-23T07:26:52",
+      "status": "ENDED"
+    },
+    {
+      "session_id": "SES000020",
+      "client_id": null,
+      "browser_token": "btkn_807835",
+      "started_at": "2026-02-12T01:46:00",
+      "ended_at": "2026-02-12T10:46:00",
+      "status": "ENDED"
+    }
+  ],
+  "CHATBOT_MESSAGE": [
+    {
+      "message_id": "MSG000001",
+      "session_id": "SES000001",
+      "sender_type": "USER",
+      "content": "Xin chào, tôi muốn hỏi về nhẫn vàng 18K",
+      "response_source": null,
+      "created_at": "2026-06-10T02:50:00"
+    },
+    {
+      "message_id": "MSG000002",
+      "session_id": "SES000001",
+      "sender_type": "BOT",
+      "content": "Chào bạn! RENGA có nhiều mẫu nhẫn vàng 18K đẹp. Bạn muốn tìm nhẫn cho dịp nào ạ?",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-06-10T02:53:00"
+    },
+    {
+      "message_id": "MSG000003",
+      "session_id": "SES000001",
+      "sender_type": "USER",
+      "content": "Mua tặng bạn gái nhân dịp sinh nhật",
+      "response_source": null,
+      "created_at": "2026-06-10T02:54:00"
+    },
+    {
+      "message_id": "MSG000004",
+      "session_id": "SES000001",
+      "sender_type": "BOT",
+      "content": "Gợi ý cho bạn: Nhẫn Kim Cương Vĩnh Cửu hoặc Nhẫn Đính Sapphire Hoàng Gia rất phù hợp làm quà sinh nhật!",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-06-10T02:57:00"
+    },
+    {
+      "message_id": "MSG000005",
+      "session_id": "SES000002",
+      "sender_type": "USER",
+      "content": "Chính sách bảo hành của RENGA như thế nào?",
+      "response_source": null,
+      "created_at": "2026-06-20T17:33:09"
+    },
+    {
+      "message_id": "MSG000006",
+      "session_id": "SES000002",
+      "sender_type": "BOT",
+      "content": "RENGA bảo hành 12 tháng cho tất cả sản phẩm. Thành viên Diamond được bảo hành vĩnh viễn.",
+      "response_source": "FAQ",
+      "created_at": "2026-06-20T17:35:09"
+    },
+    {
+      "message_id": "MSG000007",
+      "session_id": "SES000002",
+      "sender_type": "USER",
+      "content": "Bảo hành có bao gồm mất đá không?",
+      "response_source": null,
+      "created_at": "2026-06-20T17:37:09"
+    },
+    {
+      "message_id": "MSG000008",
+      "session_id": "SES000002",
+      "sender_type": "BOT",
+      "content": "Bảo hành bao gồm lỗi kỹ thuật từ nhà sản xuất. Trường hợp mất đá do sử dụng cần thêm phí kiểm định.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-06-20T17:40:09"
+    },
+    {
+      "message_id": "MSG000009",
+      "session_id": "SES000003",
+      "sender_type": "USER",
+      "content": "Thời gian giao hàng về Hà Nội mất bao lâu?",
+      "response_source": null,
+      "created_at": "2026-01-18T16:34:09"
+    },
+    {
+      "message_id": "MSG000010",
+      "session_id": "SES000003",
+      "sender_type": "BOT",
+      "content": "Giao hàng nội thành Hà Nội từ 1-2 ngày làm việc. Tỉnh thành khác từ 3-5 ngày.",
+      "response_source": "FAQ",
+      "created_at": "2026-01-18T16:37:09"
+    },
+    {
+      "message_id": "MSG000011",
+      "session_id": "SES000004",
+      "sender_type": "USER",
+      "content": "Tôi muốn đặt lịch tư vấn thiết kế nhẫn cưới",
+      "response_source": null,
+      "created_at": "2026-05-16T23:42:41"
+    },
+    {
+      "message_id": "MSG000012",
+      "session_id": "SES000004",
+      "sender_type": "BOT",
+      "content": "Tuyệt vời! Bạn có thể đặt lịch trong mục The Designer trên website. RENGA có 5 nghệ nhân chuyên về nhẫn cưới.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-16T23:44:41"
+    },
+    {
+      "message_id": "MSG000013",
+      "session_id": "SES000004",
+      "sender_type": "USER",
+      "content": "Phí tư vấn là bao nhiêu?",
+      "response_source": null,
+      "created_at": "2026-05-16T23:47:41"
+    },
+    {
+      "message_id": "MSG000014",
+      "session_id": "SES000004",
+      "sender_type": "BOT",
+      "content": "Phí tư vấn từ 450.000đ - 700.000đ tùy nghệ nhân. Phí này sẽ được hoàn lại khi bạn đặt đơn thiết kế.",
+      "response_source": "FAQ",
+      "created_at": "2026-05-16T23:48:41"
+    },
+    {
+      "message_id": "MSG000015",
+      "session_id": "SES000004",
+      "sender_type": "USER",
+      "content": "Ok cảm ơn bạn",
+      "response_source": null,
+      "created_at": "2026-05-16T23:50:41"
+    },
+    {
+      "message_id": "MSG000016",
+      "session_id": "SES000004",
+      "sender_type": "BOT",
+      "content": "Rất vui được hỗ trợ bạn! Chúc bạn chọn được mẫu nhẫn ưng ý nhé 💍",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-16T23:51:41"
+    },
+    {
+      "message_id": "MSG000017",
+      "session_id": "SES000005",
+      "sender_type": "USER",
+      "content": "Làm sao để đổi size nhẫn?",
+      "response_source": null,
+      "created_at": "2026-05-23T09:09:52"
+    },
+    {
+      "message_id": "MSG000018",
+      "session_id": "SES000005",
+      "sender_type": "BOT",
+      "content": "Trong vòng 30 ngày từ khi nhận hàng, RENGA hỗ trợ đổi size miễn phí khi mang sản phẩm và hóa đơn đến cửa hàng.",
+      "response_source": "FAQ",
+      "created_at": "2026-05-23T09:11:52"
+    },
+    {
+      "message_id": "MSG000019",
+      "session_id": "SES000006",
+      "sender_type": "USER",
+      "content": "Sản phẩm moissanite có bền không?",
+      "response_source": null,
+      "created_at": "2026-02-05T14:54:44"
+    },
+    {
+      "message_id": "MSG000020",
+      "session_id": "SES000006",
+      "sender_type": "BOT",
+      "content": "Moissanite có độ cứng 9.25 Mohs, rất bền và lấp lánh hơn kim cương với giá cả phải chăng hơn.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-05T14:55:44"
+    },
+    {
+      "message_id": "MSG000021",
+      "session_id": "SES000006",
+      "sender_type": "USER",
+      "content": "Giá nhẫn moissanite khoảng bao nhiêu?",
+      "response_source": null,
+      "created_at": "2026-02-05T14:57:44"
+    },
+    {
+      "message_id": "MSG000022",
+      "session_id": "SES000006",
+      "sender_type": "BOT",
+      "content": "Nhẫn Bạc Moissanite Lấp Lánh tại RENGA có giá 2.800.000đ. Bạn có muốn xem thêm thông tin không?",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-05T15:00:44"
+    },
+    {
+      "message_id": "MSG000023",
+      "session_id": "SES000007",
+      "sender_type": "USER",
+      "content": "Tôi có thể thanh toán bằng ví điện tử không?",
+      "response_source": null,
+      "created_at": "2026-02-16T13:03:39"
+    },
+    {
+      "message_id": "MSG000024",
+      "session_id": "SES000007",
+      "sender_type": "BOT",
+      "content": "Hiện RENGA hỗ trợ thẻ tín dụng, chuyển khoản ngân hàng và COD. Ví điện tử đang trong lộ trình tích hợp.",
+      "response_source": "FAQ",
+      "created_at": "2026-02-16T13:06:39"
+    },
+    {
+      "message_id": "MSG000025",
+      "session_id": "SES000008",
+      "sender_type": "USER",
+      "content": "Điểm tích lũy dùng để làm gì?",
+      "response_source": null,
+      "created_at": "2026-02-26T16:18:14"
+    },
+    {
+      "message_id": "MSG000026",
+      "session_id": "SES000008",
+      "sender_type": "BOT",
+      "content": "Điểm tích lũy giúp bạn lên hạng thành viên và đổi thành voucher giảm giá. 1.000 điểm = 10.000đ.",
+      "response_source": "FAQ",
+      "created_at": "2026-02-26T16:21:14"
+    },
+    {
+      "message_id": "MSG000027",
+      "session_id": "SES000008",
+      "sender_type": "USER",
+      "content": "Bao nhiêu điểm thì lên hạng Gold?",
+      "response_source": null,
+      "created_at": "2026-02-26T16:24:14"
+    },
+    {
+      "message_id": "MSG000028",
+      "session_id": "SES000008",
+      "sender_type": "BOT",
+      "content": "Cần tích lũy 5.000 điểm để lên hạng Gold, tương đương mua hàng khoảng 5.000.000đ.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-26T16:25:14"
+    },
+    {
+      "message_id": "MSG000029",
+      "session_id": "SES000009",
+      "sender_type": "USER",
+      "content": "Nhẫn bạch kim và nhẫn vàng trắng khác nhau thế nào?",
+      "response_source": null,
+      "created_at": "2026-03-21T20:41:42"
+    },
+    {
+      "message_id": "MSG000030",
+      "session_id": "SES000009",
+      "sender_type": "BOT",
+      "content": "Bạch kim cứng hơn, không bị bạc màu, phù hợp người dị ứng kim loại. Vàng trắng là hợp kim mạ rhodium, cần đánh bóng định kỳ.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-03-21T20:43:42"
+    },
+    {
+      "message_id": "MSG000031",
+      "session_id": "SES000010",
+      "sender_type": "USER",
+      "content": "Tôi muốn xem các mẫu lắc tay",
+      "response_source": null,
+      "created_at": "2026-05-27T16:24:16"
+    },
+    {
+      "message_id": "MSG000032",
+      "session_id": "SES000010",
+      "sender_type": "BOT",
+      "content": "RENGA có Lắc Tay Vàng 18K Khắc Tên (5.800.000đ) và nhiều mẫu tùy biến trong The Studio.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-27T16:26:16"
+    },
+    {
+      "message_id": "MSG000033",
+      "session_id": "SES000010",
+      "sender_type": "USER",
+      "content": "Có mẫu nào dưới 3 triệu không?",
+      "response_source": null,
+      "created_at": "2026-05-27T16:28:16"
+    },
+    {
+      "message_id": "MSG000034",
+      "session_id": "SES000010",
+      "sender_type": "BOT",
+      "content": "Lắc tay có sẵn bắt đầu từ 5.800.000đ. Nếu muốn ngân sách linh hoạt hơn, bạn có thể dùng The Studio để tùy biến.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-27T16:30:16"
+    },
+    {
+      "message_id": "MSG000035",
+      "session_id": "SES000011",
+      "sender_type": "USER",
+      "content": "Xin chào, tôi muốn hỏi về nhẫn vàng 18K",
+      "response_source": null,
+      "created_at": "2026-02-19T01:58:40"
+    },
+    {
+      "message_id": "MSG000036",
+      "session_id": "SES000011",
+      "sender_type": "BOT",
+      "content": "Chào bạn! RENGA có nhiều mẫu nhẫn vàng 18K đẹp. Bạn muốn tìm nhẫn cho dịp nào ạ?",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-19T01:59:40"
+    },
+    {
+      "message_id": "MSG000037",
+      "session_id": "SES000011",
+      "sender_type": "USER",
+      "content": "Mua tặng bạn gái nhân dịp sinh nhật",
+      "response_source": null,
+      "created_at": "2026-02-19T02:01:40"
+    },
+    {
+      "message_id": "MSG000038",
+      "session_id": "SES000011",
+      "sender_type": "BOT",
+      "content": "Gợi ý cho bạn: Nhẫn Kim Cương Vĩnh Cửu hoặc Nhẫn Đính Sapphire Hoàng Gia rất phù hợp làm quà sinh nhật!",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-19T02:02:40"
+    },
+    {
+      "message_id": "MSG000039",
+      "session_id": "SES000012",
+      "sender_type": "USER",
+      "content": "Chính sách bảo hành của RENGA như thế nào?",
+      "response_source": null,
+      "created_at": "2026-05-05T01:20:03"
+    },
+    {
+      "message_id": "MSG000040",
+      "session_id": "SES000012",
+      "sender_type": "BOT",
+      "content": "RENGA bảo hành 12 tháng cho tất cả sản phẩm. Thành viên Diamond được bảo hành vĩnh viễn.",
+      "response_source": "FAQ",
+      "created_at": "2026-05-05T01:22:03"
+    },
+    {
+      "message_id": "MSG000041",
+      "session_id": "SES000012",
+      "sender_type": "USER",
+      "content": "Bảo hành có bao gồm mất đá không?",
+      "response_source": null,
+      "created_at": "2026-05-05T01:25:03"
+    },
+    {
+      "message_id": "MSG000042",
+      "session_id": "SES000012",
+      "sender_type": "BOT",
+      "content": "Bảo hành bao gồm lỗi kỹ thuật từ nhà sản xuất. Trường hợp mất đá do sử dụng cần thêm phí kiểm định.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-05T01:27:03"
+    },
+    {
+      "message_id": "MSG000043",
+      "session_id": "SES000013",
+      "sender_type": "USER",
+      "content": "Thời gian giao hàng về Hà Nội mất bao lâu?",
+      "response_source": null,
+      "created_at": "2026-03-19T00:38:10"
+    },
+    {
+      "message_id": "MSG000044",
+      "session_id": "SES000013",
+      "sender_type": "BOT",
+      "content": "Giao hàng nội thành Hà Nội từ 1-2 ngày làm việc. Tỉnh thành khác từ 3-5 ngày.",
+      "response_source": "FAQ",
+      "created_at": "2026-03-19T00:40:10"
+    },
+    {
+      "message_id": "MSG000045",
+      "session_id": "SES000014",
+      "sender_type": "USER",
+      "content": "Tôi muốn đặt lịch tư vấn thiết kế nhẫn cưới",
+      "response_source": null,
+      "created_at": "2026-05-18T16:38:37"
+    },
+    {
+      "message_id": "MSG000046",
+      "session_id": "SES000014",
+      "sender_type": "BOT",
+      "content": "Tuyệt vời! Bạn có thể đặt lịch trong mục The Designer trên website. RENGA có 5 nghệ nhân chuyên về nhẫn cưới.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-18T16:41:37"
+    },
+    {
+      "message_id": "MSG000047",
+      "session_id": "SES000014",
+      "sender_type": "USER",
+      "content": "Phí tư vấn là bao nhiêu?",
+      "response_source": null,
+      "created_at": "2026-05-18T16:44:37"
+    },
+    {
+      "message_id": "MSG000048",
+      "session_id": "SES000014",
+      "sender_type": "BOT",
+      "content": "Phí tư vấn từ 450.000đ - 700.000đ tùy nghệ nhân. Phí này sẽ được hoàn lại khi bạn đặt đơn thiết kế.",
+      "response_source": "FAQ",
+      "created_at": "2026-05-18T16:46:37"
+    },
+    {
+      "message_id": "MSG000049",
+      "session_id": "SES000014",
+      "sender_type": "USER",
+      "content": "Ok cảm ơn bạn",
+      "response_source": null,
+      "created_at": "2026-05-18T16:48:37"
+    },
+    {
+      "message_id": "MSG000050",
+      "session_id": "SES000014",
+      "sender_type": "BOT",
+      "content": "Rất vui được hỗ trợ bạn! Chúc bạn chọn được mẫu nhẫn ưng ý nhé 💍",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-05-18T16:50:37"
+    },
+    {
+      "message_id": "MSG000051",
+      "session_id": "SES000015",
+      "sender_type": "USER",
+      "content": "Làm sao để đổi size nhẫn?",
+      "response_source": null,
+      "created_at": "2026-01-17T00:42:16"
+    },
+    {
+      "message_id": "MSG000052",
+      "session_id": "SES000015",
+      "sender_type": "BOT",
+      "content": "Trong vòng 30 ngày từ khi nhận hàng, RENGA hỗ trợ đổi size miễn phí khi mang sản phẩm và hóa đơn đến cửa hàng.",
+      "response_source": "FAQ",
+      "created_at": "2026-01-17T00:43:16"
+    },
+    {
+      "message_id": "MSG000053",
+      "session_id": "SES000016",
+      "sender_type": "USER",
+      "content": "Sản phẩm moissanite có bền không?",
+      "response_source": null,
+      "created_at": "2026-03-26T23:56:24"
+    },
+    {
+      "message_id": "MSG000054",
+      "session_id": "SES000016",
+      "sender_type": "BOT",
+      "content": "Moissanite có độ cứng 9.25 Mohs, rất bền và lấp lánh hơn kim cương với giá cả phải chăng hơn.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-03-26T23:58:24"
+    },
+    {
+      "message_id": "MSG000055",
+      "session_id": "SES000016",
+      "sender_type": "USER",
+      "content": "Giá nhẫn moissanite khoảng bao nhiêu?",
+      "response_source": null,
+      "created_at": "2026-03-26T23:59:24"
+    },
+    {
+      "message_id": "MSG000056",
+      "session_id": "SES000016",
+      "sender_type": "BOT",
+      "content": "Nhẫn Bạc Moissanite Lấp Lánh tại RENGA có giá 2.800.000đ. Bạn có muốn xem thêm thông tin không?",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-03-27T00:00:24"
+    },
+    {
+      "message_id": "MSG000057",
+      "session_id": "SES000017",
+      "sender_type": "USER",
+      "content": "Tôi có thể thanh toán bằng ví điện tử không?",
+      "response_source": null,
+      "created_at": "2026-04-28T20:46:18"
+    },
+    {
+      "message_id": "MSG000058",
+      "session_id": "SES000017",
+      "sender_type": "BOT",
+      "content": "Hiện RENGA hỗ trợ thẻ tín dụng, chuyển khoản ngân hàng và COD. Ví điện tử đang trong lộ trình tích hợp.",
+      "response_source": "FAQ",
+      "created_at": "2026-04-28T20:48:18"
+    },
+    {
+      "message_id": "MSG000059",
+      "session_id": "SES000018",
+      "sender_type": "USER",
+      "content": "Điểm tích lũy dùng để làm gì?",
+      "response_source": null,
+      "created_at": "2026-04-14T19:40:02"
+    },
+    {
+      "message_id": "MSG000060",
+      "session_id": "SES000018",
+      "sender_type": "BOT",
+      "content": "Điểm tích lũy giúp bạn lên hạng thành viên và đổi thành voucher giảm giá. 1.000 điểm = 10.000đ.",
+      "response_source": "FAQ",
+      "created_at": "2026-04-14T19:41:02"
+    },
+    {
+      "message_id": "MSG000061",
+      "session_id": "SES000018",
+      "sender_type": "USER",
+      "content": "Bao nhiêu điểm thì lên hạng Gold?",
+      "response_source": null,
+      "created_at": "2026-04-14T19:44:02"
+    },
+    {
+      "message_id": "MSG000062",
+      "session_id": "SES000018",
+      "sender_type": "BOT",
+      "content": "Cần tích lũy 5.000 điểm để lên hạng Gold, tương đương mua hàng khoảng 5.000.000đ.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-04-14T19:45:02"
+    },
+    {
+      "message_id": "MSG000063",
+      "session_id": "SES000019",
+      "sender_type": "USER",
+      "content": "Nhẫn bạch kim và nhẫn vàng trắng khác nhau thế nào?",
+      "response_source": null,
+      "created_at": "2026-02-23T01:26:52"
+    },
+    {
+      "message_id": "MSG000064",
+      "session_id": "SES000019",
+      "sender_type": "BOT",
+      "content": "Bạch kim cứng hơn, không bị bạc màu, phù hợp người dị ứng kim loại. Vàng trắng là hợp kim mạ rhodium, cần đánh bóng định kỳ.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-23T01:28:52"
+    },
+    {
+      "message_id": "MSG000065",
+      "session_id": "SES000020",
+      "sender_type": "USER",
+      "content": "Tôi muốn xem các mẫu lắc tay",
+      "response_source": null,
+      "created_at": "2026-02-12T01:46:00"
+    },
+    {
+      "message_id": "MSG000066",
+      "session_id": "SES000020",
+      "sender_type": "BOT",
+      "content": "RENGA có Lắc Tay Vàng 18K Khắc Tên (5.800.000đ) và nhiều mẫu tùy biến trong The Studio.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-12T01:49:00"
+    },
+    {
+      "message_id": "MSG000067",
+      "session_id": "SES000020",
+      "sender_type": "USER",
+      "content": "Có mẫu nào dưới 3 triệu không?",
+      "response_source": null,
+      "created_at": "2026-02-12T01:50:00"
+    },
+    {
+      "message_id": "MSG000068",
+      "session_id": "SES000020",
+      "sender_type": "BOT",
+      "content": "Lắc tay có sẵn bắt đầu từ 5.800.000đ. Nếu muốn ngân sách linh hoạt hơn, bạn có thể dùng The Studio để tùy biến.",
+      "response_source": "AI_GENERATED",
+      "created_at": "2026-02-12T01:52:00"
+    }
+  ]
+}
