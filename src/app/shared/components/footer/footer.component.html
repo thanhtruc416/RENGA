@@ -37,28 +37,37 @@
         <a routerLink="/chinh-sach-bao-hanh" class="site-footer__link">Chính sách bảo hành</a>
         <a routerLink="/doi-tra-hoan-tien" class="site-footer__link">Đổi trả &amp; Hoàn tiền</a>
         <a href="#" class="site-footer__link" (click)="openSizeGuide($event)">Hướng dẫn đo size nhẫn</a>
-        <a routerLink="/" class="site-footer__link">Câu hỏi thường gặp</a>
+        <a routerLink="/cau-hoi-thuong-gap" class="site-footer__link">Câu hỏi thường gặp</a>
       </div>
 
       <div class="site-footer__col">
         <p class="site-footer__col-title">NEWSLETTER</p>
         <p class="site-footer__newsletter-desc">Đăng ký để nhận tin tức về bộ sưu tập mới và ưu đãi đặc quyền</p>
-        <form class="newsletter-form" novalidate>
-          <div class="newsletter-form__field">
-            <input
-              class="newsletter-form__input"
-              type="email"
-              placeholder="Email của bạn"
-              aria-label="Địa chỉ email đăng ký nhận tin"
-            />
-            <button class="newsletter-form__submit" type="submit" aria-label="Đăng ký">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
+        @if (newsletterDone()) {
+          <p class="newsletter-success">Cảm ơn bạn! Chúng tôi sẽ gửi tin mới nhất đến email của bạn.</p>
+        } @else {
+          <div class="newsletter-form">
+            <div class="newsletter-form__field">
+              <input
+                class="newsletter-form__input"
+                type="email"
+                placeholder="Email của bạn"
+                aria-label="Địa chỉ email đăng ký nhận tin"
+                [formControl]="emailCtrl"
+                (keydown.enter)="onNewsletterSubmit()"
+              />
+              <button class="newsletter-form__submit" type="button" aria-label="Đăng ký" (click)="onNewsletterSubmit()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+            @if (emailCtrl.invalid && emailCtrl.touched) {
+              <p class="newsletter-error">Vui lòng nhập email hợp lệ.</p>
+            }
           </div>
-        </form>
+        }
       </div>
     </div>
   </div>

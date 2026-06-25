@@ -18,9 +18,9 @@
   padding-top: 28px;
   padding-bottom: 12px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--color-muted);
 }

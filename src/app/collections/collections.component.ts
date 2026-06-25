@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CtaSectionComponent } from '../shared/components/cta-section/cta-section.component';
 
@@ -30,7 +30,7 @@ export class CollectionsComponent {
       titleLine2: 'ĐỒNG BỘ',
       description:
         'Sự kết hợp hoàn mỹ giữa dây chuyền, nhẫn và hoa tai, tạo nên một bản giao hưởng ánh sáng và phong cách đồng nhất cho những dịp quan trọng nhất.',
-      imageUrl: '/images/collection-dong-bo.png',
+      imageUrl: 'assets/images/collection-dong-bo.png',
       slug: 'bo-trang-suc-dong-bo',
       reversed: false,
     },
@@ -41,7 +41,7 @@ export class CollectionsComponent {
       titleLine2: 'CẶP ĐÔI',
       description:
         'Biểu tượng của sự gắn kết vĩnh cửu. Những thiết kế song hành mang đậm dấu ấn cá nhân, dành riêng cho những tâm hồn đồng điệu.',
-      imageUrl: '/images/collection-cap-doi.png',
+      imageUrl: 'assets/images/collection-cap-doi.png',
       slug: 'bo-trang-suc-cap-doi',
       reversed: true,
     },
@@ -52,7 +52,7 @@ export class CollectionsComponent {
       titleLine2: 'HOÀNG GIA',
       description:
         'Đỉnh cao của nghệ thuật chế tác thủ công. Những kiệt tác mang hơi thở quý tộc, được khảm bởi những viên đá quý hiếm nhất thế gian.',
-      imageUrl: '/images/collection-hoang-gia.png',
+      imageUrl: 'assets/images/collection-hoang-gia.png',
       slug: 'hoang-gia',
       reversed: false,
     },

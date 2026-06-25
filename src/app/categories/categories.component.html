@@ -1,4 +1,4 @@
-<div class="categories">
+﻿<div class="categories">
 
   <!-- Page Title -->
   <h1 class="categories__title">Danh mục sản phẩm</h1>
@@ -17,7 +17,7 @@
             <li class="categories__card-link-item">
               <a [routerLink]="link.route" class="categories__card-link">
                 <span>{{ link.label }}</span>
-                <img src="/icons/ic-arrow-right.png" alt="" class="categories__link-chevron" />
+                <img src="assets/icons/ic-arrow-right.png" alt="" class="categories__link-chevron" />
               </a>
             </li>
           }
@@ -32,7 +32,7 @@
     <!-- Lắc & Vòng Tay (wide) -->
     <div class="categories__card">
       <a class="categories__card-img-wrap categories__card-img-wrap--short" routerLink="/products" [queryParams]="{category: 'lac-tay'}">
-        <img src="/images/category-lac-vong-tay.png" alt="Lắc & Vòng Tay" class="categories__card-img" />
+        <img src="assets/images/category-lac-vong-tay.png" alt="Lắc & Vòng Tay" class="categories__card-img" />
         <div class="categories__card-gradient"></div>
         <div class="categories__card-label">Lắc & Vòng Tay (Bracelets)</div>
       </a>

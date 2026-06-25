@@ -70,18 +70,10 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'profile',
+    path: 'account',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./profile/profile.component').then((m) => m.ProfileComponent),
-  },
-  {
-    path: 'profile/rewards',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./profile/profile-rewards.component').then(
-        (m) => m.ProfileRewardsComponent,
-      ),
+    loadChildren: () =>
+      import('./account/account.routes').then((m) => m.accountRoutes),
   },
   {
     path: 'bo-suu-tap',
@@ -113,11 +105,6 @@ export const routes: Routes = [
     path: 'checkout',
     loadComponent: () =>
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
-  },
-  {
-    path: 'orders',
-    loadComponent: () =>
-      import('./orders/order-list/order-list.component').then((m) => m.OrderListComponent),
   },
   {
     path: 'orders/tracking',
@@ -194,6 +181,11 @@ export const routes: Routes = [
       import('./admin-login/admin-login.component').then(
         (m) => m.AdminLoginComponent,
       ),
+  },
+  {
+    path: 'cau-hoi-thuong-gap',
+    redirectTo: 'doi-tra-hoan-tien',
+    pathMatch: 'full',
   },
   {
     path: '**',

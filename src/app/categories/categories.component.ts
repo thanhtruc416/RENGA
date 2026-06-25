@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface CategoryLink {
@@ -28,7 +28,7 @@ export class CategoriesComponent {
       id: 'nhan',
       name: 'Nhẫn',
       englishName: 'Rings',
-      imageUrl: '/images/category-nhan.png',
+      imageUrl: 'assets/images/category-nhan.png',
       links: [
         { label: 'Nhẫn Cưới & Cầu Hôn', route: '/products' },
         { label: 'Vàng 24K / 18K / 14K', route: '/products' },
@@ -40,7 +40,7 @@ export class CategoriesComponent {
       id: 'day-chuyen',
       name: 'Dây Chuyền',
       englishName: 'Necklaces',
-      imageUrl: '/images/category-day-chuyen.png',
+      imageUrl: 'assets/images/category-day-chuyen.png',
       links: [
         { label: 'Vàng & Vàng Trắng', route: '/products' },
         { label: 'Trang Sức Bạc', route: '/products' },
@@ -51,7 +51,7 @@ export class CategoriesComponent {
       id: 'hoa-tai',
       name: 'Hoa Tai',
       englishName: 'Earrings',
-      imageUrl: '/images/category-hoa-tai.png',
+      imageUrl: 'assets/images/category-hoa-tai.png',
       links: [
         { label: 'Vàng & Vàng Trắng', route: '/products' },
         { label: 'Hoa Tai Bạc', route: '/products' },

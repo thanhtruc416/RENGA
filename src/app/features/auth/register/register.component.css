@@ -1,4 +1,4 @@
-/* ── Full-page layout ── */
+﻿/* ── Full-page layout ── */
 .register {
   min-height: 100vh;
   position: relative;
@@ -13,7 +13,7 @@
 .register__bg {
   position: absolute;
   inset: 0;
-  background-image: url('/images/auth-bg.jpg');
+  background-image: url('../../../../assets/images/auth-bg.jpg');
   background-size: cover;
   background-position: bottom center;
   filter: blur(2px);

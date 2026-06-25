@@ -22,8 +22,8 @@
 .order-breadcrumb__item {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 1.8px;
+  font-size: 14px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--color-text-muted, #444748);
   text-decoration: none;
@@ -41,7 +41,7 @@
 }
 
 .order-breadcrumb__sep {
-  font-size: 20px;
+  font-size: 14px;
   color: var(--color-border, #c4c7c7);
   line-height: 1;
 }

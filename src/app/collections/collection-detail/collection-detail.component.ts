@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CtaSectionComponent } from '../../shared/components/cta-section/cta-section.component';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -39,14 +39,14 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Đường cắt gọn gàng, ánh phản chiếu đồng đều tạo nên sự sang trọng không phô trương. Đây là bộ sưu tập dành cho người phụ nữ hiện đại — tự tin, tinh tế và luôn hoàn chỉnh trong từng khoảnh khắc.',
     storyQuote: 'Vẻ đẹp thực sự nằm trong sự hài hòa tổng thể, không phải trong từng chi tiết đơn lẻ',
-    storyImageUrl: '/images/collection-dong-bo.png',
+    storyImageUrl: 'assets/images/collection-dong-bo.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ bộ sưu tập Đồng Bộ',
     products: [
-      { id: '1', name: 'HARMONY GOLD RING', price: '3.800.000', imageUrl: '/images/collection-prod-diamond-ring.png' },
-      { id: '2', name: 'SYMPHONY NECKLACE', price: '2.600.000', imageUrl: '/images/collection-prod-unity-necklace.png' },
-      { id: '3', name: 'ACCORD BAND', price: '2.900.000', imageUrl: '/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'UNISON STUDS', price: '1.350.000', imageUrl: '/images/collection-prod-mini-studs.png' },
+      { id: '1', name: 'HARMONY GOLD RING', price: '3.800.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
+      { id: '2', name: 'SYMPHONY NECKLACE', price: '2.600.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
+      { id: '3', name: 'ACCORD BAND', price: '2.900.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
+      { id: '4', name: 'UNISON STUDS', price: '1.350.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
     ],
   },
 
@@ -62,14 +62,14 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Sự tinh xảo trong từng đường nét cắt gọt và sự đồng nhất trong độ sáng của kim cương tạo nên một vòng tròn khép kín, không điểm bắt đầu, không điểm kết thúc — giống như chính tình yêu của bạn.',
     storyQuote: 'Được đính đá thủ công đầy tỉ mỉ, mang lại vẻ rạng rỡ bền lâu suốt đời.',
-    storyImageUrl: '/images/collection-story-cap-doi.png',
+    storyImageUrl: 'assets/images/collection-story-cap-doi.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ vũ trụ Eternity.',
     products: [
-      { id: '1', name: 'ETERNITY DIAMOND RING', price: '4.200.000', imageUrl: '/images/collection-prod-diamond-ring.png' },
-      { id: '2', name: 'INTERLOCKING UNITY NECKLACE', price: '2.850.000', imageUrl: '/images/collection-prod-unity-necklace.png' },
-      { id: '3', name: 'BAGUETTE ETERNITY BAND', price: '3.100.000', imageUrl: '/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'ETERNITY MINI STUDS', price: '1.450.000', imageUrl: '/images/collection-prod-mini-studs.png' },
+      { id: '1', name: 'ETERNITY DIAMOND RING', price: '4.200.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
+      { id: '2', name: 'INTERLOCKING UNITY NECKLACE', price: '2.850.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
+      { id: '3', name: 'BAGUETTE ETERNITY BAND', price: '3.100.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
+      { id: '4', name: 'ETERNITY MINI STUDS', price: '1.450.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
     ],
   },
 
@@ -85,14 +85,14 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Những viên đá quý được tuyển chọn khắt khe từ các mỏ danh tiếng thế giới, mỗi viên đều mang trong mình câu chuyện của đất trời. Đây không chỉ là trang sức — đây là di sản được truyền từ thế hệ này sang thế hệ khác.',
     storyQuote: 'Mỗi kiệt tác là lời nhắc nhở rằng vẻ đẹp chân thực vượt qua mọi giới hạn của thời gian.',
-    storyImageUrl: '/images/collection-hoang-gia.png',
+    storyImageUrl: 'assets/images/collection-hoang-gia.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những kiệt tác được chọn lọc từ bộ sưu tập Hoàng Gia.',
     products: [
-      { id: '1', name: 'ROYAL CROWN NECKLACE', price: '12.500.000', imageUrl: '/images/collection-prod-unity-necklace.png' },
-      { id: '2', name: 'IMPERIAL DIAMOND RING', price: '8.900.000', imageUrl: '/images/collection-prod-diamond-ring.png' },
-      { id: '3', name: 'REGAL SAPPHIRE BAND', price: '6.200.000', imageUrl: '/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'SOVEREIGN STUDS', price: '3.800.000', imageUrl: '/images/collection-prod-mini-studs.png' },
+      { id: '1', name: 'ROYAL CROWN NECKLACE', price: '12.500.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
+      { id: '2', name: 'IMPERIAL DIAMOND RING', price: '8.900.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
+      { id: '3', name: 'REGAL SAPPHIRE BAND', price: '6.200.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
+      { id: '4', name: 'SOVEREIGN STUDS', price: '3.800.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
     ],
   },
 };

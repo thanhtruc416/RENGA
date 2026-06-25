@@ -1,4 +1,4 @@
-import { DecimalPipe, UpperCasePipe } from '@angular/common';
+﻿import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -83,17 +83,17 @@ export class StudioComponent {
     {
       id: 'nhan',
       name: 'Nhẫn',
-      image: '/images/category-nhan.png',
+      image: 'assets/images/category-nhan.png',
     },
     {
       id: 'day-chuyen',
       name: 'Dây chuyền',
-      image: '/images/category-day-chuyen.png',
+      image: 'assets/images/category-day-chuyen.png',
     },
     {
       id: 'hoa-tai',
       name: 'Hoa tai',
-      image: '/images/category-hoa-tai.png',
+      image: 'assets/images/category-hoa-tai.png',
     },
   ];
 
@@ -108,31 +108,31 @@ export class StudioComponent {
     {
       id: 'diamond',
       label: 'Kim cương',
-      image: '/images/product-nhan-kim-cuong-solitaire.png',
+      image: 'assets/images/product-nhan-kim-cuong-solitaire.png',
       pricePerCarat: 10_000_000,
     },
     {
       id: 'ruby',
       label: 'Hồng ngọc',
-      image: '/images/product-nhan-rose-gold-sapphire.png',
+      image: 'assets/images/product-nhan-rose-gold-sapphire.png',
       pricePerCarat: 8_000_000,
     },
     {
       id: 'sapphire',
       label: 'Lam ngọc',
-      image: '/images/product-nhan-eternal-love.png',
+      image: 'assets/images/product-nhan-eternal-love.png',
       pricePerCarat: 7_000_000,
     },
     {
       id: 'emerald',
       label: 'Ngọc lục bảo',
-      image: '/images/product-nhan-emerald-modernity.png',
+      image: 'assets/images/product-nhan-emerald-modernity.png',
       pricePerCarat: 6_000_000,
     },
     {
       id: 'none',
       label: 'Không đá',
-      image: '/images/studio-ring.png',
+      image: 'assets/images/studio-ring.png',
       pricePerCarat: 0,
       muted: true,
     },
@@ -140,19 +140,19 @@ export class StudioComponent {
 
   readonly engraveGallery: GalleryThumb[] = [
     {
-      src: '/images/product-detail-nhan-aeterna-1.png',
+      src: 'assets/images/product-detail-nhan-aeterna-1.png',
       alt: 'Góc nhìn chính',
     },
     {
-      src: '/images/product-detail-nhan-aeterna-2.png',
+      src: 'assets/images/product-detail-nhan-aeterna-2.png',
       alt: 'Góc nhìn 2',
     },
     {
-      src: '/images/product-detail-nhan-aeterna-3.png',
+      src: 'assets/images/product-detail-nhan-aeterna-3.png',
       alt: 'Góc nhìn 3',
     },
     {
-      src: '/images/product-detail-nhan-aeterna-4.png',
+      src: 'assets/images/product-detail-nhan-aeterna-4.png',
       alt: 'Góc nhìn 4',
     },
   ];
@@ -308,7 +308,7 @@ export class StudioComponent {
     const cartRect = cartEl.getBoundingClientRect();
 
     const cat = this.categories.find(c => c.id === this.selectedCategoryId());
-    const imgSrc = cat?.image ?? '/images/category-nhan.png';
+    const imgSrc = cat?.image ?? 'assets/images/category-nhan.png';
 
     const fly = document.createElement('div');
     fly.style.cssText = `
@@ -351,7 +351,7 @@ export class StudioComponent {
       name: `${cat?.name ?? 'Trang sức'} Studio`,
       spec: `${this.selectedMaterial().label} • ${this.selectedStone().label}`,
       price: this.totalPrice(),
-      image: cat?.image ?? '/images/category-nhan.png',
+      image: cat?.image ?? 'assets/images/category-nhan.png',
       quantity: 1,
     });
   }

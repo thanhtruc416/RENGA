@@ -1,0 +1,617 @@
+{
+  "CATEGORY": [
+    {
+      "category_id": "CAT000001",
+      "parent_id": null,
+      "category_name": "Trang sức",
+      "slug": "trang-suc",
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000002",
+      "parent_id": "CAT000001",
+      "category_name": "Nhẫn",
+      "slug": "nhan",
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000003",
+      "parent_id": "CAT000001",
+      "category_name": "Dây chuyền",
+      "slug": "day-chuyen",
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000004",
+      "parent_id": "CAT000001",
+      "category_name": "Lắc tay",
+      "slug": "lac-tay",
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000005",
+      "parent_id": "CAT000001",
+      "category_name": "Hoa tai",
+      "slug": "hoa-tai",
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000006",
+      "parent_id": "CAT000001",
+      "category_name": "Mặt dây chuyền",
+      "slug": "mat-day-chuyen",
+      "display_order": 5,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000007",
+      "parent_id": "CAT000001",
+      "category_name": "Bộ trang sức",
+      "slug": "bo-trang-suc",
+      "display_order": 6,
+      "is_active": true
+    },
+    {
+      "category_id": "CAT000008",
+      "parent_id": "CAT000001",
+      "category_name": "Charm",
+      "slug": "charm",
+      "display_order": 7,
+      "is_active": true
+    }
+  ],
+  "PRODUCT": [
+    {
+      "product_id": "PRD000001",
+      "category_id": "CAT000002",
+      "product_name": "Nhẫn Kim Cương Vĩnh Cửu",
+      "description": "Nhẫn đính kim cương thiên nhiên GIA, vàng 18K",
+      "base_price": 8500000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000002",
+      "created_at": "2025-11-08T16:18:11",
+      "updated_at": "2025-11-14T00:18:11"
+    },
+    {
+      "product_id": "PRD000002",
+      "category_id": "CAT000002",
+      "product_name": "Nhẫn Bạc Moissanite Lấp Lánh",
+      "description": "Nhẫn bạc 925 đính đá moissanite cao cấp",
+      "base_price": 2800000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000009",
+      "created_at": "2025-10-22T01:27:13",
+      "updated_at": "2025-10-26T08:27:13"
+    },
+    {
+      "product_id": "PRD000003",
+      "category_id": "CAT000002",
+      "product_name": "Nhẫn Đính Sapphire Hoàng Gia",
+      "description": "Nhẫn vàng 18K đính đá sapphire xanh hoàng gia",
+      "base_price": 9200000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000009",
+      "created_at": "2025-10-18T08:47:48",
+      "updated_at": "2025-10-25T06:47:48"
+    },
+    {
+      "product_id": "PRD000004",
+      "category_id": "CAT000003",
+      "product_name": "Dây Chuyền Bạch Kim Ngôi Sao",
+      "description": "Dây chuyền bạch kim hình ngôi sao, mặt dây đính đá",
+      "base_price": 4200000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000009",
+      "created_at": "2025-09-25T13:28:43",
+      "updated_at": "2025-09-29T13:28:43"
+    },
+    {
+      "product_id": "PRD000005",
+      "category_id": "CAT000003",
+      "product_name": "Vòng Cổ Vàng 14K Nhẹ Nhàng",
+      "description": "Dây chuyền vàng 14K mảnh thanh lịch",
+      "base_price": 3800000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000003",
+      "created_at": "2025-10-02T17:52:34",
+      "updated_at": "2025-10-03T20:52:34"
+    },
+    {
+      "product_id": "PRD000006",
+      "category_id": "CAT000004",
+      "product_name": "Lắc Tay Vàng 18K Khắc Tên",
+      "description": "Lắc tay vàng 18K có thể khắc tên theo yêu cầu",
+      "base_price": 5800000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000003",
+      "created_at": "2025-07-28T12:15:15",
+      "updated_at": "2025-08-01T06:15:15"
+    },
+    {
+      "product_id": "PRD000007",
+      "category_id": "CAT000005",
+      "product_name": "Hoa Tai Ruby Hoàng Gia",
+      "description": "Hoa tai đính đá ruby tự nhiên, vàng 18K",
+      "base_price": 12000000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000009",
+      "created_at": "2025-09-27T10:00:13",
+      "updated_at": "2025-09-29T15:00:13"
+    },
+    {
+      "product_id": "PRD000101",
+      "category_id": "CAT000006",
+      "product_name": "Mặt Dây Ngọc Lục Bảo Oval",
+      "description": "Mặt dây chuyền đính ngọc lục bảo hình oval",
+      "base_price": 6500000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000009",
+      "created_at": "2025-10-01T11:04:41",
+      "updated_at": "2025-10-02T12:04:41"
+    },
+    {
+      "product_id": "PRD000008",
+      "category_id": "CAT000007",
+      "product_name": "Bộ Trang Sức Cưới Trọn Vẹn",
+      "description": "Bộ nhẫn cưới + dây chuyền + hoa tai đồng bộ",
+      "base_price": 22000000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000003",
+      "created_at": "2025-11-13T07:09:07",
+      "updated_at": "2025-11-18T03:09:07"
+    },
+    {
+      "product_id": "PRD000009",
+      "category_id": "CAT000008",
+      "product_name": "Charm Trái Tim Bạc",
+      "description": "Charm trái tim bằng bạc 925, tương thích các loại lắc",
+      "base_price": 650000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000001",
+      "created_at": "2025-08-28T07:19:55",
+      "updated_at": "2025-08-28T19:19:55"
+    },
+    {
+      "product_id": "PRD000010",
+      "category_id": "CAT000002",
+      "product_name": "Nhẫn Vàng Hồng Đính Đá",
+      "description": "Nhẫn rose gold đính hàng đá nhỏ xung quanh",
+      "base_price": 7200000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000001",
+      "created_at": "2025-09-05T14:51:32",
+      "updated_at": "2025-09-12T12:51:32"
+    },
+    {
+      "product_id": "PRD000011",
+      "category_id": "CAT000003",
+      "product_name": "Dây Chuyền Ngọc Trai Akoya",
+      "description": "Dây chuyền ngọc trai Akoya Nhật Bản",
+      "base_price": 5500000,
+      "status": "ACTIVE",
+      "created_by_admin_id": "EMP000002",
+      "created_at": "2025-09-17T15:39:28",
+      "updated_at": "2025-09-24T09:39:28"
+    }
+  ],
+  "PRODUCT_IMAGE": [
+    {
+      "image_id": "IMG000001",
+      "product_id": "PRD000001",
+      "image_url": "https://cdn.pnj.io/images/detailed/180/sp-GNDD00C000074-nhan-cuoi-nam-kim-cuong-vang-18k-pnj-chung-doi-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000002",
+      "product_id": "PRD000001",
+      "image_url": "https://cdn.pnj.io/images/detailed/179/sp-GNDD00C000081-nhan-cuoi-kim-cuong-vang-18k-pnj-chung-doi-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000003",
+      "product_id": "PRD000002",
+      "image_url": "https://cdn.pnj.io/images/detailed/283/sp-snxmmxw060003-nhan-bac-dinh-da-style-by-pnj-01.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000004",
+      "product_id": "PRD000002",
+      "image_url": "https://cdn.pnj.io/images/detailed/272/sp-snxmxmw000212-nhan-bac-dinh-da-pnjsilver-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000005",
+      "product_id": "PRD000003",
+      "image_url": "https://cdn.pnj.io/images/detailed/279/sp-gnsp00w000118-nhan-vang-trang-10k-dinh-da-sapphire-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000006",
+      "product_id": "PRD000003",
+      "image_url": "https://cdn.pnj.io/images/detailed/279/sp-gnspxmw000571-nhan-vang-trang-14k-dinh-da-sapphire-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000007",
+      "product_id": "PRD000004",
+      "image_url": "https://cdn.pnj.io/images/detailed/301/sp-gd0000w001583-day-chuyen-vang-trang-y-75-18k-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000008",
+      "product_id": "PRD000004",
+      "image_url": "https://cdn.pnj.io/images/detailed/300/sp-gd0000w001570-day-chuyen-vang-trang-75-18k-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000009",
+      "product_id": "PRD000005",
+      "image_url": "https://cdn.pnj.io/images/detailed/301/sp-gd0000y013155-day-chuyen-vang-y-75-18k-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000010",
+      "product_id": "PRD000005",
+      "image_url": "https://cdn.pnj.io/images/detailed/246/sp-gd0000y060543-day-chuyen-nam-vang-y-18k-mancode-by-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000011",
+      "product_id": "PRD000006",
+      "image_url": "https://cdn.pnj.io/images/detailed/294/sp-gvxm00w000461-vong-tay-nam-vang-trang-416-10k-dinh-da-ecz-pnj-01.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000012",
+      "product_id": "PRD000006",
+      "image_url": "https://cdn.pnj.io/images/detailed/294/sp-gvxmxmw001634-vong-tay-vang-trang-416-10k-dinh-da-ecz-pnj-01.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000013",
+      "product_id": "PRD000007",
+      "image_url": "https://cdn.pnj.io/images/detailed/299/sp-gbrbxmw000125-bong-tai-vang-trang-585-14k-dinh-da-ruby-pnj-family-infinity-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000014",
+      "product_id": "PRD000007",
+      "image_url": "https://cdn.pnj.io/images/detailed/300/sp-gbrbxmy000398-bong-tai-vang-585-14k-dinh-da-ruby-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000015",
+      "product_id": "PRD000101",
+      "image_url": "https://cdn.pnj.io/images/detailed/287/sp-gmpaxmw000140-mat-day-chuyen-vang-trang-10k-dinh-ngoc-trai-akoya-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000016",
+      "product_id": "PRD000101",
+      "image_url": "https://cdn.pnj.io/images/detailed/287/sp-gmpaxmw000141-mat-day-chuyen-vang-trang-10k-dinh-ngoc-trai-akoya-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000017",
+      "product_id": "PRD000008",
+      "image_url": "https://cdn.pnj.io/images/detailed/300/sp-gn0000c000793-gn0000c000794-cap-nhan-cuoi-vang-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000018",
+      "product_id": "PRD000008",
+      "image_url": "https://cdn.pnj.io/images/detailed/300/sp-gn0000c000791-gn0000c000792-cap-nhan-cuoi-vang-pnj-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000019",
+      "product_id": "PRD000009",
+      "image_url": "https://cdn.pnj.io/images/detailed/288/sp-siztxmw060098-hat-charm-bac-dinh-da-pnjsilver-hinh-trai-tim-01.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000020",
+      "product_id": "PRD000009",
+      "image_url": "https://cdn.pnj.io/images/detailed/290/sp-sixmxmw000084-hat-charm-bac-dinh-da-pnjsilver-kind-heart-1.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000021",
+      "product_id": "PRD000010",
+      "image_url": "https://cdn.pnj.io/images/detailed/209/sp-gnxmxmw000121-nhan-vang-trang-10k-dinh-da-ecz-pnj-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000022",
+      "product_id": "PRD000010",
+      "image_url": "https://cdn.pnj.io/images/detailed/209/sp-gnxmxmw000121-nhan-vang-trang-10k-dinh-da-ecz-pnj-2.png",
+      "is_primary": false,
+      "display_order": 1
+    },
+    {
+      "image_id": "IMG000023",
+      "product_id": "PRD000011",
+      "image_url": "https://cdn.pnj.io/images/detailed/298/sp-sd0000w060121-day-chuyen-bac-pnjsilver-1.png",
+      "is_primary": true,
+      "display_order": 0
+    },
+    {
+      "image_id": "IMG000024",
+      "product_id": "PRD000011",
+      "image_url": "https://cdn.pnj.io/images/detailed/298/sp-sd0000w060121-day-chuyen-bac-pnjsilver-2.png",
+      "is_primary": false,
+      "display_order": 1
+    }
+  ],
+  "PRODUCT_VARIANT": [
+    {
+      "variant_id": "VAR000001",
+      "product_id": "PRD000001",
+      "variant_name": "Size 20",
+      "size_value": "20",
+      "price": 8600000,
+      "stock_quantity": 7,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000002",
+      "product_id": "PRD000001",
+      "variant_name": "Size 14",
+      "size_value": "14",
+      "price": 8600000,
+      "stock_quantity": 16,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000003",
+      "product_id": "PRD000001",
+      "variant_name": "Size 12",
+      "size_value": "12",
+      "price": 8500000,
+      "stock_quantity": 5,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000004",
+      "product_id": "PRD000001",
+      "variant_name": "Size 16",
+      "size_value": "16",
+      "price": 8500000,
+      "stock_quantity": 18,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000005",
+      "product_id": "PRD000002",
+      "variant_name": "Size 18",
+      "size_value": "18",
+      "price": 2900000,
+      "stock_quantity": 5,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000006",
+      "product_id": "PRD000002",
+      "variant_name": "Size 10",
+      "size_value": "10",
+      "price": 2800000,
+      "stock_quantity": 10,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000007",
+      "product_id": "PRD000002",
+      "variant_name": "Size 14",
+      "size_value": "14",
+      "price": 2900000,
+      "stock_quantity": 14,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000008",
+      "product_id": "PRD000002",
+      "variant_name": "Size 16",
+      "size_value": "16",
+      "price": 2800000,
+      "stock_quantity": 4,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000009",
+      "product_id": "PRD000003",
+      "variant_name": "Size 14",
+      "size_value": "14",
+      "price": 9200000,
+      "stock_quantity": 11,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000010",
+      "product_id": "PRD000003",
+      "variant_name": "Size 16",
+      "size_value": "16",
+      "price": 9200000,
+      "stock_quantity": 19,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000011",
+      "product_id": "PRD000003",
+      "variant_name": "Size 10",
+      "size_value": "10",
+      "price": 9300000,
+      "stock_quantity": 19,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000012",
+      "product_id": "PRD000003",
+      "variant_name": "Size 18",
+      "size_value": "18",
+      "price": 9300000,
+      "stock_quantity": 10,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000013",
+      "product_id": "PRD000004",
+      "variant_name": "42cm",
+      "size_value": "42cm",
+      "price": 4200000,
+      "stock_quantity": 16,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000014",
+      "product_id": "PRD000004",
+      "variant_name": "40cm",
+      "size_value": "40cm",
+      "price": 4200000,
+      "stock_quantity": 5,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000015",
+      "product_id": "PRD000005",
+      "variant_name": "42cm",
+      "size_value": "42cm",
+      "price": 3800000,
+      "stock_quantity": 8,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000016",
+      "product_id": "PRD000005",
+      "variant_name": "40cm",
+      "size_value": "40cm",
+      "price": 3800000,
+      "stock_quantity": 28,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000017",
+      "product_id": "PRD000006",
+      "variant_name": "One size",
+      "size_value": "One size",
+      "price": 5800000,
+      "stock_quantity": 15,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000018",
+      "product_id": "PRD000007",
+      "variant_name": "One size",
+      "size_value": "One size",
+      "price": 12000000,
+      "stock_quantity": 16,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000019",
+      "product_id": "PRD000101",
+      "variant_name": "One size",
+      "size_value": "One size",
+      "price": 6500000,
+      "stock_quantity": 28,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000020",
+      "product_id": "PRD000008",
+      "variant_name": "One size",
+      "size_value": "One size",
+      "price": 22000000,
+      "stock_quantity": 7,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000021",
+      "product_id": "PRD000009",
+      "variant_name": "One size",
+      "size_value": "One size",
+      "price": 650000,
+      "stock_quantity": 5,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000022",
+      "product_id": "PRD000010",
+      "variant_name": "Size 20",
+      "size_value": "20",
+      "price": 7200000,
+      "stock_quantity": 20,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000023",
+      "product_id": "PRD000010",
+      "variant_name": "Size 12",
+      "size_value": "12",
+      "price": 7200000,
+      "stock_quantity": 13,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000024",
+      "product_id": "PRD000010",
+      "variant_name": "Size 18",
+      "size_value": "18",
+      "price": 7300000,
+      "stock_quantity": 16,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000025",
+      "product_id": "PRD000010",
+      "variant_name": "Size 14",
+      "size_value": "14",
+      "price": 7200000,
+      "stock_quantity": 10,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000026",
+      "product_id": "PRD000011",
+      "variant_name": "40cm",
+      "size_value": "40cm",
+      "price": 5500000,
+      "stock_quantity": 17,
+      "status": "AVAILABLE"
+    },
+    {
+      "variant_id": "VAR000027",
+      "product_id": "PRD000011",
+      "variant_name": "42cm",
+      "size_value": "42cm",
+      "price": 5500000,
+      "stock_quantity": 5,
+      "status": "AVAILABLE"
+    }
+  ]
+}

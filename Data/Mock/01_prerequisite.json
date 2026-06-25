@@ -1,0 +1,98 @@
+{
+  "MEMBER_TIER": [
+    {
+      "tier_id": "TIR000001",
+      "tier_name": "SILVER",
+      "min_points": 0,
+      "max_points": 4999,
+      "point_multiplier": 1.0,
+      "description": "Hạng cơ bản dành cho thành viên mới"
+    },
+    {
+      "tier_id": "TIR000002",
+      "tier_name": "GOLD",
+      "min_points": 5000,
+      "max_points": 14999,
+      "point_multiplier": 1.5,
+      "description": "Hạng vàng dành cho khách hàng thân thiết"
+    },
+    {
+      "tier_id": "TIR000003",
+      "tier_name": "PLATINUM",
+      "min_points": 15000,
+      "max_points": 39999,
+      "point_multiplier": 2.0,
+      "description": "Hạng bạch kim với nhiều đặc quyền cao cấp"
+    },
+    {
+      "tier_id": "TIR000004",
+      "tier_name": "DIAMOND",
+      "min_points": 40000,
+      "max_points": null,
+      "point_multiplier": 3.0,
+      "description": "Hạng kim cương dành cho khách hàng VIP nhất"
+    }
+  ],
+  "TIER_BENEFIT": [
+    {
+      "benefit_id": "BNF000001",
+      "tier_id": "TIR000001",
+      "benefit_type": "FREE_SHIP",
+      "description": "Miễn phí giao hàng cho đơn hàng trên 500.000đ"
+    },
+    {
+      "benefit_id": "BNF000002",
+      "tier_id": "TIR000001",
+      "benefit_type": "BIRTHDAY_GIFT",
+      "description": "Ưu đãi sinh nhật 5% toàn bộ đơn hàng"
+    },
+    {
+      "benefit_id": "BNF000003",
+      "tier_id": "TIR000002",
+      "benefit_type": "FREE_SHIP",
+      "description": "Miễn phí giao hàng không điều kiện"
+    },
+    {
+      "benefit_id": "BNF000004",
+      "tier_id": "TIR000002",
+      "benefit_type": "VOUCHER",
+      "description": "Tặng voucher giảm 5% khi lên hạng Gold"
+    },
+    {
+      "benefit_id": "BNF000005",
+      "tier_id": "TIR000003",
+      "benefit_type": "PRIORITY_CONSULT",
+      "description": "Ưu tiên đặt lịch tư vấn với nghệ nhân hàng đầu"
+    },
+    {
+      "benefit_id": "BNF000006",
+      "tier_id": "TIR000003",
+      "benefit_type": "BIRTHDAY_GIFT",
+      "description": "Tặng quà nhân dịp đặc biệt"
+    },
+    {
+      "benefit_id": "BNF000007",
+      "tier_id": "TIR000003",
+      "benefit_type": "VOUCHER",
+      "description": "Tặng voucher giảm 8% khi lên hạng Platinum"
+    },
+    {
+      "benefit_id": "BNF000008",
+      "tier_id": "TIR000004",
+      "benefit_type": "VOUCHER",
+      "description": "Tặng voucher giảm 12% khi lên hạng Diamond"
+    },
+    {
+      "benefit_id": "BNF000009",
+      "tier_id": "TIR000004",
+      "benefit_type": "EARLY_ACCESS",
+      "description": "Truy cập sớm bộ sưu tập mới trước 48 giờ"
+    },
+    {
+      "benefit_id": "BNF000010",
+      "tier_id": "TIR000004",
+      "benefit_type": "PRIORITY_CONSULT",
+      "description": "Tư vấn riêng tư với Head Designer mỗi quý"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-<!-- FAB -->
+﻿<!-- FAB -->
 <button
   class="chatbot__fab"
   type="button"
@@ -6,7 +6,7 @@
   [attr.aria-expanded]="isOpen()"
   aria-label="Mở chatbot REN AI"
 >
-  <img src="/icons/ic-chatbot-fab.png" alt="" class="chatbot__fab-icon" />
+  <img src="assets/icons/ic-chatbot-fab.png" alt="" class="chatbot__fab-icon" />
 </button>
 
 <!-- Popup Window -->
@@ -44,7 +44,7 @@
         <!-- Bot simple text -->
         @if (msg.sender === 'bot' && msg.text) {
           <div class="chatbot__msg">
-            <img src="/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
+            <img src="assets/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
             <div class="chatbot__content">
               <div class="chatbot__bubble">{{ msg.text }}</div>
               <span class="chatbot__time">{{ msg.timestamp }}</span>
@@ -134,7 +134,7 @@
       <!-- Typing indicator -->
       @if (isTyping()) {
         <div class="chatbot__msg">
-          <img src="/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
+          <img src="assets/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
           <div class="chatbot__typing">
             <span></span><span></span><span></span>
           </div>

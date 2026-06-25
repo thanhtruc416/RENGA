@@ -64,21 +64,35 @@ export class CheckoutComponent {
 
   readonly voucherCode = signal('');
   readonly voucherDiscount = signal(0);
+  readonly voucherStatus = signal<'idle' | 'success' | 'error'>('idle');
+  readonly voucherMsg = signal('');
 
   readonly total = computed(() => Math.max(this.subtotal() - this.voucherDiscount(), 0));
 
   applyVoucher(): void {
     const code = this.voucherCode().trim().toUpperCase();
+    if (!code) {
+      this.voucherStatus.set('error');
+      this.voucherMsg.set('Vui lòng nhập mã voucher.');
+      return;
+    }
     // TODO: gọi API kiểm tra voucher
     if (code === 'RENGA10') {
-      this.voucherDiscount.set(Math.round(this.subtotal() * 0.1));
+      const discount = Math.round(this.subtotal() * 0.1);
+      this.voucherDiscount.set(discount);
+      this.voucherStatus.set('success');
+      this.voucherMsg.set(`Đã áp dụng! Giảm ${discount.toLocaleString('vi-VN')}đ`);
     } else {
       this.voucherDiscount.set(0);
+      this.voucherStatus.set('error');
+      this.voucherMsg.set('Mã voucher không hợp lệ hoặc đã hết hạn.');
     }
   }
 
   onVoucherInput(event: Event): void {
     this.voucherCode.set((event.target as HTMLInputElement).value);
+    this.voucherStatus.set('idle');
+    this.voucherMsg.set('');
   }
 
   readonly selectedPayment = signal<PaymentMethod>('cod');

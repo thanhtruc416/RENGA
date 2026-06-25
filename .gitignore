@@ -59,6 +59,24 @@ test-results/
 .idea/
 
 # ========================
+# Python (Data/scripts)
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ========================
+# Data pipeline (crawl output — không cần cho BE)
+# ========================
+Data/product/Raw/
+Data/product/Clean/
+Data/config.json
+
+# ========================
 # Misc
 # ========================
 .claude/

@@ -1,0 +1,4520 @@
+{
+  "CLIENT": [
+    {
+      "client_id": "CLT000001",
+      "email": "dinhductuan1@outlook.com",
+      "phone": "0789325288",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-01T22:40:36",
+      "updated_at": "2025-09-07T04:40:36"
+    },
+    {
+      "client_id": "CLT000002",
+      "email": "vuhuuduc68@outlook.com",
+      "phone": "0818227824",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-21T03:57:56",
+      "updated_at": "2025-09-23T10:57:56"
+    },
+    {
+      "client_id": "CLT000003",
+      "email": "dinhbichtrang10@outlook.com",
+      "phone": "0950983930",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-31T13:09:10",
+      "updated_at": "2025-11-01T05:09:10"
+    },
+    {
+      "client_id": "CLT000004",
+      "email": "vuthuyhoa13@outlook.com",
+      "phone": "0399737631",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-22T16:50:38",
+      "updated_at": "2025-09-26T11:50:38"
+    },
+    {
+      "client_id": "CLT000005",
+      "email": "phambichvy71@gmail.com",
+      "phone": "0826247317",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-10T19:45:31",
+      "updated_at": "2025-07-17T18:45:31"
+    },
+    {
+      "client_id": "CLT000006",
+      "email": "lythuyhuong85@outlook.com",
+      "phone": "0360647468",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-03T12:03:11",
+      "updated_at": "2025-10-05T04:03:11"
+    },
+    {
+      "client_id": "CLT000007",
+      "email": "buidieudiem52@gmail.com",
+      "phone": "0308121913",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-30T20:09:21",
+      "updated_at": "2026-01-05T22:09:21"
+    },
+    {
+      "client_id": "CLT000008",
+      "email": "toxuanphong97@gmail.com",
+      "phone": "0353462475",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-02T19:24:47",
+      "updated_at": "2025-07-07T17:24:47"
+    },
+    {
+      "client_id": "CLT000009",
+      "email": "lexuanquan85@gmail.com",
+      "phone": "0378498084",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-30T07:43:51",
+      "updated_at": "2025-12-31T18:43:51"
+    },
+    {
+      "client_id": "CLT000010",
+      "email": "dangxuannam1@yahoo.com",
+      "phone": "0787401640",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-27T17:40:33",
+      "updated_at": "2025-11-29T03:40:33"
+    },
+    {
+      "client_id": "CLT000011",
+      "email": "nguyenkimvy47@gmail.com",
+      "phone": "0959826204",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-22T13:17:32",
+      "updated_at": "2025-12-26T09:17:32"
+    },
+    {
+      "client_id": "CLT000012",
+      "email": "hoangdinhlong90@gmail.com",
+      "phone": "0360256342",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-13T06:46:25",
+      "updated_at": "2025-09-13T16:46:25"
+    },
+    {
+      "client_id": "CLT000013",
+      "email": "vubichyen4@gmail.com",
+      "phone": "0741458685",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-18T07:17:42",
+      "updated_at": "2025-12-21T02:17:42"
+    },
+    {
+      "client_id": "CLT000014",
+      "email": "doxuancuong69@outlook.com",
+      "phone": "0969340608",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-17T16:47:12",
+      "updated_at": "2025-11-25T14:47:12"
+    },
+    {
+      "client_id": "CLT000015",
+      "email": "phamthanhviet86@yahoo.com",
+      "phone": "0765648236",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-09T12:31:49",
+      "updated_at": "2025-11-17T12:31:49"
+    },
+    {
+      "client_id": "CLT000016",
+      "email": "dangdieutrinh37@outlook.com",
+      "phone": "0777738721",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-06T21:46:59",
+      "updated_at": "2025-11-13T16:46:59"
+    },
+    {
+      "client_id": "CLT000017",
+      "email": "phanthitrang52@gmail.com",
+      "phone": "0891769367",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-29T15:43:56",
+      "updated_at": "2025-08-05T15:43:56"
+    },
+    {
+      "client_id": "CLT000018",
+      "email": "dinhanhtrang79@outlook.com",
+      "phone": "0972788957",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-21T05:06:57",
+      "updated_at": "2025-12-26T15:06:57"
+    },
+    {
+      "client_id": "CLT000019",
+      "email": "vuthanhviet41@outlook.com",
+      "phone": "0834714345",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-16T15:31:08",
+      "updated_at": "2025-07-18T03:31:08"
+    },
+    {
+      "client_id": "CLT000020",
+      "email": "buibahung46@yahoo.com",
+      "phone": "0366909670",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-24T07:26:54",
+      "updated_at": "2025-11-28T11:26:54"
+    },
+    {
+      "client_id": "CLT000021",
+      "email": "lythanhyen85@gmail.com",
+      "phone": "0372980699",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-17T07:13:24",
+      "updated_at": "2025-07-24T04:13:24"
+    },
+    {
+      "client_id": "CLT000022",
+      "email": "hothuyhuyen7@yahoo.com",
+      "phone": "0764641708",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-13T12:57:03",
+      "updated_at": "2025-08-20T11:57:03"
+    },
+    {
+      "client_id": "CLT000023",
+      "email": "nguyendinhkhoa78@outlook.com",
+      "phone": "0819374529",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-17T11:47:14",
+      "updated_at": "2025-11-18T17:47:14"
+    },
+    {
+      "client_id": "CLT000024",
+      "email": "phanbichngoc9@outlook.com",
+      "phone": "0791905865",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-03T17:46:13",
+      "updated_at": "2025-11-07T09:46:13"
+    },
+    {
+      "client_id": "CLT000025",
+      "email": "duongbalong32@gmail.com",
+      "phone": "0798776945",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-24T03:53:59",
+      "updated_at": "2025-08-28T23:53:59"
+    },
+    {
+      "client_id": "CLT000026",
+      "email": "buibichnhung11@gmail.com",
+      "phone": "0754948083",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-17T19:47:28",
+      "updated_at": "2025-11-22T04:47:28"
+    },
+    {
+      "client_id": "CLT000027",
+      "email": "nguyenbichyen96@outlook.com",
+      "phone": "0349578856",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-03T05:35:57",
+      "updated_at": "2025-09-07T00:35:57"
+    },
+    {
+      "client_id": "CLT000028",
+      "email": "phananhlinh25@yahoo.com",
+      "phone": "0337498941",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-14T04:08:54",
+      "updated_at": "2025-08-18T01:08:54"
+    },
+    {
+      "client_id": "CLT000029",
+      "email": "dangquockien7@yahoo.com",
+      "phone": "0909477752",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-30T17:40:27",
+      "updated_at": "2026-01-04T20:40:27"
+    },
+    {
+      "client_id": "CLT000030",
+      "email": "trandieuthu67@yahoo.com",
+      "phone": "0931869993",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-26T11:32:58",
+      "updated_at": "2025-10-01T05:32:58"
+    },
+    {
+      "client_id": "CLT000031",
+      "email": "phamdinhnam53@yahoo.com",
+      "phone": "0712328120",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-11T20:42:08",
+      "updated_at": "2025-11-18T05:42:08"
+    },
+    {
+      "client_id": "CLT000032",
+      "email": "duongbichphuong8@gmail.com",
+      "phone": "0361832421",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-01T21:55:00",
+      "updated_at": "2025-12-05T04:55:00"
+    },
+    {
+      "client_id": "CLT000033",
+      "email": "hoductrung4@gmail.com",
+      "phone": "0871906594",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-14T10:51:54",
+      "updated_at": "2025-08-21T15:51:54"
+    },
+    {
+      "client_id": "CLT000034",
+      "email": "duongquocquoc21@yahoo.com",
+      "phone": "0871756551",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-18T22:24:18",
+      "updated_at": "2025-09-26T08:24:18"
+    },
+    {
+      "client_id": "CLT000035",
+      "email": "lethanhngoc47@outlook.com",
+      "phone": "0880876038",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-24T21:16:50",
+      "updated_at": "2025-11-30T05:16:50"
+    },
+    {
+      "client_id": "CLT000036",
+      "email": "dangthuyngoc12@gmail.com",
+      "phone": "0993248086",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-11T09:14:04",
+      "updated_at": "2025-12-12T15:14:04"
+    },
+    {
+      "client_id": "CLT000037",
+      "email": "vothuydiem9@yahoo.com",
+      "phone": "0378263982",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-28T00:55:37",
+      "updated_at": "2025-12-02T11:55:37"
+    },
+    {
+      "client_id": "CLT000038",
+      "email": "dangtrungkien59@yahoo.com",
+      "phone": "0378755886",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-16T20:38:15",
+      "updated_at": "2025-12-18T21:38:15"
+    },
+    {
+      "client_id": "CLT000039",
+      "email": "lybadung13@outlook.com",
+      "phone": "0370289517",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-24T18:57:56",
+      "updated_at": "2025-12-29T15:57:56"
+    },
+    {
+      "client_id": "CLT000040",
+      "email": "vothuythao31@outlook.com",
+      "phone": "0786578091",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-10T21:31:59",
+      "updated_at": "2025-11-13T23:31:59"
+    },
+    {
+      "client_id": "CLT000041",
+      "email": "huynhvanhung53@outlook.com",
+      "phone": "0704556238",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-10T09:25:12",
+      "updated_at": "2025-11-12T08:25:12"
+    },
+    {
+      "client_id": "CLT000042",
+      "email": "duongcongphong39@outlook.com",
+      "phone": "0974821759",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-21T09:25:22",
+      "updated_at": "2025-09-28T18:25:22"
+    },
+    {
+      "client_id": "CLT000043",
+      "email": "lythuyan88@outlook.com",
+      "phone": "0794406409",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-10T12:33:45",
+      "updated_at": "2025-07-17T00:33:45"
+    },
+    {
+      "client_id": "CLT000044",
+      "email": "dobichtrinh94@gmail.com",
+      "phone": "0721047095",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-18T12:03:07",
+      "updated_at": "2025-07-21T16:03:07"
+    },
+    {
+      "client_id": "CLT000045",
+      "email": "trinhxuanviet19@gmail.com",
+      "phone": "0724745171",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-15T00:32:44",
+      "updated_at": "2025-12-22T06:32:44"
+    },
+    {
+      "client_id": "CLT000046",
+      "email": "trinhthanhphuong79@gmail.com",
+      "phone": "0851370985",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-03T18:16:43",
+      "updated_at": "2025-11-04T11:16:43"
+    },
+    {
+      "client_id": "CLT000047",
+      "email": "tranthanhkien54@outlook.com",
+      "phone": "0913826758",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-22T03:13:27",
+      "updated_at": "2025-11-29T22:13:27"
+    },
+    {
+      "client_id": "CLT000048",
+      "email": "dothuytrang16@yahoo.com",
+      "phone": "0715850643",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-18T19:13:44",
+      "updated_at": "2025-07-25T21:13:44"
+    },
+    {
+      "client_id": "CLT000049",
+      "email": "toanhhoa70@yahoo.com",
+      "phone": "0335290422",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-03T01:20:38",
+      "updated_at": "2025-12-04T22:20:38"
+    },
+    {
+      "client_id": "CLT000050",
+      "email": "vuvanlong47@outlook.com",
+      "phone": "0702681177",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-24T06:41:03",
+      "updated_at": "2025-10-25T10:41:03"
+    },
+    {
+      "client_id": "CLT000051",
+      "email": "lybatuan36@outlook.com",
+      "phone": "0871159212",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-31T22:21:04",
+      "updated_at": "2025-11-07T04:21:04"
+    },
+    {
+      "client_id": "CLT000052",
+      "email": "dinhhuutuan94@gmail.com",
+      "phone": "0367365766",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-30T16:34:51",
+      "updated_at": "2025-09-04T06:34:51"
+    },
+    {
+      "client_id": "CLT000053",
+      "email": "lyngocthao43@outlook.com",
+      "phone": "0815280988",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-24T17:38:20",
+      "updated_at": "2025-07-29T03:38:20"
+    },
+    {
+      "client_id": "CLT000054",
+      "email": "dangdieukim98@yahoo.com",
+      "phone": "0327315851",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-20T11:29:59",
+      "updated_at": "2025-10-22T21:29:59"
+    },
+    {
+      "client_id": "CLT000055",
+      "email": "vothanhtam12@outlook.com",
+      "phone": "0702296120",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-12T00:13:42",
+      "updated_at": "2025-10-14T08:13:42"
+    },
+    {
+      "client_id": "CLT000056",
+      "email": "buitrungson85@yahoo.com",
+      "phone": "0902290147",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-03T07:20:51",
+      "updated_at": "2025-10-09T19:20:51"
+    },
+    {
+      "client_id": "CLT000057",
+      "email": "ngodieudiem28@gmail.com",
+      "phone": "0703690034",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-26T09:14:52",
+      "updated_at": "2025-11-29T03:14:52"
+    },
+    {
+      "client_id": "CLT000058",
+      "email": "hoangbichkim74@yahoo.com",
+      "phone": "0716060715",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-20T08:14:10",
+      "updated_at": "2025-10-24T16:14:10"
+    },
+    {
+      "client_id": "CLT000059",
+      "email": "luuthanhthao40@outlook.com",
+      "phone": "0813696816",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-04T22:14:47",
+      "updated_at": "2025-09-07T07:14:47"
+    },
+    {
+      "client_id": "CLT000060",
+      "email": "dinhthanhnhung98@outlook.com",
+      "phone": "0331243292",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-15T15:10:18",
+      "updated_at": "2025-07-17T13:10:18"
+    },
+    {
+      "client_id": "CLT000061",
+      "email": "buingocdiem60@yahoo.com",
+      "phone": "0844905814",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-08T07:15:44",
+      "updated_at": "2025-07-08T22:15:44"
+    },
+    {
+      "client_id": "CLT000062",
+      "email": "dinhdieuvy8@yahoo.com",
+      "phone": "0979359782",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-21T02:21:13",
+      "updated_at": "2025-07-24T18:21:13"
+    },
+    {
+      "client_id": "CLT000063",
+      "email": "duongducviet81@outlook.com",
+      "phone": "0355466590",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-03T23:34:44",
+      "updated_at": "2025-09-04T16:34:44"
+    },
+    {
+      "client_id": "CLT000064",
+      "email": "lequocbinh17@outlook.com",
+      "phone": "0762914865",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-14T11:25:45",
+      "updated_at": "2025-11-22T09:25:45"
+    },
+    {
+      "client_id": "CLT000065",
+      "email": "phanthuyhoa5@outlook.com",
+      "phone": "0322141888",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-04T09:26:08",
+      "updated_at": "2025-09-12T14:26:08"
+    },
+    {
+      "client_id": "CLT000066",
+      "email": "luuquocthang69@gmail.com",
+      "phone": "0965379473",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-30T02:13:29",
+      "updated_at": "2025-09-04T03:13:29"
+    },
+    {
+      "client_id": "CLT000067",
+      "email": "dinhkimhoa37@gmail.com",
+      "phone": "0340758181",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-26T04:22:55",
+      "updated_at": "2025-11-27T22:22:55"
+    },
+    {
+      "client_id": "CLT000068",
+      "email": "dobahung41@gmail.com",
+      "phone": "0885361530",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-10T22:50:41",
+      "updated_at": "2025-12-18T13:50:41"
+    },
+    {
+      "client_id": "CLT000069",
+      "email": "lyquockien94@outlook.com",
+      "phone": "0890104328",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-11T11:35:36",
+      "updated_at": "2025-10-16T00:35:36"
+    },
+    {
+      "client_id": "CLT000070",
+      "email": "vudieuchau92@gmail.com",
+      "phone": "0917980893",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-26T13:25:33",
+      "updated_at": "2025-08-31T03:25:33"
+    },
+    {
+      "client_id": "CLT000071",
+      "email": "lexuanduc9@yahoo.com",
+      "phone": "0967065405",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-16T19:43:41",
+      "updated_at": "2025-08-24T15:43:41"
+    },
+    {
+      "client_id": "CLT000072",
+      "email": "huynhcongkien6@yahoo.com",
+      "phone": "0321704303",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-29T05:49:26",
+      "updated_at": "2026-01-01T13:49:26"
+    },
+    {
+      "client_id": "CLT000073",
+      "email": "tranxuanphong89@yahoo.com",
+      "phone": "0956676527",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-10T07:57:38",
+      "updated_at": "2025-09-15T20:57:38"
+    },
+    {
+      "client_id": "CLT000074",
+      "email": "dangngochuyen6@outlook.com",
+      "phone": "0747962757",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-16T22:40:01",
+      "updated_at": "2025-12-20T17:40:01"
+    },
+    {
+      "client_id": "CLT000075",
+      "email": "huynhquocson5@outlook.com",
+      "phone": "0802135569",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-30T19:04:25",
+      "updated_at": "2025-08-07T01:04:25"
+    },
+    {
+      "client_id": "CLT000076",
+      "email": "dinhthanhphuong34@yahoo.com",
+      "phone": "0310278681",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-14T17:03:14",
+      "updated_at": "2025-11-19T12:03:14"
+    },
+    {
+      "client_id": "CLT000077",
+      "email": "huynhcongduc47@outlook.com",
+      "phone": "0751884422",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-13T13:02:30",
+      "updated_at": "2025-08-14T21:02:30"
+    },
+    {
+      "client_id": "CLT000078",
+      "email": "trinhcongtrung99@yahoo.com",
+      "phone": "0391146786",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-07T21:02:22",
+      "updated_at": "2025-12-14T01:02:22"
+    },
+    {
+      "client_id": "CLT000079",
+      "email": "trinhquockhoa42@outlook.com",
+      "phone": "0880182422",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-13T18:46:03",
+      "updated_at": "2025-08-17T11:46:03"
+    },
+    {
+      "client_id": "CLT000080",
+      "email": "trinhmytrinh44@outlook.com",
+      "phone": "0982992299",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-08T23:58:45",
+      "updated_at": "2025-07-09T07:58:45"
+    },
+    {
+      "client_id": "CLT000081",
+      "email": "nguyenanhthu57@yahoo.com",
+      "phone": "0773647102",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-03T00:46:25",
+      "updated_at": "2025-10-07T23:46:25"
+    },
+    {
+      "client_id": "CLT000082",
+      "email": "doquocbinh13@gmail.com",
+      "phone": "0953714732",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-26T08:29:09",
+      "updated_at": "2025-08-30T11:29:09"
+    },
+    {
+      "client_id": "CLT000083",
+      "email": "huynhanhchau28@outlook.com",
+      "phone": "0847016873",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-07T12:36:37",
+      "updated_at": "2025-09-08T01:36:37"
+    },
+    {
+      "client_id": "CLT000084",
+      "email": "hoangxuandung37@gmail.com",
+      "phone": "0706098358",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-14T00:30:57",
+      "updated_at": "2025-09-19T10:30:57"
+    },
+    {
+      "client_id": "CLT000085",
+      "email": "phamthanhvy5@gmail.com",
+      "phone": "0723986800",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-16T13:34:44",
+      "updated_at": "2025-11-20T03:34:44"
+    },
+    {
+      "client_id": "CLT000086",
+      "email": "luuthuytrinh61@gmail.com",
+      "phone": "0795888794",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-10T12:40:18",
+      "updated_at": "2025-09-14T01:40:18"
+    },
+    {
+      "client_id": "CLT000087",
+      "email": "votrungquoc88@gmail.com",
+      "phone": "0309728962",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-07T03:07:45",
+      "updated_at": "2025-07-13T06:07:45"
+    },
+    {
+      "client_id": "CLT000088",
+      "email": "ngobaviet49@yahoo.com",
+      "phone": "0802838578",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-03T15:05:18",
+      "updated_at": "2025-08-08T13:05:18"
+    },
+    {
+      "client_id": "CLT000089",
+      "email": "vumytrang37@gmail.com",
+      "phone": "0743757584",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-20T08:35:44",
+      "updated_at": "2025-10-27T14:35:44"
+    },
+    {
+      "client_id": "CLT000090",
+      "email": "tranngocnhung18@gmail.com",
+      "phone": "0847338484",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-28T13:15:46",
+      "updated_at": "2025-11-05T11:15:46"
+    },
+    {
+      "client_id": "CLT000091",
+      "email": "vuthuyhuyen84@gmail.com",
+      "phone": "0812082677",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-24T18:48:03",
+      "updated_at": "2025-11-27T20:48:03"
+    },
+    {
+      "client_id": "CLT000092",
+      "email": "trinhvanlong39@outlook.com",
+      "phone": "0820672400",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-10-26T01:10:20",
+      "updated_at": "2025-10-27T05:10:20"
+    },
+    {
+      "client_id": "CLT000093",
+      "email": "vongochuyen23@outlook.com",
+      "phone": "0374205493",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-12-14T05:55:54",
+      "updated_at": "2025-12-21T01:55:54"
+    },
+    {
+      "client_id": "CLT000094",
+      "email": "lybichlan2@yahoo.com",
+      "phone": "0763745499",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-04T22:23:07",
+      "updated_at": "2025-11-08T19:23:07"
+    },
+    {
+      "client_id": "CLT000095",
+      "email": "dinhthanhtuan96@outlook.com",
+      "phone": "0759332727",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-11T13:13:04",
+      "updated_at": "2025-09-16T00:13:04"
+    },
+    {
+      "client_id": "CLT000096",
+      "email": "duongxuanduc42@outlook.com",
+      "phone": "0908839822",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-24T19:07:34",
+      "updated_at": "2025-09-26T01:07:34"
+    },
+    {
+      "client_id": "CLT000097",
+      "email": "trananhhanh1@outlook.com",
+      "phone": "0890874064",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-12T07:29:37",
+      "updated_at": "2025-08-18T12:29:37"
+    },
+    {
+      "client_id": "CLT000098",
+      "email": "leconghung49@gmail.com",
+      "phone": "0762265676",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-10T13:45:14",
+      "updated_at": "2025-11-17T15:45:14"
+    },
+    {
+      "client_id": "CLT000099",
+      "email": "hodinhminh59@yahoo.com",
+      "phone": "0947868633",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-31T02:55:04",
+      "updated_at": "2025-08-03T01:55:04"
+    },
+    {
+      "client_id": "CLT000100",
+      "email": "nguyenngocngoc70@gmail.com",
+      "phone": "0979030673",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2025-11-24T11:41:31",
+      "updated_at": "2025-12-02T18:41:31"
+    },
+    {
+      "client_id": "CLT000101",
+      "email": null,
+      "phone": "0799534283",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-09-19T07:19:48",
+      "updated_at": "2025-09-20T22:19:48"
+    },
+    {
+      "client_id": "CLT000102",
+      "email": null,
+      "phone": "0768566246",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-08-05T16:56:17",
+      "updated_at": "2025-08-08T13:56:17"
+    },
+    {
+      "client_id": "CLT000103",
+      "email": null,
+      "phone": "0986688263",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-08-19T12:21:57",
+      "updated_at": "2025-08-20T15:21:57"
+    },
+    {
+      "client_id": "CLT000104",
+      "email": null,
+      "phone": "0304699013",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-12-04T05:56:37",
+      "updated_at": "2025-12-07T05:56:37"
+    },
+    {
+      "client_id": "CLT000105",
+      "email": null,
+      "phone": "0317393638",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-09-01T10:50:04",
+      "updated_at": "2025-09-02T23:50:04"
+    },
+    {
+      "client_id": "CLT000106",
+      "email": null,
+      "phone": "0871753556",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-07-09T21:02:57",
+      "updated_at": "2025-07-11T02:02:57"
+    },
+    {
+      "client_id": "CLT000107",
+      "email": null,
+      "phone": "0335369378",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-11-05T02:41:39",
+      "updated_at": "2025-11-06T22:41:39"
+    },
+    {
+      "client_id": "CLT000108",
+      "email": null,
+      "phone": "0722872808",
+      "client_type": "GUEST",
+      "status": "ANONYMOUS",
+      "created_at": "2025-07-07T13:37:48",
+      "updated_at": "2025-07-07T23:37:48"
+    },
+    {
+      "client_id": "CLT000109",
+      "email": null,
+      "phone": "0777555963",
+      "client_type": "CUSTOMER",
+      "status": "ACTIVE",
+      "created_at": "2026-01-01T08:00:00",
+      "updated_at": "2026-01-01T08:00:00"
+    }
+  ],
+  "CUSTOMER": [
+    {
+      "client_id": "CLT000001",
+      "full_name": "Đinh Đức Tuấn",
+      "gender": "MALE",
+      "birth_date": "1973-10-22",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 159,
+      "tier_start_date": "2025-12-28"
+    },
+    {
+      "client_id": "CLT000002",
+      "full_name": "Vũ Hữu Đức",
+      "gender": "MALE",
+      "birth_date": "1995-09-13",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13835,
+      "tier_start_date": "2025-11-19"
+    },
+    {
+      "client_id": "CLT000003",
+      "full_name": "Đinh Bích Trang",
+      "gender": "FEMALE",
+      "birth_date": "1972-04-17",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8750,
+      "tier_start_date": "2025-12-23"
+    },
+    {
+      "client_id": "CLT000004",
+      "full_name": "Vũ Thúy Hoa",
+      "gender": "FEMALE",
+      "birth_date": "1983-12-28",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3469,
+      "tier_start_date": "2025-09-29"
+    },
+    {
+      "client_id": "CLT000005",
+      "full_name": "Phạm Bích Vy",
+      "gender": "FEMALE",
+      "birth_date": "1998-06-12",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13856,
+      "tier_start_date": "2025-07-03"
+    },
+    {
+      "client_id": "CLT000006",
+      "full_name": "Lý Thùy Hương",
+      "gender": "FEMALE",
+      "birth_date": "1980-02-05",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8111,
+      "tier_start_date": "2025-08-12"
+    },
+    {
+      "client_id": "CLT000007",
+      "full_name": "Bùi Diệu Diễm",
+      "gender": "FEMALE",
+      "birth_date": "1989-09-12",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 48067,
+      "tier_start_date": "2025-10-24"
+    },
+    {
+      "client_id": "CLT000008",
+      "full_name": "Tô Xuân Phong",
+      "gender": "MALE",
+      "birth_date": "1973-05-27",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4612,
+      "tier_start_date": "2025-07-15"
+    },
+    {
+      "client_id": "CLT000009",
+      "full_name": "Lê Xuân Quân",
+      "gender": "MALE",
+      "birth_date": "1973-12-05",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 23666,
+      "tier_start_date": "2025-12-20"
+    },
+    {
+      "client_id": "CLT000010",
+      "full_name": "Đặng Xuân Nam",
+      "gender": "MALE",
+      "birth_date": "1975-07-02",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 9291,
+      "tier_start_date": "2025-11-21"
+    },
+    {
+      "client_id": "CLT000011",
+      "full_name": "Nguyễn Kim Vy",
+      "gender": "FEMALE",
+      "birth_date": "1993-03-17",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8441,
+      "tier_start_date": "2025-08-18"
+    },
+    {
+      "client_id": "CLT000012",
+      "full_name": "Hoàng Đình Long",
+      "gender": "MALE",
+      "birth_date": "1977-07-27",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3855,
+      "tier_start_date": "2025-08-08"
+    },
+    {
+      "client_id": "CLT000013",
+      "full_name": "Vũ Bích Yến",
+      "gender": "FEMALE",
+      "birth_date": "1989-10-03",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1462,
+      "tier_start_date": "2025-08-21"
+    },
+    {
+      "client_id": "CLT000014",
+      "full_name": "Đỗ Xuân Cường",
+      "gender": "MALE",
+      "birth_date": "1982-05-24",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1614,
+      "tier_start_date": "2025-09-22"
+    },
+    {
+      "client_id": "CLT000015",
+      "full_name": "Phạm Thành Việt",
+      "gender": "MALE",
+      "birth_date": "1990-12-11",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 45702,
+      "tier_start_date": "2025-10-19"
+    },
+    {
+      "client_id": "CLT000016",
+      "full_name": "Đặng Diệu Trinh",
+      "gender": "FEMALE",
+      "birth_date": "1973-03-06",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2745,
+      "tier_start_date": "2025-12-06"
+    },
+    {
+      "client_id": "CLT000017",
+      "full_name": "Phan Thị Trang",
+      "gender": "FEMALE",
+      "birth_date": "2000-05-16",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 5090,
+      "tier_start_date": "2025-11-23"
+    },
+    {
+      "client_id": "CLT000018",
+      "full_name": "Đinh Ánh Trang",
+      "gender": "FEMALE",
+      "birth_date": "1998-04-05",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 11991,
+      "tier_start_date": "2025-12-24"
+    },
+    {
+      "client_id": "CLT000019",
+      "full_name": "Vũ Thành Việt",
+      "gender": "MALE",
+      "birth_date": "1977-11-14",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 19942,
+      "tier_start_date": "2025-09-13"
+    },
+    {
+      "client_id": "CLT000020",
+      "full_name": "Bùi Bá Hùng",
+      "gender": "MALE",
+      "birth_date": "1988-04-24",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3432,
+      "tier_start_date": "2025-11-23"
+    },
+    {
+      "client_id": "CLT000021",
+      "full_name": "Lý Thanh Yến",
+      "gender": "FEMALE",
+      "birth_date": "1974-08-14",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 29044,
+      "tier_start_date": "2025-12-16"
+    },
+    {
+      "client_id": "CLT000022",
+      "full_name": "Hồ Thúy Huyền",
+      "gender": "FEMALE",
+      "birth_date": "1996-07-31",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 562,
+      "tier_start_date": "2025-11-04"
+    },
+    {
+      "client_id": "CLT000023",
+      "full_name": "Nguyễn Đình Khoa",
+      "gender": "MALE",
+      "birth_date": "1980-08-01",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1341,
+      "tier_start_date": "2025-07-21"
+    },
+    {
+      "client_id": "CLT000024",
+      "full_name": "Phan Bích Ngọc",
+      "gender": "FEMALE",
+      "birth_date": "1998-11-28",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 5207,
+      "tier_start_date": "2025-09-20"
+    },
+    {
+      "client_id": "CLT000025",
+      "full_name": "Dương Bá Long",
+      "gender": "MALE",
+      "birth_date": "1995-07-15",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 22990,
+      "tier_start_date": "2025-09-29"
+    },
+    {
+      "client_id": "CLT000026",
+      "full_name": "Bùi Bích Nhung",
+      "gender": "FEMALE",
+      "birth_date": "1988-11-21",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4002,
+      "tier_start_date": "2025-11-25"
+    },
+    {
+      "client_id": "CLT000027",
+      "full_name": "Nguyễn Bích Yến",
+      "gender": "FEMALE",
+      "birth_date": "1979-03-21",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 12434,
+      "tier_start_date": "2025-08-29"
+    },
+    {
+      "client_id": "CLT000028",
+      "full_name": "Phan Ánh Linh",
+      "gender": "FEMALE",
+      "birth_date": "1980-04-14",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 7939,
+      "tier_start_date": "2025-07-03"
+    },
+    {
+      "client_id": "CLT000029",
+      "full_name": "Đặng Quốc Kiên",
+      "gender": "MALE",
+      "birth_date": "1997-12-21",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 6869,
+      "tier_start_date": "2025-07-13"
+    },
+    {
+      "client_id": "CLT000030",
+      "full_name": "Trần Diệu Thu",
+      "gender": "FEMALE",
+      "birth_date": "1999-04-08",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2435,
+      "tier_start_date": "2025-10-23"
+    },
+    {
+      "client_id": "CLT000031",
+      "full_name": "Phạm Đình Nam",
+      "gender": "MALE",
+      "birth_date": "1979-11-29",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 12699,
+      "tier_start_date": "2025-07-07"
+    },
+    {
+      "client_id": "CLT000032",
+      "full_name": "Dương Bích Phương",
+      "gender": "FEMALE",
+      "birth_date": "1995-06-26",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4874,
+      "tier_start_date": "2025-12-08"
+    },
+    {
+      "client_id": "CLT000033",
+      "full_name": "Hồ Đức Trung",
+      "gender": "MALE",
+      "birth_date": "1989-12-23",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 58848,
+      "tier_start_date": "2025-07-05"
+    },
+    {
+      "client_id": "CLT000034",
+      "full_name": "Dương Quốc Quốc",
+      "gender": "MALE",
+      "birth_date": "1979-10-22",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13117,
+      "tier_start_date": "2025-11-06"
+    },
+    {
+      "client_id": "CLT000035",
+      "full_name": "Lê Thanh Ngọc",
+      "gender": "FEMALE",
+      "birth_date": "1995-11-10",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3621,
+      "tier_start_date": "2025-07-11"
+    },
+    {
+      "client_id": "CLT000036",
+      "full_name": "Đặng Thúy Ngọc",
+      "gender": "FEMALE",
+      "birth_date": "1973-12-30",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 30120,
+      "tier_start_date": "2025-11-03"
+    },
+    {
+      "client_id": "CLT000037",
+      "full_name": "Võ Thúy Diễm",
+      "gender": "FEMALE",
+      "birth_date": "1996-10-20",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2784,
+      "tier_start_date": "2025-10-07"
+    },
+    {
+      "client_id": "CLT000038",
+      "full_name": "Đặng Trung Kiên",
+      "gender": "MALE",
+      "birth_date": "1989-06-16",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1956,
+      "tier_start_date": "2025-09-13"
+    },
+    {
+      "client_id": "CLT000039",
+      "full_name": "Lý Bá Dũng",
+      "gender": "MALE",
+      "birth_date": "1994-08-01",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 5251,
+      "tier_start_date": "2025-07-28"
+    },
+    {
+      "client_id": "CLT000040",
+      "full_name": "Võ Thùy Thảo",
+      "gender": "FEMALE",
+      "birth_date": "1995-05-30",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8727,
+      "tier_start_date": "2025-07-18"
+    },
+    {
+      "client_id": "CLT000041",
+      "full_name": "Huỳnh Văn Hùng",
+      "gender": "MALE",
+      "birth_date": "1975-12-16",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1392,
+      "tier_start_date": "2025-07-16"
+    },
+    {
+      "client_id": "CLT000042",
+      "full_name": "Dương Công Phong",
+      "gender": "MALE",
+      "birth_date": "1985-07-18",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 23195,
+      "tier_start_date": "2025-12-12"
+    },
+    {
+      "client_id": "CLT000043",
+      "full_name": "Lý Thùy An",
+      "gender": "FEMALE",
+      "birth_date": "1986-11-26",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 64417,
+      "tier_start_date": "2025-12-09"
+    },
+    {
+      "client_id": "CLT000044",
+      "full_name": "Đỗ Bích Trinh",
+      "gender": "FEMALE",
+      "birth_date": "1995-06-08",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 10352,
+      "tier_start_date": "2025-09-19"
+    },
+    {
+      "client_id": "CLT000045",
+      "full_name": "Trịnh Xuân Việt",
+      "gender": "MALE",
+      "birth_date": "1992-12-12",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 38731,
+      "tier_start_date": "2025-09-16"
+    },
+    {
+      "client_id": "CLT000046",
+      "full_name": "Trịnh Thanh Phương",
+      "gender": "FEMALE",
+      "birth_date": "2000-12-10",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3803,
+      "tier_start_date": "2025-11-14"
+    },
+    {
+      "client_id": "CLT000047",
+      "full_name": "Trần Thành Kiên",
+      "gender": "MALE",
+      "birth_date": "2000-02-16",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 45063,
+      "tier_start_date": "2025-09-19"
+    },
+    {
+      "client_id": "CLT000048",
+      "full_name": "Đỗ Thúy Trang",
+      "gender": "FEMALE",
+      "birth_date": "1991-11-01",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1737,
+      "tier_start_date": "2025-11-02"
+    },
+    {
+      "client_id": "CLT000049",
+      "full_name": "Tô Ánh Hoa",
+      "gender": "FEMALE",
+      "birth_date": "1992-06-29",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 18602,
+      "tier_start_date": "2025-12-16"
+    },
+    {
+      "client_id": "CLT000050",
+      "full_name": "Vũ Văn Long",
+      "gender": "MALE",
+      "birth_date": "1987-02-22",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 12405,
+      "tier_start_date": "2025-08-13"
+    },
+    {
+      "client_id": "CLT000051",
+      "full_name": "Lý Bá Tuấn",
+      "gender": "MALE",
+      "birth_date": "1994-03-26",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13984,
+      "tier_start_date": "2025-09-02"
+    },
+    {
+      "client_id": "CLT000052",
+      "full_name": "Đinh Hữu Tuấn",
+      "gender": "MALE",
+      "birth_date": "1992-08-18",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2560,
+      "tier_start_date": "2025-08-19"
+    },
+    {
+      "client_id": "CLT000053",
+      "full_name": "Lý Ngọc Thảo",
+      "gender": "FEMALE",
+      "birth_date": "1999-09-22",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 26586,
+      "tier_start_date": "2025-11-07"
+    },
+    {
+      "client_id": "CLT000054",
+      "full_name": "Đặng Diệu Kim",
+      "gender": "FEMALE",
+      "birth_date": "1998-10-04",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 29061,
+      "tier_start_date": "2025-10-17"
+    },
+    {
+      "client_id": "CLT000055",
+      "full_name": "Võ Thành Tâm",
+      "gender": "MALE",
+      "birth_date": "1984-04-14",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 11163,
+      "tier_start_date": "2025-09-27"
+    },
+    {
+      "client_id": "CLT000056",
+      "full_name": "Bùi Trung Sơn",
+      "gender": "MALE",
+      "birth_date": "1984-02-04",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 54484,
+      "tier_start_date": "2025-08-23"
+    },
+    {
+      "client_id": "CLT000057",
+      "full_name": "Ngô Diệu Diễm",
+      "gender": "FEMALE",
+      "birth_date": "1981-03-01",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 24484,
+      "tier_start_date": "2025-07-24"
+    },
+    {
+      "client_id": "CLT000058",
+      "full_name": "Hoàng Bích Kim",
+      "gender": "FEMALE",
+      "birth_date": "1979-11-07",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 11843,
+      "tier_start_date": "2025-07-23"
+    },
+    {
+      "client_id": "CLT000059",
+      "full_name": "Lưu Thanh Thảo",
+      "gender": "FEMALE",
+      "birth_date": "1996-07-05",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2728,
+      "tier_start_date": "2025-08-02"
+    },
+    {
+      "client_id": "CLT000060",
+      "full_name": "Đinh Thanh Nhung",
+      "gender": "FEMALE",
+      "birth_date": "1986-10-24",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 35576,
+      "tier_start_date": "2025-09-29"
+    },
+    {
+      "client_id": "CLT000061",
+      "full_name": "Bùi Ngọc Diễm",
+      "gender": "FEMALE",
+      "birth_date": "1998-04-19",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3020,
+      "tier_start_date": "2025-08-25"
+    },
+    {
+      "client_id": "CLT000062",
+      "full_name": "Đinh Diệu Vy",
+      "gender": "FEMALE",
+      "birth_date": "1987-03-03",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 6381,
+      "tier_start_date": "2025-11-03"
+    },
+    {
+      "client_id": "CLT000063",
+      "full_name": "Dương Đức Việt",
+      "gender": "MALE",
+      "birth_date": "1973-03-20",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2700,
+      "tier_start_date": "2025-10-17"
+    },
+    {
+      "client_id": "CLT000064",
+      "full_name": "Lê Quốc Bình",
+      "gender": "MALE",
+      "birth_date": "1973-03-07",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13624,
+      "tier_start_date": "2025-11-03"
+    },
+    {
+      "client_id": "CLT000065",
+      "full_name": "Phan Thúy Hoa",
+      "gender": "FEMALE",
+      "birth_date": "1990-04-28",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 7147,
+      "tier_start_date": "2025-09-12"
+    },
+    {
+      "client_id": "CLT000066",
+      "full_name": "Lưu Quốc Thắng",
+      "gender": "MALE",
+      "birth_date": "1982-07-08",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1589,
+      "tier_start_date": "2025-11-09"
+    },
+    {
+      "client_id": "CLT000067",
+      "full_name": "Đinh Kim Hoa",
+      "gender": "FEMALE",
+      "birth_date": "1985-04-15",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 23938,
+      "tier_start_date": "2025-12-23"
+    },
+    {
+      "client_id": "CLT000068",
+      "full_name": "Đỗ Bá Hùng",
+      "gender": "MALE",
+      "birth_date": "1996-12-04",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2746,
+      "tier_start_date": "2025-07-29"
+    },
+    {
+      "client_id": "CLT000069",
+      "full_name": "Lý Quốc Kiên",
+      "gender": "MALE",
+      "birth_date": "1996-05-29",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 6821,
+      "tier_start_date": "2025-08-25"
+    },
+    {
+      "client_id": "CLT000070",
+      "full_name": "Vũ Diệu Châu",
+      "gender": "FEMALE",
+      "birth_date": "1990-12-02",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 12,
+      "tier_start_date": "2025-09-07"
+    },
+    {
+      "client_id": "CLT000071",
+      "full_name": "Lê Xuân Đức",
+      "gender": "MALE",
+      "birth_date": "1991-05-18",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 36531,
+      "tier_start_date": "2025-07-21"
+    },
+    {
+      "client_id": "CLT000072",
+      "full_name": "Huỳnh Công Kiên",
+      "gender": "MALE",
+      "birth_date": "1983-07-20",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 31888,
+      "tier_start_date": "2025-12-06"
+    },
+    {
+      "client_id": "CLT000073",
+      "full_name": "Trần Xuân Phong",
+      "gender": "MALE",
+      "birth_date": "1997-04-05",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 9369,
+      "tier_start_date": "2025-07-17"
+    },
+    {
+      "client_id": "CLT000074",
+      "full_name": "Đặng Ngọc Huyền",
+      "gender": "FEMALE",
+      "birth_date": "1984-10-19",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 35147,
+      "tier_start_date": "2025-08-23"
+    },
+    {
+      "client_id": "CLT000075",
+      "full_name": "Huỳnh Quốc Sơn",
+      "gender": "MALE",
+      "birth_date": "1982-08-16",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3685,
+      "tier_start_date": "2025-09-11"
+    },
+    {
+      "client_id": "CLT000076",
+      "full_name": "Đinh Thanh Phương",
+      "gender": "FEMALE",
+      "birth_date": "1990-10-27",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8515,
+      "tier_start_date": "2025-08-25"
+    },
+    {
+      "client_id": "CLT000077",
+      "full_name": "Huỳnh Công Đức",
+      "gender": "MALE",
+      "birth_date": "1996-12-13",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1646,
+      "tier_start_date": "2025-07-27"
+    },
+    {
+      "client_id": "CLT000078",
+      "full_name": "Trịnh Công Trung",
+      "gender": "MALE",
+      "birth_date": "1974-04-07",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 604,
+      "tier_start_date": "2025-08-31"
+    },
+    {
+      "client_id": "CLT000079",
+      "full_name": "Trịnh Quốc Khoa",
+      "gender": "MALE",
+      "birth_date": "2000-06-13",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4250,
+      "tier_start_date": "2025-08-25"
+    },
+    {
+      "client_id": "CLT000080",
+      "full_name": "Trịnh Mỹ Trinh",
+      "gender": "FEMALE",
+      "birth_date": "1971-07-19",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 665,
+      "tier_start_date": "2025-11-02"
+    },
+    {
+      "client_id": "CLT000081",
+      "full_name": "Nguyễn Ánh Thu",
+      "gender": "FEMALE",
+      "birth_date": "1981-07-29",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 8342,
+      "tier_start_date": "2025-10-26"
+    },
+    {
+      "client_id": "CLT000082",
+      "full_name": "Đỗ Quốc Bình",
+      "gender": "MALE",
+      "birth_date": "1978-06-13",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 11850,
+      "tier_start_date": "2025-12-16"
+    },
+    {
+      "client_id": "CLT000083",
+      "full_name": "Huỳnh Ánh Châu",
+      "gender": "FEMALE",
+      "birth_date": "1979-07-29",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 414,
+      "tier_start_date": "2025-10-05"
+    },
+    {
+      "client_id": "CLT000084",
+      "full_name": "Hoàng Xuân Dũng",
+      "gender": "MALE",
+      "birth_date": "1996-01-04",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 54757,
+      "tier_start_date": "2025-10-15"
+    },
+    {
+      "client_id": "CLT000085",
+      "full_name": "Phạm Thanh Vy",
+      "gender": "FEMALE",
+      "birth_date": "1987-09-03",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 30523,
+      "tier_start_date": "2025-09-27"
+    },
+    {
+      "client_id": "CLT000086",
+      "full_name": "Lưu Thùy Trinh",
+      "gender": "FEMALE",
+      "birth_date": "1984-03-04",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 6795,
+      "tier_start_date": "2025-10-22"
+    },
+    {
+      "client_id": "CLT000087",
+      "full_name": "Võ Trung Quốc",
+      "gender": "MALE",
+      "birth_date": "1976-06-28",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 900,
+      "tier_start_date": "2025-07-04"
+    },
+    {
+      "client_id": "CLT000088",
+      "full_name": "Ngô Bá Việt",
+      "gender": "MALE",
+      "birth_date": "1981-08-25",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 13734,
+      "tier_start_date": "2025-10-15"
+    },
+    {
+      "client_id": "CLT000089",
+      "full_name": "Vũ Mỹ Trang",
+      "gender": "FEMALE",
+      "birth_date": "1982-12-02",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4449,
+      "tier_start_date": "2025-12-21"
+    },
+    {
+      "client_id": "CLT000090",
+      "full_name": "Trần Ngọc Nhung",
+      "gender": "FEMALE",
+      "birth_date": "1978-02-21",
+      "avatar": null,
+      "tier_id": "TIR000004",
+      "loyalty_points": 59229,
+      "tier_start_date": "2025-08-17"
+    },
+    {
+      "client_id": "CLT000091",
+      "full_name": "Vũ Thùy Huyền",
+      "gender": "FEMALE",
+      "birth_date": "1979-09-18",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2631,
+      "tier_start_date": "2025-11-03"
+    },
+    {
+      "client_id": "CLT000092",
+      "full_name": "Trịnh Văn Long",
+      "gender": "MALE",
+      "birth_date": "1979-09-07",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 2744,
+      "tier_start_date": "2025-09-27"
+    },
+    {
+      "client_id": "CLT000093",
+      "full_name": "Võ Ngọc Huyền",
+      "gender": "FEMALE",
+      "birth_date": "1998-02-20",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 3321,
+      "tier_start_date": "2025-09-22"
+    },
+    {
+      "client_id": "CLT000094",
+      "full_name": "Lý Bích Lan",
+      "gender": "FEMALE",
+      "birth_date": "1978-01-15",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 37700,
+      "tier_start_date": "2025-07-13"
+    },
+    {
+      "client_id": "CLT000095",
+      "full_name": "Đinh Thành Tuấn",
+      "gender": "MALE",
+      "birth_date": "1986-01-08",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4499,
+      "tier_start_date": "2025-11-25"
+    },
+    {
+      "client_id": "CLT000096",
+      "full_name": "Dương Xuân Đức",
+      "gender": "MALE",
+      "birth_date": "1994-05-24",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 1682,
+      "tier_start_date": "2025-10-22"
+    },
+    {
+      "client_id": "CLT000097",
+      "full_name": "Trần Ánh Hạnh",
+      "gender": "FEMALE",
+      "birth_date": "1971-07-17",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 17393,
+      "tier_start_date": "2025-09-21"
+    },
+    {
+      "client_id": "CLT000098",
+      "full_name": "Lê Công Hùng",
+      "gender": "MALE",
+      "birth_date": "1974-07-11",
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 4417,
+      "tier_start_date": "2025-11-04"
+    },
+    {
+      "client_id": "CLT000099",
+      "full_name": "Hồ Đình Minh",
+      "gender": "MALE",
+      "birth_date": "1999-10-12",
+      "avatar": null,
+      "tier_id": "TIR000003",
+      "loyalty_points": 21176,
+      "tier_start_date": "2025-11-18"
+    },
+    {
+      "client_id": "CLT000100",
+      "full_name": "Nguyễn Ngọc Ngọc",
+      "gender": "FEMALE",
+      "birth_date": "1974-10-08",
+      "avatar": null,
+      "tier_id": "TIR000002",
+      "loyalty_points": 5924,
+      "tier_start_date": "2025-10-06"
+    },
+    {
+      "client_id": "CLT000109",
+      "full_name": "Cao Thi Thanh Truc",
+      "gender": "FEMALE",
+      "birth_date": null,
+      "avatar": null,
+      "tier_id": "TIR000001",
+      "loyalty_points": 0,
+      "tier_start_date": "2026-01-01"
+    }
+  ],
+  "GUEST": [
+    {
+      "client_id": "CLT000101"
+    },
+    {
+      "client_id": "CLT000102"
+    },
+    {
+      "client_id": "CLT000103"
+    },
+    {
+      "client_id": "CLT000104"
+    },
+    {
+      "client_id": "CLT000105"
+    },
+    {
+      "client_id": "CLT000106"
+    },
+    {
+      "client_id": "CLT000107"
+    },
+    {
+      "client_id": "CLT000108"
+    }
+  ],
+  "ACCOUNT": [
+    {
+      "account_id": "ACC000001",
+      "client_id": "CLT000001",
+      "provider": "LOCAL",
+      "identifier": "dinhductuan1@outlook.com",
+      "password_hash": "$2b$12$32d25e6fc25cf25a517949e39922283e",
+      "is_verified": true,
+      "created_at": "2025-09-01T22:40:36"
+    },
+    {
+      "account_id": "ACC000002",
+      "client_id": "CLT000002",
+      "provider": "LOCAL",
+      "identifier": "vuhuuduc68@outlook.com",
+      "password_hash": "$2b$12$1f576677af719bc3273efc0e1060abd3",
+      "is_verified": true,
+      "created_at": "2025-09-21T03:57:56"
+    },
+    {
+      "account_id": "ACC000003",
+      "client_id": "CLT000003",
+      "provider": "LOCAL",
+      "identifier": "dinhbichtrang10@outlook.com",
+      "password_hash": "$2b$12$6f06f63e59476a497550f3fe5d2a58cb",
+      "is_verified": true,
+      "created_at": "2025-10-31T13:09:10"
+    },
+    {
+      "account_id": "ACC000004",
+      "client_id": "CLT000004",
+      "provider": "LOCAL",
+      "identifier": "vuthuyhoa13@outlook.com",
+      "password_hash": "$2b$12$2795f1c6c372f3f43c788059e08d3989",
+      "is_verified": true,
+      "created_at": "2025-09-22T16:50:38"
+    },
+    {
+      "account_id": "ACC000005",
+      "client_id": "CLT000005",
+      "provider": "LOCAL",
+      "identifier": "phambichvy71@gmail.com",
+      "password_hash": "$2b$12$1bc443e7b937e8c96e3cc81db0f2cd6d",
+      "is_verified": true,
+      "created_at": "2025-07-10T19:45:31"
+    },
+    {
+      "account_id": "ACC000006",
+      "client_id": "CLT000006",
+      "provider": "LOCAL",
+      "identifier": "lythuyhuong85@outlook.com",
+      "password_hash": "$2b$12$1179af2642ccf47bb5e3e84c15271427",
+      "is_verified": true,
+      "created_at": "2025-10-03T12:03:11"
+    },
+    {
+      "account_id": "ACC000007",
+      "client_id": "CLT000007",
+      "provider": "LOCAL",
+      "identifier": "buidieudiem52@gmail.com",
+      "password_hash": "$2b$12$ff8c0e28890915d110ebc2e3e5699225",
+      "is_verified": true,
+      "created_at": "2025-12-30T20:09:21"
+    },
+    {
+      "account_id": "ACC000008",
+      "client_id": "CLT000008",
+      "provider": "LOCAL",
+      "identifier": "toxuanphong97@gmail.com",
+      "password_hash": "$2b$12$c4766e637499b41b7d465bd3cf022574",
+      "is_verified": true,
+      "created_at": "2025-07-02T19:24:47"
+    },
+    {
+      "account_id": "ACC000009",
+      "client_id": "CLT000009",
+      "provider": "LOCAL",
+      "identifier": "lexuanquan85@gmail.com",
+      "password_hash": "$2b$12$44f32b7e4fbbb0278a7f7462d3b0dd6a",
+      "is_verified": true,
+      "created_at": "2025-12-30T07:43:51"
+    },
+    {
+      "account_id": "ACC000010",
+      "client_id": "CLT000010",
+      "provider": "LOCAL",
+      "identifier": "dangxuannam1@yahoo.com",
+      "password_hash": "$2b$12$731a01b72166c657c4c1045abb0a3ece",
+      "is_verified": true,
+      "created_at": "2025-11-27T17:40:33"
+    },
+    {
+      "account_id": "ACC000011",
+      "client_id": "CLT000011",
+      "provider": "LOCAL",
+      "identifier": "nguyenkimvy47@gmail.com",
+      "password_hash": "$2b$12$91f796a7015df28ee301a17d2c793454",
+      "is_verified": true,
+      "created_at": "2025-12-22T13:17:32"
+    },
+    {
+      "account_id": "ACC000012",
+      "client_id": "CLT000012",
+      "provider": "LOCAL",
+      "identifier": "hoangdinhlong90@gmail.com",
+      "password_hash": "$2b$12$f5ec520f8eff151062cd0fdc632c3924",
+      "is_verified": true,
+      "created_at": "2025-09-13T06:46:25"
+    },
+    {
+      "account_id": "ACC000013",
+      "client_id": "CLT000013",
+      "provider": "LOCAL",
+      "identifier": "vubichyen4@gmail.com",
+      "password_hash": "$2b$12$22ee6b55ee1d8d2b4c90dc2747dfcd79",
+      "is_verified": true,
+      "created_at": "2025-12-18T07:17:42"
+    },
+    {
+      "account_id": "ACC000014",
+      "client_id": "CLT000014",
+      "provider": "LOCAL",
+      "identifier": "doxuancuong69@outlook.com",
+      "password_hash": "$2b$12$a1b5fa5e6a3bf5d901bfdcaa21dc517d",
+      "is_verified": true,
+      "created_at": "2025-11-17T16:47:12"
+    },
+    {
+      "account_id": "ACC000015",
+      "client_id": "CLT000015",
+      "provider": "LOCAL",
+      "identifier": "phamthanhviet86@yahoo.com",
+      "password_hash": "$2b$12$7fb085dea8725c61c6c99af728975387",
+      "is_verified": true,
+      "created_at": "2025-11-09T12:31:49"
+    },
+    {
+      "account_id": "ACC000016",
+      "client_id": "CLT000016",
+      "provider": "LOCAL",
+      "identifier": "dangdieutrinh37@outlook.com",
+      "password_hash": "$2b$12$e473765175c6191149d9b07bb0821021",
+      "is_verified": true,
+      "created_at": "2025-11-06T21:46:59"
+    },
+    {
+      "account_id": "ACC000017",
+      "client_id": "CLT000017",
+      "provider": "LOCAL",
+      "identifier": "phanthitrang52@gmail.com",
+      "password_hash": "$2b$12$ba6acb63dabb9eb077c15e104de1350b",
+      "is_verified": true,
+      "created_at": "2025-07-29T15:43:56"
+    },
+    {
+      "account_id": "ACC000018",
+      "client_id": "CLT000018",
+      "provider": "LOCAL",
+      "identifier": "dinhanhtrang79@outlook.com",
+      "password_hash": "$2b$12$f135ac77fe7f79e6a05549bb12aa41a0",
+      "is_verified": true,
+      "created_at": "2025-12-21T05:06:57"
+    },
+    {
+      "account_id": "ACC000019",
+      "client_id": "CLT000019",
+      "provider": "LOCAL",
+      "identifier": "vuthanhviet41@outlook.com",
+      "password_hash": "$2b$12$8e160075cd56058f6078369c9540bc95",
+      "is_verified": true,
+      "created_at": "2025-07-16T15:31:08"
+    },
+    {
+      "account_id": "ACC000020",
+      "client_id": "CLT000020",
+      "provider": "LOCAL",
+      "identifier": "buibahung46@yahoo.com",
+      "password_hash": "$2b$12$acf7bc8747209b3fe15757cbd84eb011",
+      "is_verified": true,
+      "created_at": "2025-11-24T07:26:54"
+    },
+    {
+      "account_id": "ACC000021",
+      "client_id": "CLT000021",
+      "provider": "LOCAL",
+      "identifier": "lythanhyen85@gmail.com",
+      "password_hash": "$2b$12$d8b7eb7ced68e57e2908ce4bbcd43907",
+      "is_verified": true,
+      "created_at": "2025-07-17T07:13:24"
+    },
+    {
+      "account_id": "ACC000022",
+      "client_id": "CLT000022",
+      "provider": "LOCAL",
+      "identifier": "hothuyhuyen7@yahoo.com",
+      "password_hash": "$2b$12$b0f8ccf990d412b3d39e41a3e22a5f21",
+      "is_verified": true,
+      "created_at": "2025-08-13T12:57:03"
+    },
+    {
+      "account_id": "ACC000023",
+      "client_id": "CLT000023",
+      "provider": "LOCAL",
+      "identifier": "nguyendinhkhoa78@outlook.com",
+      "password_hash": "$2b$12$a2f3bc17efcf8505575ae1ce45165d1b",
+      "is_verified": true,
+      "created_at": "2025-11-17T11:47:14"
+    },
+    {
+      "account_id": "ACC000024",
+      "client_id": "CLT000024",
+      "provider": "LOCAL",
+      "identifier": "phanbichngoc9@outlook.com",
+      "password_hash": "$2b$12$9b287c6097c044741036c276d19f8d48",
+      "is_verified": true,
+      "created_at": "2025-11-03T17:46:13"
+    },
+    {
+      "account_id": "ACC000025",
+      "client_id": "CLT000025",
+      "provider": "LOCAL",
+      "identifier": "duongbalong32@gmail.com",
+      "password_hash": "$2b$12$ec6a033a7d5bbc573fae407597b8bce0",
+      "is_verified": true,
+      "created_at": "2025-08-24T03:53:59"
+    },
+    {
+      "account_id": "ACC000026",
+      "client_id": "CLT000026",
+      "provider": "LOCAL",
+      "identifier": "buibichnhung11@gmail.com",
+      "password_hash": "$2b$12$55b0b0cf383e3968d55ca7d33343e021",
+      "is_verified": true,
+      "created_at": "2025-11-17T19:47:28"
+    },
+    {
+      "account_id": "ACC000027",
+      "client_id": "CLT000027",
+      "provider": "LOCAL",
+      "identifier": "nguyenbichyen96@outlook.com",
+      "password_hash": "$2b$12$6615fd2b4e1525a4c0269093d5187712",
+      "is_verified": true,
+      "created_at": "2025-09-03T05:35:57"
+    },
+    {
+      "account_id": "ACC000028",
+      "client_id": "CLT000028",
+      "provider": "LOCAL",
+      "identifier": "phananhlinh25@yahoo.com",
+      "password_hash": "$2b$12$4fd847739252e1b525bc4816c773a0b8",
+      "is_verified": true,
+      "created_at": "2025-08-14T04:08:54"
+    },
+    {
+      "account_id": "ACC000029",
+      "client_id": "CLT000029",
+      "provider": "LOCAL",
+      "identifier": "dangquockien7@yahoo.com",
+      "password_hash": "$2b$12$4d1976e8792fc2179ca3bd267e00a6c4",
+      "is_verified": true,
+      "created_at": "2025-12-30T17:40:27"
+    },
+    {
+      "account_id": "ACC000030",
+      "client_id": "CLT000030",
+      "provider": "LOCAL",
+      "identifier": "trandieuthu67@yahoo.com",
+      "password_hash": "$2b$12$d02c098b55838ed04fe01b6fbc795d0c",
+      "is_verified": true,
+      "created_at": "2025-09-26T11:32:58"
+    },
+    {
+      "account_id": "ACC000031",
+      "client_id": "CLT000031",
+      "provider": "LOCAL",
+      "identifier": "phamdinhnam53@yahoo.com",
+      "password_hash": "$2b$12$4ba62ef4556a62de5f5c7643fe6d3e5e",
+      "is_verified": true,
+      "created_at": "2025-11-11T20:42:08"
+    },
+    {
+      "account_id": "ACC000032",
+      "client_id": "CLT000032",
+      "provider": "LOCAL",
+      "identifier": "duongbichphuong8@gmail.com",
+      "password_hash": "$2b$12$efb2f121b8b168ea9ae777ae620aa3fc",
+      "is_verified": true,
+      "created_at": "2025-12-01T21:55:00"
+    },
+    {
+      "account_id": "ACC000033",
+      "client_id": "CLT000033",
+      "provider": "LOCAL",
+      "identifier": "hoductrung4@gmail.com",
+      "password_hash": "$2b$12$99552dc9c6cdd65f98ef9300bd755cb2",
+      "is_verified": true,
+      "created_at": "2025-08-14T10:51:54"
+    },
+    {
+      "account_id": "ACC000034",
+      "client_id": "CLT000034",
+      "provider": "LOCAL",
+      "identifier": "duongquocquoc21@yahoo.com",
+      "password_hash": "$2b$12$87d1dcfa794fe5b5421ef1ca56b9636c",
+      "is_verified": true,
+      "created_at": "2025-09-18T22:24:18"
+    },
+    {
+      "account_id": "ACC000035",
+      "client_id": "CLT000035",
+      "provider": "LOCAL",
+      "identifier": "lethanhngoc47@outlook.com",
+      "password_hash": "$2b$12$ce5ecb43553e4ea6160fbd84548a0fc4",
+      "is_verified": true,
+      "created_at": "2025-11-24T21:16:50"
+    },
+    {
+      "account_id": "ACC000036",
+      "client_id": "CLT000036",
+      "provider": "LOCAL",
+      "identifier": "dangthuyngoc12@gmail.com",
+      "password_hash": "$2b$12$cdd62336095e97a7c6668a92a721fa4e",
+      "is_verified": true,
+      "created_at": "2025-12-11T09:14:04"
+    },
+    {
+      "account_id": "ACC000037",
+      "client_id": "CLT000037",
+      "provider": "LOCAL",
+      "identifier": "vothuydiem9@yahoo.com",
+      "password_hash": "$2b$12$17a5773d3c36561d29d0ca7f2375e2e0",
+      "is_verified": true,
+      "created_at": "2025-11-28T00:55:37"
+    },
+    {
+      "account_id": "ACC000038",
+      "client_id": "CLT000038",
+      "provider": "LOCAL",
+      "identifier": "dangtrungkien59@yahoo.com",
+      "password_hash": "$2b$12$42b3e7013b7f48540df886f700aafbc8",
+      "is_verified": true,
+      "created_at": "2025-12-16T20:38:15"
+    },
+    {
+      "account_id": "ACC000039",
+      "client_id": "CLT000039",
+      "provider": "LOCAL",
+      "identifier": "lybadung13@outlook.com",
+      "password_hash": "$2b$12$2cd1291af76374cec15bc295a03f8848",
+      "is_verified": true,
+      "created_at": "2025-12-24T18:57:56"
+    },
+    {
+      "account_id": "ACC000040",
+      "client_id": "CLT000040",
+      "provider": "LOCAL",
+      "identifier": "vothuythao31@outlook.com",
+      "password_hash": "$2b$12$cdd4e7ae30fbc614dd6e4be8592a4449",
+      "is_verified": true,
+      "created_at": "2025-11-10T21:31:59"
+    },
+    {
+      "account_id": "ACC000041",
+      "client_id": "CLT000041",
+      "provider": "LOCAL",
+      "identifier": "huynhvanhung53@outlook.com",
+      "password_hash": "$2b$12$180f5008f0929b68afbb4f6d4dcab5fe",
+      "is_verified": true,
+      "created_at": "2025-11-10T09:25:12"
+    },
+    {
+      "account_id": "ACC000042",
+      "client_id": "CLT000042",
+      "provider": "LOCAL",
+      "identifier": "duongcongphong39@outlook.com",
+      "password_hash": "$2b$12$636d76039fdcd4f1a2fb2ed83d452fb8",
+      "is_verified": true,
+      "created_at": "2025-09-21T09:25:22"
+    },
+    {
+      "account_id": "ACC000043",
+      "client_id": "CLT000043",
+      "provider": "LOCAL",
+      "identifier": "lythuyan88@outlook.com",
+      "password_hash": "$2b$12$471ff6e6a9f9d11410e0dbe10e5ec48f",
+      "is_verified": true,
+      "created_at": "2025-07-10T12:33:45"
+    },
+    {
+      "account_id": "ACC000044",
+      "client_id": "CLT000044",
+      "provider": "LOCAL",
+      "identifier": "dobichtrinh94@gmail.com",
+      "password_hash": "$2b$12$9207b968a234c2ddc108750dc9121533",
+      "is_verified": true,
+      "created_at": "2025-07-18T12:03:07"
+    },
+    {
+      "account_id": "ACC000045",
+      "client_id": "CLT000045",
+      "provider": "LOCAL",
+      "identifier": "trinhxuanviet19@gmail.com",
+      "password_hash": "$2b$12$01d7dbe003019e28e4463dfefed02c26",
+      "is_verified": true,
+      "created_at": "2025-12-15T00:32:44"
+    },
+    {
+      "account_id": "ACC000046",
+      "client_id": "CLT000046",
+      "provider": "LOCAL",
+      "identifier": "trinhthanhphuong79@gmail.com",
+      "password_hash": "$2b$12$8730d24041734692150fcc2c82368258",
+      "is_verified": true,
+      "created_at": "2025-11-03T18:16:43"
+    },
+    {
+      "account_id": "ACC000047",
+      "client_id": "CLT000047",
+      "provider": "LOCAL",
+      "identifier": "tranthanhkien54@outlook.com",
+      "password_hash": "$2b$12$18f11c11e15a2c2157510c71d3cb78e5",
+      "is_verified": true,
+      "created_at": "2025-11-22T03:13:27"
+    },
+    {
+      "account_id": "ACC000048",
+      "client_id": "CLT000048",
+      "provider": "LOCAL",
+      "identifier": "dothuytrang16@yahoo.com",
+      "password_hash": "$2b$12$cd9333e7d8fbc4b8ca4d8707481ad344",
+      "is_verified": true,
+      "created_at": "2025-07-18T19:13:44"
+    },
+    {
+      "account_id": "ACC000049",
+      "client_id": "CLT000049",
+      "provider": "LOCAL",
+      "identifier": "toanhhoa70@yahoo.com",
+      "password_hash": "$2b$12$f6f8fbf31b736d0b3f33a02f98671725",
+      "is_verified": true,
+      "created_at": "2025-12-03T01:20:38"
+    },
+    {
+      "account_id": "ACC000050",
+      "client_id": "CLT000050",
+      "provider": "LOCAL",
+      "identifier": "vuvanlong47@outlook.com",
+      "password_hash": "$2b$12$39bdd1b9c5581e2eeac1eda286577237",
+      "is_verified": true,
+      "created_at": "2025-10-24T06:41:03"
+    },
+    {
+      "account_id": "ACC000051",
+      "client_id": "CLT000051",
+      "provider": "LOCAL",
+      "identifier": "lybatuan36@outlook.com",
+      "password_hash": "$2b$12$661d78e5dc7560bf0f073e42d8193f25",
+      "is_verified": true,
+      "created_at": "2025-10-31T22:21:04"
+    },
+    {
+      "account_id": "ACC000052",
+      "client_id": "CLT000052",
+      "provider": "LOCAL",
+      "identifier": "dinhhuutuan94@gmail.com",
+      "password_hash": "$2b$12$f2a8454bd523934cbd9f5fc7d0184021",
+      "is_verified": true,
+      "created_at": "2025-08-30T16:34:51"
+    },
+    {
+      "account_id": "ACC000053",
+      "client_id": "CLT000053",
+      "provider": "LOCAL",
+      "identifier": "lyngocthao43@outlook.com",
+      "password_hash": "$2b$12$225640f1339b322a17b7ba147de4b9c5",
+      "is_verified": true,
+      "created_at": "2025-07-24T17:38:20"
+    },
+    {
+      "account_id": "ACC000054",
+      "client_id": "CLT000054",
+      "provider": "LOCAL",
+      "identifier": "dangdieukim98@yahoo.com",
+      "password_hash": "$2b$12$7568e3920939d0c6b0e3cb570fb5ceec",
+      "is_verified": true,
+      "created_at": "2025-10-20T11:29:59"
+    },
+    {
+      "account_id": "ACC000055",
+      "client_id": "CLT000055",
+      "provider": "LOCAL",
+      "identifier": "vothanhtam12@outlook.com",
+      "password_hash": "$2b$12$2bd5999723d1dac70754e547420c44e8",
+      "is_verified": true,
+      "created_at": "2025-10-12T00:13:42"
+    },
+    {
+      "account_id": "ACC000056",
+      "client_id": "CLT000056",
+      "provider": "LOCAL",
+      "identifier": "buitrungson85@yahoo.com",
+      "password_hash": "$2b$12$882d62aa92323fd184893f7e4e45b138",
+      "is_verified": true,
+      "created_at": "2025-10-03T07:20:51"
+    },
+    {
+      "account_id": "ACC000057",
+      "client_id": "CLT000057",
+      "provider": "LOCAL",
+      "identifier": "ngodieudiem28@gmail.com",
+      "password_hash": "$2b$12$1669779a6acc48b94c7ac96305646d73",
+      "is_verified": true,
+      "created_at": "2025-11-26T09:14:52"
+    },
+    {
+      "account_id": "ACC000058",
+      "client_id": "CLT000058",
+      "provider": "LOCAL",
+      "identifier": "hoangbichkim74@yahoo.com",
+      "password_hash": "$2b$12$2bfd688801eb272343297a5df0de2e1f",
+      "is_verified": true,
+      "created_at": "2025-10-20T08:14:10"
+    },
+    {
+      "account_id": "ACC000059",
+      "client_id": "CLT000059",
+      "provider": "LOCAL",
+      "identifier": "luuthanhthao40@outlook.com",
+      "password_hash": "$2b$12$03a4fbbe135b8a677e16c52b71f6f611",
+      "is_verified": true,
+      "created_at": "2025-09-04T22:14:47"
+    },
+    {
+      "account_id": "ACC000060",
+      "client_id": "CLT000060",
+      "provider": "LOCAL",
+      "identifier": "dinhthanhnhung98@outlook.com",
+      "password_hash": "$2b$12$1d374bedfa9de7d00fc883bbcdfb7701",
+      "is_verified": true,
+      "created_at": "2025-07-15T15:10:18"
+    },
+    {
+      "account_id": "ACC000061",
+      "client_id": "CLT000061",
+      "provider": "LOCAL",
+      "identifier": "buingocdiem60@yahoo.com",
+      "password_hash": "$2b$12$cef590a163e3d72ffa385e0156b3b63d",
+      "is_verified": true,
+      "created_at": "2025-07-08T07:15:44"
+    },
+    {
+      "account_id": "ACC000062",
+      "client_id": "CLT000062",
+      "provider": "LOCAL",
+      "identifier": "dinhdieuvy8@yahoo.com",
+      "password_hash": "$2b$12$00351de51d800d2bfc5ef1e7bbdc5ff3",
+      "is_verified": true,
+      "created_at": "2025-07-21T02:21:13"
+    },
+    {
+      "account_id": "ACC000063",
+      "client_id": "CLT000063",
+      "provider": "LOCAL",
+      "identifier": "duongducviet81@outlook.com",
+      "password_hash": "$2b$12$7846536fcf941d2be553d2c40ac4d539",
+      "is_verified": true,
+      "created_at": "2025-09-03T23:34:44"
+    },
+    {
+      "account_id": "ACC000064",
+      "client_id": "CLT000064",
+      "provider": "LOCAL",
+      "identifier": "lequocbinh17@outlook.com",
+      "password_hash": "$2b$12$cd8ebd48e1577e8b2c78f97d996b974e",
+      "is_verified": true,
+      "created_at": "2025-11-14T11:25:45"
+    },
+    {
+      "account_id": "ACC000065",
+      "client_id": "CLT000065",
+      "provider": "LOCAL",
+      "identifier": "phanthuyhoa5@outlook.com",
+      "password_hash": "$2b$12$6092eb08e0a84c0ded6134a95350d4a5",
+      "is_verified": true,
+      "created_at": "2025-09-04T09:26:08"
+    },
+    {
+      "account_id": "ACC000066",
+      "client_id": "CLT000066",
+      "provider": "LOCAL",
+      "identifier": "luuquocthang69@gmail.com",
+      "password_hash": "$2b$12$b9e828875c08163f1aff0898707365c2",
+      "is_verified": true,
+      "created_at": "2025-08-30T02:13:29"
+    },
+    {
+      "account_id": "ACC000067",
+      "client_id": "CLT000067",
+      "provider": "LOCAL",
+      "identifier": "dinhkimhoa37@gmail.com",
+      "password_hash": "$2b$12$fbbaafac6b4f0b20bbee106c3414f256",
+      "is_verified": true,
+      "created_at": "2025-11-26T04:22:55"
+    },
+    {
+      "account_id": "ACC000068",
+      "client_id": "CLT000068",
+      "provider": "LOCAL",
+      "identifier": "dobahung41@gmail.com",
+      "password_hash": "$2b$12$dd977b39c3196672d3af06034cb63f49",
+      "is_verified": true,
+      "created_at": "2025-12-10T22:50:41"
+    },
+    {
+      "account_id": "ACC000069",
+      "client_id": "CLT000069",
+      "provider": "LOCAL",
+      "identifier": "lyquockien94@outlook.com",
+      "password_hash": "$2b$12$b834be824e99823fea144dd5118b74ff",
+      "is_verified": true,
+      "created_at": "2025-10-11T11:35:36"
+    },
+    {
+      "account_id": "ACC000070",
+      "client_id": "CLT000070",
+      "provider": "LOCAL",
+      "identifier": "vudieuchau92@gmail.com",
+      "password_hash": "$2b$12$d1a6c2a69491a754b695dc7626aefa63",
+      "is_verified": true,
+      "created_at": "2025-08-26T13:25:33"
+    },
+    {
+      "account_id": "ACC000071",
+      "client_id": "CLT000071",
+      "provider": "LOCAL",
+      "identifier": "lexuanduc9@yahoo.com",
+      "password_hash": "$2b$12$de261d6147a75004c19ce50d721f9c20",
+      "is_verified": true,
+      "created_at": "2025-08-16T19:43:41"
+    },
+    {
+      "account_id": "ACC000072",
+      "client_id": "CLT000072",
+      "provider": "LOCAL",
+      "identifier": "huynhcongkien6@yahoo.com",
+      "password_hash": "$2b$12$b0c2d0110b8fd2bab13f93da29e7af07",
+      "is_verified": true,
+      "created_at": "2025-12-29T05:49:26"
+    },
+    {
+      "account_id": "ACC000073",
+      "client_id": "CLT000073",
+      "provider": "LOCAL",
+      "identifier": "tranxuanphong89@yahoo.com",
+      "password_hash": "$2b$12$8e2525aaf3a8afd818e49ffb344bf441",
+      "is_verified": true,
+      "created_at": "2025-09-10T07:57:38"
+    },
+    {
+      "account_id": "ACC000074",
+      "client_id": "CLT000074",
+      "provider": "LOCAL",
+      "identifier": "dangngochuyen6@outlook.com",
+      "password_hash": "$2b$12$2340545f7610c5bd4902a72c5454d10a",
+      "is_verified": true,
+      "created_at": "2025-12-16T22:40:01"
+    },
+    {
+      "account_id": "ACC000075",
+      "client_id": "CLT000075",
+      "provider": "LOCAL",
+      "identifier": "huynhquocson5@outlook.com",
+      "password_hash": "$2b$12$faef2cbc0f1707693b4a3723cf381358",
+      "is_verified": true,
+      "created_at": "2025-07-30T19:04:25"
+    },
+    {
+      "account_id": "ACC000076",
+      "client_id": "CLT000076",
+      "provider": "LOCAL",
+      "identifier": "dinhthanhphuong34@yahoo.com",
+      "password_hash": "$2b$12$76f1e88c92938b5d23b986d359af3bd8",
+      "is_verified": true,
+      "created_at": "2025-11-14T17:03:14"
+    },
+    {
+      "account_id": "ACC000077",
+      "client_id": "CLT000077",
+      "provider": "LOCAL",
+      "identifier": "huynhcongduc47@outlook.com",
+      "password_hash": "$2b$12$5bd878449897e9b54ac5558af6da7c95",
+      "is_verified": true,
+      "created_at": "2025-08-13T13:02:30"
+    },
+    {
+      "account_id": "ACC000078",
+      "client_id": "CLT000078",
+      "provider": "LOCAL",
+      "identifier": "trinhcongtrung99@yahoo.com",
+      "password_hash": "$2b$12$053aec6ec66e89cf4689ad2e9274f5fd",
+      "is_verified": true,
+      "created_at": "2025-12-07T21:02:22"
+    },
+    {
+      "account_id": "ACC000079",
+      "client_id": "CLT000079",
+      "provider": "LOCAL",
+      "identifier": "trinhquockhoa42@outlook.com",
+      "password_hash": "$2b$12$891631b216b4ecd1ef24f4b299ff8ebb",
+      "is_verified": true,
+      "created_at": "2025-08-13T18:46:03"
+    },
+    {
+      "account_id": "ACC000080",
+      "client_id": "CLT000080",
+      "provider": "LOCAL",
+      "identifier": "trinhmytrinh44@outlook.com",
+      "password_hash": "$2b$12$3d17d71d4f76a08276386dd43ecda0ae",
+      "is_verified": true,
+      "created_at": "2025-07-08T23:58:45"
+    },
+    {
+      "account_id": "ACC000081",
+      "client_id": "CLT000081",
+      "provider": "LOCAL",
+      "identifier": "nguyenanhthu57@yahoo.com",
+      "password_hash": "$2b$12$329f5a1f63d2ec30a460e58d624ed7df",
+      "is_verified": true,
+      "created_at": "2025-10-03T00:46:25"
+    },
+    {
+      "account_id": "ACC000082",
+      "client_id": "CLT000082",
+      "provider": "LOCAL",
+      "identifier": "doquocbinh13@gmail.com",
+      "password_hash": "$2b$12$6a0f7ce937ce3b6ab2faeae930b2b399",
+      "is_verified": true,
+      "created_at": "2025-08-26T08:29:09"
+    },
+    {
+      "account_id": "ACC000083",
+      "client_id": "CLT000083",
+      "provider": "LOCAL",
+      "identifier": "huynhanhchau28@outlook.com",
+      "password_hash": "$2b$12$c0b52149f98150e997f67dd21cb99f52",
+      "is_verified": true,
+      "created_at": "2025-09-07T12:36:37"
+    },
+    {
+      "account_id": "ACC000084",
+      "client_id": "CLT000084",
+      "provider": "LOCAL",
+      "identifier": "hoangxuandung37@gmail.com",
+      "password_hash": "$2b$12$842f857ce65c2a579b3a6e2296a9001c",
+      "is_verified": true,
+      "created_at": "2025-09-14T00:30:57"
+    },
+    {
+      "account_id": "ACC000085",
+      "client_id": "CLT000085",
+      "provider": "LOCAL",
+      "identifier": "phamthanhvy5@gmail.com",
+      "password_hash": "$2b$12$81243cac93a5c8d73cc9e700cb573680",
+      "is_verified": true,
+      "created_at": "2025-11-16T13:34:44"
+    },
+    {
+      "account_id": "ACC000086",
+      "client_id": "CLT000086",
+      "provider": "LOCAL",
+      "identifier": "luuthuytrinh61@gmail.com",
+      "password_hash": "$2b$12$8ef54d2dbe352b7091938f31952470d9",
+      "is_verified": true,
+      "created_at": "2025-09-10T12:40:18"
+    },
+    {
+      "account_id": "ACC000087",
+      "client_id": "CLT000087",
+      "provider": "LOCAL",
+      "identifier": "votrungquoc88@gmail.com",
+      "password_hash": "$2b$12$dfff4614d126487ac9afca6732d6a73d",
+      "is_verified": true,
+      "created_at": "2025-07-07T03:07:45"
+    },
+    {
+      "account_id": "ACC000088",
+      "client_id": "CLT000088",
+      "provider": "LOCAL",
+      "identifier": "ngobaviet49@yahoo.com",
+      "password_hash": "$2b$12$16cde58be7d474433fcb8b57b1708ca8",
+      "is_verified": true,
+      "created_at": "2025-08-03T15:05:18"
+    },
+    {
+      "account_id": "ACC000089",
+      "client_id": "CLT000089",
+      "provider": "LOCAL",
+      "identifier": "vumytrang37@gmail.com",
+      "password_hash": "$2b$12$5481de16eb1709a62850693ab6147eca",
+      "is_verified": true,
+      "created_at": "2025-10-20T08:35:44"
+    },
+    {
+      "account_id": "ACC000090",
+      "client_id": "CLT000090",
+      "provider": "LOCAL",
+      "identifier": "tranngocnhung18@gmail.com",
+      "password_hash": "$2b$12$d9faaf9cd7b20c3ad4fb272f489e6ad7",
+      "is_verified": true,
+      "created_at": "2025-10-28T13:15:46"
+    },
+    {
+      "account_id": "ACC000091",
+      "client_id": "CLT000091",
+      "provider": "LOCAL",
+      "identifier": "vuthuyhuyen84@gmail.com",
+      "password_hash": "$2b$12$bc800ccb1debafdf2a4dddfc81a94631",
+      "is_verified": true,
+      "created_at": "2025-11-24T18:48:03"
+    },
+    {
+      "account_id": "ACC000092",
+      "client_id": "CLT000092",
+      "provider": "LOCAL",
+      "identifier": "trinhvanlong39@outlook.com",
+      "password_hash": "$2b$12$79954fc62542123d1b2f477107f394ca",
+      "is_verified": true,
+      "created_at": "2025-10-26T01:10:20"
+    },
+    {
+      "account_id": "ACC000093",
+      "client_id": "CLT000093",
+      "provider": "LOCAL",
+      "identifier": "vongochuyen23@outlook.com",
+      "password_hash": "$2b$12$ba814fe8e850fed97fe37150469a9189",
+      "is_verified": true,
+      "created_at": "2025-12-14T05:55:54"
+    },
+    {
+      "account_id": "ACC000094",
+      "client_id": "CLT000094",
+      "provider": "LOCAL",
+      "identifier": "lybichlan2@yahoo.com",
+      "password_hash": "$2b$12$ea38151345a2a84b6f56fa549737595d",
+      "is_verified": true,
+      "created_at": "2025-11-04T22:23:07"
+    },
+    {
+      "account_id": "ACC000095",
+      "client_id": "CLT000095",
+      "provider": "LOCAL",
+      "identifier": "dinhthanhtuan96@outlook.com",
+      "password_hash": "$2b$12$07c3203068d66f269498364a8effd9c5",
+      "is_verified": true,
+      "created_at": "2025-09-11T13:13:04"
+    },
+    {
+      "account_id": "ACC000096",
+      "client_id": "CLT000096",
+      "provider": "LOCAL",
+      "identifier": "duongxuanduc42@outlook.com",
+      "password_hash": "$2b$12$d08782ad684fa2f9947c327b5d287662",
+      "is_verified": true,
+      "created_at": "2025-09-24T19:07:34"
+    },
+    {
+      "account_id": "ACC000097",
+      "client_id": "CLT000097",
+      "provider": "LOCAL",
+      "identifier": "trananhhanh1@outlook.com",
+      "password_hash": "$2b$12$787d13410ecb535924e1dfbabecbfa5c",
+      "is_verified": true,
+      "created_at": "2025-08-12T07:29:37"
+    },
+    {
+      "account_id": "ACC000098",
+      "client_id": "CLT000098",
+      "provider": "LOCAL",
+      "identifier": "leconghung49@gmail.com",
+      "password_hash": "$2b$12$5cbfffb96f8c2bc4af330f5b4fd11b80",
+      "is_verified": true,
+      "created_at": "2025-11-10T13:45:14"
+    },
+    {
+      "account_id": "ACC000099",
+      "client_id": "CLT000099",
+      "provider": "LOCAL",
+      "identifier": "hodinhminh59@yahoo.com",
+      "password_hash": "$2b$12$584c774ed1f89cb613cfce9891517cc3",
+      "is_verified": true,
+      "created_at": "2025-07-31T02:55:04"
+    },
+    {
+      "account_id": "ACC000100",
+      "client_id": "CLT000100",
+      "provider": "LOCAL",
+      "identifier": "nguyenngocngoc70@gmail.com",
+      "password_hash": "$2b$12$ca5a242bd7aea6131556d83d31a7f0f8",
+      "is_verified": true,
+      "created_at": "2025-11-24T11:41:31"
+    },
+    {
+      "account_id": "ACC000101",
+      "client_id": "CLT000109",
+      "provider": "LOCAL",
+      "identifier": "0777555963",
+      "password_hash": "$2b$12$cabacf876a1476809d23f08fa07fd09b",
+      "is_verified": true,
+      "created_at": "2026-01-01T08:00:00"
+    }
+  ],
+  "ADDRESS": [
+    {
+      "address_id": "ADR000001",
+      "client_id": "CLT000001",
+      "recipient_name": "Đinh Đức Tuấn",
+      "recipient_phone": "0789325288",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-07-12T05:57:03"
+    },
+    {
+      "address_id": "ADR000002",
+      "client_id": "CLT000002",
+      "recipient_name": "Vũ Hữu Đức",
+      "recipient_phone": "0818227824",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-08-30T12:42:11"
+    },
+    {
+      "address_id": "ADR000003",
+      "client_id": "CLT000002",
+      "recipient_name": "Vũ Hữu Đức",
+      "recipient_phone": "0818227824",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-09-24T01:41:39"
+    },
+    {
+      "address_id": "ADR000004",
+      "client_id": "CLT000003",
+      "recipient_name": "Đinh Bích Trang",
+      "recipient_phone": "0950983930",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-10-08T20:08:28"
+    },
+    {
+      "address_id": "ADR000005",
+      "client_id": "CLT000004",
+      "recipient_name": "Vũ Thúy Hoa",
+      "recipient_phone": "0399737631",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-07-12T18:28:31"
+    },
+    {
+      "address_id": "ADR000006",
+      "client_id": "CLT000004",
+      "recipient_name": "Vũ Thúy Hoa",
+      "recipient_phone": "0399737631",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-12-03T11:01:53"
+    },
+    {
+      "address_id": "ADR000007",
+      "client_id": "CLT000005",
+      "recipient_name": "Phạm Bích Vy",
+      "recipient_phone": "0826247317",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-09-17T22:01:36"
+    },
+    {
+      "address_id": "ADR000008",
+      "client_id": "CLT000006",
+      "recipient_name": "Lý Thùy Hương",
+      "recipient_phone": "0360647468",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-11-23T05:49:07"
+    },
+    {
+      "address_id": "ADR000009",
+      "client_id": "CLT000007",
+      "recipient_name": "Bùi Diệu Diễm",
+      "recipient_phone": "0308121913",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-20T09:43:46"
+    },
+    {
+      "address_id": "ADR000010",
+      "client_id": "CLT000008",
+      "recipient_name": "Tô Xuân Phong",
+      "recipient_phone": "0353462475",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-08-21T11:55:24"
+    },
+    {
+      "address_id": "ADR000011",
+      "client_id": "CLT000008",
+      "recipient_name": "Tô Xuân Phong",
+      "recipient_phone": "0353462475",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-12-19T01:07:28"
+    },
+    {
+      "address_id": "ADR000012",
+      "client_id": "CLT000009",
+      "recipient_name": "Lê Xuân Quân",
+      "recipient_phone": "0378498084",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-08-22T21:14:04"
+    },
+    {
+      "address_id": "ADR000013",
+      "client_id": "CLT000010",
+      "recipient_name": "Đặng Xuân Nam",
+      "recipient_phone": "0787401640",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-10-17T22:00:55"
+    },
+    {
+      "address_id": "ADR000014",
+      "client_id": "CLT000011",
+      "recipient_name": "Nguyễn Kim Vy",
+      "recipient_phone": "0959826204",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-29T11:36:18"
+    },
+    {
+      "address_id": "ADR000015",
+      "client_id": "CLT000011",
+      "recipient_name": "Nguyễn Kim Vy",
+      "recipient_phone": "0959826204",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-10-29T12:29:32"
+    },
+    {
+      "address_id": "ADR000016",
+      "client_id": "CLT000012",
+      "recipient_name": "Hoàng Đình Long",
+      "recipient_phone": "0360256342",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-12-07T07:58:36"
+    },
+    {
+      "address_id": "ADR000017",
+      "client_id": "CLT000013",
+      "recipient_name": "Vũ Bích Yến",
+      "recipient_phone": "0741458685",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-09-23T09:12:50"
+    },
+    {
+      "address_id": "ADR000018",
+      "client_id": "CLT000014",
+      "recipient_name": "Đỗ Xuân Cường",
+      "recipient_phone": "0969340608",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-06T19:36:34"
+    },
+    {
+      "address_id": "ADR000019",
+      "client_id": "CLT000015",
+      "recipient_name": "Phạm Thành Việt",
+      "recipient_phone": "0765648236",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-08-29T00:09:35"
+    },
+    {
+      "address_id": "ADR000020",
+      "client_id": "CLT000016",
+      "recipient_name": "Đặng Diệu Trinh",
+      "recipient_phone": "0777738721",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-12-04T14:51:19"
+    },
+    {
+      "address_id": "ADR000021",
+      "client_id": "CLT000017",
+      "recipient_name": "Phan Thị Trang",
+      "recipient_phone": "0891769367",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-08-04T03:41:28"
+    },
+    {
+      "address_id": "ADR000022",
+      "client_id": "CLT000018",
+      "recipient_name": "Đinh Ánh Trang",
+      "recipient_phone": "0972788957",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-11-22T09:41:07"
+    },
+    {
+      "address_id": "ADR000023",
+      "client_id": "CLT000018",
+      "recipient_name": "Đinh Ánh Trang",
+      "recipient_phone": "0972788957",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-08-20T07:55:12"
+    },
+    {
+      "address_id": "ADR000024",
+      "client_id": "CLT000019",
+      "recipient_name": "Vũ Thành Việt",
+      "recipient_phone": "0834714345",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-08-11T13:05:33"
+    },
+    {
+      "address_id": "ADR000025",
+      "client_id": "CLT000019",
+      "recipient_name": "Vũ Thành Việt",
+      "recipient_phone": "0834714345",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": false,
+      "created_at": "2025-09-18T03:33:02"
+    },
+    {
+      "address_id": "ADR000026",
+      "client_id": "CLT000020",
+      "recipient_name": "Bùi Bá Hùng",
+      "recipient_phone": "0366909670",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-10-03T19:18:51"
+    },
+    {
+      "address_id": "ADR000027",
+      "client_id": "CLT000020",
+      "recipient_name": "Bùi Bá Hùng",
+      "recipient_phone": "0366909670",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-09-23T15:08:34"
+    },
+    {
+      "address_id": "ADR000028",
+      "client_id": "CLT000021",
+      "recipient_name": "Lý Thanh Yến",
+      "recipient_phone": "0372980699",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-08-20T12:24:58"
+    },
+    {
+      "address_id": "ADR000029",
+      "client_id": "CLT000022",
+      "recipient_name": "Hồ Thúy Huyền",
+      "recipient_phone": "0764641708",
+      "address_line": "45 Lê Lợi",
+      "ward": "Phường Bến Thành",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-08-08T17:05:17"
+    },
+    {
+      "address_id": "ADR000030",
+      "client_id": "CLT000023",
+      "recipient_name": "Nguyễn Đình Khoa",
+      "recipient_phone": "0819374529",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-20T19:24:26"
+    },
+    {
+      "address_id": "ADR000031",
+      "client_id": "CLT000023",
+      "recipient_name": "Nguyễn Đình Khoa",
+      "recipient_phone": "0819374529",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-12-30T19:34:15"
+    },
+    {
+      "address_id": "ADR000032",
+      "client_id": "CLT000024",
+      "recipient_name": "Phan Bích Ngọc",
+      "recipient_phone": "0791905865",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-09-09T07:55:06"
+    },
+    {
+      "address_id": "ADR000033",
+      "client_id": "CLT000025",
+      "recipient_name": "Dương Bá Long",
+      "recipient_phone": "0798776945",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-04T07:43:18"
+    },
+    {
+      "address_id": "ADR000034",
+      "client_id": "CLT000025",
+      "recipient_name": "Dương Bá Long",
+      "recipient_phone": "0798776945",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": false,
+      "created_at": "2025-12-13T05:43:39"
+    },
+    {
+      "address_id": "ADR000035",
+      "client_id": "CLT000026",
+      "recipient_name": "Bùi Bích Nhung",
+      "recipient_phone": "0754948083",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-09-26T00:38:41"
+    },
+    {
+      "address_id": "ADR000036",
+      "client_id": "CLT000027",
+      "recipient_name": "Nguyễn Bích Yến",
+      "recipient_phone": "0349578856",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-11-18T01:25:43"
+    },
+    {
+      "address_id": "ADR000037",
+      "client_id": "CLT000028",
+      "recipient_name": "Phan Ánh Linh",
+      "recipient_phone": "0337498941",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-08-23T06:23:00"
+    },
+    {
+      "address_id": "ADR000038",
+      "client_id": "CLT000028",
+      "recipient_name": "Phan Ánh Linh",
+      "recipient_phone": "0337498941",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": false,
+      "created_at": "2025-10-16T10:50:22"
+    },
+    {
+      "address_id": "ADR000039",
+      "client_id": "CLT000029",
+      "recipient_name": "Đặng Quốc Kiên",
+      "recipient_phone": "0909477752",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-10-21T01:06:48"
+    },
+    {
+      "address_id": "ADR000040",
+      "client_id": "CLT000030",
+      "recipient_name": "Trần Diệu Thu",
+      "recipient_phone": "0931869993",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-10-27T09:05:09"
+    },
+    {
+      "address_id": "ADR000041",
+      "client_id": "CLT000031",
+      "recipient_name": "Phạm Đình Nam",
+      "recipient_phone": "0712328120",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-14T12:09:34"
+    },
+    {
+      "address_id": "ADR000042",
+      "client_id": "CLT000032",
+      "recipient_name": "Dương Bích Phương",
+      "recipient_phone": "0361832421",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-07-25T03:31:48"
+    },
+    {
+      "address_id": "ADR000043",
+      "client_id": "CLT000032",
+      "recipient_name": "Dương Bích Phương",
+      "recipient_phone": "0361832421",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-11-13T20:59:43"
+    },
+    {
+      "address_id": "ADR000044",
+      "client_id": "CLT000033",
+      "recipient_name": "Hồ Đức Trung",
+      "recipient_phone": "0871906594",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-26T04:20:44"
+    },
+    {
+      "address_id": "ADR000045",
+      "client_id": "CLT000033",
+      "recipient_name": "Hồ Đức Trung",
+      "recipient_phone": "0871906594",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-10-09T18:32:48"
+    },
+    {
+      "address_id": "ADR000046",
+      "client_id": "CLT000034",
+      "recipient_name": "Dương Quốc Quốc",
+      "recipient_phone": "0871756551",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-27T07:38:32"
+    },
+    {
+      "address_id": "ADR000047",
+      "client_id": "CLT000035",
+      "recipient_name": "Lê Thanh Ngọc",
+      "recipient_phone": "0880876038",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-12-28T03:16:06"
+    },
+    {
+      "address_id": "ADR000048",
+      "client_id": "CLT000036",
+      "recipient_name": "Đặng Thúy Ngọc",
+      "recipient_phone": "0993248086",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-10-07T19:30:55"
+    },
+    {
+      "address_id": "ADR000049",
+      "client_id": "CLT000037",
+      "recipient_name": "Võ Thúy Diễm",
+      "recipient_phone": "0378263982",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-18T23:38:34"
+    },
+    {
+      "address_id": "ADR000050",
+      "client_id": "CLT000038",
+      "recipient_name": "Đặng Trung Kiên",
+      "recipient_phone": "0378755886",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-08-31T18:48:32"
+    },
+    {
+      "address_id": "ADR000051",
+      "client_id": "CLT000039",
+      "recipient_name": "Lý Bá Dũng",
+      "recipient_phone": "0370289517",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-09-30T03:59:05"
+    },
+    {
+      "address_id": "ADR000052",
+      "client_id": "CLT000040",
+      "recipient_name": "Võ Thùy Thảo",
+      "recipient_phone": "0786578091",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-09-25T03:41:30"
+    },
+    {
+      "address_id": "ADR000053",
+      "client_id": "CLT000041",
+      "recipient_name": "Huỳnh Văn Hùng",
+      "recipient_phone": "0704556238",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-10-05T15:17:50"
+    },
+    {
+      "address_id": "ADR000054",
+      "client_id": "CLT000041",
+      "recipient_name": "Huỳnh Văn Hùng",
+      "recipient_phone": "0704556238",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-08-15T02:04:35"
+    },
+    {
+      "address_id": "ADR000055",
+      "client_id": "CLT000042",
+      "recipient_name": "Dương Công Phong",
+      "recipient_phone": "0974821759",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-12-13T16:49:53"
+    },
+    {
+      "address_id": "ADR000056",
+      "client_id": "CLT000043",
+      "recipient_name": "Lý Thùy An",
+      "recipient_phone": "0794406409",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-12-03T17:16:25"
+    },
+    {
+      "address_id": "ADR000057",
+      "client_id": "CLT000044",
+      "recipient_name": "Đỗ Bích Trinh",
+      "recipient_phone": "0721047095",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-11-30T17:24:55"
+    },
+    {
+      "address_id": "ADR000058",
+      "client_id": "CLT000045",
+      "recipient_name": "Trịnh Xuân Việt",
+      "recipient_phone": "0724745171",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-12-01T12:50:42"
+    },
+    {
+      "address_id": "ADR000059",
+      "client_id": "CLT000045",
+      "recipient_name": "Trịnh Xuân Việt",
+      "recipient_phone": "0724745171",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-08-21T08:27:58"
+    },
+    {
+      "address_id": "ADR000060",
+      "client_id": "CLT000046",
+      "recipient_name": "Trịnh Thanh Phương",
+      "recipient_phone": "0851370985",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-07-28T03:24:29"
+    },
+    {
+      "address_id": "ADR000061",
+      "client_id": "CLT000047",
+      "recipient_name": "Trần Thành Kiên",
+      "recipient_phone": "0913826758",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-28T13:08:50"
+    },
+    {
+      "address_id": "ADR000062",
+      "client_id": "CLT000047",
+      "recipient_name": "Trần Thành Kiên",
+      "recipient_phone": "0913826758",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-07-07T08:28:08"
+    },
+    {
+      "address_id": "ADR000063",
+      "client_id": "CLT000048",
+      "recipient_name": "Đỗ Thúy Trang",
+      "recipient_phone": "0715850643",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-30T18:43:42"
+    },
+    {
+      "address_id": "ADR000064",
+      "client_id": "CLT000048",
+      "recipient_name": "Đỗ Thúy Trang",
+      "recipient_phone": "0715850643",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": false,
+      "created_at": "2025-07-25T10:50:52"
+    },
+    {
+      "address_id": "ADR000065",
+      "client_id": "CLT000049",
+      "recipient_name": "Tô Ánh Hoa",
+      "recipient_phone": "0335290422",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-09-08T13:31:48"
+    },
+    {
+      "address_id": "ADR000066",
+      "client_id": "CLT000050",
+      "recipient_name": "Vũ Văn Long",
+      "recipient_phone": "0702681177",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-08-28T13:41:57"
+    },
+    {
+      "address_id": "ADR000067",
+      "client_id": "CLT000050",
+      "recipient_name": "Vũ Văn Long",
+      "recipient_phone": "0702681177",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-07-12T19:28:00"
+    },
+    {
+      "address_id": "ADR000068",
+      "client_id": "CLT000051",
+      "recipient_name": "Lý Bá Tuấn",
+      "recipient_phone": "0871159212",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-27T02:28:01"
+    },
+    {
+      "address_id": "ADR000069",
+      "client_id": "CLT000052",
+      "recipient_name": "Đinh Hữu Tuấn",
+      "recipient_phone": "0367365766",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-12-27T05:25:19"
+    },
+    {
+      "address_id": "ADR000070",
+      "client_id": "CLT000053",
+      "recipient_name": "Lý Ngọc Thảo",
+      "recipient_phone": "0815280988",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-25T14:06:49"
+    },
+    {
+      "address_id": "ADR000071",
+      "client_id": "CLT000054",
+      "recipient_name": "Đặng Diệu Kim",
+      "recipient_phone": "0327315851",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-10-27T06:07:19"
+    },
+    {
+      "address_id": "ADR000072",
+      "client_id": "CLT000054",
+      "recipient_name": "Đặng Diệu Kim",
+      "recipient_phone": "0327315851",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": false,
+      "created_at": "2025-08-05T00:47:59"
+    },
+    {
+      "address_id": "ADR000073",
+      "client_id": "CLT000055",
+      "recipient_name": "Võ Thành Tâm",
+      "recipient_phone": "0702296120",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-08-30T12:20:07"
+    },
+    {
+      "address_id": "ADR000074",
+      "client_id": "CLT000056",
+      "recipient_name": "Bùi Trung Sơn",
+      "recipient_phone": "0902290147",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-06T00:37:19"
+    },
+    {
+      "address_id": "ADR000075",
+      "client_id": "CLT000057",
+      "recipient_name": "Ngô Diệu Diễm",
+      "recipient_phone": "0703690034",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-08-04T02:47:49"
+    },
+    {
+      "address_id": "ADR000076",
+      "client_id": "CLT000058",
+      "recipient_name": "Hoàng Bích Kim",
+      "recipient_phone": "0716060715",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-08-03T08:59:13"
+    },
+    {
+      "address_id": "ADR000077",
+      "client_id": "CLT000059",
+      "recipient_name": "Lưu Thanh Thảo",
+      "recipient_phone": "0813696816",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-10-12T00:47:51"
+    },
+    {
+      "address_id": "ADR000078",
+      "client_id": "CLT000060",
+      "recipient_name": "Đinh Thanh Nhung",
+      "recipient_phone": "0331243292",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-11-10T06:18:43"
+    },
+    {
+      "address_id": "ADR000079",
+      "client_id": "CLT000060",
+      "recipient_name": "Đinh Thanh Nhung",
+      "recipient_phone": "0331243292",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-12-15T19:40:56"
+    },
+    {
+      "address_id": "ADR000080",
+      "client_id": "CLT000061",
+      "recipient_name": "Bùi Ngọc Diễm",
+      "recipient_phone": "0844905814",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-24T08:36:45"
+    },
+    {
+      "address_id": "ADR000081",
+      "client_id": "CLT000062",
+      "recipient_name": "Đinh Diệu Vy",
+      "recipient_phone": "0979359782",
+      "address_line": "45 Lê Lợi",
+      "ward": "Phường Bến Thành",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-15T09:45:22"
+    },
+    {
+      "address_id": "ADR000082",
+      "client_id": "CLT000063",
+      "recipient_name": "Dương Đức Việt",
+      "recipient_phone": "0355466590",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-08-18T22:23:07"
+    },
+    {
+      "address_id": "ADR000083",
+      "client_id": "CLT000063",
+      "recipient_name": "Dương Đức Việt",
+      "recipient_phone": "0355466590",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-09-03T17:34:46"
+    },
+    {
+      "address_id": "ADR000084",
+      "client_id": "CLT000064",
+      "recipient_name": "Lê Quốc Bình",
+      "recipient_phone": "0762914865",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-07-04T12:57:37"
+    },
+    {
+      "address_id": "ADR000085",
+      "client_id": "CLT000064",
+      "recipient_name": "Lê Quốc Bình",
+      "recipient_phone": "0762914865",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": false,
+      "created_at": "2025-08-05T00:05:09"
+    },
+    {
+      "address_id": "ADR000086",
+      "client_id": "CLT000065",
+      "recipient_name": "Phan Thúy Hoa",
+      "recipient_phone": "0322141888",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-12-09T10:20:55"
+    },
+    {
+      "address_id": "ADR000087",
+      "client_id": "CLT000066",
+      "recipient_name": "Lưu Quốc Thắng",
+      "recipient_phone": "0965379473",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-11-27T09:50:36"
+    },
+    {
+      "address_id": "ADR000088",
+      "client_id": "CLT000066",
+      "recipient_name": "Lưu Quốc Thắng",
+      "recipient_phone": "0965379473",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": false,
+      "created_at": "2025-10-06T15:42:54"
+    },
+    {
+      "address_id": "ADR000089",
+      "client_id": "CLT000067",
+      "recipient_name": "Đinh Kim Hoa",
+      "recipient_phone": "0340758181",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-07-18T19:24:58"
+    },
+    {
+      "address_id": "ADR000090",
+      "client_id": "CLT000067",
+      "recipient_name": "Đinh Kim Hoa",
+      "recipient_phone": "0340758181",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-12-19T18:40:24"
+    },
+    {
+      "address_id": "ADR000091",
+      "client_id": "CLT000068",
+      "recipient_name": "Đỗ Bá Hùng",
+      "recipient_phone": "0885361530",
+      "address_line": "78 Trần Hưng Đạo",
+      "ward": "Phường Phạm Ngũ Lão",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-12-26T03:22:33"
+    },
+    {
+      "address_id": "ADR000092",
+      "client_id": "CLT000069",
+      "recipient_name": "Lý Quốc Kiên",
+      "recipient_phone": "0890104328",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-07-10T06:31:42"
+    },
+    {
+      "address_id": "ADR000093",
+      "client_id": "CLT000070",
+      "recipient_name": "Vũ Diệu Châu",
+      "recipient_phone": "0917980893",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-08-06T08:56:45"
+    },
+    {
+      "address_id": "ADR000094",
+      "client_id": "CLT000071",
+      "recipient_name": "Lê Xuân Đức",
+      "recipient_phone": "0967065405",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-07-09T14:37:09"
+    },
+    {
+      "address_id": "ADR000095",
+      "client_id": "CLT000071",
+      "recipient_name": "Lê Xuân Đức",
+      "recipient_phone": "0967065405",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": false,
+      "created_at": "2025-12-05T23:13:33"
+    },
+    {
+      "address_id": "ADR000096",
+      "client_id": "CLT000072",
+      "recipient_name": "Huỳnh Công Kiên",
+      "recipient_phone": "0321704303",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-07-08T02:39:54"
+    },
+    {
+      "address_id": "ADR000097",
+      "client_id": "CLT000072",
+      "recipient_name": "Huỳnh Công Kiên",
+      "recipient_phone": "0321704303",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-09-08T07:37:12"
+    },
+    {
+      "address_id": "ADR000098",
+      "client_id": "CLT000073",
+      "recipient_name": "Trần Xuân Phong",
+      "recipient_phone": "0956676527",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-09-22T14:46:29"
+    },
+    {
+      "address_id": "ADR000099",
+      "client_id": "CLT000073",
+      "recipient_name": "Trần Xuân Phong",
+      "recipient_phone": "0956676527",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-10-14T22:05:41"
+    },
+    {
+      "address_id": "ADR000100",
+      "client_id": "CLT000074",
+      "recipient_name": "Đặng Ngọc Huyền",
+      "recipient_phone": "0747962757",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-08T07:56:37"
+    },
+    {
+      "address_id": "ADR000101",
+      "client_id": "CLT000074",
+      "recipient_name": "Đặng Ngọc Huyền",
+      "recipient_phone": "0747962757",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": false,
+      "created_at": "2025-10-08T15:09:14"
+    },
+    {
+      "address_id": "ADR000102",
+      "client_id": "CLT000075",
+      "recipient_name": "Huỳnh Quốc Sơn",
+      "recipient_phone": "0802135569",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-07-27T17:42:20"
+    },
+    {
+      "address_id": "ADR000103",
+      "client_id": "CLT000076",
+      "recipient_name": "Đinh Thanh Phương",
+      "recipient_phone": "0310278681",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-07-24T19:31:54"
+    },
+    {
+      "address_id": "ADR000104",
+      "client_id": "CLT000076",
+      "recipient_name": "Đinh Thanh Phương",
+      "recipient_phone": "0310278681",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-09-26T18:40:17"
+    },
+    {
+      "address_id": "ADR000105",
+      "client_id": "CLT000077",
+      "recipient_name": "Huỳnh Công Đức",
+      "recipient_phone": "0751884422",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-09-09T01:53:58"
+    },
+    {
+      "address_id": "ADR000106",
+      "client_id": "CLT000078",
+      "recipient_name": "Trịnh Công Trung",
+      "recipient_phone": "0391146786",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-09-29T10:56:24"
+    },
+    {
+      "address_id": "ADR000107",
+      "client_id": "CLT000078",
+      "recipient_name": "Trịnh Công Trung",
+      "recipient_phone": "0391146786",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-07-25T22:04:57"
+    },
+    {
+      "address_id": "ADR000108",
+      "client_id": "CLT000079",
+      "recipient_name": "Trịnh Quốc Khoa",
+      "recipient_phone": "0880182422",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-01T07:34:49"
+    },
+    {
+      "address_id": "ADR000109",
+      "client_id": "CLT000080",
+      "recipient_name": "Trịnh Mỹ Trinh",
+      "recipient_phone": "0982992299",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-26T22:17:16"
+    },
+    {
+      "address_id": "ADR000110",
+      "client_id": "CLT000080",
+      "recipient_name": "Trịnh Mỹ Trinh",
+      "recipient_phone": "0982992299",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-10-29T00:35:38"
+    },
+    {
+      "address_id": "ADR000111",
+      "client_id": "CLT000081",
+      "recipient_name": "Nguyễn Ánh Thu",
+      "recipient_phone": "0773647102",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-11-20T13:37:07"
+    },
+    {
+      "address_id": "ADR000112",
+      "client_id": "CLT000082",
+      "recipient_name": "Đỗ Quốc Bình",
+      "recipient_phone": "0953714732",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-08-06T20:41:27"
+    },
+    {
+      "address_id": "ADR000113",
+      "client_id": "CLT000083",
+      "recipient_name": "Huỳnh Ánh Châu",
+      "recipient_phone": "0847016873",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-10-13T05:09:36"
+    },
+    {
+      "address_id": "ADR000114",
+      "client_id": "CLT000083",
+      "recipient_name": "Huỳnh Ánh Châu",
+      "recipient_phone": "0847016873",
+      "address_line": "123 Nguyễn Huệ",
+      "ward": "Phường Bến Nghé",
+      "province": "TP.HCM",
+      "is_default": false,
+      "created_at": "2025-09-22T16:16:08"
+    },
+    {
+      "address_id": "ADR000115",
+      "client_id": "CLT000084",
+      "recipient_name": "Hoàng Xuân Dũng",
+      "recipient_phone": "0706098358",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-07-25T23:36:53"
+    },
+    {
+      "address_id": "ADR000116",
+      "client_id": "CLT000085",
+      "recipient_name": "Phạm Thanh Vy",
+      "recipient_phone": "0723986800",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-09-02T16:25:53"
+    },
+    {
+      "address_id": "ADR000117",
+      "client_id": "CLT000086",
+      "recipient_name": "Lưu Thùy Trinh",
+      "recipient_phone": "0795888794",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-01T03:45:02"
+    },
+    {
+      "address_id": "ADR000118",
+      "client_id": "CLT000087",
+      "recipient_name": "Võ Trung Quốc",
+      "recipient_phone": "0309728962",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-07-30T09:43:14"
+    },
+    {
+      "address_id": "ADR000119",
+      "client_id": "CLT000088",
+      "recipient_name": "Ngô Bá Việt",
+      "recipient_phone": "0802838578",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-08-07T08:00:57"
+    },
+    {
+      "address_id": "ADR000120",
+      "client_id": "CLT000089",
+      "recipient_name": "Vũ Mỹ Trang",
+      "recipient_phone": "0743757584",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-08-26T09:36:26"
+    },
+    {
+      "address_id": "ADR000121",
+      "client_id": "CLT000090",
+      "recipient_name": "Trần Ngọc Nhung",
+      "recipient_phone": "0847338484",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-11-01T21:02:13"
+    },
+    {
+      "address_id": "ADR000122",
+      "client_id": "CLT000091",
+      "recipient_name": "Vũ Thùy Huyền",
+      "recipient_phone": "0812082677",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-08-15T02:13:28"
+    },
+    {
+      "address_id": "ADR000123",
+      "client_id": "CLT000092",
+      "recipient_name": "Trịnh Văn Long",
+      "recipient_phone": "0820672400",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-12-20T16:15:06"
+    },
+    {
+      "address_id": "ADR000124",
+      "client_id": "CLT000092",
+      "recipient_name": "Trịnh Văn Long",
+      "recipient_phone": "0820672400",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-09-29T21:08:05"
+    },
+    {
+      "address_id": "ADR000125",
+      "client_id": "CLT000093",
+      "recipient_name": "Võ Ngọc Huyền",
+      "recipient_phone": "0374205493",
+      "address_line": "30 Trần Phú",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-09-16T20:01:05"
+    },
+    {
+      "address_id": "ADR000126",
+      "client_id": "CLT000093",
+      "recipient_name": "Võ Ngọc Huyền",
+      "recipient_phone": "0374205493",
+      "address_line": "45 Lê Lợi",
+      "ward": "Phường Bến Thành",
+      "province": "TP.HCM",
+      "is_default": false,
+      "created_at": "2025-07-28T07:17:55"
+    },
+    {
+      "address_id": "ADR000127",
+      "client_id": "CLT000094",
+      "recipient_name": "Lý Bích Lan",
+      "recipient_phone": "0763745499",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-08-29T13:49:16"
+    },
+    {
+      "address_id": "ADR000128",
+      "client_id": "CLT000094",
+      "recipient_name": "Lý Bích Lan",
+      "recipient_phone": "0763745499",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": false,
+      "created_at": "2025-11-11T05:20:05"
+    },
+    {
+      "address_id": "ADR000129",
+      "client_id": "CLT000095",
+      "recipient_name": "Đinh Thành Tuấn",
+      "recipient_phone": "0759332727",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-11-10T02:37:23"
+    },
+    {
+      "address_id": "ADR000130",
+      "client_id": "CLT000095",
+      "recipient_name": "Đinh Thành Tuấn",
+      "recipient_phone": "0759332727",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": false,
+      "created_at": "2025-10-11T01:02:18"
+    },
+    {
+      "address_id": "ADR000131",
+      "client_id": "CLT000096",
+      "recipient_name": "Dương Xuân Đức",
+      "recipient_phone": "0908839822",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-09-25T12:05:59"
+    },
+    {
+      "address_id": "ADR000132",
+      "client_id": "CLT000097",
+      "recipient_name": "Trần Ánh Hạnh",
+      "recipient_phone": "0890874064",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-07-12T16:48:41"
+    },
+    {
+      "address_id": "ADR000133",
+      "client_id": "CLT000098",
+      "recipient_name": "Lê Công Hùng",
+      "recipient_phone": "0762265676",
+      "address_line": "45 Lê Lợi",
+      "ward": "Phường Bến Thành",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-13T07:48:21"
+    },
+    {
+      "address_id": "ADR000134",
+      "client_id": "CLT000099",
+      "recipient_name": "Hồ Đình Minh",
+      "recipient_phone": "0947868633",
+      "address_line": "201 Nguyễn Trãi",
+      "ward": "Phường 2",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-10-28T09:44:59"
+    },
+    {
+      "address_id": "ADR000135",
+      "client_id": "CLT000100",
+      "recipient_name": "Nguyễn Ngọc Ngọc",
+      "recipient_phone": "0979030673",
+      "address_line": "67 Đội Cấn",
+      "ward": "Phường Đội Cấn",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-10-20T20:52:07"
+    },
+    {
+      "address_id": "ADR000136",
+      "client_id": "CLT000101",
+      "recipient_name": "Võ Diệu Linh",
+      "recipient_phone": "0799534283",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-07-10T02:29:44"
+    },
+    {
+      "address_id": "ADR000137",
+      "client_id": "CLT000102",
+      "recipient_name": "Lý Bích Thu",
+      "recipient_phone": "0768566246",
+      "address_line": "25 Lý Thường Kiệt",
+      "ward": "Phường Trần Hưng Đạo",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-12-25T15:00:10"
+    },
+    {
+      "address_id": "ADR000138",
+      "client_id": "CLT000103",
+      "recipient_name": "Bùi Công Bình",
+      "recipient_phone": "0986688263",
+      "address_line": "56 Cách Mạng Tháng 8",
+      "ward": "Phường 5",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-11-18T16:48:34"
+    },
+    {
+      "address_id": "ADR000139",
+      "client_id": "CLT000104",
+      "recipient_name": "Phan Thanh Thu",
+      "recipient_phone": "0304699013",
+      "address_line": "45 Lê Lợi",
+      "ward": "Phường Bến Thành",
+      "province": "TP.HCM",
+      "is_default": true,
+      "created_at": "2025-12-29T23:28:51"
+    },
+    {
+      "address_id": "ADR000140",
+      "client_id": "CLT000105",
+      "recipient_name": "Hồ Thanh Thu",
+      "recipient_phone": "0317393638",
+      "address_line": "55 Nguyễn Văn Linh",
+      "ward": "Phường Thạch Thang",
+      "province": "Đà Nẵng",
+      "is_default": true,
+      "created_at": "2025-10-08T13:53:53"
+    },
+    {
+      "address_id": "ADR000141",
+      "client_id": "CLT000106",
+      "recipient_name": "Hoàng Ánh An",
+      "recipient_phone": "0871753556",
+      "address_line": "23 Đại lộ Bình Dương",
+      "ward": "Phường Hiệp Thành",
+      "province": "Bình Dương",
+      "is_default": true,
+      "created_at": "2025-08-27T07:41:44"
+    },
+    {
+      "address_id": "ADR000142",
+      "client_id": "CLT000107",
+      "recipient_name": "Võ Công Kiên",
+      "recipient_phone": "0335369378",
+      "address_line": "44 Nguyễn Thị Minh Khai",
+      "ward": "Phường An Nghiệp",
+      "province": "Cần Thơ",
+      "is_default": true,
+      "created_at": "2025-11-20T06:57:58"
+    },
+    {
+      "address_id": "ADR000143",
+      "client_id": "CLT000108",
+      "recipient_name": "Trần Bá Khoa",
+      "recipient_phone": "0722872808",
+      "address_line": "10 Tràng Thi",
+      "ward": "Phường Hàng Bông",
+      "province": "Hà Nội",
+      "is_default": true,
+      "created_at": "2025-11-15T07:38:56"
+    },
+    {
+      "address_id": "ADR000900",
+      "client_id": "CLT000109",
+      "recipient_name": "Cao Thi Thanh Truc",
+      "recipient_phone": "0777555963",
+      "address_line": "123 Đinh Tiên Hoàng",
+      "ward": "Phường Đa Kao",
+      "province": "TP. Hồ Chí Minh",
+      "is_default": true,
+      "created_at": "2026-01-01T08:00:00"
+    }
+  ]
+}
