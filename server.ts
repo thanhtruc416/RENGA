@@ -52,6 +52,15 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
 });
 
+app.use('/api/products', productRouter);
+app.use('/api/auth',     authRouter);
+app.use('/api/cart',     cartRouter);
+app.use('/api/orders',   orderRouter);
+app.use('/api/vouchers', voucherRouter);
+app.use('/api/studio',   studioRouter);
+app.use('/api/design',   designRouter);
+app.use('/api/account',  accountRouter);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
 
