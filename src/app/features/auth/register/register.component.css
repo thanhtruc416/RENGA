@@ -247,6 +247,19 @@
 }
 .reg-popup__btn:hover { opacity: 0.85; }
 
+.reg-popup__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.reg-popup__btn--outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+
 /* ── Submit Button ── */
 .register__submit {
   margin-top: 40px;

@@ -46,8 +46,9 @@ export class RegisterComponent {
   readonly popupVisible  = signal(false);
   readonly popupSuccess  = signal(true);
   readonly showOldOrders = signal(false);
-  readonly otpError      = signal('');
-  readonly serverError   = signal('');
+  readonly otpError        = signal('');
+  readonly serverError     = signal('');
+  readonly showPhoneExists = signal(false);
 
   // Countdown gửi lại OTP
   readonly countdown     = signal(0);
@@ -103,8 +104,13 @@ export class RegisterComponent {
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
+          // Lỗi validation (phone/email đã tồn tại) → luôn hiện popup, kể cả dev
+          if (err.status === 400 || err.status === 409) {
+            this.showPhoneExists.set(true);
+            return;
+          }
+          // Dev mode: bypass lỗi kết nối / route chưa tồn tại để test UI
           if (!environment.production) {
-            // Dev mock: vẫn chuyển sang bước OTP để test UI
             this.step.set('otp');
             this.startCountdown();
             return;
@@ -113,6 +119,8 @@ export class RegisterComponent {
         },
       });
   }
+
+  closePhoneExistsPopup(): void { this.showPhoneExists.set(false); }
 
   // ── OTP input handling ─────────────────────────────────────────────────────
 
@@ -203,13 +211,6 @@ export class RegisterComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        if (!environment.production) {
-          const ok = this.mockSuccessNext;
-          this.mockSuccessNext = !this.mockSuccessNext;
-          this.popupSuccess.set(ok);
-          this.popupVisible.set(true);
-          return;
-        }
         this.otpError.set(err.error?.message ?? 'Mã OTP không hợp lệ.');
         this._clearOtp();
       },

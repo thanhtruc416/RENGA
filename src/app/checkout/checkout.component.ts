@@ -459,7 +459,12 @@ export class CheckoutComponent {
     this.isSubmitting.set(true);
 
     if (!this.auth.isLoggedIn()) {
-      setTimeout(() => { this.isSubmitting.set(false); this.showSuccessGuestModal.set(true); }, 800);
+      const allIds = new Set(this.orderItems().map(i => i.id));
+      setTimeout(() => {
+        this.isSubmitting.set(false);
+        this.cartService.removeItems(allIds);
+        this.showSuccessGuestModal.set(true);
+      }, 800);
       return;
     }
 

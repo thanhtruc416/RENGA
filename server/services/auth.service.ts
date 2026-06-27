@@ -32,7 +32,7 @@ type OtpPurpose = 'REGISTER' | 'RESET_PASSWORD' | 'VERIFY' | 'LOGIN_LOCK';
 // ─── Regex ────────────────────────────────────────────────────────────────────
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-const EMAIL_REGEX    = /^[a-zA-Z0-9][a-zA-Z0-9._+\-]*@[a-zA-Z0-9][a-zA-Z0-9.\-]*\.[a-zA-Z]{2,}$/;
+const EMAIL_REGEX    = /^[a-zA-Z0-9][a-zA-Z0-9._+\-]{1,}@[a-zA-Z0-9][a-zA-Z0-9.\-]*\.[a-zA-Z]{2,}$/;
 
 // ─── ID generators ────────────────────────────────────────────────────────────
 
@@ -407,18 +407,18 @@ export async function loginCustomer(
      JOIN client   c  ON c.client_id  = a.client_id
      JOIN customer cu ON cu.client_id = a.client_id
      WHERE a.provider = 'LOCAL'
-       AND a.identifier = ?`,
+       AND c.phone = ?`,
     [identifier],
   ) as [any[], any];
 
   if (rows.length === 0) {
-    throw { status: 401, message: 'Thông tin đăng nhập không chính xác.' };
+    throw { status: 404, message: 'Số điện thoại chưa được đăng ký.' };
   }
 
   const acc = rows[0];
 
   if (acc.status === 'INACTIVE') {
-    throw { status: 403, message: 'Tài khoản đã bị khóa.' };
+    throw { status: 403, message: 'Tài khoản đã bị vô hiệu hoá. Vui lòng liên hệ hỗ trợ.' };
   }
 
   if (acc.locked_until) {
@@ -465,8 +465,9 @@ export async function loginCustomer(
       [attempts, acc.account_id],
     );
     throw {
-      status:  401,
-      message: `Thông tin đăng nhập không chính xác. Còn ${MAX_LOGIN_ATTEMPTS - attempts} lần thử.`,
+      status:            401,
+      message:           `Thông tin đăng nhập không chính xác. Còn ${MAX_LOGIN_ATTEMPTS - attempts} lần thử.`,
+      remainingAttempts: MAX_LOGIN_ATTEMPTS - attempts,
     };
   }
 
@@ -638,6 +639,8 @@ export async function logout(refreshToken: string): Promise<void> {
 export async function forgotPasswordSendOtp(phone: string): Promise<{ message: string }> {
   const GENERIC_MSG = 'Nếu số điện thoại tồn tại, mã OTP sẽ được gửi trong vài giây.';
 
+  console.log('[forgotPassword] phone received:', JSON.stringify(phone));
+
   const [rows] = await db.query(
     `SELECT a.account_id, c.phone, c.email
      FROM account a
@@ -646,34 +649,83 @@ export async function forgotPasswordSendOtp(phone: string): Promise<{ message: s
     [phone],
   ) as [any[], any];
 
+  console.log('[forgotPassword] rows found:', rows.length, rows.map((r: any) => ({ phone: r.phone, email: r.email })));
+
   if (rows.length === 0) return { message: GENERIC_MSG };
 
   const { email } = rows[0];
-  await checkOtpResendCooldown({ phone, purpose: 'RESET_PASSWORD' });
-  const otp = await issueOtp({ phone, email: email ?? undefined, purpose: 'RESET_PASSWORD' });
 
-  if (email) await sendOtpEmail(email, otp, 'RESET_PASSWORD');
-  else       console.log(`[DEV] OTP reset password cho ${phone}: ${otp}`);
+  if (!email) {
+    throw {
+      status:  422,
+      message: 'Tài khoản của bạn chưa có địa chỉ email, vui lòng liên hệ hỗ trợ.',
+    };
+  }
+
+  await checkOtpResendCooldown({ phone, purpose: 'RESET_PASSWORD' });
+  const otp = await issueOtp({ phone, email, purpose: 'RESET_PASSWORD' });
+  await sendOtpEmail(email, otp, 'RESET_PASSWORD');
 
   return { message: GENERIC_MSG };
 }
 
-// ─── Quên mật khẩu: bước 2 ───────────────────────────────────────────────────
+// ─── Quên mật khẩu: bước 2 — xác thực OTP & lấy reset token ─────────────────
+
+const RESET_TOKEN_EXPIRES_MINUTES = 10;
+
+export async function forgotPasswordVerifyOtp(data: {
+  phone: string;
+  otp:   string;
+}): Promise<{ resetToken: string }> {
+  const { phone, otp } = data;
+
+  const [rows] = await db.query(
+    `SELECT a.account_id
+     FROM account a
+     JOIN client c ON c.client_id = a.client_id
+     WHERE a.provider = 'LOCAL' AND c.phone = ?`,
+    [phone],
+  ) as [any[], any];
+
+  if (rows.length === 0) throw { status: 400, message: 'Tài khoản không tồn tại.' };
+
+  await verifyOtp({ phone, otp, purpose: 'RESET_PASSWORD' });
+
+  const resetToken = jwt.sign(
+    { phone, purpose: 'RESET_PASSWORD' },
+    JWT_SECRET,
+    { expiresIn: `${RESET_TOKEN_EXPIRES_MINUTES}m` },
+  );
+
+  return { resetToken };
+}
+
+// ─── Quên mật khẩu: bước 3 — đặt lại mật khẩu ───────────────────────────────
 
 export async function resetPassword(data: {
-  phone:           string;
-  otp:             string;
+  resetToken:      string;
   newPassword:     string;
   confirmPassword: string;
 }): Promise<void> {
-  const { phone, otp, newPassword, confirmPassword } = data;
+  const { resetToken, newPassword, confirmPassword } = data;
 
   if (newPassword !== confirmPassword) {
     throw { status: 400, message: 'Mật khẩu xác nhận không khớp.' };
   }
   validatePassword(newPassword);
 
-  await verifyOtp({ phone, otp, purpose: 'RESET_PASSWORD' });
+  let decoded: { phone: string; purpose: string };
+  try {
+    decoded = jwt.verify(resetToken, JWT_SECRET) as { phone: string; purpose: string };
+  } catch {
+    throw { status: 400, message: 'Phiên đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.' };
+  }
+
+  if (decoded.purpose !== 'RESET_PASSWORD') {
+    throw { status: 400, message: 'Token không hợp lệ.' };
+  }
+
+  const { phone } = decoded;
 
   const [rows] = await db.query(
     `SELECT a.account_id

@@ -197,6 +197,30 @@
   </div>
 }
 
+<!-- ── Popup số điện thoại đã tồn tại ──────────────────────────────────────────── -->
+@if (showPhoneExists()) {
+  <div class="reg-popup-backdrop" (click)="closePhoneExistsPopup()">
+    <div class="reg-popup" (click)="$event.stopPropagation()">
+      <button class="reg-popup__close" type="button" (click)="closePhoneExistsPopup()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="reg-popup__icon reg-popup__icon--fail">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h2 class="reg-popup__title">Số điện thoại<br>đã được đăng ký!</h2>
+      <p class="reg-popup__desc">Số điện thoại hoặc email này<br>đã được sử dụng cho tài khoản khác.</p>
+      <div class="reg-popup__actions">
+        <button class="reg-popup__btn reg-popup__btn--outline" type="button" (click)="closePhoneExistsPopup()">THỬ SĐT KHÁC</button>
+        <a routerLink="/dang-nhap" class="reg-popup__btn">ĐĂNG NHẬP NGAY</a>
+      </div>
+    </div>
+  </div>
+}
+
 <!-- ── Popup merge guest ───────────────────────────────────────────────────────── -->
 @if (showOldOrders()) {
   <app-old-orders-modal

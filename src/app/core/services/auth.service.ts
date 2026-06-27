@@ -28,9 +28,12 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface ForgotPasswordVerifyOtpResponse {
+  resetToken: string;
+}
+
 export interface ResetPasswordPayload {
-  phone:           string;
-  otp:             string;
+  resetToken:      string;
   newPassword:     string;
   confirmPassword: string;
 }
@@ -115,7 +118,15 @@ export class AuthService {
     );
   }
 
-  // ── Quên mật khẩu bước 2: đặt lại MK ─────────────────────────────────────
+  // ── Quên mật khẩu bước 2: xác thực OTP → nhận reset token ────────────────
+
+  forgotPasswordVerifyOtp(phone: string, otp: string): Observable<ForgotPasswordVerifyOtpResponse> {
+    return this.http.post<ForgotPasswordVerifyOtpResponse>(
+      `${environment.apiUrl}/auth/forgot-password/verify-otp`, { phone, otp }
+    );
+  }
+
+  // ── Quên mật khẩu bước 3: đặt lại MK bằng reset token ───────────────────
 
   resetPassword(payload: ResetPasswordPayload): Observable<MessageResponse> {
     return this.http.post<MessageResponse>(

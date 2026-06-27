@@ -11,8 +11,8 @@ import cartRouter    from './server/routes/cart';
 import orderRouter   from './server/routes/order';
 import voucherRouter from './server/routes/voucher';
 import studioRouter  from './server/routes/studio';
-import designRouter   from './server/routes/design';
-import accountRouter  from './server/routes/account';
+import designRouter  from './server/routes/design';
+import accountRouter from './server/routes/account';
 
 const app = express();
 
@@ -32,18 +32,9 @@ app.use(cors({
 app.use(express.json());
 app.use(passport.initialize());
 
-app.use((req, res, next) => {
-  console.log(`>>> ${req.method} ${req.path}`, JSON.stringify(req.body).slice(0, 200));
+app.use((req, _res, next) => {
+  console.log(`>>> ${req.method} ${req.path}`, (JSON.stringify(req.body) ?? '').slice(0, 200));
   next();
-});
-
-app.use('/api/auth', authRoutes);
-
-console.log('Routes mounted: /api/auth');
-
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('[GLOBAL ERROR]', err);
-  res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
 });
 
 app.use('/api/products', productRouter);
@@ -55,9 +46,15 @@ app.use('/api/studio',   studioRouter);
 app.use('/api/design',   designRouter);
 app.use('/api/account',  accountRouter);
 
+// Error handler — phải ở cuối cùng
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('[GLOBAL ERROR]', err);
+  res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
 
 export default app;
 
-process.stdin.resume(); // giữ process sống
+process.stdin.resume();

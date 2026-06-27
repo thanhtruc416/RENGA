@@ -25,9 +25,11 @@ export class LoginComponent {
   readonly showPassword = signal(false);
   readonly isSubmitting = signal(false);
 
-  readonly showLoginFail = signal(false);
+  readonly showLoginFail     = signal(false);
   readonly showPhoneNotFound = signal(false);
-  readonly remainingAttempts = signal(3);
+  readonly showAccountLocked = signal(false);
+  readonly showInactive      = signal(false);
+  readonly remainingAttempts = signal(5);
 
   setPhone(value: string): void { this.phone.set(value); }
   setPassword(value: string): void { this.password.set(value); }
@@ -51,8 +53,17 @@ export class LoginComponent {
         if (err.status === 404) {
           this.showPhoneNotFound.set(true);
         } else if (err.status === 401) {
-          this.remainingAttempts.update(v => Math.max(0, v - 1));
+          const fromServer = err.error?.remainingAttempts;
+          if (typeof fromServer === 'number') {
+            this.remainingAttempts.set(fromServer);
+          } else {
+            this.remainingAttempts.update(v => Math.max(0, v - 1));
+          }
           this.showLoginFail.set(true);
+        } else if (err.status === 423) {
+          this.showAccountLocked.set(true);
+        } else if (err.status === 403) {
+          this.showInactive.set(true);
         }
       },
     });
@@ -60,6 +71,8 @@ export class LoginComponent {
 
   mockLogin(): void { this.authService.mockLogin(); }
 
-  closeLoginFail(): void { this.showLoginFail.set(false); }
+  closeLoginFail(): void     { this.showLoginFail.set(false); }
   closePhoneNotFound(): void { this.showPhoneNotFound.set(false); }
+  closeAccountLocked(): void { this.showAccountLocked.set(false); }
+  closeInactive(): void      { this.showInactive.set(false); }
 }
