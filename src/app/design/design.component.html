@@ -159,7 +159,7 @@
             <div class="ds-timeslot-section">
               <h3 class="ds-timeslot-section__title">{{ selectedDateLabel() }}</h3>
               <div class="ds-timeslot-grid" role="listbox" aria-label="Chọn giờ tư vấn">
-                @for (slot of timeSlots; track slot) {
+                @for (slot of timeSlots(); track slot) {
                   <button
                     class="ds-timeslot"
                     [class.is-selected]="selectedTime() === slot"
@@ -251,7 +251,19 @@
           </div>
 
           <div class="ds-form__group ds-form__group--full">
-            <label class="ds-form__label" for="idea-desc">Nhập mô tả ý tưởng chi tiết</label>
+            <div class="ds-form__label-row">
+              <label class="ds-form__label" for="idea-desc">Nhập mô tả ý tưởng chi tiết</label>
+              <button type="button" class="ds-voice-btn" [class.ds-voice-btn--active]="isListening()"
+                (click)="toggleVoice()" [attr.aria-label]="isListening() ? 'Dừng ghi âm' : 'Nhập bằng giọng nói'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="9" y="2" width="6" height="12" rx="3"/>
+                  <path d="M5 10a7 7 0 0 0 14 0"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                  <line x1="9" y1="21" x2="15" y2="21"/>
+                </svg>
+                {{ isListening() ? 'Đang nghe...' : 'Giọng nói' }}
+              </button>
+            </div>
             <textarea class="ds-form__textarea" id="idea-desc" formControlName="ideaDesc" rows="6"
               placeholder="Chia sẻ ý tưởng, cảm hứng và yêu cầu đặc biệt của bạn..."></textarea>
           </div>
@@ -260,7 +272,7 @@
             <p class="ds-form__label">Tải hình ảnh liên quan</p>
             <label class="ds-upload-zone" for="idea-images" aria-label="Tải ảnh tham khảo">
               <input class="ds-upload-zone__input" type="file" id="idea-images"
-                name="images" accept="image/*" multiple />
+                name="images" accept="image/*" multiple (change)="onImagesChange($event)" />
               <span class="ds-upload-zone__icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -271,6 +283,18 @@
               <span class="ds-upload-zone__text">Kéo hoặc thả tệp vào đây</span>
               <span class="ds-upload-zone__hint">PNG, JPG — Tối đa 10MB/ảnh</span>
             </label>
+
+            @if (attachedImages().length > 0) {
+              <div class="ds-upload-previews">
+                @for (img of attachedImages(); track img.url; let i = $index) {
+                  <div class="ds-upload-preview">
+                    <img class="ds-upload-preview__img" [src]="img.url" [alt]="img.name" />
+                    <button class="ds-upload-preview__remove" type="button"
+                      (click)="removeImage(i)" aria-label="Xóa ảnh">✕</button>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
         </div>
@@ -317,18 +341,6 @@
             </div>
           </div>
 
-          <!-- Member card -->
-          <div class="ds-member-card">
-            <div class="ds-member-card__info">
-              <p class="ds-member-card__label">RENGA MEMBER</p>
-              <p class="ds-member-card__name">Nguyễn Thị Trúc</p>
-              <p class="ds-member-card__tier">Gold Member</p>
-            </div>
-            <div class="ds-member-card__benefit">
-              <span class="ds-member-card__discount">Ưu đãi 10%</span>
-            </div>
-          </div>
-
           <!-- Payment methods -->
           <div class="ds-pay-methods">
             <h3 class="ds-pay-methods__title">Phương thức thanh toán</h3>
@@ -352,7 +364,21 @@
 
         <!-- Summary sidebar -->
         <aside class="ds-pay-summary">
+          <!-- Member card -->
+          <div class="ds-member-card">
+            <div class="ds-member-card__info">
+              <p class="ds-member-card__label">RENGA MEMBER</p>
+              <p class="ds-member-card__name">Nguyễn Thị Trúc</p>
+              <p class="ds-member-card__tier">Gold Member</p>
+            </div>
+            <div class="ds-member-card__benefit">
+              <span class="ds-member-card__discount">Ưu đãi 10%</span>
+            </div>
+          </div>
+
           <h3 class="ds-pay-summary__title">Tóm tắt thanh toán</h3>
+
+          <!-- Breakdown -->
           <div class="ds-pay-summary__rows">
             <div class="ds-pay-summary__row">
               <span>Phí tư vấn Designer</span>
@@ -368,8 +394,16 @@
                 <span>- {{ formatVnd(voucherDiscount()) }}<u>đ</u></span>
               </div>
             }
+            <div class="ds-pay-summary__row ds-pay-summary__row--subtotal">
+              <span>Tổng phí tư vấn</span>
+              <span>{{ formatVnd(netFee()) }}<u>đ</u></span>
+            </div>
+          </div>
+
+          <!-- BR-18: 100% phí tư vấn thanh toán ngay -->
+          <div class="ds-pay-summary__rows ds-pay-summary__rows--split">
             <div class="ds-pay-summary__row">
-              <span>Đặt cọc (50%)</span>
+              <span>Thanh toán toàn bộ phí tư vấn</span>
               <span>{{ formatVnd(depositAmount()) }}<u>đ</u></span>
             </div>
           </div>
@@ -401,14 +435,14 @@
           </div>
 
           <div class="ds-pay-summary__total">
-            <span class="ds-pay-summary__total-label">Tổng thanh toán</span>
+            <span class="ds-pay-summary__total-label">Cần thanh toán ngay</span>
             <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}<u>đ</u></span>
           </div>
-          <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()">
-            HOÀN TẤT ĐẶT LỊCH
+          <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? 'Đang xử lý...' : 'HOÀN TẤT ĐẶT LỊCH' }}
           </button>
           <p class="ds-pay-summary__note">
-            Đặt cọc 50% để xác nhận lịch hẹn. Số tiền còn lại sẽ được thanh toán sau buổi tư vấn.
+            Phí tư vấn được thanh toán toàn bộ khi đặt lịch và có thể được khấu trừ vào đơn hàng nếu chốt đơn.
           </p>
         </aside>
 
@@ -425,6 +459,8 @@
 <app-payment-success-modal
   [isOpen]="showSuccessModal()"
   [mode]="'appointment'"
+  [isGuest]="false"
+  [orderId]="placedAppointmentId()"
   (closed)="showSuccessModal.set(false)"
   (scheduleAgain)="showSuccessModal.set(false); goToStep(1)"
 />

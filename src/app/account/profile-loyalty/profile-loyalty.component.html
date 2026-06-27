@@ -14,34 +14,58 @@
 
   <!-- Đổi thưởng đặc quyền -->
   <section class="profile-rewards__redeem">
-    <h2 class="profile-rewards__section-title">ĐỔI THƯỞNG ĐẶC QUYỀN</h2>
+    <div class="profile-rewards__redeem-header">
+      <h2 class="profile-rewards__section-title">ĐỔI THƯỞNG ĐẶC QUYỀN</h2>
+      <div class="profile-rewards__balance">
+        <span class="profile-rewards__balance-label">Điểm hiện tại</span>
+        <span class="profile-rewards__balance-val">{{ currentPoints().toLocaleString('vi-VN') }} PTS</span>
+      </div>
+    </div>
+
     <div class="profile-rewards__vouchers">
-      <div class="profile-rewards__voucher-card">
-        <div class="profile-rewards__voucher-header">
-          <div class="profile-rewards__voucher-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-            </svg>
+      @for (v of vouchers(); track v.id) {
+        <div class="profile-rewards__voucher-card" [class.profile-rewards__voucher-card--locked]="!canAfford(v)">
+
+          <div class="profile-rewards__voucher-header">
+            <div class="profile-rewards__voucher-icon">
+              @if (v.id === 'voucher-purchase') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M15 4V2m0 2v2m0-2h-4.5M3 10h18M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/>
+                  <path d="M9 15l2 2 4-4"/>
+                </svg>
+              }
+            </div>
+            <span class="profile-rewards__voucher-pts">{{ v.points.toLocaleString('vi-VN') }} PTS</span>
           </div>
-          <span class="profile-rewards__voucher-pts">1,500 PTS</span>
+
+          <h3 class="profile-rewards__voucher-title">{{ v.title }}</h3>
+          <p class="profile-rewards__voucher-desc">{{ v.description }}</p>
+
+          @if (!canAfford(v)) {
+            <span class="profile-rewards__voucher-locked-label">Chưa đủ điểm</span>
+          }
+
+          <button
+            class="profile-rewards__voucher-btn"
+            type="button"
+            [disabled]="!canAfford(v) || redeemingId() !== null"
+            (click)="redeemVoucher(v)"
+          >
+            @if (redeemingId() === v.id) {
+              Đang xử lý...
+            } @else {
+              Đổi ngay
+            }
+          </button>
+
         </div>
-        <h3 class="profile-rewards__voucher-title">Phiếu mua hàng</h3>
-        <p class="profile-rewards__voucher-desc">Áp dụng cho đơn hàng thiết kế riêng từ 50.000.000 VNĐ trở lên</p>
-        <button class="profile-rewards__voucher-btn" type="button" (click)="redeemVoucher()">Đổi ngay</button>
-      </div>
-      <div class="profile-rewards__voucher-card">
-        <div class="profile-rewards__voucher-header">
-          <div class="profile-rewards__voucher-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M15 4V2m0 2v2m0-2h-4.5M3 10h18M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 15l2 2 4-4"/>
-            </svg>
-          </div>
-          <span class="profile-rewards__voucher-pts">3,000 PTS</span>
-        </div>
-        <h3 class="profile-rewards__voucher-title">Chăm sóc &amp; Đánh bóng Cao Cấp</h3>
-        <p class="profile-rewards__voucher-desc">Dịch vụ làm sạch, đánh bóng và kiểm tra chuyên nghiệp cho tối đa 3 sản phẩm.</p>
-        <button class="profile-rewards__voucher-btn" type="button" (click)="redeemVoucher()">Đổi ngay</button>
-      </div>
+      }
     </div>
   </section>
 
@@ -49,43 +73,48 @@
   <div class="profile-rewards__bottom">
     <section class="profile-rewards__history">
       <h2 class="profile-rewards__section-title">LỊCH SỬ TÍCH ĐIỂM</h2>
-      <table class="profile-rewards__table">
-        <thead>
-          <tr class="profile-rewards__table-head-row">
-            <th class="profile-rewards__th">Ngày</th>
-            <th class="profile-rewards__th">Chi tiết giao dịch</th>
-            <th class="profile-rewards__th">Loại</th>
-            <th class="profile-rewards__th profile-rewards__th--right">Điểm</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of pointHistory(); track row.date) {
-            <tr class="profile-rewards__table-row">
-              <td class="profile-rewards__td">{{ row.date }}</td>
-              <td class="profile-rewards__td">{{ row.description }}</td>
-              <td class="profile-rewards__td">
-                <span
-                  class="profile-rewards__type-badge"
-                  [class.profile-rewards__type-badge--earned]="row.type === 'EARNED'"
-                  [class.profile-rewards__type-badge--bonus]="row.type === 'BONUS'"
-                  [class.profile-rewards__type-badge--redeemed]="row.type === 'REDEEMED'"
-                >
-                  {{ row.type }}
-                </span>
-              </td>
-              <td
-                class="profile-rewards__td profile-rewards__td--right"
-                [class.profile-rewards__points--positive]="row.points > 0"
-                [class.profile-rewards__points--negative]="row.points < 0"
-              >
-                {{ formatPoints(row.points) }}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </section>
 
+      @if (isLoadingLoyalty()) {
+        <p class="profile-rewards__loading">Đang tải...</p>
+      } @else {
+        <table class="profile-rewards__table">
+          <thead>
+            <tr class="profile-rewards__table-head-row">
+              <th class="profile-rewards__th">Ngày</th>
+              <th class="profile-rewards__th">Chi tiết giao dịch</th>
+              <th class="profile-rewards__th">Loại</th>
+              <th class="profile-rewards__th profile-rewards__th--right">Điểm</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of pointHistory(); track row.description + row.date) {
+              <tr class="profile-rewards__table-row">
+                <td class="profile-rewards__td">{{ row.date }}</td>
+                <td class="profile-rewards__td">{{ row.description }}</td>
+                <td class="profile-rewards__td">
+                  <span
+                    class="profile-rewards__type-badge"
+                    [class.profile-rewards__type-badge--earned]="row.type === 'EARNED'"
+                    [class.profile-rewards__type-badge--redeemed]="row.type === 'REDEEMED'"
+                  >{{ row.type }}</span>
+                </td>
+                <td
+                  class="profile-rewards__td profile-rewards__td--right"
+                  [class.profile-rewards__points--positive]="row.points > 0"
+                  [class.profile-rewards__points--negative]="row.points < 0"
+                >{{ formatPoints(row.points) }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td class="profile-rewards__td profile-rewards__td--empty" colspan="4">
+                  Chưa có lịch sử giao dịch điểm.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
   </div>
 
 </div>
@@ -107,7 +136,10 @@
           </svg>
         </div>
         <h2 class="redeem-modal__title">Đổi thành công!</h2>
-        <p class="redeem-modal__desc">Phần thưởng đã được ghi nhận vào tài khoản của bạn. Vui lòng kiểm tra email để biết thêm chi tiết.</p>
+        <p class="redeem-modal__desc">
+          Bạn đã đổi thành công <strong>{{ lastRedeemedTitle() }}</strong>.<br>
+          Điểm còn lại: <strong>{{ currentPoints().toLocaleString('vi-VN') }} PTS</strong>.
+        </p>
         <button class="redeem-modal__btn" type="button" (click)="closeRedeemModal()">ĐÓNG</button>
       }
 
@@ -118,7 +150,7 @@
           </svg>
         </div>
         <h2 class="redeem-modal__title">Đổi thất bại!</h2>
-        <p class="redeem-modal__desc">Rất tiếc, điểm của bạn không đủ hoặc đã xảy ra lỗi. Vui lòng thử lại sau.</p>
+        <p class="redeem-modal__desc">{{ redeemErrorMsg() }}</p>
         <button class="redeem-modal__btn" type="button" (click)="closeRedeemModal()">ĐÓNG</button>
       }
 

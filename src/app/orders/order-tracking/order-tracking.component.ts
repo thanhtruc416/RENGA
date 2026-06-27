@@ -2,45 +2,50 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
+  inject,
   LOCALE_ID,
+  OnInit,
   signal,
 } from '@angular/core';
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import localeVi from '@angular/common/locales/vi';
+import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 registerLocaleData(localeVi);
 
 type OrderStatus = 'shipping' | 'completed' | 'cancelled' | 'in-progress';
-type OrderType = 'standard' | 'bespoke';
+type OrderType   = 'standard' | 'bespoke';
 
 interface Order {
   id: string;
   type: OrderType;
-  sub: string;
   date: string;
+  rawDate: Date;
   product: string;
-  amount: number;   // ← đổi string → number để dùng | number pipe
+  itemCount: number;
+  amount: number;
   status: OrderStatus;
 }
 
-const ALL_ORDERS: Order[] = [
-  { id: '#AH-29384', type: 'standard', sub: 'Luxury Packaging', date: '14/05/2024', product: 'Bespoke Diamond Tiara',      amount: 850_000_000, status: 'shipping'    },
-  { id: '#AH-28110', type: 'standard', sub: 'Certified GIA',    date: '22/03/2024', product: 'Aurelian Gold Cufflinks',   amount: 42_500_000,  status: 'completed'   },
-  { id: '#AH-27552', type: 'standard', sub: 'Vintage Replica',  date: '02/01/2024', product: 'Heritage Emerald Necklace', amount: 320_000_000, status: 'completed'   },
-  { id: '#AH-26991', type: 'standard', sub: 'Boutique Pickup',  date: '15/11/2023', product: 'Starlight Pearl Earrings',  amount: 18_200_000,  status: 'cancelled'   },
-  { id: '#AH-26543', type: 'standard', sub: 'Standard',         date: '02/09/2023', product: 'Aurelian Signet Ring',      amount: 35_000_000,  status: 'completed'   },
-  { id: '#C-26100',  type: 'bespoke',  sub: 'Certified GIA',    date: '11/07/2023', product: 'Celestial Diamond Brooch',  amount: 120_000_000, status: 'completed'   },
-  { id: '#C-25800',  type: 'bespoke',  sub: 'Bespoke',          date: '30/05/2023', product: 'Heritage Ruby Pendant',     amount: 75_000_000,  status: 'in-progress' },
-  { id: '#AH-25400', type: 'standard', sub: 'Boutique Pickup',  date: '14/03/2023', product: 'Lunar Pearl Bracelet',      amount: 28_000_000,  status: 'completed'   },
-  { id: '#C-24900',  type: 'bespoke',  sub: 'Standard',         date: '01/02/2023', product: 'Midnight Sapphire Ring',    amount: 55_000_000,  status: 'cancelled'   },
-  { id: '#AH-24300', type: 'standard', sub: 'Luxury Packaging', date: '20/12/2022', product: 'Soleil Gold Choker',        amount: 48_000_000,  status: 'completed'   },
-  { id: '#C-23900',  type: 'bespoke',  sub: 'Certified GIA',    date: '05/10/2022', product: 'Eternity Diamond Band',     amount: 180_000_000, status: 'completed'   },
-  { id: '#AH-23400', type: 'standard', sub: 'Standard',         date: '18/08/2022', product: 'Aurora Emerald Earrings',   amount: 62_000_000,  status: 'completed'   },
-  { id: '#C-30201', type: 'bespoke',  sub: 'Bespoke',          date: '20/06/2024', product: 'Custom Engraved Solitaire', amount: 95_000_000,  status: 'in-progress' },
-];
+const DB_STATUS_MAP: Record<string, OrderStatus> = {
+  PENDING:    'in-progress',
+  CONFIRMED:  'in-progress',
+  PROCESSING: 'in-progress',
+  SHIPPED:    'shipping',
+  SHIPPING:   'shipping',
+  DISPATCHED: 'shipping',
+  DELIVERED:  'completed',
+  COMPLETED:  'completed',
+  CANCELLED:  'cancelled',
+  CANCELED:   'cancelled',
+};
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 8;
 
 @Component({
   selector: 'app-order-tracking',
@@ -51,35 +56,85 @@ const PAGE_SIZE = 4;
   templateUrl: './order-tracking.component.html',
   styleUrl: './order-tracking.component.css',
 })
-export class OrderTrackingComponent {
+export class OrderTrackingComponent implements OnInit {
+  private readonly http        = inject(HttpClient);
+  private readonly destroyRef  = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
 
-  // ─── Member tier (TODO: lấy từ AuthService / AccountService) ─────────
-  readonly memberTier = signal('Gold Heritage Tier');
+  readonly isGuest    = computed(() => !this.authService.isLoggedIn());
+  readonly isLoading  = signal(true);
+  readonly loadError  = signal(false);
+  readonly allOrders  = signal<Order[]>([]);
 
-  // ─── Filter state: pending (UI) vs applied (table) ────────────────────
-  readonly pendingType   = signal('');
+  readonly memberTier = signal('');
+
+  ngOnInit(): void {
+    if (this.isGuest()) { this.isLoading.set(false); return; }
+    this.http
+      .get<{ success: boolean; data: any[] }>(`${environment.apiUrl}/orders`)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.allOrders.set(res.data.map(o => this.mapOrder(o)));
+          } else {
+            this.loadError.set(true);
+          }
+          this.isLoading.set(false);
+        },
+        error: () => { this.loadError.set(true); this.isLoading.set(false); },
+      });
+  }
+
+  private mapOrder(raw: any): Order {
+    const d = new Date(raw.created_at);
+    const dd   = String(d.getDate()).padStart(2, '0');
+    const mm   = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return {
+      id:        raw.order_id,
+      type:      raw.order_type === 'CUSTOMIZATION' ? 'bespoke' : 'standard',
+      date:      `${dd}/${mm}/${yyyy}`,
+      rawDate:   d,
+      product:   raw.first_product_name ?? 'Sản phẩm',
+      itemCount: Number(raw.item_count ?? 1),
+      amount:    Number(raw.total_amount),
+      status:    DB_STATUS_MAP[raw.order_status] ?? 'in-progress',
+    };
+  }
+
+  // ─── Filter state ────────────────────────────────────────────────────────
   readonly pendingStatus = signal('');
-  readonly pendingTime   = signal('3m');
+  readonly pendingTime   = signal('all');
+  readonly filterStatus  = signal('');
+  readonly filterTime    = signal('all');
 
-  readonly filterType   = signal('');
-  readonly filterStatus = signal('');
-  readonly filterTime   = signal('3m');
-
-  // ─── Pagination ───────────────────────────────────────────────────────
+  // ─── Pagination ──────────────────────────────────────────────────────────
   readonly currentPage = signal(1);
 
-  // ─── Derived ──────────────────────────────────────────────────────────
+  // ─── Derived ─────────────────────────────────────────────────────────────
   readonly filteredOrders = computed(() => {
-    const status = this.filterStatus();
-    const type   = this.filterType();
-    return ALL_ORDERS.filter((o) =>
+    const status  = this.filterStatus();
+    const timePeriod = this.filterTime();
+    const cutoff  = this.getCutoff(timePeriod);
+
+    return this.allOrders().filter(o =>
       (!status || o.status === status) &&
-      (!type   || o.type   === type),
+      (!cutoff || o.rawDate >= cutoff)
     );
   });
 
+  private getCutoff(period: string): Date | null {
+    if (period === 'all') return null;
+    const now = new Date();
+    if (period === '3m')  { now.setMonth(now.getMonth() - 3);   return now; }
+    if (period === '6m')  { now.setMonth(now.getMonth() - 6);   return now; }
+    if (period === '1y')  { now.setFullYear(now.getFullYear() - 1); return now; }
+    return null;
+  }
+
   readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredOrders().length / PAGE_SIZE)),
+    Math.max(1, Math.ceil(this.filteredOrders().length / PAGE_SIZE))
   );
 
   readonly displayedOrders = computed(() => {
@@ -89,23 +144,24 @@ export class OrderTrackingComponent {
   });
 
   readonly pageNumbers = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, i) => i + 1),
+    Array.from({ length: this.totalPages() }, (_, i) => i + 1)
   );
 
   readonly paginationInfo = computed(() => {
     const total = this.filteredOrders().length;
-    const page  = this.currentPage();
-    const from  = (page - 1) * PAGE_SIZE + 1;
-    const to    = Math.min(page * PAGE_SIZE, total);
+    if (!total) return 'Không có đơn hàng nào';
+    const page = this.currentPage();
+    const from = (page - 1) * PAGE_SIZE + 1;
+    const to   = Math.min(page * PAGE_SIZE, total);
     return `Hiển thị ${from}–${to} trên tổng số ${total} đơn hàng`;
   });
 
-  // ─── Labels & CSS helpers ─────────────────────────────────────────────
+  // ─── Labels & CSS ─────────────────────────────────────────────────────────
   readonly statusLabel: Record<OrderStatus, string> = {
     'shipping':    'Đang giao hàng',
     'completed':   'Đã hoàn thành',
     'cancelled':   'Đã hủy',
-    'in-progress': 'Đang chế tác',
+    'in-progress': 'Đang xử lý',
   };
 
   badgeClass(status: OrderStatus): string {
@@ -118,51 +174,36 @@ export class OrderTrackingComponent {
       : 'order-tracking-table__row';
   }
 
-  /** Bỏ ký tự # khỏi id — dùng cho routerLink param */
-  cleanId(id: string): string {
-    return id.replace('#', '');
-  }
-
-  // ─── Actions ──────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────
   readonly hasActiveFilters = computed(() =>
-    this.filterType() !== '' || this.filterStatus() !== '' || this.filterTime() !== '3m'
+    this.filterStatus() !== '' || this.filterTime() !== 'all'
   );
 
   readonly hasDraftChanges = computed(() =>
-    this.pendingType()   !== this.filterType()   ||
     this.pendingStatus() !== this.filterStatus() ||
     this.pendingTime()   !== this.filterTime()
   );
 
   applyFilters(): void {
-    this.filterType.set(this.pendingType());
     this.filterStatus.set(this.pendingStatus());
     this.filterTime.set(this.pendingTime());
     this.currentPage.set(1);
   }
 
   clearFilters(): void {
-    this.pendingType.set('');
     this.pendingStatus.set('');
-    this.pendingTime.set('3m');
-    this.filterType.set('');
+    this.pendingTime.set('all');
     this.filterStatus.set('');
-    this.filterTime.set('3m');
+    this.filterTime.set('all');
     this.currentPage.set(1);
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage.set(page);
-    }
+    if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page);
   }
 
   onFilterStatusChange(event: Event): void {
     this.pendingStatus.set((event.target as HTMLSelectElement).value);
-  }
-
-  onFilterTypeChange(event: Event): void {
-    this.pendingType.set((event.target as HTMLSelectElement).value);
   }
 
   onFilterTimeChange(event: Event): void {

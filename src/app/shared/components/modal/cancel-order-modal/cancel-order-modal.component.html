@@ -166,7 +166,7 @@
           <div class="cancel-fail__img-col">
             <img class="cancel-fail__product-img" [src]="productImage()" [alt]="productName()" />
             <div class="cancel-fail__img-overlay" aria-hidden="true"></div>
-            <span class="cancel-fail__status-tag">Đang vận chuyển</span>
+            <span class="cancel-fail__status-tag">{{ statusViLabel() }}</span>
           </div>
           <div class="cancel-fail__info-col">
             <p class="cancel-fail__product-label">Sản phẩm</p>
@@ -175,7 +175,7 @@
             <div class="cancel-fail__card-footer">
               <div>
                 <span class="cancel-fail__status-label">Trạng thái</span>
-                <p class="cancel-fail__status-value">DISPATCHED</p>
+                <p class="cancel-fail__status-value">{{ statusEnLabel() }}</p>
               </div>
             </div>
           </div>

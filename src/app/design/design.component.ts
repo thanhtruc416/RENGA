@@ -1,8 +1,11 @@
-﻿import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, computed, signal, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { formatVnd } from '../shared/utils/currency.util';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
+import { environment } from '../../environments/environment';
 
 interface Designer {
   id: string;
@@ -39,88 +42,28 @@ export class DesignComponent {
     { n: 4, label: 'Xác nhận' },
   ];
 
-  private readonly allDesigners: Designer[] = [
-    {
-      id: 'henri-de-luca',
-      name: 'Master Henri de Luca',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế kim cương',
-      badge: 'SIGNATURE WORK',
-      bio: 'Bậc thầy thiết kế kim cương với hơn 20 năm kinh nghiệm tại các kinh đô trang sức châu Âu.',
-      fee: 13_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-    {
-      id: 'isabella-moretti',
-      name: 'Isabella Moretti',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế vòng cổ',
-      badge: 'HERITAGE REVIVAL',
-      bio: 'Chuyên gia phục hồi phong cách di sản, kết hợp nét cổ điển Ý với cảm quan hiện đại.',
-      fee: 13_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-    {
-      id: 'elena-vance',
-      name: 'Elena Vance',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế trang sức tay',
-      badge: 'AVANT-GARDE METALS',
-      bio: 'Chuyên gia thiết kế trang sức cao cấp với phong cách avant-garde độc đáo.',
-      fee: 13_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-    {
-      id: 'rafael-de-souza',
-      name: 'Rafael de Souza',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế nhẫn cưới',
-      badge: 'ETERNAL BOND',
-      bio: 'Nghệ nhân chuyên thiết kế nhẫn cưới và trang sức đính hôn với ngôn ngữ thiết kế lãng mạn.',
-      fee: 15_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-    {
-      id: 'mei-lin-chen',
-      name: 'Mei Lin Chen',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế hoa tai',
-      badge: 'DELICATE FORMS',
-      bio: 'Chuyên gia tạo hình hoa tai tinh xảo, lấy cảm hứng từ nghệ thuật điêu khắc châu Á.',
-      fee: 11_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-    {
-      id: 'lucas-fontaine',
-      name: 'Lucas Fontaine',
-      role: 'Nhà thiết kế kim hoàn cao cấp',
-      specialty: 'Nhà thiết kế lắc tay',
-      badge: 'FLUID LUXURY',
-      bio: 'Phong cách tối giản Pháp — từng đường nét được tính toán để tôn lên vẻ đẹp tự nhiên.',
-      fee: 12_000_000,
-      image: 'assets/images/designer-photo.png',
-      rating: 5,
-    },
-  ];
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly http = inject(HttpClient);
 
+  private readonly BADGE_MAP: Record<string, string> = {
+    'Thiết kế nhẫn cưới': 'ETERNAL BOND',
+    'Thiết kế vòng cổ & mặt dây chuyền': 'HERITAGE REVIVAL',
+    'Thiết kế lắc tay': 'FLUID LUXURY',
+    'Thiết kế hoa tai': 'DELICATE FORMS',
+    'Thiết kế trang sức đính đá': 'SIGNATURE WORK',
+  };
+
+  private readonly allDesignersData = signal<Designer[]>([]);
   private readonly designerPageSize = 3;
   private readonly designerVisible = signal(this.designerPageSize);
 
-  readonly designers = computed(() =>
-    this.allDesigners.slice(0, this.designerVisible())
-  );
+  readonly designers = computed(() => this.allDesignersData().slice(0, this.designerVisible()));
+  readonly hasMoreDesigners = computed(() => this.designerVisible() < this.allDesignersData().length);
 
-  readonly hasMoreDesigners = computed(() =>
-    this.designerVisible() < this.allDesigners.length
-  );
-
-  readonly timeSlots = ['09:00', '10:30', '13:00', '14:30', '16:00', '17:30'];
-  readonly unavailableSlots = new Set(['17:30']);
+  readonly timeSlots = signal<string[]>([]);
+  readonly unavailableSlots = new Set<string>();
+  readonly slotsLoading = signal(false);
+  private slotIdByTime: Record<string, string> = {};
 
   readonly paymentMethods = [
     { id: 'momo', label: 'Ví MoMo' },
@@ -158,45 +101,103 @@ export class DesignComponent {
     ideaDesc: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
+  // Step 3 – voice input
+  readonly isListening = signal(false);
+  private recognition: any = null;
+
+  toggleVoice(): void {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) { alert('Trình duyệt của bạn chưa hỗ trợ nhận giọng nói.'); return; }
+
+    if (this.isListening()) {
+      this.recognition?.stop();
+      return;
+    }
+
+    this.recognition = new SpeechRecognition();
+    this.recognition.lang = 'vi-VN';
+    this.recognition.interimResults = false;
+    this.recognition.continuous = false;
+
+    this.recognition.onstart  = () => this.isListening.set(true);
+    this.recognition.onend    = () => this.isListening.set(false);
+    this.recognition.onerror  = () => this.isListening.set(false);
+    this.recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      const current = this.ideaForm.controls.ideaDesc.value;
+      this.ideaForm.controls.ideaDesc.setValue(
+        current ? `${current} ${transcript}` : transcript
+      );
+    };
+    this.recognition.start();
+  }
+
+  // Step 3 – image attachments
+  readonly attachedImages = signal<{ name: string; url: string }[]>([]);
+
+  onImagesChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+    const current = this.attachedImages();
+    const added: { name: string; url: string }[] = [];
+    Array.from(input.files).forEach(file => {
+      if (file.size <= 10 * 1024 * 1024) {
+        added.push({ name: file.name, url: URL.createObjectURL(file) });
+      }
+    });
+    this.attachedImages.set([...current, ...added]);
+    input.value = '';
+  }
+
+  removeImage(index: number): void {
+    const imgs = [...this.attachedImages()];
+    URL.revokeObjectURL(imgs[index].url);
+    imgs.splice(index, 1);
+    this.attachedImages.set(imgs);
+  }
+
   // Step 4
   readonly selectedPayment = signal('momo');
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
-  private bookingSuccessNext = true;
+  readonly isSubmitting = signal(false);
+  readonly placedAppointmentId = signal('');
   readonly MEMBER_DISCOUNT = 0.1;
-  readonly DEPOSIT_RATIO = 0.5;
+  // BR-18: The Designer phải thanh toán 100% phí tư vấn ngay khi đặt lịch
+  readonly DEPOSIT_RATIO = 1.0;
 
   readonly voucherInput = signal('');
   readonly appliedVoucher = signal('');
   readonly voucherError = signal(false);
-
-  private readonly VALID_VOUCHERS: Record<string, number> = {
-    'RENGA10': 0.10,
-    'RENGA20': 0.20,
-    'MEMBER5': 0.05,
-  };
-
-  readonly voucherDiscount = computed(() => {
-    const code = this.appliedVoucher().toUpperCase();
-    const rate = this.VALID_VOUCHERS[code] ?? 0;
-    return Math.round(this.consultationFee() * rate);
-  });
+  readonly voucherDiscount = signal(0);
 
   applyVoucher(): void {
     const code = this.voucherInput().trim().toUpperCase();
-    if (this.VALID_VOUCHERS[code]) {
-      this.appliedVoucher.set(code);
-      this.voucherError.set(false);
-    } else {
-      this.appliedVoucher.set('');
-      this.voucherError.set(true);
-    }
+    if (!code) return;
+    this.http.post<any>(`${environment.apiUrl}/vouchers/validate`, {
+      code,
+      order_total: this.consultationFee(),
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        if (res.valid) {
+          this.appliedVoucher.set(code);
+          this.voucherDiscount.set(res.discount);
+          this.voucherError.set(false);
+        } else {
+          this.appliedVoucher.set('');
+          this.voucherDiscount.set(0);
+          this.voucherError.set(true);
+        }
+      },
+      error: () => this.voucherError.set(true),
+    });
   }
 
   removeVoucher(): void {
     this.appliedVoucher.set('');
     this.voucherInput.set('');
     this.voucherError.set(false);
+    this.voucherDiscount.set(0);
   }
 
   // ─── Computed ─────────────────────────────────────────────────────────
@@ -237,11 +238,34 @@ export class DesignComponent {
     return date.toDateString() === sel.toDateString();
   });
 
-  readonly consultationFee = computed(() => this.selectedDesigner()?.fee ?? 0);
-  readonly memberDiscount = computed(() => Math.round(this.consultationFee() * this.MEMBER_DISCOUNT));
-  readonly depositAmount = computed(() =>
-    Math.round((this.consultationFee() - this.memberDiscount() - this.voucherDiscount()) * this.DEPOSIT_RATIO),
+  readonly consultationFee  = computed(() => this.selectedDesigner()?.fee ?? 0);
+  readonly memberDiscount   = computed(() => Math.round(this.consultationFee() * this.MEMBER_DISCOUNT));
+  readonly netFee           = computed(() => this.consultationFee() - this.memberDiscount() - this.voucherDiscount());
+  readonly depositAmount    = computed(() =>
+    Math.round(this.netFee() * this.DEPOSIT_RATIO),
   );
+
+  constructor() {
+    this.http.get<any>(`${environment.apiUrl}/design/designers`)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.allDesignersData.set(res.data.map((d: any): Designer => ({
+              id:        d.employee_id,
+              name:      d.full_name,
+              role:      'Nhà thiết kế kim hoàn cao cấp',
+              specialty: d.specialty ?? '',
+              badge:     this.BADGE_MAP[d.specialty] ?? 'ARTISAN',
+              bio:       d.bio ?? '',
+              fee:       Number(d.consultation_fee),
+              image:     d.avatar ?? 'assets/images/designer-photo.png',
+              rating:    5,
+            })));
+          }
+        },
+      });
+  }
 
   // ─── Methods ──────────────────────────────────────────────────────────
   goToStep(n: number): void {
@@ -280,6 +304,38 @@ export class DesignComponent {
     if (!day.disabled && day.date) {
       this.selectedDate.set(day.date);
       this.selectedTime.set(null);
+      this.timeSlots.set([]);
+      this.slotIdByTime = {};
+      this.unavailableSlots.clear();
+
+      const designer = this.selectedDesigner();
+      if (!designer) return;
+
+      const d = day.date;
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      this.slotsLoading.set(true);
+      this.http.get<any>(`${environment.apiUrl}/design/slots`, {
+        params: { designerId: designer.id, date: dateStr },
+      }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (res) => {
+          if (res.success) {
+            const labels: string[] = [];
+            // BR-33: chỉ cho đặt trước ít nhất 24 giờ
+            const cutoff = Date.now() + 24 * 60 * 60 * 1000;
+            for (const slot of res.data) {
+              const label = String(slot.start_time).substring(0, 5);
+              labels.push(label);
+              this.slotIdByTime[label] = slot.slot_id;
+              const [h, m] = label.split(':').map(Number);
+              const slotMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m).getTime();
+              if (!slot.is_available || slotMs < cutoff) this.unavailableSlots.add(label);
+            }
+            this.timeSlots.set(labels);
+          }
+          this.slotsLoading.set(false);
+        },
+        error: () => this.slotsLoading.set(false),
+      });
     }
   }
 
@@ -308,13 +364,30 @@ export class DesignComponent {
   }
 
   completeBooking(): void {
-    // TODO: gọi API đặt lịch — mock xen kẽ để test cả 2 case
-    if (this.bookingSuccessNext) {
-      this.showSuccessModal.set(true);
-    } else {
-      this.showFailModal.set(true);
-    }
-    this.bookingSuccessNext = !this.bookingSuccessNext;
+    const time     = this.selectedTime();
+    const slotId   = time ? (this.slotIdByTime[time] ?? null) : null;
+    if (!slotId) { this.showFailModal.set(true); return; }
+
+    this.isSubmitting.set(true);
+    this.http.post<any>(`${environment.apiUrl}/design/appointments`, {
+      slotId,
+      ideaDescription: this.ideaForm.value.ideaDesc ?? '',
+      consultationFee: this.consultationFee(),
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.placedAppointmentId.set(res.data.appointment_id);
+          this.showSuccessModal.set(true);
+        } else {
+          this.showFailModal.set(true);
+        }
+        this.isSubmitting.set(false);
+      },
+      error: () => {
+        this.showFailModal.set(true);
+        this.isSubmitting.set(false);
+      },
+    });
   }
 
   readonly formatVnd = formatVnd;

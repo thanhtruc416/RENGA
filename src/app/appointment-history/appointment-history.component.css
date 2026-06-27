@@ -453,6 +453,22 @@
   color: var(--color-dark);
 }
 
+.appt-empty {
+  padding: 48px 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-text-muted, #888);
+}
+
+.appt-table__empty {
+  padding: 40px 16px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text-muted, #888);
+}
+
 /* ── Dev popup ──────────────────────────────────────── */
 .appt-dev-backdrop {
   position: fixed;
@@ -757,3 +773,4 @@
   color: var(--color-dark);
   border: 1px solid #c4607e;
 }
+

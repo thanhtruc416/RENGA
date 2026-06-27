@@ -21,6 +21,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -28,6 +29,7 @@ body {
   color: var(--color-dark);
   background: var(--color-white);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img, svg {

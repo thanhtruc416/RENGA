@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router  } from '@angular/router';
+import { Router } from '@angular/router';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
 import { formatPrice } from '../../shared/utils/currency.util';
 
@@ -21,7 +21,7 @@ interface Order {
   selector: 'app-order-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink, AdminHeaderComponent],
+  imports: [CommonModule, AdminHeaderComponent],
   templateUrl: './order-management.component.html',
   styleUrl: './order-management.component.css',
 })

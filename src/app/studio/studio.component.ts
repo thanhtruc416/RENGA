@@ -1,17 +1,21 @@
-﻿import { DecimalPipe, UpperCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+﻿import { DecimalPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, signal, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CartService } from '../core/services/cart.service';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { formatVnd } from '../shared/utils/currency.util';
+import { environment } from '../../environments/environment';
 
-interface Category {
+interface Blank {
   id: string;
   name: string;
+  type: string;
+  basePrice: number;
+  description: string;
   image: string;
 }
 
@@ -22,6 +26,9 @@ interface Material {
   color: string;
   price: string;
   priceVnd: number;
+  image: string;
+  imgFilter: string;
+  available: boolean;
 }
 
 interface Stone {
@@ -62,13 +69,63 @@ interface CheckoutForm {
 })
 export class StudioComponent {
   // ─── Constants ───────────────────────────────────────────────────────
-  readonly MOUNT_FEE = 4_000_000;
   readonly CRAFT_FEE = 5_000_000;
   readonly ENGRAVE_FEE_PER_CHAR = 50_000;
   readonly ENGRAVE_FREE_CHARS = 10;
   readonly MAX_ENGRAVE_CHARS = 25;
   readonly showSuccessModal = signal(false);
   readonly showFailModal = signal(false);
+  readonly isSubmitting = signal(false);
+  readonly placedOrderId = signal('');
+
+  // ─── Voucher state ────────────────────────────────────────────────────
+  private appliedCustomerVoucherId: string | null = null;
+  readonly voucherDiscount = signal(0);
+  readonly voucherMsg = signal('');
+  readonly voucherStatus = signal<'idle' | 'success' | 'error'>('idle');
+
+  // ─── Blank forms (from DB) ────────────────────────────────────────────
+  readonly allBlanks     = signal<Blank[]>([]);
+  readonly blanksLoading = signal(false);
+  readonly blanksError   = signal(false);
+
+  private readonly TYPE_LABELS: Record<string, string> = {
+    RING: 'Nhẫn', NECKLACE: 'Dây chuyền', BRACELET: 'Lắc tay', EARRING: 'Hoa tai',
+  };
+
+  typeLabel(type: string): string {
+    return this.TYPE_LABELS[type] ?? type;
+  }
+
+  onBlankImgError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'assets/images/studio-ring.png';
+  }
+
+  retryLoadBlanks(): void {
+    this.blanksError.set(false);
+    this.blanksLoading.set(true);
+    this.http.get<any>(`${environment.apiUrl}/studio/blanks`)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.allBlanks.set(res.data.map((b: any): Blank => ({
+              id:          b.blank_id,
+              name:        b.blank_name,
+              type:        b.blank_type,
+              basePrice:   Number(b.base_price),
+              description: b.description ?? '',
+              image:       b.image_url ?? 'assets/images/studio-ring.png',
+            })));
+          }
+          this.blanksLoading.set(false);
+        },
+        error: () => {
+          this.blanksLoading.set(false);
+          this.blanksError.set(true);
+        },
+      });
+  }
 
   // ─── Static data ──────────────────────────────────────────────────────
   readonly steps = [
@@ -79,30 +136,127 @@ export class StudioComponent {
     { n: 5, label: 'Đặt hàng' },
   ];
 
-  readonly categories: Category[] = [
-    {
-      id: 'nhan',
-      name: 'Nhẫn',
-      image: 'assets/images/category-nhan.png',
-    },
-    {
-      id: 'day-chuyen',
-      name: 'Dây chuyền',
-      image: 'assets/images/category-day-chuyen.png',
-    },
-    {
-      id: 'hoa-tai',
-      name: 'Hoa tai',
-      image: 'assets/images/category-hoa-tai.png',
-    },
-  ];
 
   readonly materials: Material[] = [
-    { id: 'vang-18k', label: 'Vàng 18K', tag: 'Lựa chọn đặc trưng', color: '#d4af37', price: '15 triệu VNĐ', priceVnd: 15_000_000 },
-    { id: 'vang-14k', label: 'Vàng 14K', tag: 'Thanh lịch cân bằng', color: '#e5c07b', price: '12 triệu VNĐ', priceVnd: 12_000_000 },
-    { id: 'bach-kim', label: 'Bạch kim', tag: 'Sức mạnh vĩnh cửu', color: '#e5e4e2', price: '20 triệu VNĐ', priceVnd: 20_000_000 },
-    { id: 'bac-925', label: 'Bạc 925', tag: 'Cổ điển hiện đại', color: '#c0c0c0', price: '8 triệu VNĐ', priceVnd: 8_000_000 },
+    { id: 'vang-18k', label: 'Vàng 18K', tag: 'Lựa chọn đặc trưng', color: '#d4af37', price: '15 triệu VNĐ', priceVnd: 15_000_000,
+      image: '', imgFilter: '', available: true },
+    { id: 'vang-14k', label: 'Vàng 14K', tag: 'Thanh lịch cân bằng', color: '#e5c07b', price: '12 triệu VNĐ', priceVnd: 12_000_000,
+      image: '', imgFilter: '', available: true },
+    { id: 'bach-kim', label: 'Bạch kim', tag: 'Sức mạnh vĩnh cửu', color: '#e5e4e2', price: '20 triệu VNĐ', priceVnd: 20_000_000,
+      image: '', imgFilter: '', available: true },
+    { id: 'bac-925', label: 'Bạc 925', tag: 'Cổ điển hiện đại', color: '#c0c0c0', price: '8 triệu VNĐ', priceVnd: 8_000_000,
+      image: '', imgFilter: '', available: true },
   ];
+
+  // Hình ảnh của từng blank theo chất liệu (lấy từ Mejuri product variants)
+  // Key: blank_id → { material_id → image_url }
+  // Nếu blank_id không có trong map → tất cả chất liệu đều available (dùng ảnh blank mặc định)
+  // Nếu blank_id có trong map nhưng material_id không có → chất liệu đó bị disabled
+  private readonly BLANK_MATERIAL_IMAGES: Record<string, Partial<Record<string, string>>> = {
+    'BLK000001': { // Nhẫn tròn trơn → Thin Dome Ring
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-StackerRings_ThinDomeRing_V_OffFigure-PDP_new.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-ThinDomeRing-14k-Angled_061_new.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-StackerRings_ThinDomeRing_SS_OffFigure-PDP_new.png',
+      // bach-kim: không có variant → disabled
+    },
+    'BLK000002': { // Nhẫn đai ngang → Stacker Ring
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-StackerRing_10k_OffFigureAngledView_PDP_new.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-StackerRing_10k_OffFigureAngledView_PDP_new.png',
+      'bach-kim': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/stacker_ring_OffFigureAngledView_PDP.jpg',
+      // bac-925: không có variant → disabled
+    },
+    'BLK000003': { // Nhẫn đính đá solo → Dôme Figure Balance Ring
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-DomeFigure_DomeFigureFloatingGemstoneStackerLGS_V_OffFigAngledView-018_Purple_FOC_new.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-DomeFigure_DomeFigureFloatingGemstoneStackerLGS_V_OffFigAngledView-018_Purple_FOC_new.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-DomeFigure_DomeFigureFloatingGemstoneStackerLGS_V_OffFigAngledView-018_Purple_FOC_SILVER_new.png',
+      // bach-kim: không có variant → disabled
+    },
+
+    'BLK000004': { // Vòng cổ dây mảnh → Spheres Chain Necklace
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-NEWCHAINS_SpheresChokerNecklace_14k_Front_061_new_20102b9f-4820-489c-a4d0-ef33501515fb.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-NEWCHAINS_SpheresChokerNecklace_14k_Front_061_new_20102b9f-4820-489c-a4d0-ef33501515fb.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SILVERBESTSELLERLES-SpheresChainNecklaceSilver-SS-Front_043_new.png',
+      // bach-kim: không có → disabled
+    },
+    'BLK000005': { // Vòng cổ dây xích → Serpentine Chain Necklace
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SerpentineChainNecklace-14K-Front_014_new_694c52ff-6f10-4b64-b2f0-2c3d52a0f8e8.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SerpentineChainNecklace-14K-Front_014_new_694c52ff-6f10-4b64-b2f0-2c3d52a0f8e8.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SILVERBESTSELLERLES-SerpentineNecklaceSilver-SS-Front_229_new.png',
+      // bach-kim: không có → disabled
+    },
+    'BLK000006': { // Lắc tay tròn trơn → Spheres Chain Bracelet
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SpheresBracelet-14K-TopDown_169_new.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SpheresBracelet-14K-TopDown_169_new.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SILVERBESTSELLERLES-SpheresChainBraceletSilver-SS-TopDown_527_new.png',
+      // bach-kim: không có → disabled
+    },
+    'BLK000007': { // Hoa tai thả tròn → Bold Huggie Hoops
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-BoldHuggieHoops_V_OffFigureAngledView_PDP_new.png',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-BoldHuggieHoops_10k_OffFigureAngledView_PDP_new.png',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-SILVERBESTSELLERLES-BoldHuggieHoopsSilver-SS-Angled_014_new_12392e97-5877-4977-ace5-18b963492f6b.png',
+      // bach-kim: không có → disabled
+    },
+    'BLK000008': { // Mặt dây chuyền oval → Lucia Pendant Necklace
+      'vang-18k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-LGSSinglePendantNecklace_V_OffFigureFrontView_copy.jpg',
+      'vang-14k': 'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-LGSSinglePendantNecklace_V_OffFigureFrontView_copy.jpg',
+      'bac-925':  'https://cdn.shopify.com/s/files/1/0797/3637/3533/files/0-LGSSinglePendantNecklace_SS_OffFigureFrontViewcopy.jpg',
+      // bach-kim: không có → disabled
+    },
+  };
+
+  readonly step2PreviewImage = computed(() => {
+    const blank = this.selectedBlank();
+    if (!blank) return 'assets/images/studio-ring.png';
+    const variants = this.BLANK_MATERIAL_IMAGES[blank.id];
+    if (!variants) return blank.image; // không có variant map → dùng ảnh blank
+    return variants[this.selectedMaterial().id] || blank.image;
+  });
+
+  // Stone availability per blank
+  // Blank không có trong map → chỉ 'none' khả dụng (không gắn đá được)
+  private readonly BLANK_AVAILABLE_STONES: Record<string, string[]> = {
+    'BLK000003': ['diamond', 'ruby', 'sapphire', 'emerald', 'none'],
+    'BLK000008': ['diamond', 'ruby', 'sapphire', 'emerald', 'none'],
+  };
+
+  isStoneAvailableForBlank(stoneId: string): boolean {
+    const blank = this.selectedBlank();
+    if (!blank) return stoneId === 'none';
+    const available = this.BLANK_AVAILABLE_STONES[blank.id];
+    if (!available) return stoneId === 'none';
+    return available.includes(stoneId);
+  }
+
+  blankSupportsStones(): boolean {
+    const blank = this.selectedBlank();
+    if (!blank) return false;
+    return !!this.BLANK_AVAILABLE_STONES[blank.id];
+  }
+
+  // Vertical metallic band gradient — simulates inner surface curvature under light
+  readonly innerBandGradient = computed(() => {
+    const id = this.selectedMaterial().id;
+    if (id === 'vang-18k' || id === 'vang-14k')
+      return 'linear-gradient(to bottom, #7a5510 0%, #c8960c 18%, #f0cc50 38%, #ffe47a 50%, #e8c040 62%, #c09018 82%, #7a5510 100%)';
+    if (id === 'bach-kim')
+      return 'linear-gradient(to bottom, #606070 0%, #9898b0 18%, #d0d0e0 38%, #f0f0f8 50%, #c8c8d8 62%, #8888a0 82%, #606070 100%)';
+    return 'linear-gradient(to bottom, #555 0%, #909090 18%, #d4d4d4 38%, #ebebeb 50%, #c8c8c8 62%, #888 82%, #555 100%)';
+  });
+
+  readonly innerBandTextColor = computed(() => {
+    const id = this.selectedMaterial().id;
+    if (id === 'vang-18k' || id === 'vang-14k') return 'rgba(80, 48, 4, 0.85)';
+    if (id === 'bach-kim') return 'rgba(50, 50, 70, 0.80)';
+    return 'rgba(40, 40, 40, 0.80)';
+  });
+
+  isMaterialAvailableForBlank(materialId: string): boolean {
+    const blank = this.selectedBlank();
+    if (!blank) return true;
+    const variants = this.BLANK_MATERIAL_IMAGES[blank.id];
+    if (!variants) return true; // blank không có variant map → tất cả available
+    return !!variants[materialId];
+  }
 
   readonly stones: Stone[] = [
     {
@@ -163,6 +317,307 @@ export class StudioComponent {
     { id: 'credit-card', label: 'Thẻ tín dụng/Ghi nợ' },
   ];
 
+  // ─── Province / Ward data ─────────────────────────────────────────────
+  readonly PROVINCES = [
+    { value: 'hcm',        label: 'TP. Hồ Chí Minh' },
+    { value: 'hn',         label: 'Hà Nội' },
+    { value: 'dn',         label: 'Đà Nẵng' },
+    { value: 'cantho',     label: 'Cần Thơ' },
+    { value: 'haiphong',   label: 'Hải Phòng' },
+    { value: 'hue',        label: 'Huế' },
+    { value: 'quangninh',  label: 'Quảng Ninh' },
+    { value: 'bacninh',    label: 'Bắc Ninh' },
+    { value: 'thainguyen', label: 'Thái Nguyên' },
+    { value: 'phutho',     label: 'Phú Thọ' },
+    { value: 'laocai',     label: 'Lào Cai' },
+    { value: 'tuyenquang', label: 'Tuyên Quang' },
+    { value: 'hungyen',    label: 'Hưng Yên' },
+    { value: 'ninhbinh',   label: 'Ninh Bình' },
+    { value: 'thanhhoa',   label: 'Thanh Hóa' },
+    { value: 'nghean',     label: 'Nghệ An' },
+    { value: 'hatinh',     label: 'Hà Tĩnh' },
+    { value: 'quangtri',   label: 'Quảng Trị' },
+    { value: 'quangngai',  label: 'Quảng Ngãi' },
+    { value: 'gialai',     label: 'Gia Lai' },
+    { value: 'khanhhoa',   label: 'Khánh Hòa' },
+    { value: 'lamdong',    label: 'Lâm Đồng' },
+    { value: 'daklak',     label: 'Đắk Lắk' },
+    { value: 'dongnai',    label: 'Đồng Nai' },
+    { value: 'tayninh',    label: 'Tây Ninh' },
+    { value: 'angiang',    label: 'An Giang' },
+    { value: 'dongthap',   label: 'Đồng Tháp' },
+    { value: 'vinhlong',   label: 'Vĩnh Long' },
+    { value: 'camau',      label: 'Cà Mau' },
+    { value: 'caobang',    label: 'Cao Bằng' },
+    { value: 'dienbien',   label: 'Điện Biên' },
+    { value: 'laichau',    label: 'Lai Châu' },
+    { value: 'langson',    label: 'Lạng Sơn' },
+    { value: 'sonla',      label: 'Sơn La' },
+  ];
+
+  readonly DISTRICTS: Record<string, { value: string; label: string }[]> = {
+    hcm: [
+      { value: 'ben-nghe',        label: 'Phường Bến Nghé' },
+      { value: 'ben-thanh',       label: 'Phường Bến Thành' },
+      { value: 'co-giang',        label: 'Phường Cô Giang' },
+      { value: 'nguyen-cu-trinh', label: 'Phường Nguyễn Cư Trinh' },
+      { value: 'phu-my-hung',     label: 'Phường Phú Mỹ Hưng' },
+      { value: 'tan-phong',       label: 'Phường Tân Phong' },
+      { value: 'linh-trung',      label: 'Phường Linh Trung' },
+      { value: 'thu-duc',         label: 'Phường Thủ Đức' },
+      { value: 'binh-tho',        label: 'Phường Bình Thọ' },
+      { value: 'hiep-binh-phuoc', label: 'Phường Hiệp Bình Phước' },
+      { value: 'an-lac',          label: 'Phường An Lạc' },
+      { value: 'tan-son-nhi',     label: 'Phường Tân Sơn Nhì' },
+      { value: 'phu-nhuan',       label: 'Phường Phú Nhuận' },
+    ],
+    hn: [
+      { value: 'ba-dinh',      label: 'Quận Ba Đình' },
+      { value: 'hoan-kiem',    label: 'Quận Hoàn Kiếm' },
+      { value: 'hai-ba-trung', label: 'Quận Hai Bà Trưng' },
+      { value: 'dong-da',      label: 'Quận Đống Đa' },
+      { value: 'tay-ho',       label: 'Quận Tây Hồ' },
+      { value: 'cau-giay',     label: 'Quận Cầu Giấy' },
+      { value: 'thanh-xuan',   label: 'Quận Thanh Xuân' },
+      { value: 'hoang-mai',    label: 'Quận Hoàng Mai' },
+      { value: 'long-bien',    label: 'Quận Long Biên' },
+      { value: 'nam-tu-liem',  label: 'Quận Nam Từ Liêm' },
+      { value: 'bac-tu-liem',  label: 'Quận Bắc Từ Liêm' },
+      { value: 'ha-dong',      label: 'Quận Hà Đông' },
+    ],
+    dn: [
+      { value: 'hai-chau-1',    label: 'Phường Hải Châu 1' },
+      { value: 'hai-chau-2',    label: 'Phường Hải Châu 2' },
+      { value: 'thanh-binh',    label: 'Phường Thạnh Bình' },
+      { value: 'thuan-phuoc',   label: 'Phường Thuận Phước' },
+      { value: 'my-an',         label: 'Phường Mỹ An' },
+      { value: 'khue-my',       label: 'Phường Khuê Mỹ' },
+      { value: 'man-thai',      label: 'Phường Mân Thái' },
+      { value: 'phuoc-my',      label: 'Phường Phước Mỹ' },
+      { value: 'hoa-cuong-bac', label: 'Phường Hòa Cường Bắc' },
+      { value: 'hoa-khanh-bac', label: 'Phường Hòa Khánh Bắc' },
+      { value: 'hoa-minh',      label: 'Phường Hòa Minh' },
+      { value: 'hoa-vang',      label: 'Xã Hòa Vang' },
+    ],
+    haiphong: [
+      { value: 'hong-bang',   label: 'Quận Hồng Bàng' },
+      { value: 'ngo-quyen',   label: 'Quận Ngô Quyền' },
+      { value: 'le-chan',     label: 'Quận Lê Chân' },
+      { value: 'hai-an',     label: 'Quận Hải An' },
+      { value: 'kien-an',    label: 'Quận Kiến An' },
+      { value: 'hai-duong',  label: 'TP. Hải Dương' },
+      { value: 'kinh-mon',   label: 'TX. Kinh Môn' },
+      { value: 'chi-linh',   label: 'TP. Chí Linh' },
+    ],
+    hue: [
+      { value: 'phu-hoi',    label: 'Phường Phú Hội' },
+      { value: 'phu-xuan',   label: 'Phường Phú Xuân' },
+      { value: 'thuan-hoa',  label: 'Phường Thuận Hòa' },
+      { value: 'an-cuu',     label: 'Phường An Cựu' },
+      { value: 'kim-long',   label: 'Phường Kim Long' },
+      { value: 'huong-thuy', label: 'TX. Hương Thủy' },
+      { value: 'huong-tra',  label: 'TX. Hương Trà' },
+    ],
+    cantho: [
+      { value: 'ninh-kieu',  label: 'Quận Ninh Kiều' },
+      { value: 'binh-thuy',  label: 'Quận Bình Thủy' },
+      { value: 'cai-rang',   label: 'Quận Cái Răng' },
+      { value: 'o-mon',      label: 'Quận Ô Môn' },
+      { value: 'thot-not',   label: 'Quận Thốt Nốt' },
+      { value: 'vi-thanh',   label: 'TP. Vị Thanh' },
+      { value: 'nga-bay',    label: 'TX. Ngã Bảy' },
+      { value: 'soc-trang',  label: 'TP. Sóc Trăng' },
+    ],
+    quangninh: [
+      { value: 'ha-long',    label: 'TP. Hạ Long' },
+      { value: 'cam-pha',    label: 'TP. Cẩm Phả' },
+      { value: 'uong-bi',    label: 'TP. Uông Bí' },
+      { value: 'mong-cai',   label: 'TP. Móng Cái' },
+      { value: 'dong-trieu', label: 'TX. Đông Triều' },
+      { value: 'quang-yen',  label: 'TX. Quảng Yên' },
+    ],
+    bacninh: [
+      { value: 'bac-ninh-tp',  label: 'TP. Bắc Ninh' },
+      { value: 'tu-son',       label: 'TX. Từ Sơn' },
+      { value: 'bac-giang-tp', label: 'TP. Bắc Giang' },
+      { value: 'viet-yen',     label: 'TX. Việt Yên' },
+      { value: 'yen-phong',    label: 'Huyện Yên Phong' },
+      { value: 'lang-giang',   label: 'Huyện Lạng Giang' },
+    ],
+    thainguyen: [
+      { value: 'tn-tp',      label: 'TP. Thái Nguyên' },
+      { value: 'song-cong',  label: 'TP. Sông Công' },
+      { value: 'pho-yen',    label: 'TX. Phổ Yên' },
+      { value: 'bac-kan',    label: 'TP. Bắc Kạn' },
+      { value: 'cho-moi',    label: 'TX. Chợ Mới' },
+    ],
+    phutho: [
+      { value: 'viet-tri',    label: 'TP. Việt Trì' },
+      { value: 'phu-tho-tx',  label: 'TX. Phú Thọ' },
+      { value: 'vinh-yen',    label: 'TP. Vĩnh Yên' },
+      { value: 'phuc-yen',    label: 'TP. Phúc Yên' },
+      { value: 'hoa-binh-tp', label: 'TP. Hòa Bình' },
+      { value: 'luong-son',   label: 'TX. Lương Sơn' },
+    ],
+    laocai: [
+      { value: 'lao-cai-tp', label: 'TP. Lào Cai' },
+      { value: 'sa-pa',      label: 'TX. Sa Pa' },
+      { value: 'yen-bai-tp', label: 'TP. Yên Bái' },
+      { value: 'nghia-lo',   label: 'TX. Nghĩa Lộ' },
+      { value: 'van-yen',    label: 'Huyện Văn Yên' },
+    ],
+    tuyenquang: [
+      { value: 'tuyen-quang-tp', label: 'TP. Tuyên Quang' },
+      { value: 'ha-giang-tp',    label: 'TP. Hà Giang' },
+      { value: 'dong-van',       label: 'TX. Đồng Văn' },
+      { value: 'yen-binh',       label: 'Huyện Yên Bình' },
+    ],
+    hungyen: [
+      { value: 'hung-yen-tp',  label: 'TP. Hưng Yên' },
+      { value: 'my-hao',       label: 'TX. Mỹ Hào' },
+      { value: 'thai-binh-tp', label: 'TP. Thái Bình' },
+      { value: 'dong-hoa',     label: 'TX. Đông Hòa' },
+      { value: 'kien-xuong',   label: 'Huyện Kiến Xương' },
+    ],
+    ninhbinh: [
+      { value: 'ninh-binh-tp', label: 'TP. Ninh Bình' },
+      { value: 'tam-diep',     label: 'TP. Tam Điệp' },
+      { value: 'phu-ly',       label: 'TP. Phủ Lý' },
+      { value: 'nam-dinh-tp',  label: 'TP. Nam Định' },
+      { value: 'my-loc',       label: 'TX. Mỹ Lộc' },
+    ],
+    thanhhoa: [
+      { value: 'thanh-hoa-tp', label: 'TP. Thanh Hóa' },
+      { value: 'bim-son',      label: 'TX. Bỉm Sơn' },
+      { value: 'sam-son',      label: 'TP. Sầm Sơn' },
+      { value: 'nghi-son',     label: 'TX. Nghi Sơn' },
+    ],
+    nghean: [
+      { value: 'vinh',       label: 'TP. Vinh' },
+      { value: 'cua-lo',     label: 'TX. Cửa Lò' },
+      { value: 'thai-hoa',   label: 'TX. Thái Hòa' },
+      { value: 'hoang-mai',  label: 'TX. Hoàng Mai' },
+    ],
+    hatinh: [
+      { value: 'ha-tinh-tp', label: 'TP. Hà Tĩnh' },
+      { value: 'hong-linh',  label: 'TX. Hồng Lĩnh' },
+      { value: 'ky-anh',     label: 'TX. Kỳ Anh' },
+      { value: 'vung-ang',   label: 'TX. Vũng Áng' },
+    ],
+    quangtri: [
+      { value: 'dong-ha',      label: 'TP. Đông Hà' },
+      { value: 'quang-tri-tx', label: 'TX. Quảng Trị' },
+      { value: 'dong-hoi',     label: 'TP. Đồng Hới' },
+      { value: 'ba-don',       label: 'TX. Ba Đồn' },
+      { value: 'le-thuy',      label: 'Huyện Lệ Thủy' },
+    ],
+    quangngai: [
+      { value: 'quang-ngai-tp', label: 'TP. Quảng Ngãi' },
+      { value: 'duc-pho',       label: 'TX. Đức Phổ' },
+      { value: 'kon-tum-tp',    label: 'TP. Kon Tum' },
+      { value: 'dak-to',        label: 'TX. Đắk Tô' },
+      { value: 'ngoc-hoi',      label: 'Huyện Ngọc Hồi' },
+    ],
+    gialai: [
+      { value: 'pleiku',    label: 'TP. Pleiku' },
+      { value: 'an-khe',    label: 'TX. An Khê' },
+      { value: 'ayun-pa',   label: 'TX. Ayun Pa' },
+      { value: 'quy-nhon',  label: 'TP. Quy Nhơn' },
+      { value: 'hoai-nhon', label: 'TX. Hoài Nhơn' },
+      { value: 'an-nhon',   label: 'TX. An Nhơn' },
+    ],
+    khanhhoa: [
+      { value: 'nha-trang', label: 'TP. Nha Trang' },
+      { value: 'cam-ranh',  label: 'TP. Cam Ranh' },
+      { value: 'ninh-hoa',  label: 'TX. Ninh Hòa' },
+      { value: 'phan-rang', label: 'TP. Phan Rang - Tháp Chàm' },
+      { value: 'ninh-hai',  label: 'TX. Ninh Hải' },
+    ],
+    lamdong: [
+      { value: 'da-lat',    label: 'TP. Đà Lạt' },
+      { value: 'bao-loc',   label: 'TX. Bảo Lộc' },
+      { value: 'phan-thiet',label: 'TP. Phan Thiết' },
+      { value: 'la-gi',     label: 'TX. La Gi' },
+      { value: 'duc-linh',  label: 'Huyện Đức Linh' },
+    ],
+    daklak: [
+      { value: 'buon-ma-thuot', label: 'TP. Buôn Ma Thuột' },
+      { value: 'buon-ho',       label: 'TX. Buôn Hồ' },
+      { value: 'gia-nghia',     label: 'TP. Gia Nghĩa' },
+      { value: 'dak-mil',       label: 'TX. Đắk Mil' },
+    ],
+    dongnai: [
+      { value: 'bien-hoa',  label: 'TP. Biên Hòa' },
+      { value: 'long-khanh',label: 'TP. Long Khánh' },
+      { value: 'nhon-trach',label: 'TX. Nhơn Trạch' },
+      { value: 'dong-xoai', label: 'TP. Đồng Xoài' },
+      { value: 'chon-thanh',label: 'TX. Chơn Thành' },
+    ],
+    tayninh: [
+      { value: 'tay-ninh-tp', label: 'TP. Tây Ninh' },
+      { value: 'trang-bang',  label: 'TX. Trảng Bàng' },
+      { value: 'hoa-thanh',   label: 'TX. Hòa Thành' },
+      { value: 'tan-an',      label: 'TP. Tân An' },
+      { value: 'kien-tuong',  label: 'TX. Kiến Tường' },
+    ],
+    angiang: [
+      { value: 'long-xuyen', label: 'TP. Long Xuyên' },
+      { value: 'chau-doc',   label: 'TP. Châu Đốc' },
+      { value: 'tan-chau',   label: 'TX. Tân Châu' },
+      { value: 'rach-gia',   label: 'TP. Rạch Giá' },
+      { value: 'ha-tien',    label: 'TX. Hà Tiên' },
+      { value: 'kien-luong', label: 'TX. Kiên Lương' },
+    ],
+    dongthap: [
+      { value: 'cao-lanh', label: 'TP. Cao Lãnh' },
+      { value: 'sa-dec',   label: 'TP. Sa Đéc' },
+      { value: 'hong-ngu', label: 'TX. Hồng Ngự' },
+      { value: 'my-tho',   label: 'TP. Mỹ Tho' },
+      { value: 'cai-lay',  label: 'TX. Cai Lậy' },
+    ],
+    vinhlong: [
+      { value: 'vinh-long-tp', label: 'TP. Vĩnh Long' },
+      { value: 'binh-minh',    label: 'TX. Bình Minh' },
+      { value: 'ben-tre-tp',   label: 'TP. Bến Tre' },
+      { value: 'tra-vinh-tp',  label: 'TP. Trà Vinh' },
+      { value: 'duyen-hai',    label: 'TX. Duyên Hải' },
+    ],
+    camau: [
+      { value: 'ca-mau-tp',   label: 'TP. Cà Mau' },
+      { value: 'nam-can',     label: 'TX. Năm Căn' },
+      { value: 'bac-lieu-tp', label: 'TP. Bạc Liêu' },
+      { value: 'gia-rai',     label: 'TX. Giá Rai' },
+    ],
+    caobang: [
+      { value: 'cao-bang-tp', label: 'TP. Cao Bằng' },
+      { value: 'bao-lac',     label: 'Huyện Bảo Lạc' },
+      { value: 'ha-quang',    label: 'Huyện Hà Quảng' },
+    ],
+    dienbien: [
+      { value: 'dien-bien-phu', label: 'TP. Điện Biên Phủ' },
+      { value: 'muong-lay',     label: 'TX. Mường Lay' },
+      { value: 'dien-bien',     label: 'Huyện Điện Biên' },
+    ],
+    laichau: [
+      { value: 'lai-chau-tp', label: 'TP. Lai Châu' },
+      { value: 'phong-tho',   label: 'TX. Phong Thổ' },
+      { value: 'sin-ho',      label: 'Huyện Sìn Hồ' },
+      { value: 'tam-duong',   label: 'Huyện Tam Đường' },
+    ],
+    langson: [
+      { value: 'lang-son-tp', label: 'TP. Lạng Sơn' },
+      { value: 'loc-binh',    label: 'Huyện Lộc Bình' },
+      { value: 'chi-lang',    label: 'Huyện Chi Lăng' },
+      { value: 'huu-lung',    label: 'Huyện Hữu Lũng' },
+    ],
+    sonla: [
+      { value: 'son-la-tp', label: 'TP. Sơn La' },
+      { value: 'moc-chau',  label: 'TX. Mộc Châu' },
+      { value: 'mai-son',   label: 'TX. Mai Sơn' },
+      { value: 'yen-chau',  label: 'Huyện Yên Châu' },
+    ],
+  };
+
   // ─── Step state ───────────────────────────────────────────────────────
   readonly currentStep = signal(1);
 
@@ -170,6 +625,29 @@ export class StudioComponent {
   readonly checkoutSubStep = signal<1 | 2>(1);
 
   constructor() {
+    this.blanksLoading.set(true);
+    this.http.get<any>(`${environment.apiUrl}/studio/blanks`)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.allBlanks.set(res.data.map((b: any): Blank => ({
+              id:          b.blank_id,
+              name:        b.blank_name,
+              type:        b.blank_type,
+              basePrice:   Number(b.base_price),
+              description: b.description ?? '',
+              image:       b.image_url ?? 'assets/images/studio-ring.png',
+            })));
+          }
+          this.blanksLoading.set(false);
+        },
+        error: () => {
+          this.blanksLoading.set(false);
+          this.blanksError.set(true);
+        },
+      });
+
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
@@ -185,7 +663,7 @@ export class StudioComponent {
   }
 
   // Step 1
-  readonly selectedCategoryId = signal<string | null>(null);
+  readonly selectedBlank = signal<Blank | null>(null);
 
   // Step 2
   readonly selectedMaterial = signal<Material>(this.materials[0]);
@@ -222,10 +700,63 @@ export class StudioComponent {
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     phone: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true }),
-    province: new FormControl('', { nonNullable: true }),
-    ward: new FormControl('', { nonNullable: true }),
+    province: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    ward: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     address: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
+
+  readonly selectedProvince   = signal('');
+  readonly availableDistricts = computed(() => this.DISTRICTS[this.selectedProvince()] ?? []);
+  readonly wardLabel          = computed(() => this.selectedProvince() === 'hn' ? 'QUẬN/HUYỆN' : 'PHƯỜNG/XÃ');
+  readonly wardPlaceholder    = computed(() => this.selectedProvince() === 'hn' ? 'Chọn Quận/Huyện' : 'Chọn Phường/Xã');
+
+  onProvinceChange(): void {
+    this.selectedProvince.set(this.checkoutForm.get('province')!.value);
+    this.checkoutForm.get('ward')!.setValue('');
+  }
+
+  // ─── Saved address picker ─────────────────────────────────────────────
+  readonly savedAddresses    = signal<any[]>([]);
+  readonly addressesLoaded   = signal(false);
+  readonly addressesLoading  = signal(false);
+  readonly showAddressPicker = signal(false);
+
+  loadAndShowAddresses(): void {
+    if (!this.addressesLoaded()) {
+      this.addressesLoading.set(true);
+      this.http.get<any>(`${environment.apiUrl}/orders/addresses`)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (res) => {
+            this.savedAddresses.set(res.data ?? []);
+            this.addressesLoaded.set(true);
+            this.addressesLoading.set(false);
+            this.showAddressPicker.set(true);
+          },
+          error: () => {
+            this.addressesLoaded.set(true);
+            this.addressesLoading.set(false);
+            this.showAddressPicker.set(true);
+          },
+        });
+    } else {
+      this.showAddressPicker.update(v => !v);
+    }
+  }
+
+  applyAddress(addr: any): void {
+    const provinceVal = this.PROVINCES.find(p => p.value === addr.province || p.label === addr.province)?.value ?? '';
+    this.selectedProvince.set(provinceVal);
+    const wardVal = (this.DISTRICTS[provinceVal] ?? []).find(d => d.value === addr.ward || d.label === addr.ward)?.value ?? '';
+    this.checkoutForm.patchValue({
+      name:     addr.recipient_name,
+      phone:    addr.recipient_phone,
+      address:  addr.address_line,
+      province: provinceVal || addr.province,
+      ward:     wardVal || addr.ward,
+    });
+    this.showAddressPicker.set(false);
+  }
 
   // ─── Computed ─────────────────────────────────────────────────────────
   readonly stonePrice = computed(() =>
@@ -241,7 +772,7 @@ export class StudioComponent {
 
   readonly totalPrice = computed(
     () =>
-      this.MOUNT_FEE +
+      (this.selectedBlank()?.basePrice ?? 0) +
       this.selectedMaterial().priceVnd +
       this.stonePrice() +
       this.engraveFee() +
@@ -251,10 +782,13 @@ export class StudioComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cartService = inject(CartService);
+  private readonly http = inject(HttpClient);
 
-  readonly depositAmount = computed(() => Math.round(this.totalPrice() / 2));
+  readonly finalTotal = computed(() => Math.max(this.totalPrice() - this.voucherDiscount(), 0));
+  readonly depositAmount = computed(() => Math.round(this.finalTotal() / 2));
 
   readonly orderItems = computed((): OrderItem[] => {
+    const blank = this.selectedBlank();
     const items: OrderItem[] = [
       { name: this.selectedMaterial().label, price: this.selectedMaterial().priceVnd },
     ];
@@ -264,7 +798,7 @@ export class StudioComponent {
         price: this.stonePrice(),
       });
     }
-    items.push({ name: 'Phôi Di Sản', price: this.MOUNT_FEE });
+    items.push({ name: blank?.name ?? 'Phôi', price: blank?.basePrice ?? 0 });
     items.push({ name: 'Công chế tác thủ công', price: this.CRAFT_FEE });
     if (this.engraveFee() > 0) {
       items.push({
@@ -307,8 +841,7 @@ export class StudioComponent {
     const btnRect = btn.getBoundingClientRect();
     const cartRect = cartEl.getBoundingClientRect();
 
-    const cat = this.categories.find(c => c.id === this.selectedCategoryId());
-    const imgSrc = cat?.image ?? 'assets/images/category-nhan.png';
+    const imgSrc = this.selectedBlank()?.image ?? 'assets/images/studio-ring.png';
 
     const fly = document.createElement('div');
     fly.style.cssText = `
@@ -345,19 +878,29 @@ export class StudioComponent {
   }
 
   private addToCartSilent(): void {
-    const cat = this.categories.find(c => c.id === this.selectedCategoryId());
+    const blank = this.selectedBlank();
     this.cartService.addItem({
       type: 'studio',
-      name: `${cat?.name ?? 'Trang sức'} Studio`,
+      name: `${blank?.name ?? 'Trang sức'} Studio`,
       spec: `${this.selectedMaterial().label} • ${this.selectedStone().label}`,
       price: this.totalPrice(),
-      image: cat?.image ?? 'assets/images/category-nhan.png',
+      image: blank?.image ?? 'assets/images/studio-ring.png',
       quantity: 1,
     });
   }
 
-  selectCategory(id: string): void {
-    this.selectedCategoryId.set(id);
+  selectBlank(blank: Blank): void {
+    this.selectedBlank.set(blank);
+    // Reset material nếu chất liệu hiện tại không available cho blank mới
+    const variants = this.BLANK_MATERIAL_IMAGES[blank.id];
+    if (variants && !variants[this.selectedMaterial().id]) {
+      const firstAvailable = this.materials.find(m => !!variants[m.id]);
+      if (firstAvailable) this.selectedMaterial.set(firstAvailable);
+    }
+    // Reset stone về 'none' nếu blank mới không hỗ trợ đá
+    if (!this.BLANK_AVAILABLE_STONES[blank.id]) {
+      this.selectedStone.set(this.stones.find(s => s.id === 'none')!);
+    }
     this.goToStep(2);
   }
 
@@ -401,23 +944,72 @@ export class StudioComponent {
 
   readonly formatVnd = formatVnd;
 
-  private mockSuccessNext = true;
+  applyVoucher(): void {
+    const code = this.voucherCode().trim();
+    if (!code) return;
+    this.http.post<any>(`${environment.apiUrl}/vouchers/validate`, {
+      code,
+      order_total: this.totalPrice(),
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        if (res.valid) {
+          this.voucherDiscount.set(res.discount);
+          this.voucherMsg.set(res.message);
+          this.voucherStatus.set('success');
+          this.appliedCustomerVoucherId = res.customer_voucher_id ?? null;
+        } else {
+          this.voucherDiscount.set(0);
+          this.voucherMsg.set(res.message);
+          this.voucherStatus.set('error');
+          this.appliedCustomerVoucherId = null;
+        }
+      },
+      error: () => {
+        this.voucherMsg.set('Không thể kiểm tra voucher');
+        this.voucherStatus.set('error');
+      },
+    });
+  }
 
   submitOrder(): void {
     if (this.checkoutForm.invalid) {
       this.checkoutForm.markAllAsTouched();
       return;
     }
-    // TODO: gọi API — mock xen kẽ để test cả 2 case
-    if (this.mockSuccessNext) {
-      this.showSuccessModal.set(true);
-    } else {
-      this.showFailModal.set(true);
-    }
-    this.mockSuccessNext = !this.mockSuccessNext;
-  }
+    const form = this.checkoutForm.getRawValue();
+    const PROVINCE_MAP = Object.fromEntries(this.PROVINCES.map(p => [p.value, p.label]));
+    const provinceLabel = PROVINCE_MAP[form.province] ?? form.province;
+    const wardLabel     = this.availableDistricts().find(d => d.value === form.ward)?.label ?? form.ward;
 
-  applyVoucher(): void {
-    // TODO: gọi API kiểm tra voucher
+    this.isSubmitting.set(true);
+    this.http.post<any>(`${environment.apiUrl}/studio`, {
+      totalPrice:         this.totalPrice(),
+      discountAmount:     this.voucherDiscount(),
+      customerVoucherId:  this.appliedCustomerVoucherId,
+      blankId:            this.selectedBlank()?.id ?? null,
+      materialId:         this.selectedMaterial().id,
+      address: {
+        recipient_name:  form.name,
+        recipient_phone: form.phone,
+        address_line:    form.address,
+        province:        provinceLabel,
+        ward:            wardLabel,
+      },
+      note: `Studio - ${this.selectedBlank()?.name ?? ''} - ${this.selectedMaterial().label} - ${this.selectedStone().label}`,
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.placedOrderId.set(res.data.order_id);
+          this.showSuccessModal.set(true);
+        } else {
+          this.showFailModal.set(true);
+        }
+        this.isSubmitting.set(false);
+      },
+      error: () => {
+        this.showFailModal.set(true);
+        this.isSubmitting.set(false);
+      },
+    });
   }
 }

@@ -1,20 +1,15 @@
 ﻿import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../core/services/auth.service';
 import { ModalService } from '../core/services/modal.service';
+import { ProductsService, Product } from '../products/products.service';
 import { formatPrice } from '../shared/utils/currency.util';
 
 interface Category {
   name: string;
   imageUrl: string;
   slug: string;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
 }
 
 interface Review {
@@ -33,11 +28,20 @@ interface Review {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  @ViewChild('reviewsTrack') reviewsTrack!: ElementRef<HTMLDivElement>;
+  @ViewChild('reviewsTrack')    reviewsTrack!:    ElementRef<HTMLDivElement>;
+  @ViewChild('categoriesTrack') categoriesTrack!: ElementRef<HTMLDivElement>;
 
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly modalService = inject(ModalService);
+  private readonly authService    = inject(AuthService);
+  private readonly router         = inject(Router);
+  private readonly modalService   = inject(ModalService);
+  private readonly productsService = inject(ProductsService);
+
+  scrollCategories(dir: 'prev' | 'next'): void {
+    const el = this.categoriesTrack.nativeElement;
+    const card = el.querySelector<HTMLElement>('.home__category-item');
+    const step = (card?.offsetWidth ?? 240) + 24;
+    el.scrollBy({ left: dir === 'next' ? step : -step, behavior: 'smooth' });
+  }
 
   scrollToCategories(): void {
     document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
@@ -66,12 +70,10 @@ export class HomeComponent {
     { name: 'CHARM', imageUrl: 'assets/images/category-charm.png', slug: 'charm' },
   ]);
 
-  readonly bestSellers = signal<Product[]>([
-    { id: '1', name: 'Aura Diamond Studs', price: 12500000, imageUrl: 'assets/images/product-aura-diamond-studs.png' },
-    { id: '2', name: 'Eternal Gold Band', price: 8900000, imageUrl: 'assets/images/product-eternal-gold-band.png' },
-    { id: '3', name: 'Silk Gold Bangle', price: 15200000, imageUrl: 'assets/images/product-silk-gold-bangle.png' },
-    { id: '4', name: 'Solo Sparkle Pendant', price: 6400000, imageUrl: 'assets/images/product-solo-sparkle-pendant.png' },
-  ]);
+  readonly bestSellers = toSignal(
+    this.productsService.getProducts(undefined, 1, 4),
+    { initialValue: [] as Product[] }
+  );
 
   readonly reviews = signal<Review[]>([
     { id: 1, quote: '"Chiếc nhẫn hoàn hảo hơn cả mong đợi!"', author: 'Lan Anh', imageUrl: 'assets/images/review-customer.png' },

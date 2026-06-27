@@ -9,7 +9,7 @@
           </svg>
         </div>
         <h3 class="ltv-cancel-modal__result-title">Hủy lịch thành công!</h3>
-        <p class="ltv-cancel-modal__result-desc">Lịch hẹn {{ appointmentId }} đã được hủy. Đặt cọc sẽ được hoàn trả theo chính sách.</p>
+        <p class="ltv-cancel-modal__result-desc">Lịch hẹn {{ appointmentId }} đã được hủy. {{ refundMessage() }}</p>
         <button class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary" type="button" (click)="onClose()">ĐÓNG</button>
       </div>
     } @else if (result() === 'fail') {
@@ -39,7 +39,7 @@
     </div>
 
     <div class="ltv-cancel-modal__refund-notice">
-      <strong>Chính sách hoàn tiền:</strong> Hủy trước 24 giờ sẽ được hoàn 100% đặt cọc. Hủy trong vòng 24 giờ sẽ mất phí đặt cọc.
+      <strong>Chính sách hoàn tiền:</strong> Hủy trước 24 giờ: hoàn 100% phí tư vấn. Hủy trong vòng 24 giờ: hoàn 50% phí tư vấn.
     </div>
 
     <div class="ltv-cancel-modal__reasons">
@@ -72,9 +72,9 @@
       <button
         class="ltv-cancel-modal__btn ltv-cancel-modal__btn--primary"
         type="button"
-        [disabled]="!selectedReason() || (isOtherSelected() && !otherReason().trim())"
+        [disabled]="!selectedReason() || (isOtherSelected() && !otherReason().trim()) || isSubmitting()"
         (click)="onConfirm()"
-      >XÁC NHẬN HỦY</button>
+      >{{ isSubmitting() ? 'Đang xử lý...' : 'XÁC NHẬN HỦY' }}</button>
     </div>
 
     } <!-- end @else -->

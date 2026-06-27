@@ -76,6 +76,22 @@ export class CancelOrderModalComponent {
     return s === 'P' || s === 'PC' || s === 'PF';
   });
 
+  readonly statusEnLabel = computed<string>(() => {
+    const map: Record<OrderStatus, string> = {
+      P: 'PENDING', PC: 'CONFIRMED', PF: 'PROCESSING',
+      S: 'DISPATCHED', CM: 'DELIVERED', C: 'CANCELLED',
+    };
+    return map[this.orderStatus()] ?? 'UNKNOWN';
+  });
+
+  readonly statusViLabel = computed<string>(() => {
+    const map: Record<OrderStatus, string> = {
+      P: 'Đang chờ xác nhận', PC: 'Đã xác nhận', PF: 'Đang xử lý',
+      S: 'Đang vận chuyển', CM: 'Đã giao hàng', C: 'Đã hủy',
+    };
+    return map[this.orderStatus()] ?? 'Không xác định';
+  });
+
   readonly otherSelected = computed<boolean>(() => this.selectedReasonId() === 'r5');
 
   readonly canSubmit = computed<boolean>(() =>

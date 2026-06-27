@@ -28,15 +28,27 @@
   <!-- Product Categories -->
   <section id="categories" class="home__categories">
     <h2 class="home__categories-title">Khám phá Danh mục sản phẩm</h2>
-    <div class="home__categories-grid">
-      @for (cat of categories(); track cat.slug) {
-        <a [routerLink]="['/products']" [queryParams]="{ category: cat.slug }" class="home__category-item">
-          <div class="home__category-arch">
-            <img [src]="cat.imageUrl" [alt]="cat.name" class="home__category-img" />
-          </div>
-          <span class="home__category-name">{{ cat.name }}</span>
-        </a>
-      }
+    <div class="home__categories-carousel">
+      <button class="home__categories-nav" type="button" (click)="scrollCategories('prev')" aria-label="Danh mục trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="home__categories-grid" #categoriesTrack>
+        @for (cat of categories(); track cat.slug) {
+          <a [routerLink]="['/products']" [queryParams]="{ category: cat.slug }" class="home__category-item">
+            <div class="home__category-arch">
+              <img [src]="cat.imageUrl" [alt]="cat.name" class="home__category-img" />
+            </div>
+            <span class="home__category-name">{{ cat.name }}</span>
+          </a>
+        }
+      </div>
+      <button class="home__categories-nav" type="button" (click)="scrollCategories('next')" aria-label="Danh mục tiếp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
     </div>
   </section>
 

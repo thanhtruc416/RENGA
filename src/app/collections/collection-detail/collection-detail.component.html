@@ -31,7 +31,7 @@
       <p class="coll-detail__products-subtitle">{{ collection().productsSubtitle }}</p>
     </div>
     <div class="coll-detail__products-grid">
-      @for (product of collection().products; track product.id) {
+      @for (product of products(); track product.id) {
         <a [routerLink]="['/products', product.id]" class="coll-detail__product">
           <div class="coll-detail__product-img-wrap">
             <img [src]="product.imageUrl" [alt]="product.name" class="coll-detail__product-img" />
@@ -41,7 +41,7 @@
           </div>
           <div class="coll-detail__product-info">
             <h3 class="coll-detail__product-name">{{ product.name }}</h3>
-            <p class="coll-detail__product-price">{{ product.price }}<u>đ</u></p>
+            <p class="coll-detail__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
           </div>
         </a>
       }

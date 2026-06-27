@@ -15,20 +15,20 @@
     <!-- Gallery -->
     <div class="product-detail__gallery">
       <div class="product-detail__gallery-thumbnails">
-        @for (img of product().images; track $index) {
+        @for (imgUrl of productImages(); track $index) {
           <button
             class="product-detail__thumb-btn"
             [class.product-detail__thumb-btn--active]="activeImageIndex() === $index"
             type="button"
             (click)="selectImage($index)"
           >
-            <img [src]="img" [alt]="product().name + ' - ảnh ' + ($index + 1)" class="product-detail__thumb-img" />
+            <img [src]="imgUrl" [alt]="product().name + ' - ảnh ' + ($index + 1)" class="product-detail__thumb-img" />
           </button>
         }
       </div>
       <div class="product-detail__gallery-main">
         <img
-          [src]="product().images[activeImageIndex()]"
+          [src]="productImages()[activeImageIndex()]"
           [alt]="product().name"
           class="product-detail__main-img"
         />
@@ -55,17 +55,17 @@
 
     <!-- Product Info -->
     <div class="product-detail__info">
-      <p class="product-detail__collection">{{ product().collection }}</p>
+      <p class="product-detail__collection">By RENGA</p>
       <h1 class="product-detail__name">{{ product().name }}</h1>
 
       <div class="product-detail__price-row">
-        <span class="product-detail__price">{{ formatPrice(product().price) }}<u>đ</u></span>
+        <span class="product-detail__price">{{ formatPrice(displayPrice()) }}<u>đ</u></span>
         @if (product().inStock) {
           <span class="product-detail__stock-badge">SẴN CÓ</span>
         }
       </div>
 
-      <p class="product-detail__desc">{{ product().description }}</p>
+      <p class="product-detail__desc" [innerHTML]="product().description"></p>
 
       <!-- Size Selector -->
       <div class="product-detail__size-section">
@@ -87,12 +87,16 @@
 
       <!-- CTA Buttons -->
       <div class="product-detail__cta">
-        <button class="product-detail__btn product-detail__btn--primary" type="button" (click)="flyToCart($event)">
-          THÊM VÀO GIỎ HÀNG
-        </button>
-        <button class="product-detail__btn product-detail__btn--secondary" type="button" (click)="buyNow()">
-          MUA NGAY
-        </button>
+        @if (product().inStock) {
+          <button class="product-detail__btn product-detail__btn--primary" type="button" (click)="flyToCart($event)">
+            THÊM VÀO GIỎ HÀNG
+          </button>
+          <button class="product-detail__btn product-detail__btn--secondary" type="button" (click)="buyNow()">
+            MUA NGAY
+          </button>
+        } @else if (product().id) {
+          <div class="product-detail__out-of-stock">HẾT HÀNG</div>
+        }
       </div>
 
       <!-- Service Info -->
@@ -114,7 +118,7 @@
   <section class="product-detail__specs">
     <h2 class="product-detail__specs-title">THÔNG SỐ CHI TIẾT</h2>
     <div class="product-detail__specs-grid">
-      @for (spec of specs; track spec.label; let last = $last) {
+      @for (spec of specs(); track spec.label; let last = $last) {
         <div class="product-detail__spec-item" [class.product-detail__spec-item--last]="last">
           <p class="product-detail__spec-label">{{ spec.label }}</p>
           <p class="product-detail__spec-value">{{ spec.value }}</p>
@@ -339,7 +343,7 @@
       </svg>
     </button>
 
-    @if (product().images.length > 1) {
+    @if (productImages().length > 1) {
       <button class="product-detail__lightbox-nav product-detail__lightbox-nav--prev" type="button" (click)="$event.stopPropagation(); lightboxPrev()" aria-label="Ảnh trước">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"/>
@@ -349,16 +353,16 @@
 
     <div class="product-detail__lightbox-content" (click)="$event.stopPropagation()">
       <img
-        [src]="product().images[activeImageIndex()]"
+        [src]="productImages()[activeImageIndex()]"
         [alt]="product().name"
         class="product-detail__lightbox-img"
       />
-      @if (product().images.length > 1) {
-        <p class="product-detail__lightbox-counter">{{ activeImageIndex() + 1 }} / {{ product().images.length }}</p>
+      @if (productImages().length > 1) {
+        <p class="product-detail__lightbox-counter">{{ activeImageIndex() + 1 }} / {{ productImages().length }}</p>
       }
     </div>
 
-    @if (product().images.length > 1) {
+    @if (productImages().length > 1) {
       <button class="product-detail__lightbox-nav product-detail__lightbox-nav--next" type="button" (click)="$event.stopPropagation(); lightboxNext()" aria-label="Ảnh tiếp">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>

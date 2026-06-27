@@ -78,9 +78,9 @@
                   <select class="field-group__select" id="province" formControlName="province"
                     (change)="onProvinceChange()">
                     <option value="" disabled>Chọn Tỉnh/Thành</option>
-                    <option value="hcm">TP. Hồ Chí Minh</option>
-                    <option value="hn">Hà Nội</option>
-                    <option value="dn">Đà Nẵng</option>
+                    @for (p of PROVINCES; track p.value) {
+                      <option [value]="p.value">{{ p.label }}</option>
+                    }
                   </select>
                 </div>
                 @if (shippingForm.get('province')?.invalid && shippingForm.get('province')?.touched) {
@@ -89,10 +89,10 @@
               </div>
               <div class="field-group field-group--select"
                 [class.field-group--error]="shippingForm.get('district')?.invalid && shippingForm.get('district')?.touched">
-                <label class="field-group__label field-group__label--above" for="district">PHƯỜNG/XÃ *</label>
+                <label class="field-group__label field-group__label--above" for="district">{{ districtLabel() }} *</label>
                 <div class="field-group__select-wrap">
                   <select class="field-group__select" id="district" formControlName="district">
-                    <option value="" disabled>Chọn Phường/Xã</option>
+                    <option value="" disabled>{{ districtPlaceholder() }}</option>
                     @for (d of availableDistricts(); track d.value) {
                       <option [value]="d.value">{{ d.label }}</option>
                     }
@@ -198,7 +198,7 @@
           @for (item of orderItems(); track item.id) {
             <div class="order-item" role="listitem">
               <div class="order-item__thumb">
-                <img [src]="item.image" [alt]="item.name" loading="lazy" />
+                <img [src]="item.image" [alt]="item.name" loading="lazy" (error)="onImgError($event)" />
               </div>
               <div class="order-item__info">
                 <div class="order-item__top">
@@ -271,6 +271,7 @@
 <app-payment-success-modal
   [isOpen]="showSuccessModal()"
   [isGuest]="false"
+  [orderId]="placedOrderId()"
   (closed)="showSuccessModal.set(false)"
 />
 
@@ -286,8 +287,3 @@
   (closed)="showFailModal.set(false)"
 />
 
-<app-payment-fail-modal
-  [isOpen]="showFailGuestModal()"
-  [isGuest]="true"
-  (closed)="showFailGuestModal.set(false)"
-/>

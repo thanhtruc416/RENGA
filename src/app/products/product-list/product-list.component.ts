@@ -58,7 +58,7 @@ export class ProductListComponent {
 
   readonly products = toSignal(
     toObservable(this.activeCategory).pipe(
-      switchMap((category) => this.productsService.getProducts(category)),
+      switchMap((category) => this.productsService.getProducts(category, 1, 500)),
     ),
     { initialValue: [] },
   );
@@ -98,9 +98,16 @@ export class ProductListComponent {
     }
   }
 
+  readonly failedImages = signal(new Set<string>());
+
+  onImgError(id: string): void {
+    this.failedImages.update(s => new Set([...s, id]));
+  }
+
   // ── Filtered + sorted products (uses APPLIED state) ───────
   readonly filteredProducts = computed(() => {
-    let list = this.products();
+    const failed = this.failedImages();
+    let list = this.products().filter(p => !failed.has(p.id));
 
     const stones = this.selectedStones();
     if (stones.length) {

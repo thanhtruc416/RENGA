@@ -1,3 +1,39 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
+import { requireAuth } from '../middleware/auth';
+import { getCart, addCartItem, updateCartItem, removeCartItem, clearCart } from '../services/cart.service';
+
 const router = Router();
+router.use(requireAuth);
+
+router.get('/', async (req, res) => {
+  const data = await getCart(req.user!.client_id);
+  res.json({ success: true, data });
+});
+
+router.post('/items', async (req, res) => {
+  const { variant_id, quantity = 1, unit_price } = req.body;
+  if (!variant_id || !unit_price) {
+    res.status(400).json({ success: false, message: 'Thiếu variant_id hoặc unit_price' });
+    return;
+  }
+  const id = await addCartItem(req.user!.client_id, { variant_id, quantity, unit_price });
+  res.json({ success: true, data: { cart_item_id: id } });
+});
+
+router.patch('/items/:id', async (req, res) => {
+  const { quantity } = req.body;
+  await updateCartItem(req.params['id'], req.user!.client_id, Number(quantity));
+  res.json({ success: true });
+});
+
+router.delete('/items/:id', async (req, res) => {
+  await removeCartItem(req.params['id'], req.user!.client_id);
+  res.json({ success: true });
+});
+
+router.delete('/clear', async (req, res) => {
+  await clearCart(req.user!.client_id);
+  res.json({ success: true });
+});
+
 export default router;
