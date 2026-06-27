@@ -11,137 +11,161 @@
       <img src="assets/icons/ic-close.png" alt="" />
     </a>
 
-    <!-- Brand Header -->
-    <div class="register__header">
-      <h1 class="register__title">
-        Đăng kí tài khoản<br />RENGA
-      </h1>
-      <p class="register__subtitle">
-        Khám phá thế giới trang sức cao cấp dành riêng cho bạn
+    <!-- ══ BƯỚC 1: FORM ══════════════════════════════════════════════════════ -->
+    @if (step() === 'form') {
+
+      <div class="register__header">
+        <h1 class="register__title">Đăng kí tài khoản<br />RENGA</h1>
+        <p class="register__subtitle">Khám phá thế giới trang sức cao cấp dành riêng cho bạn</p>
+      </div>
+
+      <form class="register__form" [formGroup]="form" (ngSubmit)="register()">
+
+        <div class="register__field" [class.register__field--error]="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+          <input class="register__input" type="text" placeholder="Họ và Tên *" formControlName="fullName" autocomplete="name" />
+          @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
+            <span class="register__error">Vui lòng nhập họ và tên</span>
+          }
+        </div>
+
+        <div class="register__field" [class.register__field--error]="form.get('email')?.invalid && form.get('email')?.touched">
+          <input class="register__input" type="email" placeholder="Email" formControlName="email" autocomplete="email" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="register__error">Email không hợp lệ</span>
+          }
+        </div>
+
+        <div class="register__field" [class.register__field--error]="form.get('phone')?.invalid && form.get('phone')?.touched">
+          <input class="register__input" type="tel" placeholder="Số điện thoại *" formControlName="phone" inputmode="numeric" autocomplete="tel" />
+          @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+            <span class="register__error">Số điện thoại phải có đúng 10 chữ số</span>
+          }
+        </div>
+
+        <div class="register__field" [class.register__field--error]="form.get('password')?.invalid && form.get('password')?.touched">
+          <div class="register__input-wrap">
+            <input class="register__input" [type]="showPassword() ? 'text' : 'password'" placeholder="Mật khẩu *" formControlName="password" autocomplete="new-password" />
+            <button class="register__eye-btn" type="button" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+              @if (showPassword()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              }
+            </button>
+          </div>
+          @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+            <span class="register__error">Vui lòng nhập mật khẩu</span>
+          } @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+            <span class="register__error">Mật khẩu tối thiểu 8 ký tự</span>
+          }
+        </div>
+
+        <div class="register__field" [class.register__field--error]="(form.get('confirmPassword')?.invalid || form.hasError('mismatch')) && form.get('confirmPassword')?.touched">
+          <div class="register__input-wrap">
+            <input class="register__input" [type]="showPassword() ? 'text' : 'password'" placeholder="Xác nhận mật khẩu *" formControlName="confirmPassword" autocomplete="new-password" />
+            <button class="register__eye-btn" type="button" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+              @if (showPassword()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              }
+            </button>
+          </div>
+          @if (form.get('confirmPassword')?.hasError('required') && form.get('confirmPassword')?.touched) {
+            <span class="register__error">Vui lòng xác nhận mật khẩu</span>
+          } @else if (form.hasError('mismatch') && form.get('confirmPassword')?.touched) {
+            <span class="register__error">Mật khẩu không khớp</span>
+          }
+        </div>
+
+        @if (serverError()) {
+          <p class="register__server-error">{{ serverError() }}</p>
+        }
+
+        <button class="register__submit" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ' }}
+        </button>
+      </form>
+
+      <p class="register__footer">
+        Đã có tài khoản?&nbsp;<a routerLink="/dang-nhap" class="register__login-link">Đăng nhập ngay</a>
+      </p>
+    }
+
+  <!-- ══ BƯỚC 2: OTP ════════════════════════════════════════════════════════ -->
+  @if (step() === 'otp') {
+
+    <div class="register__header register__header--otp">
+      <h1 class="register__title">Đăng ký<br />thành công?</h1>
+      <p class="register__subtitle register__subtitle--otp">
+        Mã xác thực đã được gửi đến<br />
+        <strong>{{ form.get('phone')?.value }}</strong>
+        @if (form.get('email')?.value) { &nbsp;và email của bạn }
       </p>
     </div>
 
-    <!-- Form -->
-    <form class="register__form" [formGroup]="form" (ngSubmit)="register()">
-      <div class="register__field" [class.register__field--error]="form.get('fullName')?.invalid && form.get('fullName')?.touched">
-        <input
-          class="register__input"
-          type="text"
-          placeholder="Họ và Tên *"
-          formControlName="fullName"
-          autocomplete="name"
-        />
-        @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
-          <span class="register__error">Vui lòng nhập họ và tên</span>
-        }
-      </div>
+    <div class="register__otp-section">
 
-      <div class="register__field" [class.register__field--error]="form.get('email')?.invalid && form.get('email')?.touched">
-        <input
-          class="register__input"
-          type="email"
-          placeholder="Email"
-          formControlName="email"
-          autocomplete="email"
-        />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <span class="register__error">Email không hợp lệ</span>
-        }
-      </div>
-
-      <div class="register__field" [class.register__field--error]="form.get('phone')?.invalid && form.get('phone')?.touched">
-        <input
-          class="register__input"
-          type="tel"
-          placeholder="Số điện thoại *"
-          formControlName="phone"
-          inputmode="numeric"
-          autocomplete="tel"
-        />
-        @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-          <span class="register__error">Số điện thoại phải có đúng 10 chữ số</span>
-        }
-      </div>
-
-      <div class="register__field" [class.register__field--error]="form.get('password')?.invalid && form.get('password')?.touched">
-        <div class="register__input-wrap">
-          <input
-            class="register__input"
-            [type]="showPassword() ? 'text' : 'password'"
-            placeholder="Mật khẩu *"
-            formControlName="password"
-            autocomplete="new-password"
-          />
-          <button class="register__eye-btn" type="button" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
-            @if (showPassword()) {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            } @else {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            }
+      <!-- Phone display + Gửi lại -->
+      <div class="register__otp-phone-row">
+        <span class="register__otp-phone">{{ form.get('phone')?.value }}</span>
+        @if (countdown() > 0) {
+          <span class="register__otp-resend-wait">Gửi lại mã ({{ countdown() }}s)</span>
+        } @else {
+          <button class="register__otp-resend-btn" type="button" (click)="resendOtp()">
+            Gửi lại mã
           </button>
-        </div>
-        @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
-          <span class="register__error">Vui lòng nhập mật khẩu</span>
-        } @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
-          <span class="register__error">Mật khẩu tối thiểu 8 ký tự</span>
         }
       </div>
 
-      <div class="register__field" [class.register__field--error]="(form.get('confirmPassword')?.invalid || form.hasError('mismatch')) && form.get('confirmPassword')?.touched">
-        <div class="register__input-wrap">
+      <div class="register__otp-divider"></div>
+
+      <!-- Label -->
+      <p class="register__otp-label">NHẬP MÃ OTP</p>
+
+      <!-- 6 ô OTP -->
+      <div class="register__otp-boxes" (paste)="onOtpPaste($event)">
+        @for (digit of otpDigits(); track $index) {
           <input
-            class="register__input"
-            [type]="showPassword() ? 'text' : 'password'"
-            placeholder="Xác nhận mật khẩu *"
-            formControlName="confirmPassword"
-            autocomplete="new-password"
+            #otpInput
+            class="register__otp-box"
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            [value]="digit"
+            (input)="onOtpInput($event, $index)"
+            (keydown)="onOtpKeydown($event, $index)"
+            [attr.aria-label]="'Ký tự OTP thứ ' + ($index + 1)"
           />
-          <button class="register__eye-btn" type="button" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
-            @if (showPassword()) {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            } @else {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            }
-          </button>
-        </div>
-        @if (form.get('confirmPassword')?.hasError('required') && form.get('confirmPassword')?.touched) {
-          <span class="register__error">Vui lòng xác nhận mật khẩu</span>
-        } @else if (form.hasError('mismatch') && form.get('confirmPassword')?.touched) {
-          <span class="register__error">Mật khẩu không khớp</span>
         }
       </div>
 
+      @if (otpError()) {
+        <p class="register__otp-error">{{ otpError() }}</p>
+      }
+
+      <!-- Nút xác nhận -->
       <button
         class="register__submit"
-        type="submit"
-        [disabled]="isSubmitting()"
+        type="button"
+        [disabled]="!otpFilled || isSubmitting()"
+        (click)="submitOtp()"
       >
-        {{ isSubmitting() ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ' }}
+        {{ isSubmitting() ? 'ĐANG XÁC THỰC...' : 'XÁC NHẬN' }}
       </button>
-    </form>
 
-    <!-- Footer Link -->
-    <p class="register__footer">
-      Đã có tài khoản?&nbsp;<a routerLink="/dang-nhap" class="register__login-link">Đăng nhập ngay</a>
-    </p>
+      <!-- Quay lại -->
+      <button class="register__otp-back" type="button" (click)="step.set('form')">
+        QUAY LẠI ĐĂNG KÝ
+      </button>
 
-  </div>
+    </div>
+  }
+
+  </div><!-- /card -->
 </div>
 
+<!-- ── Popup kết quả ─────────────────────────────────────────────────────────── -->
 @if (popupVisible()) {
   <div class="reg-popup-backdrop" (click)="closePopup()">
     <div class="reg-popup" (click)="$event.stopPropagation()">
@@ -173,6 +197,7 @@
   </div>
 }
 
+<!-- ── Popup merge guest ───────────────────────────────────────────────────────── -->
 @if (showOldOrders()) {
   <app-old-orders-modal
     (closed)="closeOldOrders()"
