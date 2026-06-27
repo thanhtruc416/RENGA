@@ -1,15 +1,11 @@
 ﻿import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CtaSectionComponent } from '../../shared/components/cta-section/cta-section.component';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
-
-interface CollectionProduct {
-  id: string;
-  name: string;
-  price: string;
-  imageUrl: string;
-}
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+import { map, switchMap, catchError } from 'rxjs';
+import { of } from 'rxjs';
+import { ProductsService, Product } from '../../products/products.service';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface CollectionDetail {
   slug: string;
@@ -23,7 +19,7 @@ interface CollectionDetail {
   storyImageUrl: string;
   productsTitle: string;
   productsSubtitle: string;
-  products: CollectionProduct[];
+  productCategory: string;
 }
 
 const COLLECTIONS: Record<string, CollectionDetail> = {
@@ -42,12 +38,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyImageUrl: 'assets/images/collection-dong-bo.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ bộ sưu tập Đồng Bộ',
-    products: [
-      { id: '1', name: 'HARMONY GOLD RING', price: '3.800.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
-      { id: '2', name: 'SYMPHONY NECKLACE', price: '2.600.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
-      { id: '3', name: 'ACCORD BAND', price: '2.900.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'UNISON STUDS', price: '1.350.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
-    ],
+    productCategory: 'day-chuyen',
   },
 
   'bo-trang-suc-cap-doi': {
@@ -65,12 +56,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyImageUrl: 'assets/images/collection-story-cap-doi.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ vũ trụ Eternity.',
-    products: [
-      { id: '1', name: 'ETERNITY DIAMOND RING', price: '4.200.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
-      { id: '2', name: 'INTERLOCKING UNITY NECKLACE', price: '2.850.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
-      { id: '3', name: 'BAGUETTE ETERNITY BAND', price: '3.100.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'ETERNITY MINI STUDS', price: '1.450.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
-    ],
+    productCategory: 'nhan',
   },
 
   'hoang-gia': {
@@ -88,12 +74,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyImageUrl: 'assets/images/collection-hoang-gia.png',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những kiệt tác được chọn lọc từ bộ sưu tập Hoàng Gia.',
-    products: [
-      { id: '1', name: 'ROYAL CROWN NECKLACE', price: '12.500.000', imageUrl: 'assets/images/collection-prod-unity-necklace.png' },
-      { id: '2', name: 'IMPERIAL DIAMOND RING', price: '8.900.000', imageUrl: 'assets/images/collection-prod-diamond-ring.png' },
-      { id: '3', name: 'REGAL SAPPHIRE BAND', price: '6.200.000', imageUrl: 'assets/images/collection-prod-baguette-band.png' },
-      { id: '4', name: 'SOVEREIGN STUDS', price: '3.800.000', imageUrl: 'assets/images/collection-prod-mini-studs.png' },
-    ],
+    productCategory: 'nhan',
   },
 };
 
@@ -107,6 +88,9 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
 })
 export class CollectionDetailComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly productsService = inject(ProductsService);
+
+  readonly formatPrice = formatPrice;
 
   private readonly slug = toSignal(
     this.route.paramMap.pipe(map(p => p.get('slug') ?? '')),
@@ -115,5 +99,16 @@ export class CollectionDetailComponent {
 
   readonly collection = computed(
     () => COLLECTIONS[this.slug()] ?? COLLECTIONS['bo-trang-suc-cap-doi']
+  );
+
+  readonly products = toSignal(
+    toObservable(this.collection).pipe(
+      switchMap(col =>
+        this.productsService.getProducts(col.productCategory, 1, 4).pipe(
+          catchError(() => of([] as Product[]))
+        )
+      )
+    ),
+    { initialValue: [] as Product[] }
   );
 }

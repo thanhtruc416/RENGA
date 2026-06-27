@@ -19,7 +19,7 @@ export class CartComponent {
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
   readonly activeTab = signal<'available' | 'studio'>('available');
-  readonly selectedIds = signal<Set<number>>(new Set());
+  readonly selectedIds = signal<Set<string>>(new Set());
 
   readonly filteredItems = computed(() =>
     this.cartService.items().filter((item) => item.type === this.activeTab())
@@ -62,7 +62,7 @@ export class CartComponent {
     this.selectedIds.set(new Set());
   }
 
-  toggleSelectItem(id: number): void {
+  toggleSelectItem(id: string): void {
     this.selectedIds.update((set) => {
       const next = new Set(set);
       next.has(id) ? next.delete(id) : next.add(id);
@@ -70,7 +70,7 @@ export class CartComponent {
     });
   }
 
-  isSelected(id: number): boolean {
+  isSelected(id: string): boolean {
     return this.selectedIds().has(id);
   }
 
@@ -79,16 +79,17 @@ export class CartComponent {
     this.selectedIds.set(new Set());
   }
 
-  updateQty(id: number, delta: number): void {
+  updateQty(id: string, delta: number): void {
     this.cartService.updateQty(id, delta);
   }
 
-  removeItem(id: number): void {
+  removeItem(id: string): void {
     this.cartService.removeItem(id);
   }
 
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
+    img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='160' height='160' fill='%23f5f5f5'/%3E%3C/svg%3E";
+    img.onerror = null;
   }
 }

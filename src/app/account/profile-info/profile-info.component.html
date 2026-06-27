@@ -6,205 +6,261 @@
     <p class="profile__hero-subtitle">Quản lý hành trình thiết kế riêng và các đặc quyền thành viên của bạn.</p>
   </section>
 
-  <!-- Main grid: gateway + personal info on left, loyalty card spans both rows on right -->
   <div class="profile__main-grid">
 
-    <!-- Row 1 left: Dashboard Gateway -->
-    <a routerLink="/account/diem-tich-luy" class="profile__gateway-card">
-      <div class="profile__gateway-body">
-        <div class="profile__gateway-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-        </div>
-        <div class="profile__gateway-text">
-          <p class="profile__gateway-title">TÍCH ĐIỂM &amp; ĐỔI THƯỞNG</p>
-          <p class="profile__gateway-desc">Xem lịch sử tích điểm và đổi điểm lấy đặc quyền cao cấp</p>
-        </div>
-      </div>
-      <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M1 1l4 4-4 4"/>
-      </svg>
-    </a>
+    <!-- LEFT: personal info + security -->
+    <div class="profile__left-col">
 
-    <!-- Row 1-2 right: Loyalty Card (spans both rows) -->
-    <section class="profile__loyalty-card">
-      <svg class="profile__loyalty-sparkle" aria-hidden="true" viewBox="0 0 40 40" fill="none">
-        <path d="M20 2l2.5 15.5L38 20l-15.5 2.5L20 38l-2.5-15.5L2 20l15.5-2.5Z" fill="rgba(255,255,255,0.15)"/>
-      </svg>
-
-      <div class="profile__loyalty-top">
-        <div class="profile__loyalty-tier">
-          <p class="profile__loyalty-tier-label">HẠNG THÀNH VIÊN</p>
-          <h2 class="profile__loyalty-tier-name">{{ loyaltyTier() }}</h2>
-        </div>
-        <svg class="profile__loyalty-diamond" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5">
-          <path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M6 3l4 6m8-6-4 6"/>
-        </svg>
-      </div>
-
-      <div class="profile__loyalty-progress-section">
-        <div class="profile__loyalty-progress-labels">
-          <span class="profile__loyalty-points">{{ loyaltyPoints().toLocaleString('vi-VN') }} điểm</span>
-          <span class="profile__loyalty-remaining">Còn {{ loyaltyRemaining().toLocaleString('vi-VN') }}</span>
-        </div>
-        <div class="profile__loyalty-progress-bg">
-          <div class="profile__loyalty-progress-fill" [style.width.%]="loyaltyProgress()"></div>
-        </div>
-      </div>
-
-      <div class="profile__loyalty-history">
-        <p class="profile__loyalty-history-label">Điểm tích lũy</p>
-        @for (item of loyaltyHistory(); track item.label) {
-          <div class="profile__loyalty-history-item">
-            <span class="profile__loyalty-history-name">{{ item.label }}</span>
-            <span class="profile__loyalty-history-points">+{{ item.points.toLocaleString('vi-VN') }}</span>
-          </div>
-        }
-      </div>
-    </section>
-
-    <!-- Row 2 left: Personal Info -->
-    <section class="profile__info-card">
-      <div class="profile__info-header">
-        <h2 class="profile__info-title">THÔNG TIN CÁ NHÂN</h2>
-        @if (!isEditing()) {
-          <button class="profile__info-edit-btn" type="button" (click)="startEdit()">Chỉnh sửa</button>
-        } @else {
-          <div class="profile__info-actions">
-            <button class="profile__info-cancel-btn" type="button" (click)="cancelEdit()">Hủy</button>
-            <button class="profile__info-save-btn" type="button" (click)="saveEdit(editForm)">Lưu</button>
-          </div>
-        }
-      </div>
-
-      <form #editForm id="profile-edit-form" (submit)="$event.preventDefault()">
-        <div class="profile__info-grid">
-          <div class="profile__info-field">
-            <label class="profile__field-label">Họ và tên</label>
-            @if (!isEditing()) {
-              <div class="profile__field-value">{{ user().fullName }}</div>
-            } @else {
-              <input class="profile__field-input" type="text" required
-                [value]="draft().fullName"
-                (input)="setDraft('fullName', $any($event.target).value)" />
-            }
-          </div>
-          <div class="profile__info-field">
-            <label class="profile__field-label">Email</label>
-            @if (!isEditing()) {
-              <div class="profile__field-value">{{ user().email }}</div>
-            } @else {
-              <input class="profile__field-input" type="email" required
-                [value]="draft().email"
-                (input)="setDraft('email', $any($event.target).value); $any($event.target).setCustomValidity('')"
-                (invalid)="onEmailInvalid($event)" />
-            }
-          </div>
-          <div class="profile__info-field">
-            <label class="profile__field-label">SĐT</label>
-            @if (!isEditing()) {
-              <div class="profile__field-value">{{ user().phone }}</div>
-            } @else {
-              <input class="profile__field-input" type="tel" required
-                pattern="[0-9+\-\s]+"
-                inputmode="tel"
-                [value]="draft().phone"
-                (keypress)="onPhoneKeyPress($event)"
-                (input)="setDraft('phone', $any($event.target).value); $any($event.target).setCustomValidity('')"
-                (invalid)="onPhoneInvalid($event)" />
-            }
-          </div>
-          <div class="profile__info-field">
-            <label class="profile__field-label">Ngày sinh</label>
-            @if (!isEditing()) {
-              <div class="profile__field-value">{{ user().birthDate }}</div>
-            } @else {
-              <input class="profile__field-input profile__field-input--date" type="date"
-                [value]="draftDateInput()"
-                (change)="setBirthDate($any($event.target).value)" />
-            }
-          </div>
-        </div>
-
-        <div class="profile__info-field profile__info-field--full">
-          <label class="profile__field-label">Địa chỉ</label>
+      <!-- THÔNG TIN CÁ NHÂN -->
+      <section class="profile__info-card">
+        <div class="profile__info-header">
+          <h2 class="profile__info-title">THÔNG TIN CÁ NHÂN</h2>
           @if (!isEditing()) {
-            <div class="profile__field-value">{{ user().address }}</div>
+            <button class="profile__info-edit-btn" type="button" (click)="startEdit()">Chỉnh sửa</button>
           } @else {
-            <input class="profile__field-input" type="text"
-              [value]="draft().address"
-              (input)="setDraft('address', $any($event.target).value)" />
+            <div class="profile__info-actions">
+              <button class="profile__info-cancel-btn" type="button" (click)="cancelEdit()" [disabled]="isSaving()">Hủy</button>
+              <button class="profile__info-save-btn" type="button" (click)="saveEdit(editForm)" [disabled]="isSaving()">
+                {{ isSaving() ? 'Đang lưu...' : 'Lưu' }}
+              </button>
+            </div>
           }
         </div>
-      </form>
-    </section>
+
+        <form #editForm id="profile-edit-form" (submit)="$event.preventDefault()">
+          <div class="profile__info-grid">
+            <div class="profile__info-field">
+              <label class="profile__field-label">Họ và tên</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ user().fullName }}</div>
+              } @else {
+                <input class="profile__field-input" type="text" required
+                  [value]="draft().fullName"
+                  (input)="setDraft('fullName', $any($event.target).value)" />
+              }
+            </div>
+            <div class="profile__info-field">
+              <label class="profile__field-label">Email</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ user().email }}</div>
+              } @else {
+                <input class="profile__field-input" type="email" required
+                  [value]="draft().email"
+                  (input)="setDraft('email', $any($event.target).value); $any($event.target).setCustomValidity('')"
+                  (invalid)="onEmailInvalid($event)" />
+              }
+            </div>
+            <div class="profile__info-field">
+              <label class="profile__field-label">SĐT</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ user().phone }}</div>
+              } @else {
+                <input class="profile__field-input" type="tel" required
+                  pattern="[0-9+\-\s]+"
+                  inputmode="tel"
+                  [value]="draft().phone"
+                  (keypress)="onPhoneKeyPress($event)"
+                  (input)="setDraft('phone', $any($event.target).value); $any($event.target).setCustomValidity('')"
+                  (invalid)="onPhoneInvalid($event)" />
+              }
+            </div>
+            <div class="profile__info-field">
+              <label class="profile__field-label">Ngày sinh</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ user().birthDate }}</div>
+              } @else {
+                <input class="profile__field-input profile__field-input--date" type="date"
+                  [value]="draftDateInput()"
+                  (change)="setBirthDate($any($event.target).value)" />
+              }
+            </div>
+          </div>
+
+          <div class="profile__info-field profile__info-field--full">
+            <label class="profile__field-label">Địa chỉ</label>
+            @if (!isEditing()) {
+              <div class="profile__field-value">{{ user().address }}</div>
+            } @else {
+              <input class="profile__field-input" type="text"
+                [value]="draft().address"
+                (input)="setDraft('address', $any($event.target).value)" />
+            }
+          </div>
+        </form>
+      </section>
+
+      <!-- THÔNG TIN BẢO MẬT -->
+      <section class="profile__security">
+        <h2 class="profile__security-title">THÔNG TIN BẢO MẬT</h2>
+        <div class="profile__security-fields">
+
+          <div class="profile__security-field">
+            <label class="profile__security-label" for="current-password">MẬT KHẨU HIỆN TẠI</label>
+            <div class="profile__security-input-wrap">
+              <input
+                id="current-password"
+                [type]="showPasswords() ? 'text' : 'password'"
+                class="profile__security-input"
+                [value]="currentPassword()"
+                (input)="setCurrentPassword($any($event.target).value)"
+                placeholder="Nhập mật khẩu hiện tại"
+              />
+              <button type="button" class="profile__security-eye" (click)="showPasswords.set(!showPasswords())" [attr.aria-label]="showPasswords() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+                @if (showPasswords()) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                }
+              </button>
+            </div>
+          </div>
+
+          <div class="profile__security-field">
+            <label class="profile__security-label" for="new-password">MẬT KHẨU MỚI</label>
+            <div class="profile__security-input-wrap">
+              <input
+                id="new-password"
+                [type]="showPasswords() ? 'text' : 'password'"
+                class="profile__security-input"
+                [value]="newPassword()"
+                (input)="setNewPassword($any($event.target).value)"
+                placeholder="Nhập mật khẩu mới"
+              />
+              <button type="button" class="profile__security-eye" (click)="showPasswords.set(!showPasswords())" [attr.aria-label]="showPasswords() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+                @if (showPasswords()) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                }
+              </button>
+            </div>
+          </div>
+
+          <div class="profile__security-field">
+            <label class="profile__security-label" for="confirm-password">XÁC NHẬN MẬT KHẨU</label>
+            <div class="profile__security-input-wrap">
+              <input
+                id="confirm-password"
+                [type]="showPasswords() ? 'text' : 'password'"
+                class="profile__security-input"
+                [class.profile__security-input--mismatch]="confirmMismatch()"
+                [value]="confirmPassword()"
+                (input)="setConfirmPassword($any($event.target).value)"
+                placeholder="Nhập lại mật khẩu mới"
+              />
+              <button type="button" class="profile__security-eye" (click)="showPasswords.set(!showPasswords())" [attr.aria-label]="showPasswords() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
+                @if (showPasswords()) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (confirmMismatch()) {
+              <p class="profile__security-mismatch">Mật khẩu xác nhận không khớp</p>
+            }
+          </div>
+
+        </div>
+        <button class="profile__security-btn" type="button" (click)="updatePassword()"
+          [disabled]="!currentPassword() || !newPassword() || confirmMismatch() || isChangingPw()">
+          {{ isChangingPw() ? 'Đang xử lý...' : 'CẬP NHẬT THÔNG TIN' }}
+        </button>
+      </section>
+
+    </div>
+
+    <!-- RIGHT: gateway + loyalty card -->
+    <div class="profile__right-col">
+
+      <!-- ĐỔI THƯỞNG gateway -->
+      <a routerLink="/account/diem-tich-luy" class="profile__gateway-card">
+        <div class="profile__gateway-body">
+          <div class="profile__gateway-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="profile__gateway-text">
+            <p class="profile__gateway-title">ĐỔI THƯỞNG</p>
+            <p class="profile__gateway-desc">Sử dụng điểm tích lũy cho các đặc quyền cao cấp</p>
+          </div>
+        </div>
+        <svg class="profile__gateway-arrow" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 1l4 4-4 4"/>
+        </svg>
+      </a>
+
+      <!-- HẠNG THÀNH VIÊN -->
+      <section class="profile__loyalty-card">
+        <svg class="profile__loyalty-sparkle" aria-hidden="true" viewBox="0 0 40 40" fill="none">
+          <path d="M20 2l2.5 15.5L38 20l-15.5 2.5L20 38l-2.5-15.5L2 20l15.5-2.5Z" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+
+        <div class="profile__loyalty-top">
+          <div class="profile__loyalty-tier">
+            <p class="profile__loyalty-tier-label">HẠNG THÀNH VIÊN</p>
+            <h2 class="profile__loyalty-tier-name">{{ loyaltyTier() }}</h2>
+          </div>
+          <svg class="profile__loyalty-diamond" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5">
+            <path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M6 3l4 6m8-6-4 6"/>
+          </svg>
+        </div>
+
+        <div class="profile__loyalty-stats">
+          <div class="profile__loyalty-stat">
+            <span class="profile__loyalty-stat-val">{{ loyaltyPoints().toLocaleString('vi-VN') }}</span>
+            <span class="profile__loyalty-stat-unit">điểm</span>
+          </div>
+          <div class="profile__loyalty-stat-sep"></div>
+          <div class="profile__loyalty-stat">
+            <span class="profile__loyalty-stat-val">{{ loyaltyUsed().toLocaleString('vi-VN') }}</span>
+            <span class="profile__loyalty-stat-unit">lần</span>
+          </div>
+        </div>
+
+        <div class="profile__loyalty-progress-section">
+          <div class="profile__loyalty-progress-labels">
+            <span class="profile__loyalty-points">{{ loyaltyPoints().toLocaleString('vi-VN') }} điểm</span>
+            <span class="profile__loyalty-remaining">Còn {{ loyaltyRemaining().toLocaleString('vi-VN') }}</span>
+          </div>
+          <div class="profile__loyalty-progress-bg">
+            <div class="profile__loyalty-progress-fill" [style.width.%]="loyaltyProgress()"></div>
+          </div>
+        </div>
+
+        <div class="profile__loyalty-history">
+          <p class="profile__loyalty-history-label">Điểm tích lũy</p>
+          @for (item of loyaltyHistory(); track item.label) {
+            <div class="profile__loyalty-history-item">
+              <span class="profile__loyalty-history-name">{{ item.label }}</span>
+              <span class="profile__loyalty-history-points">+{{ item.points.toLocaleString('vi-VN') }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
 
   </div>
-
-
-  <!-- Security Section -->
-  <section class="profile__security">
-    <h2 class="profile__security-title">THÔNG TIN BẢO MẬT</h2>
-    <div class="profile__security-fields">
-      <div class="profile__security-field">
-        <label class="profile__security-label" for="current-password">MẬT KHẨU HIỆN TẠI</label>
-        <div class="profile__security-input-wrap">
-          <input
-            id="current-password"
-            [type]="showPasswords() ? 'text' : 'password'"
-            class="profile__security-input"
-            [value]="currentPassword()"
-            (input)="setCurrentPassword($any($event.target).value)"
-            placeholder="Nhập mật khẩu hiện tại"
-          />
-          <button type="button" class="profile__security-eye" (click)="showPasswords.set(!showPasswords())" [attr.aria-label]="showPasswords() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
-            @if (showPasswords()) {
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            } @else {
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            }
-          </button>
-        </div>
-      </div>
-      <div class="profile__security-field">
-        <label class="profile__security-label" for="new-password">MẬT KHẨU MỚI</label>
-        <div class="profile__security-input-wrap">
-          <input
-            id="new-password"
-            [type]="showPasswords() ? 'text' : 'password'"
-            class="profile__security-input"
-            [value]="newPassword()"
-            (input)="setNewPassword($any($event.target).value)"
-            placeholder="Nhập mật khẩu mới"
-          />
-          <button type="button" class="profile__security-eye" (click)="showPasswords.set(!showPasswords())" [attr.aria-label]="showPasswords() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'">
-            @if (showPasswords()) {
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            } @else {
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            }
-          </button>
-        </div>
-      </div>
-    </div>
-    <button class="profile__security-btn" type="button" (click)="updatePassword()">
-      CẬP NHẬT THÔNG TIN
-    </button>
-
-  </section>
 
 </div>
 

@@ -1,17 +1,12 @@
 ﻿import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { switchMap, map } from 'rxjs';
-import { ProductsService } from '../products.service';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+import { switchMap, map, filter } from 'rxjs';
+import { ProductsService, ProductDetail } from '../products.service';
 import { CartService } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { RingSizeGuideModalComponent } from '../../shared/components/modal/ring-size-guide-modal/ring-size-guide-modal.component';
-
-interface ProductSpec {
-  label: string;
-  value: string;
-}
 
 interface Review {
   id: number;
@@ -39,23 +34,22 @@ export class ProductDetailComponent {
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
-  // Đọc :id từ route → gọi service → sau này swap of() sang http.get() trong service là xong
-  // Khi dùng http.get() (async): đổi requireSync thành initialValue: undefined và wrap template bằng @if (product(); as p)
+  private static readonly EMPTY: ProductDetail = {
+    id: '', category: '', category_name: '', collection: '',
+    name: '', price: 0, imageUrl: '', tryonUrl: null,
+    description: '', material: '', sizes: [], images: [], variants: [], inStock: false,
+    specs: [],
+  };
+
   readonly product = toSignal(
     this.route.paramMap.pipe(
-      map((p) => p.get('id') ?? '1'),
+      map((p) => p.get('id') ?? ''),
       switchMap((id) => this.productsService.getProductById(id)),
     ),
-    { requireSync: true },
+    { initialValue: ProductDetailComponent.EMPTY },
   );
 
-  // TODO: lấy từ API — product.specs
-  readonly specs: ProductSpec[] = [
-    { label: 'CHẤT LIỆU', value: 'Vàng Trắng 18k' },
-    { label: 'KIM CƯƠNG CHÍNH', value: '1.50 Carat' },
-    { label: 'ĐỘ TINH KHIẾT', value: 'VVS1 - Flawless' },
-    { label: 'TRỌNG LƯỢNG', value: '4.2 Grams' },
-  ];
+  readonly specs = computed(() => this.product().specs);
 
   // TODO: lấy từ API — /api/products/:id/reviews
   readonly reviews = signal<Review[]>([
@@ -101,15 +95,14 @@ export class ProductDetailComponent {
     },
   ]);
 
-  // TODO: lấy từ API — /api/products?category=:category&exclude=:id&limit=4
   readonly relatedProducts = toSignal(
-    this.route.paramMap.pipe(
-      map((p) => p.get('id') ?? '1'),
-      switchMap((id) =>
-        this.productsService.getProducts().pipe(
-          map((all) => all.filter((p) => p.id !== id).slice(0, 4)),
-        ),
-      ),
+    toObservable(this.product).pipe(
+      filter(p => !!p.id),
+      switchMap(p =>
+        this.productsService.getProducts(p.category, 1, 5).pipe(
+          map(all => all.filter(r => r.id !== p.id).slice(0, 4))
+        )
+      )
     ),
     { initialValue: [] },
   );
@@ -228,13 +221,13 @@ export class ProductDetailComponent {
   closeArPopup(): void { this.arPopupOpen.set(false); }
 
   lightboxPrev(): void {
-    const images = this.product().images;
-    this.activeImageIndex.update(i => (i - 1 + images.length) % images.length);
+    const len = this.productImages().length;
+    this.activeImageIndex.update(i => (i - 1 + len) % len);
   }
 
   lightboxNext(): void {
-    const images = this.product().images;
-    this.activeImageIndex.update(i => (i + 1) % images.length);
+    const len = this.productImages().length;
+    this.activeImageIndex.update(i => (i + 1) % len);
   }
 
   @HostListener('document:keydown.escape')
@@ -244,12 +237,21 @@ export class ProductDetailComponent {
   }
   readonly selectedSize    = signal<number | null>(10);
   readonly showSizeGuide   = signal(false);
+
+  readonly displayPrice = computed(() => {
+    const p = this.product();
+    const size = this.selectedSize();
+    const variant = p.variants.find(v => Number(v.size_value) === size)
+      ?? p.variants[0];
+    return Number(variant?.price ?? p.price);
+  });
   openSizeGuide(): void { this.showSizeGuide.set(true); }
   closeSizeGuide(): void { this.showSizeGuide.set(false); }
 
-  readonly productImages = computed(() => {
+  readonly productImages = computed((): string[] => {
     const p = this.product();
-    return p?.images?.length ? p.images : [p?.imageUrl ?? ''];
+    if (p?.images?.length) return p.images.map(i => i.image_url);
+    return p?.imageUrl ? [p.imageUrl] : [];
   });
 
   readonly productSizes = computed(() => this.product()?.sizes ?? []);
@@ -264,13 +266,24 @@ export class ProductDetailComponent {
 
   addToCart(): void {
     const p = this.product();
+    if (!p.id) return;
+    const size = this.selectedSize();
+    const variant = p.variants.find(v => Number(v.size_value) === size)
+      ?? p.variants[0];
+    if (!variant) return;
+    const spec = size ? `Size ${size}` : (variant.variant_name ?? '');
+    const image = p.imageUrl
+      || p.images.find(i => i.is_primary)?.image_url
+      || p.images[0]?.image_url
+      || '';
     this.cartService.addItem({
       type: 'available',
       name: p.name,
-      spec: `Size ${this.selectedSize() ?? '?'} | ${p.material ?? p.collection}`,
-      price: p.price,
-      image: p.imageUrl,
+      spec,
+      price: Number(variant.price ?? p.price),
+      image,
       quantity: 1,
+      variantId: variant.variant_id,
     });
   }
 
@@ -283,7 +296,7 @@ export class ProductDetailComponent {
     const cartRect = cartEl.getBoundingClientRect();
 
     const fly = document.createElement('div');
-    const imgSrc = this.product().images?.[this.activeImageIndex()] ?? this.product().imageUrl;
+    const imgSrc = this.productImages()[this.activeImageIndex()] ?? this.product().imageUrl;
 
     fly.style.cssText = `
       position: fixed;

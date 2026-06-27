@@ -38,22 +38,34 @@
         <p class="studio-card__desc">Bắt đầu hành trình tạo nên kiệt tác của riêng bạn.</p>
       </div>
 
-      <div class="category-grid">
-        @for (cat of categories; track cat.id) {
-          <button class="category-card" (click)="selectCategory(cat.id)" type="button">
-            <div class="category-card__img-wrap">
-              <img class="category-card__img" [src]="cat.image" [alt]="cat.name" loading="lazy" />
-            </div>
-            <div class="category-card__footer">
-              <div class="category-card__info">
-                <span class="category-card__eyebrow">Danh mục</span>
-                <span class="category-card__name">{{ cat.name }}</span>
+      @if (blanksLoading()) {
+        <p class="blank-loading">Đang tải phôi sản phẩm...</p>
+      } @else if (blanksError()) {
+        <div class="blank-empty">
+          <p class="blank-empty__msg">Không thể tải danh sách phôi. Vui lòng kiểm tra server đang chạy.</p>
+          <button class="blank-empty__retry" type="button" (click)="retryLoadBlanks()">Thử lại</button>
+        </div>
+      } @else if (allBlanks().length === 0) {
+        <div class="blank-empty">
+          <p class="blank-empty__msg">Chưa có phôi sản phẩm nào. Vui lòng quay lại sau.</p>
+        </div>
+      } @else {
+        <div class="blank-grid">
+          @for (blank of allBlanks(); track blank.id) {
+            <button class="blank-card" (click)="selectBlank(blank)" type="button">
+              <div class="blank-card__img-wrap">
+                <img class="blank-card__img" [src]="blank.image" [alt]="blank.name"
+                     loading="lazy" (error)="onBlankImgError($event)" />
               </div>
-              <span class="category-card__cta">CHỌN</span>
-            </div>
-          </button>
-        }
-      </div>
+              <div class="blank-card__body">
+                <span class="blank-card__eyebrow">BY RENGA</span>
+                <p class="blank-card__name">{{ blank.name }}</p>
+                <p class="blank-card__price">{{ formatVnd(blank.basePrice) }}<u>đ</u></p>
+              </div>
+            </button>
+          }
+        </div>
+      }
     </div>
   }
 
@@ -65,10 +77,11 @@
 
       <div class="studio-card__preview">
         <img
-          src="assets/images/studio-ring.png"
-          alt="Nhẫn vàng Heritage"
+          [src]="step2PreviewImage()"
+          [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
+          style="transition: opacity 0.3s ease; object-fit: contain; background: #f9f6f2"
         />
         <div class="studio-card__preview-foot">
           <span class="studio-card__preview-label">Góc nhìn 01</span>
@@ -100,15 +113,20 @@
             <button
               class="material-option"
               [class.material-option--selected]="selectedMaterial().id === mat.id"
+              [class.material-option--disabled]="!isMaterialAvailableForBlank(mat.id)"
+              [disabled]="!isMaterialAvailableForBlank(mat.id) || null"
               (click)="selectMaterial(mat)"
               type="button"
             >
               <span class="material-option__swatch" [style.background]="mat.color"></span>
               <span class="material-option__info">
                 <span class="material-option__name">{{ mat.label }}</span>
-                <span class="material-option__tag">{{ mat.tag }}</span>
+                <span class="material-option__tag">{{ isMaterialAvailableForBlank(mat.id) ? mat.tag : 'Không có với phôi này' }}</span>
               </span>
-              <span class="material-option__price">{{ mat.priceVnd | number:'1.0-0' }}<u>đ</u></span>
+              <span class="material-option__price">
+                @if (isMaterialAvailableForBlank(mat.id)) { {{ mat.priceVnd | number:'1.0-0' }}<u>đ</u> }
+                @else { <span class="material-option__out">Không có</span> }
+              </span>
             </button>
           }
         </div>
@@ -129,14 +147,15 @@
 
       <div class="studio-card__preview">
         <img
-          src="assets/images/studio-ring.png"
-          alt="Nhẫn kim cương Heritage"
+          [src]="step2PreviewImage()"
+          [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
+          style="transition: opacity 0.3s ease; object-fit: contain; background: #f9f6f2"
         />
         <div class="studio-card__preview-name">
-          <p class="studio-card__preview-name-title">Phôi Solitaire Heritage</p>
-          <p class="studio-card__preview-name-desc">Thiết kế đặc trưng chúng tôi được chế tác chính xác để làm tăng độ sáng và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn</p>
+          <p class="studio-card__preview-name-title">{{ selectedBlank()?.name ?? 'Phôi sản phẩm' }}</p>
+          <p class="studio-card__preview-name-desc">{{ selectedBlank()?.description || 'Chọn loại đá quý để hoàn thiện kiệt tác của bạn.' }}</p>
         </div>
         <div class="studio-card__preview-foot">
           <div class="studio-card__preview-btns">
@@ -170,12 +189,21 @@
           <span class="studio-section-chip">{{ selectedStone().label }}</span>
         </div>
 
+        @if (!blankSupportsStones()) {
+          <div class="stone-unavail-notice">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Phôi <strong>{{ selectedBlank()?.name }}</strong> không có chỗ gắn đá quý
+          </div>
+        }
+
         <div class="stone-grid">
           @for (stone of stones; track stone.id) {
             <button
               class="stone-option"
               [class.stone-option--selected]="selectedStone().id === stone.id"
               [class.stone-option--muted]="stone.muted"
+              [class.stone-option--disabled]="!isStoneAvailableForBlank(stone.id)"
+              [disabled]="!isStoneAvailableForBlank(stone.id) || null"
               (click)="selectStone(stone)"
               type="button"
             >
@@ -214,8 +242,8 @@
 
           <div class="price-breakdown">
             <div class="price-breakdown__row">
-              <span>Phôi Di Sản</span>
-              <span>{{ formatVnd(MOUNT_FEE) }}<u>đ</u></span>
+              <span>{{ selectedBlank()?.name ?? 'Phôi' }}</span>
+              <span>{{ formatVnd(selectedBlank()?.basePrice ?? 0) }}<u>đ</u></span>
             </div>
             <div class="price-breakdown__row">
               <span>{{ selectedMaterial().label }}</span>
@@ -255,37 +283,36 @@
        STEP 4 — Khắc chữ
   ══════════════════════════════════════════════════ -->
   @if (currentStep() === 4) {
-    <div class="studio-card studio-card--split">
+    <div class="studio-card studio-card--split studio-card--engrave">
 
       <div class="engrave-gallery">
         <div class="engrave-gallery__main">
           <img
-            [src]="currentGalleryImage().src"
-            [alt]="currentGalleryImage().alt"
+            [src]="step2PreviewImage()"
+            [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
             class="engrave-gallery__main-img"
             loading="eager"
+            style="transition: opacity 0.3s ease"
           />
-          @if (engraveText()) {
-            <div
-              class="engrave-gallery__overlay"
-              [class.engrave-gallery__overlay--serif]="engraveFont() === 'serif-italic'"
-            >
-              {{ engraveText() }}
+        </div>
+
+        <!-- Inner band strip — chỉ hiện cho RING -->
+        @if (selectedBlank()?.type === 'RING') {
+          <div class="ring-inner-preview">
+            <span class="ring-inner-preview__label">Mặt trong nhẫn</span>
+            <div class="ring-inner-preview__band" [style.background]="innerBandGradient()">
+              @if (engraveText()) {
+                <span
+                  class="ring-inner-preview__text"
+                  [class.ring-inner-preview__text--serif]="engraveFont() === 'serif-italic'"
+                  [style.color]="innerBandTextColor()"
+                >{{ engraveText() }}</span>
+              } @else {
+                <span class="ring-inner-preview__placeholder">Nhập chữ để xem trước</span>
+              }
             </div>
-          }
-        </div>
-        <div class="engrave-gallery__thumbs">
-          @for (thumb of engraveGallery; track thumb.src; let i = $index) {
-            <button
-              class="engrave-gallery__thumb"
-              [class.engrave-gallery__thumb--active]="selectedThumbIndex() === i"
-              (click)="selectThumb(i)"
-              type="button"
-            >
-              <img [src]="thumb.src" [alt]="thumb.alt" loading="lazy" />
-            </button>
-          }
-        </div>
+          </div>
+        }
       </div>
 
       <div class="studio-card__options">
@@ -369,10 +396,11 @@
 
         <div class="studio-card__preview">
           <img
-            src="assets/images/studio-ring.png"
-            alt="Trang sức tùy chỉnh của bạn"
+            [src]="step2PreviewImage()"
+            [alt]="selectedBlank()?.name || 'Trang sức tùy chỉnh'"
             class="studio-card__preview-img"
             loading="eager"
+            style="object-fit: contain; background: #f9f6f2"
           />
         </div>
 
@@ -446,9 +474,26 @@
             <div class="checkout-section">
               <div class="checkout-section__header">
                 <h3 class="checkout-section__title"><span class="checkout-section__num">1</span>THÔNG TIN VẬN CHUYỂN</h3>
-                <button class="btn btn--ghost btn--sm" type="button" (click)="shippingExpanded.set(!shippingExpanded())">
-                  CHỌN ĐỊA CHỈ {{ shippingExpanded() ? '∧' : '∨' }}
-                </button>
+                <div class="address-picker-wrap">
+                  <button class="btn btn--ghost btn--sm" type="button" (click)="loadAndShowAddresses()">
+                    {{ addressesLoading() ? 'Đang tải...' : 'CHỌN ĐỊA CHỈ' }}
+                  </button>
+                  @if (showAddressPicker()) {
+                    <div class="address-picker">
+                      @if (savedAddresses().length === 0) {
+                        <p class="address-picker__empty">Bạn chưa có địa chỉ đã lưu</p>
+                      } @else {
+                        @for (addr of savedAddresses(); track addr.address_id) {
+                          <button class="address-picker__item" type="button" (click)="applyAddress(addr)">
+                            <strong>{{ addr.recipient_name }}</strong>&nbsp;·&nbsp;{{ addr.recipient_phone }}
+                            <span>{{ addr.address_line }}{{ addr.ward ? ', ' + addr.ward : '' }}, {{ addr.province }}</span>
+                          </button>
+                        }
+                      }
+                      <button class="address-picker__close" type="button" (click)="showAddressPicker.set(false)">Đóng</button>
+                    </div>
+                  }
+                </div>
               </div>
               @if (shippingExpanded()) {
               <div class="checkout-form-grid">
@@ -476,19 +521,30 @@
 
                 <div class="form-field">
                   <label class="form-field__label" for="checkout-province">TỈNH/THÀNH *</label>
-                  <select id="checkout-province" class="form-field__input form-field__select" formControlName="province">
+                  <select id="checkout-province" class="form-field__input form-field__select"
+                          formControlName="province" (change)="onProvinceChange()">
                     <option value="">Chọn Tỉnh/Thành</option>
-                    <option value="hcm">TP. Hồ Chí Minh</option>
-                    <option value="hn">Hà Nội</option>
-                    <option value="dn">Đà Nẵng</option>
+                    @for (p of PROVINCES; track p.value) {
+                      <option [value]="p.value">{{ p.label }}</option>
+                    }
                   </select>
+                  @if (checkoutForm.controls.province.invalid && checkoutForm.controls.province.touched) {
+                    <span class="form-field__error">Vui lòng chọn tỉnh/thành</span>
+                  }
                 </div>
 
                 <div class="form-field">
-                  <label class="form-field__label" for="checkout-ward">PHƯỜNG/XÃ *</label>
-                  <select id="checkout-ward" class="form-field__input form-field__select" formControlName="ward">
-                    <option value="">Chọn Phường/Xã</option>
+                  <label class="form-field__label" for="checkout-ward">{{ wardLabel() }} *</label>
+                  <select id="checkout-ward" class="form-field__input form-field__select" formControlName="ward"
+                          [disabled]="!selectedProvince()">
+                    <option value="">{{ wardPlaceholder() }}</option>
+                    @for (d of availableDistricts(); track d.value) {
+                      <option [value]="d.value">{{ d.label }}</option>
+                    }
                   </select>
+                  @if (checkoutForm.controls.ward.invalid && checkoutForm.controls.ward.touched) {
+                    <span class="form-field__error">Vui lòng chọn {{ wardLabel().toLowerCase() }}</span>
+                  }
                 </div>
 
                 <div class="form-field form-field--full">
@@ -532,16 +588,18 @@
 
               <div class="checkout-summary__product">
                 <img
-                  src="assets/images/studio-ring.png"
-                  alt="Sản phẩm tùy chỉnh"
+                  [src]="step2PreviewImage()"
+                  [alt]="selectedBlank()?.name || 'Sản phẩm tùy chỉnh'"
                   class="checkout-summary__product-img"
                   loading="lazy"
+                  style="object-fit: contain; background: #f9f6f2"
                 />
                 <div class="checkout-summary__product-info">
-                  <p class="checkout-summary__product-name">Tùy chỉnh Di Sản</p>
+                  <p class="checkout-summary__product-name">{{ selectedBlank()?.name ?? 'Trang sức tùy chỉnh' }}</p>
                   <p class="checkout-summary__product-config">
-                    Kích cỡ M | {{ selectedMaterial().label }}
+                    {{ typeLabel(selectedBlank()?.type ?? '') }} | {{ selectedMaterial().label }}
                     @if (selectedStone().id !== 'none') { | {{ selectedStone().label }} {{ carat() }}ct }
+                    @if (engraveText()) { | Khắc chữ }
                   </p>
                   <p class="checkout-summary__product-price">SL: 1</p>
                 </div>
@@ -572,12 +630,25 @@
                 />
                 <button class="voucher-row__btn" (click)="applyVoucher()" type="button">ÁP DỤNG</button>
               </div>
+              @if (voucherMsg()) {
+                <p class="voucher-row__msg"
+                   [class.voucher-row__msg--success]="voucherStatus() === 'success'"
+                   [class.voucher-row__msg--error]="voucherStatus() === 'error'">
+                  {{ voucherMsg() }}
+                </p>
+              }
 
               <div class="checkout-summary__divider"></div>
 
+              @if (voucherDiscount() > 0) {
+                <div class="checkout-summary__line">
+                  <span>Giảm giá voucher</span>
+                  <span style="color: var(--color-primary)">-{{ formatVnd(voucherDiscount()) }}<u>đ</u></span>
+                </div>
+              }
               <div class="checkout-summary__total">
                 <span>TỔNG CỘNG</span>
-                <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
+                <strong>{{ formatVnd(finalTotal()) }}<u>đ</u></strong>
               </div>
 
               <div class="checkout-summary__deposit-block">
@@ -587,7 +658,7 @@
                 </div>
                 <div class="checkout-summary__deposit-row checkout-summary__deposit-row--remain">
                   <span>SỐ TIỀN CÒN LẠI</span>
-                  <strong>{{ formatVnd(totalPrice() - depositAmount()) }}<u>đ</u></strong>
+                  <strong>{{ formatVnd(finalTotal() - depositAmount()) }}<u>đ</u></strong>
                 </div>
               </div>
 
@@ -598,8 +669,9 @@
               <button
                 class="btn btn--primary btn--full checkout-summary__submit"
                 type="submit"
+                [disabled]="isSubmitting()"
               >
-                THANH TOÁN →
+                {{ isSubmitting() ? 'Đang xử lý...' : 'THANH TOÁN →' }}
               </button>
             </div>
           </aside>
@@ -617,6 +689,8 @@
 </section>
 <app-payment-success-modal
   [isOpen]="showSuccessModal()"
+  [isGuest]="false"
+  [orderId]="placedOrderId()"
   (closed)="showSuccessModal.set(false)"
 />
 

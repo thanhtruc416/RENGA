@@ -3,7 +3,6 @@
   <div class="order-tracking-top">
     <div class="order-tracking-top__inner">
 
-      <!-- Breadcrumb -->
       <nav class="order-tracking-breadcrumb" aria-label="Điều hướng trang">
         <a routerLink="/" class="order-tracking-breadcrumb__item">Trang chủ</a>
         <span class="order-tracking-breadcrumb__sep" aria-hidden="true">›</span>
@@ -11,199 +10,222 @@
           aria-current="page">Đơn hàng</span>
       </nav>
 
-      <!-- Hero -->
       <div class="order-tracking-hero">
         <div class="order-tracking-hero__left">
           <h1 class="order-tracking-hero__title">Danh sách đơn hàng</h1>
           <p class="order-tracking-desc">
-            Theo dõi các tác phẩm nghệ thuật vượt thời gian bạn đã<br />
-            sở hữu và quản lý các yêu cầu chế tác riêng biệt
+            Theo dõi và quản lý các đơn hàng của bạn tại RENGA
           </p>
         </div>
         <div class="order-tracking-hero__right">
           <a routerLink="/orders/lookup" class="order-tracking-lookup-btn">Tra cứu đơn hàng</a>
-          <div class="order-tracking-member">
-            <span class="order-tracking-member__tier-label">Thành viên ưu tiên</span>
-            <span class="order-tracking-member__tier-value">{{ memberTier() }}</span>
-          </div>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Filters + Table scroll together -->
+  <!-- Guest state -->
+  @if (isGuest()) {
+    <div class="order-tracking-state-wrap">
+      <div class="order-tracking-state">
+        <p class="order-tracking-state__title">Vui lòng đăng nhập để xem đơn hàng</p>
+        <a routerLink="/dang-nhap" class="order-tracking-state__btn">Đăng nhập</a>
+      </div>
+    </div>
+  }
+
+  <!-- Loading state -->
+  @else if (isLoading()) {
+    <div class="order-tracking-state-wrap">
+      <div class="order-tracking-state">
+        <div class="order-tracking-state__spinner"></div>
+        <p class="order-tracking-state__subtitle">Đang tải đơn hàng...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error state -->
+  @else if (loadError()) {
+    <div class="order-tracking-state-wrap">
+      <div class="order-tracking-state">
+        <p class="order-tracking-state__title">Không thể tải danh sách đơn hàng</p>
+        <p class="order-tracking-state__subtitle">Vui lòng thử lại sau hoặc liên hệ hỗ trợ.</p>
+      </div>
+    </div>
+  }
+
+  <!-- Main content -->
+  @else {
   <div class="order-tracking-scroll-wrap">
 
-  <!-- Filters -->
-  <div class="order-tracking-filters-wrap">
-    <div class="order-tracking-filters">
+    <!-- Filters -->
+    <div class="order-tracking-filters-wrap">
+      <div class="order-tracking-filters">
 
-      <div class="order-tracking-filter">
-        <label class="order-tracking-filter__label" for="filter-type">Loại đơn hàng</label>
-        <div class="order-tracking-filter__select-wrap">
-          <select id="filter-type" class="order-tracking-filter__select"
-            [value]="pendingType()"
-            (change)="onFilterTypeChange($event)">
-            <option value="">Tất cả các loại</option>
-            <option value="standard">Tiêu chuẩn</option>
-            <option value="bespoke">Tùy biến</option>
-          </select>
-          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+        <div class="order-tracking-filter">
+          <label class="order-tracking-filter__label" for="filter-status">Trạng thái</label>
+          <div class="order-tracking-filter__select-wrap">
+            <select id="filter-status" class="order-tracking-filter__select"
+              [value]="pendingStatus()"
+              (change)="onFilterStatusChange($event)">
+              <option value="">Tất cả trạng thái</option>
+              <option value="in-progress">Đang xử lý</option>
+              <option value="shipping">Đang giao hàng</option>
+              <option value="completed">Đã hoàn thành</option>
+              <option value="cancelled">Đã hủy</option>
+            </select>
+            <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+          </div>
         </div>
-      </div>
 
-      <div class="order-tracking-filter">
-        <label class="order-tracking-filter__label" for="filter-status">Trạng thái</label>
-        <div class="order-tracking-filter__select-wrap">
-          <select id="filter-status" class="order-tracking-filter__select"
-            [value]="pendingStatus()"
-            (change)="onFilterStatusChange($event)">
-            <option value="">Tất cả trạng thái</option>
-            <option value="shipping">Đang giao hàng</option>
-            <option value="in-progress">Đang chế tác</option>
-            <option value="completed">Đã hoàn thành</option>
-            <option value="cancelled">Đã hủy</option>
-          </select>
-          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+        <div class="order-tracking-filter">
+          <label class="order-tracking-filter__label" for="filter-time">Thời gian</label>
+          <div class="order-tracking-filter__select-wrap">
+            <select id="filter-time" class="order-tracking-filter__select"
+              [value]="pendingTime()"
+              (change)="onFilterTimeChange($event)">
+              <option value="all">Tất cả</option>
+              <option value="3m">3 tháng gần nhất</option>
+              <option value="6m">6 tháng gần nhất</option>
+              <option value="1y">1 năm gần nhất</option>
+            </select>
+            <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
+          </div>
         </div>
-      </div>
 
-      <div class="order-tracking-filter">
-        <label class="order-tracking-filter__label" for="filter-time">Thời gian</label>
-        <div class="order-tracking-filter__select-wrap">
-          <select id="filter-time" class="order-tracking-filter__select"
-            [value]="pendingTime()"
-            (change)="onFilterTimeChange($event)">
-            <option value="3m">3 tháng gần nhất</option>
-            <option value="6m">6 tháng gần nhất</option>
-            <option value="1y">1 năm gần nhất</option>
-            <option value="all">Tất cả</option>
-          </select>
-          <span class="order-tracking-filter__arrow" aria-hidden="true">▾</span>
-        </div>
-      </div>
-
-      <div class="order-tracking-filters__actions">
-        @if (hasActiveFilters()) {
-          <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
-            Xóa bộ lọc
-          </button>
-        }
-        <button class="order-tracking-filters__apply" type="button" [disabled]="!hasDraftChanges()" (click)="applyFilters()">
-          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
-            <line x1="1" y1="1" x2="13" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="3" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="5" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          Áp dụng bộ lọc
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Orders table -->
-  <div class="order-tracking-table-wrap">
-    <!-- div container căn max-width, giống .order-tracking-top__inner -->
-    <div class="order-tracking-table__container">
-      <table class="order-tracking-table">
-        <thead>
-          <tr class="order-tracking-table__head-row">
-            <th class="order-tracking-table__th order-tracking-table__th--id">Mã đơn hàng</th>
-            <th class="order-tracking-table__th order-tracking-table__th--date">Ngày đặt</th>
-            <th class="order-tracking-table__th order-tracking-table__th--product">Loại sản phẩm</th>
-            <th class="order-tracking-table__th order-tracking-table__th--amount">Tổng giá trị</th>
-            <th class="order-tracking-table__th order-tracking-table__th--status">Trạng thái</th>
-            <th class="order-tracking-table__th order-tracking-table__th--action"></th>
-          </tr>
-        </thead>
-        <tbody>
-
-          @for (order of displayedOrders(); track order.id) {
-            <tr [class]="rowClass(order.status)">
-              <td class="order-tracking-table__td order-tracking-table__td--id">
-                <span class="order-tracking-table__order-id">{{ order.id }}</span>
-                <span class="order-tracking-table__order-sub">{{ order.sub }}</span>
-              </td>
-              <td class="order-tracking-table__td order-tracking-table__td--date">
-                {{ order.date }}
-              </td>
-              <td class="order-tracking-table__td">
-                {{ order.product }}
-              </td>
-              <td class="order-tracking-table__td order-tracking-table__td--amount">
-                {{ order.amount | number: '1.0-0' : 'vi' }}<u>đ</u>
-              </td>
-              <td class="order-tracking-table__td order-tracking-table__td--status">
-                <span [class]="badgeClass(order.status)">
-                  {{ statusLabel[order.status] }}
-                </span>
-              </td>
-              <td class="order-tracking-table__td order-tracking-table__td--action">
-                <a
-                  [routerLink]="order.type === 'bespoke'
-                    ? ['/orders', 'custom', cleanId(order.id)]
-                    : ['/orders', cleanId(order.id)]"
-                  class="order-tracking-table__detail-link"
-                >Chi tiết</a>
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td class="order-tracking-table__empty" colspan="6">
-                Không có đơn hàng nào phù hợp
-              </td>
-            </tr>
+        <div class="order-tracking-filters__actions">
+          @if (hasActiveFilters()) {
+            <button class="order-tracking-filters__clear" type="button" (click)="clearFilters()">
+              Xóa bộ lọc
+            </button>
           }
+          <button class="order-tracking-filters__apply" type="button" [disabled]="!hasDraftChanges()" (click)="applyFilters()">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+              <line x1="1" y1="1" x2="13" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="3" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="5" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Áp dụng bộ lọc
+          </button>
+        </div>
 
-        </tbody>
-      </table>
+      </div>
     </div>
-  </div>
+
+    <!-- Orders table -->
+    <div class="order-tracking-table-wrap">
+      <div class="order-tracking-table__container">
+        <table class="order-tracking-table">
+          <thead>
+            <tr class="order-tracking-table__head-row">
+              <th class="order-tracking-table__th order-tracking-table__th--id">Mã đơn hàng</th>
+              <th class="order-tracking-table__th order-tracking-table__th--date">Ngày đặt</th>
+              <th class="order-tracking-table__th order-tracking-table__th--product">Sản phẩm</th>
+              <th class="order-tracking-table__th order-tracking-table__th--amount">Tổng giá trị</th>
+              <th class="order-tracking-table__th order-tracking-table__th--status">Trạng thái</th>
+              <th class="order-tracking-table__th order-tracking-table__th--action"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            @for (order of displayedOrders(); track order.id) {
+              <tr [class]="rowClass(order.status)">
+                <td class="order-tracking-table__td order-tracking-table__td--id">
+                  <span class="order-tracking-table__order-id">#{{ order.id }}</span>
+                  @if (order.type === 'bespoke') {
+                    <span class="order-tracking-table__order-sub">Đơn thiết kế riêng</span>
+                  }
+                </td>
+                <td class="order-tracking-table__td order-tracking-table__td--date">
+                  {{ order.date }}
+                </td>
+                <td class="order-tracking-table__td">
+                  <span class="order-tracking-table__product-name">{{ order.product }}</span>
+                  @if (order.itemCount > 1) {
+                    <span class="order-tracking-table__order-sub">+{{ order.itemCount - 1 }} sản phẩm khác</span>
+                  }
+                </td>
+                <td class="order-tracking-table__td order-tracking-table__td--amount">
+                  {{ order.amount | number: '1.0-0' : 'vi' }}<u>đ</u>
+                </td>
+                <td class="order-tracking-table__td order-tracking-table__td--status">
+                  <span [class]="badgeClass(order.status)">
+                    {{ statusLabel[order.status] }}
+                  </span>
+                </td>
+                <td class="order-tracking-table__td order-tracking-table__td--action">
+                  <a
+                    [routerLink]="order.type === 'bespoke'
+                      ? ['/orders', 'custom', order.id]
+                      : ['/orders', order.id]"
+                    class="order-tracking-table__detail-link"
+                  >Chi tiết</a>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td class="order-tracking-table__empty" colspan="6">
+                  @if (hasActiveFilters()) {
+                    Không có đơn hàng nào phù hợp với bộ lọc
+                  } @else {
+                    Bạn chưa có đơn hàng nào
+                  }
+                </td>
+              </tr>
+            }
+
+          </tbody>
+        </table>
+      </div>
+    </div>
 
   </div><!-- end order-tracking-scroll-wrap -->
 
   <!-- Pagination -->
-  <div class="order-tracking-pagination-wrap">
-    <div class="order-tracking-pagination">
-      <p class="order-tracking-pagination__info">{{ paginationInfo() }}</p>
-      <div class="order-tracking-pagination__pages">
+  @if (totalPages() > 1) {
+    <div class="order-tracking-pagination-wrap">
+      <div class="order-tracking-pagination">
+        <p class="order-tracking-pagination__info">{{ paginationInfo() }}</p>
+        <div class="order-tracking-pagination__pages">
 
-        <button
-          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
-          aria-label="Trang trước"
-          [disabled]="currentPage() === 1"
-          (click)="goToPage(currentPage() - 1)"
-        >
-          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
-            <path d="M6 1L1 5.5L6 10" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        @for (page of pageNumbers(); track page) {
           <button
-            class="order-tracking-pagination__btn"
-            [class.order-tracking-pagination__btn--active]="page === currentPage()"
-            (click)="goToPage(page)"
-          >{{ page }}</button>
-        }
+            class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+            aria-label="Trang trước"
+            [disabled]="currentPage() === 1"
+            (click)="goToPage(currentPage() - 1)"
+          >
+            <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+              <path d="M6 1L1 5.5L6 10" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
 
-        <button
-          class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
-          aria-label="Trang sau"
-          [disabled]="currentPage() === totalPages()"
-          (click)="goToPage(currentPage() + 1)"
-        >
-          <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
-            <path d="M1 1L6 5.5L1 10" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
+          @for (page of pageNumbers(); track page) {
+            <button
+              class="order-tracking-pagination__btn"
+              [class.order-tracking-pagination__btn--active]="page === currentPage()"
+              (click)="goToPage(page)"
+            >{{ page }}</button>
+          }
 
+          <button
+            class="order-tracking-pagination__btn order-tracking-pagination__btn--arrow"
+            aria-label="Trang sau"
+            [disabled]="currentPage() === totalPages()"
+            (click)="goToPage(currentPage() + 1)"
+          >
+            <svg width="7" height="11" viewBox="0 0 7 11" fill="none" aria-hidden="true">
+              <path d="M1 1L6 5.5L1 10" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+        </div>
       </div>
     </div>
-  </div>
+  }
+
+  } <!-- end @else (main content) -->
 
 </div>

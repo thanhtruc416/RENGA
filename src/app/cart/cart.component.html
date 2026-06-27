@@ -70,7 +70,9 @@
               loading="lazy"
               (error)="onImgError($event)"
             />
-            <div class="cart-item__desaturate" aria-hidden="true"></div>
+            @if (item.type === 'studio') {
+              <div class="cart-item__desaturate" aria-hidden="true"></div>
+            }
           </div>
 
           <div class="cart-item__body">

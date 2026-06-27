@@ -492,3 +492,66 @@
   opacity: 0.3;
   cursor: default;
 }
+
+/* ── Loading / Error / Guest states ─────────────── */
+.order-tracking-state-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px var(--container-px);
+}
+
+.order-tracking-state {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.order-tracking-state__spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.order-tracking-state__title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--color-black);
+}
+
+.order-tracking-state__subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.order-tracking-state__btn {
+  display: inline-block;
+  padding: 12px 32px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.order-tracking-state__btn:hover { opacity: 0.8; }
+
+/* ── Product name in table ───────────────────────── */
+.order-tracking-table__product-name {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-black);
+}
