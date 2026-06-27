@@ -340,3 +340,86 @@
   cursor: pointer;
   letter-spacing: 1px;
 }
+
+/* ── Inline modals (locked / inactive) ── */
+.login-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-modal__card {
+  background: #fff;
+  width: 400px;
+  max-width: 100%;
+  padding: 48px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.25);
+  animation: login-modal-in 0.2s ease;
+}
+
+@keyframes login-modal-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-modal__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+}
+
+.login-modal__title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 12px;
+}
+
+.login-modal__subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  color: #666;
+  margin-bottom: 28px;
+}
+
+.login-modal__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.login-modal__btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.login-modal__btn:hover { opacity: 0.85; }
+
+.login-modal__btn--outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}

@@ -1,118 +1,153 @@
-import { Router } from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import pool from '../db';
+import { Router, Request, Response } from 'express';
+import * as authService from '../services/auth.service';
 
 const router = Router();
-const SECRET = process.env.JWT_SECRET || 'renga_secret';
 
-// POST /api/auth/login
-router.post('/login', async (req, res) => {
-  const { phone, password } = req.body as { phone: string; password: string };
-  if (!phone || !password) {
-    res.status(400).json({ success: false, message: 'Thiếu số điện thoại hoặc mật khẩu' });
-    return;
-  }
-
-  const [[row]] = await pool.execute<any[]>(
-    `SELECT c.client_id, c.phone, cu.full_name, a.password_hash
-     FROM client c
-     JOIN account a  ON a.client_id  = c.client_id
-     JOIN customer cu ON cu.client_id = c.client_id
-     WHERE c.phone = ? AND c.client_type = 'CUSTOMER' AND c.status = 'ACTIVE'
-     LIMIT 1`,
-    [phone]
-  );
-
-  if (!row) {
-    res.status(401).json({ success: false, message: 'Số điện thoại không tồn tại' });
-    return;
-  }
-
-  const match = await bcrypt.compare(password, row.password_hash);
-  if (!match) {
-    res.status(401).json({ success: false, message: 'Mật khẩu không đúng' });
-    return;
-  }
-
-  const token = jwt.sign(
-    { client_id: row.client_id, phone: row.phone, full_name: row.full_name },
-    SECRET,
-    { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as jwt.SignOptions['expiresIn'] }
-  );
-
-  res.json({
-    success: true,
-    data: {
-      token,
-      user: { id: row.client_id, fullName: row.full_name, phone: row.phone, role: 'customer' },
-    },
+function handleError(err: any, res: Response): void {
+  const status  = typeof err?.status === 'number' ? err.status : 500;
+  const message = err?.message ?? 'Lỗi máy chủ nội bộ.';
+  res.status(status).json({
+    success: false,
+    message,
+    ...(err?.requireOtp         && { requireOtp:         true }),
+    ...(err?.remainingAttempts !== undefined && { remainingAttempts: err.remainingAttempts }),
   });
+}
+
+// ── Đăng ký ────────────────────────────────────────────────────────────────
+
+// POST /api/auth/register/send-otp
+router.post('/register/send-otp', async (req: Request, res: Response) => {
+  try {
+    const result = await authService.registerSendOtp(req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
 });
 
-// POST /api/auth/register
-router.post('/register', async (req, res) => {
-  const { fullName, phone, email, password } = req.body as {
-    fullName: string; phone: string; email?: string; password: string;
-  };
-  if (!fullName || !phone || !password) {
-    res.status(400).json({ success: false, message: 'Thiếu thông tin đăng ký' });
-    return;
-  }
-
-  const [[existing]] = await pool.execute<any[]>('SELECT client_id FROM client WHERE phone = ?', [phone]);
-  if (existing) {
-    res.status(409).json({ success: false, message: 'Số điện thoại đã được đăng ký' });
-    return;
-  }
-
-  const conn = await pool.getConnection();
+// POST /api/auth/register/verify-otp
+router.post('/register/verify-otp', async (req: Request, res: Response) => {
   try {
-    await conn.beginTransaction();
-
-    const [[{ maxClient }]] = await conn.execute<any[]>(
-      "SELECT MAX(CAST(SUBSTRING(client_id,4) AS UNSIGNED)) as maxClient FROM client"
-    );
-    const clientId = `CLT${String((maxClient || 0) + 1).padStart(6, '0')}`;
-
-    const [[{ maxAcc }]] = await conn.execute<any[]>(
-      "SELECT MAX(CAST(SUBSTRING(account_id,4) AS UNSIGNED)) as maxAcc FROM account"
-    );
-    const accountId = `ACC${String((maxAcc || 0) + 1).padStart(6, '0')}`;
-
-    const hash = await bcrypt.hash(password, 10);
-    const now = new Date();
-
-    await conn.execute(
-      "INSERT INTO client (client_id, email, phone, client_type, status, created_at, updated_at) VALUES (?,?,?,'CUSTOMER','ACTIVE',?,?)",
-      [clientId, email || null, phone, now, now]
-    );
-    await conn.execute(
-      "INSERT INTO customer (client_id, full_name, tier_id, loyalty_points) VALUES (?,?,'SILVER',0)",
-      [clientId, fullName]
-    );
-    await conn.execute(
-      "INSERT INTO account (account_id, client_id, provider, identifier, password_hash, is_verified, created_at) VALUES (?,?,'LOCAL',?,?,1,?)",
-      [accountId, clientId, phone, hash, now]
-    );
-
-    await conn.commit();
-
-    const token = jwt.sign(
-      { client_id: clientId, phone, full_name: fullName },
-      SECRET,
-      { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as jwt.SignOptions['expiresIn'] }
-    );
-
-    res.status(201).json({
-      success: true,
-      data: { token, user: { id: clientId, fullName, phone, role: 'customer' } },
+    const { otp, ...data } = req.body;
+    const result = await authService.registerVerifyOtp(data, otp, {
+      device: req.headers['user-agent'],
+      ip:     req.ip,
     });
-  } catch (err: any) {
-    await conn.rollback();
-    res.status(500).json({ success: false, message: err.message });
-  } finally {
-    conn.release();
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// GET /api/auth/register/check-guest?phone=xxx
+router.get('/register/check-guest', async (req: Request, res: Response) => {
+  try {
+    const phone = req.query['phone'] as string;
+    if (!phone) {
+      res.status(400).json({ success: false, message: 'Thiếu số điện thoại.' });
+      return;
+    }
+    const result = await authService.checkGuestByPhone(phone);
+    res.json(result);
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Đăng nhập ──────────────────────────────────────────────────────────────
+
+// POST /api/auth/login
+router.post('/login', async (req: Request, res: Response) => {
+  try {
+    const { phone, password } = req.body;
+    const result = await authService.loginCustomer(
+      { identifier: phone, password },
+      { device: req.headers['user-agent'], ip: req.ip },
+    );
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Quên mật khẩu ──────────────────────────────────────────────────────────
+
+// POST /api/auth/forgot-password/send-otp
+router.post('/forgot-password/send-otp', async (req: Request, res: Response) => {
+  try {
+    const { phone } = req.body;
+    const result = await authService.forgotPasswordSendOtp(phone);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// POST /api/auth/forgot-password/verify-otp
+router.post('/forgot-password/verify-otp', async (req: Request, res: Response) => {
+  try {
+    const result = await authService.forgotPasswordVerifyOtp(req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// POST /api/auth/forgot-password/reset
+router.post('/forgot-password/reset', async (req: Request, res: Response) => {
+  try {
+    await authService.resetPassword(req.body);
+    res.json({ success: true, message: 'Đặt lại mật khẩu thành công.' });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Mở khoá tài khoản ──────────────────────────────────────────────────────
+
+// POST /api/auth/login/unlock/send-otp
+router.post('/login/unlock/send-otp', async (req: Request, res: Response) => {
+  try {
+    const { identifier } = req.body;
+    const result = await authService.sendLoginLockOtp(identifier);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// POST /api/auth/login/unlock/verify-otp
+router.post('/login/unlock/verify-otp', async (req: Request, res: Response) => {
+  try {
+    await authService.verifyLoginLockOtp(req.body);
+    res.json({ success: true, message: 'Mở khóa tài khoản thành công.' });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Token ──────────────────────────────────────────────────────────────────
+
+// POST /api/auth/token/refresh
+router.post('/token/refresh', async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+    const result = await authService.refreshAccessToken(refreshToken);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// POST /api/auth/logout
+router.post('/logout', async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+    if (refreshToken) await authService.logout(refreshToken);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
   }
 });
 

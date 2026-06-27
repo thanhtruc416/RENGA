@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-import { requireAuth } from '../middleware/auth';
+import { authenticate } from '../middlewares/auth.middleware';
 import pool from '../db';
 
 const router = Router();
@@ -22,15 +22,17 @@ function toISODate(ddmmyyyy: string): string | null {
 }
 
 // ── GET /api/account/profile ──────────────────────────────────────────────────
-router.get('/profile', requireAuth, async (req, res) => {
-  const clientId = req.user!.client_id;
+router.get('/profile', authenticate, async (req, res) => {
+  const clientId = (req.user as any)?.clientId;
   try {
     const [[row]] = await pool.execute<any[]>(
       `SELECT c.client_id, c.email, c.phone,
-              cu.full_name, cu.birth_date, cu.address,
-              cu.tier_id, cu.loyalty_points
+              cu.full_name, cu.birth_date,
+              cu.tier_id, cu.loyalty_points,
+              a.address_line, a.ward, a.province
        FROM client c
        JOIN customer cu ON cu.client_id = c.client_id
+       LEFT JOIN address a ON a.client_id = c.client_id AND a.is_default = 1
        WHERE c.client_id = ?`,
       [clientId]
     );
@@ -38,17 +40,18 @@ router.get('/profile', requireAuth, async (req, res) => {
       res.status(404).json({ success: false, message: 'Không tìm thấy hồ sơ' });
       return;
     }
+    const addressParts = [row.address_line, row.ward, row.province].filter(Boolean);
     res.json({
       success: true,
       data: {
-        id:           row.client_id,
-        fullName:     row.full_name   ?? '',
-        email:        row.email       ?? '',
-        phone:        row.phone       ?? '',
-        birthDate:    toDisplayDate(row.birth_date),
-        address:      row.address     ?? '',
-        role:         'customer',
-        tierId:       row.tier_id,
+        id:            row.client_id,
+        fullName:      row.full_name  ?? '',
+        email:         row.email      ?? '',
+        phone:         row.phone      ?? '',
+        birthDate:     toDisplayDate(row.birth_date),
+        address:       addressParts.join(', '),
+        role:          'customer',
+        tierId:        row.tier_id,
         loyaltyPoints: Number(row.loyalty_points) || 0,
       },
     });
@@ -58,11 +61,10 @@ router.get('/profile', requireAuth, async (req, res) => {
 });
 
 // ── PATCH /api/account/profile ────────────────────────────────────────────────
-router.patch('/profile', requireAuth, async (req, res) => {
-  const clientId = req.user!.client_id;
-  const { fullName, email, phone, birthDate, address } = req.body as {
-    fullName?: string; email?: string; phone?: string;
-    birthDate?: string; address?: string;
+router.patch('/profile', authenticate, async (req, res) => {
+  const clientId = req.user!.clientId!;
+  const { fullName, email, phone, birthDate } = req.body as {
+    fullName?: string; email?: string; phone?: string; birthDate?: string;
   };
   try {
     const clientSets: string[] = [];
@@ -81,7 +83,6 @@ router.patch('/profile', requireAuth, async (req, res) => {
     const cuVals: any[]    = [];
     if (fullName  !== undefined) { cuSets.push('full_name = ?');  cuVals.push(fullName  || null); }
     if (birthDate !== undefined) { cuSets.push('birth_date = ?'); cuVals.push(toISODate(birthDate)); }
-    if (address   !== undefined) { cuSets.push('address = ?');    cuVals.push(address   || null); }
     if (cuSets.length) {
       await pool.execute(
         `UPDATE customer SET ${cuSets.join(', ')} WHERE client_id = ?`,
@@ -96,8 +97,8 @@ router.patch('/profile', requireAuth, async (req, res) => {
 });
 
 // ── PATCH /api/account/password ───────────────────────────────────────────────
-router.patch('/password', requireAuth, async (req, res) => {
-  const clientId = req.user!.client_id;
+router.patch('/password', authenticate, async (req, res) => {
+  const clientId = req.user!.clientId!;
   const { currentPassword, newPassword } = req.body as {
     currentPassword: string; newPassword: string;
   };
@@ -131,14 +132,14 @@ router.patch('/password', requireAuth, async (req, res) => {
 });
 
 // ── GET /api/account/loyalty ──────────────────────────────────────────────────
-router.get('/loyalty', requireAuth, async (req, res) => {
-  const clientId = req.user!.client_id;
+router.get('/loyalty', authenticate, async (req, res) => {
+  const clientId = req.user!.clientId!;
   try {
     const [[cu]] = await pool.execute<any[]>(
       `SELECT cu.loyalty_points, cu.tier_id,
               t.tier_name, t.max_points AS next_tier_points
        FROM customer cu
-       LEFT JOIN membership_tier t ON t.tier_id = cu.tier_id
+       LEFT JOIN member_tier t ON t.tier_id = cu.tier_id
        WHERE cu.client_id = ?`,
       [clientId]
     );
@@ -181,8 +182,8 @@ router.get('/loyalty', requireAuth, async (req, res) => {
 });
 
 // ── POST /api/account/loyalty/redeem ─────────────────────────────────────────
-router.post('/loyalty/redeem', requireAuth, async (req, res) => {
-  const clientId = req.user!.client_id;
+router.post('/loyalty/redeem', authenticate, async (req, res) => {
+  const clientId = req.user!.clientId!;
   const { rewardTitle, pointCost } = req.body as { rewardTitle: string; pointCost: number };
 
   if (!rewardTitle || !pointCost || pointCost <= 0) {
