@@ -11,6 +11,19 @@
       </a>
 
       <div class="site-header__actions">
+        <!-- Menu (tablet/mobile) -->
+        <button
+          class="site-header__hamburger"
+          [class.is-open]="mobileNavOpen()"
+          type="button"
+          aria-label="Mở menu"
+          [attr.aria-expanded]="mobileNavOpen()"
+          (click)="toggleMobileNav($event)"
+        >
+          <svg class="icon-open" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
         <!-- Giỏ hàng -->
         <a routerLink="/cart" id="cart-icon-btn" class="site-header__action-btn" aria-label="Giỏ hàng">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -100,22 +113,22 @@
       </div>
     </div>
 
-    <div class="site-header__bottom">
+    <div class="site-header__bottom" [class.is-open]="mobileNavOpen()" (click)="$event.stopPropagation()">
       <nav class="site-header__nav" aria-label="Menu chính">
         <div class="site-header__nav-item">
-          <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link">Trang chủ</a>
+          <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link" (click)="closeAll()">Trang chủ</a>
         </div>
 
         <div class="site-header__nav-item" [class.is-open]="openNav() === 'danh-muc'" (mouseenter)="openNav.set('danh-muc')" (mouseleave)="openNav.set(null)">
-          <span class="site-header__nav-link" [class.is-active]="isOnProducts()">Danh mục Sản phẩm</span>
+          <span class="site-header__nav-link" [class.is-active]="isOnProducts()" (click)="toggleNav($event, 'danh-muc')">Danh mục Sản phẩm</span>
           <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('danh-muc')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Danh mục sản phẩm</p>
-              <a routerLink="/products" [queryParams]="{category: 'nhan'}" class="mega-menu__link">Nhẫn</a>
-              <a routerLink="/products" [queryParams]="{category: 'day-chuyen'}" class="mega-menu__link">Dây chuyền</a>
-              <a routerLink="/products" [queryParams]="{category: 'hoa-tai'}" class="mega-menu__link">Hoa tai</a>
-              <a routerLink="/products" [queryParams]="{category: 'lac-tay'}" class="mega-menu__link">Lắc tay &amp; Vòng tay</a>
-              <a routerLink="/products" [queryParams]="{category: 'charm'}" class="mega-menu__link">Charm</a>
+              <a routerLink="/products" [queryParams]="{category: 'nhan'}" class="mega-menu__link" (click)="closeAll()">Nhẫn</a>
+              <a routerLink="/products" [queryParams]="{category: 'day-chuyen'}" class="mega-menu__link" (click)="closeAll()">Dây chuyền</a>
+              <a routerLink="/products" [queryParams]="{category: 'hoa-tai'}" class="mega-menu__link" (click)="closeAll()">Hoa tai</a>
+              <a routerLink="/products" [queryParams]="{category: 'lac-tay'}" class="mega-menu__link" (click)="closeAll()">Lắc tay &amp; Vòng tay</a>
+              <a routerLink="/products" [queryParams]="{category: 'charm'}" class="mega-menu__link" (click)="closeAll()">Charm</a>
             </div>
           </div>
         </div>
@@ -133,16 +146,16 @@
         </div>
 
         <div class="site-header__nav-item">
-          <a routerLink="/studio" routerLinkActive="is-active" class="site-header__nav-link">The Studio</a>
+          <a routerLink="/studio" routerLinkActive="is-active" class="site-header__nav-link" (click)="closeAll()">The Studio</a>
         </div>
 
         <div class="site-header__nav-item" [class.is-open]="openNav() === 'designer'" (mouseenter)="openNav.set('designer')" (mouseleave)="openNav.set(null)">
-          <span class="site-header__nav-link" [class.is-active]="isOnDesigner()">The Designer</span>
+          <span class="site-header__nav-link" [class.is-active]="isOnDesigner()" (click)="toggleNav($event, 'designer')">The Designer</span>
           <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('designer')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">The Designer</p>
-              <a routerLink="/consultation" class="mega-menu__link">Đặt lịch tư vấn</a>
-              <a routerLink="/appointment-history" class="mega-menu__link">Lịch tư vấn của tôi</a>
+              <a routerLink="/consultation" class="mega-menu__link" (click)="closeAll()">Đặt lịch tư vấn</a>
+              <a routerLink="/appointment-history" class="mega-menu__link" (click)="closeAll()">Lịch tư vấn của tôi</a>
             </div>
           </div>
         </div>

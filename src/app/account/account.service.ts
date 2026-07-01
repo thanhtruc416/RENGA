@@ -12,6 +12,7 @@ export interface UpdateProfilePayload {
   avatarUrl?: string;
   birthDate?: string;
   address?: string;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | '';
 }
 
 export interface ChangePasswordPayload {

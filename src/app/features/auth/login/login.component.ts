@@ -4,9 +4,6 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginFailModalComponent } from '../../../shared/components/modal/login-fail-modal/login-fail-modal.component';
 import { PhoneNotFoundModalComponent } from '../../../shared/components/modal/phone-not-found-modal/phone-not-found-modal.component';
-import { environment } from '../../../../environments/environment';
-
-const MOCK_PHONES = ['0000000000', '0373265707'];
 
 @Component({
   selector: 'app-login',
@@ -46,10 +43,6 @@ export class LoginComponent {
       next: () => this.router.navigate(['/']),
       error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        if (!environment.production && MOCK_PHONES.includes(this.phone())) {
-          this.authService.mockLogin();
-          return;
-        }
         if (err.status === 404) {
           this.showPhoneNotFound.set(true);
         } else if (err.status === 401) {
@@ -68,8 +61,6 @@ export class LoginComponent {
       },
     });
   }
-
-  mockLogin(): void { this.authService.mockLogin(); }
 
   closeLoginFail(): void     { this.showLoginFail.set(false); }
   closePhoneNotFound(): void { this.showPhoneNotFound.set(false); }

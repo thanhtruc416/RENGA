@@ -55,6 +55,21 @@ router.get('/register/check-guest', async (req: Request, res: Response) => {
   }
 });
 
+// POST /api/auth/guest-checkout — cấp token tạm cho khách vãng lai để tạo đơn hàng thật
+router.post('/guest-checkout', async (req: Request, res: Response) => {
+  try {
+    const { phone, email } = req.body;
+    if (!phone) {
+      res.status(400).json({ success: false, message: 'Thiếu số điện thoại.' });
+      return;
+    }
+    const result = await authService.guestCheckout({ phone, email });
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
 // ── Đăng nhập ──────────────────────────────────────────────────────────────
 
 // POST /api/auth/login

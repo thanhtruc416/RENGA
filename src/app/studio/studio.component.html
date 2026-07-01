@@ -475,11 +475,11 @@
               <div class="checkout-section__header">
                 <h3 class="checkout-section__title"><span class="checkout-section__num">1</span>THÔNG TIN VẬN CHUYỂN</h3>
                 <div class="address-picker-wrap">
-                  <button class="btn btn--ghost btn--sm" type="button" (click)="loadAndShowAddresses()">
+                  <button class="btn btn--ghost btn--sm" type="button" (click)="loadAndShowAddresses(); $event.stopPropagation()">
                     {{ addressesLoading() ? 'Đang tải...' : 'CHỌN ĐỊA CHỈ' }}
                   </button>
                   @if (showAddressPicker()) {
-                    <div class="address-picker">
+                    <div class="address-picker" (click)="$event.stopPropagation()">
                       @if (savedAddresses().length === 0) {
                         <p class="address-picker__empty">Bạn chưa có địa chỉ đã lưu</p>
                       } @else {
@@ -691,11 +691,14 @@
   [isOpen]="showSuccessModal()"
   [isGuest]="false"
   [orderId]="placedOrderId()"
+  [isCustomOrder]="true"
+  [amount]="depositAmount()"
   (closed)="showSuccessModal.set(false)"
 />
 
 <app-payment-fail-modal
   [isOpen]="showFailModal()"
+  [total]="depositAmount()"
   (closed)="showFailModal.set(false)"
 />
 <!-- Floating price summary (steps 2–5) -->

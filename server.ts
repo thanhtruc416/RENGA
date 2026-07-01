@@ -13,6 +13,7 @@ import voucherRouter from './server/routes/voucher';
 import studioRouter  from './server/routes/studio';
 import designRouter  from './server/routes/design';
 import accountRouter from './server/routes/account';
+import reviewRouter  from './server/routes/review';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/vouchers', voucherRouter);
 app.use('/api/studio',   studioRouter);
 app.use('/api/design',   designRouter);
 app.use('/api/account',  accountRouter);
+app.use('/api/reviews',  reviewRouter);
 
 // Error handler — phải ở cuối cùng
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

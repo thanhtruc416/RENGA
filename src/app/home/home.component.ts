@@ -1,22 +1,16 @@
-﻿import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../core/services/auth.service';
 import { ModalService } from '../core/services/modal.service';
 import { ProductsService, Product } from '../products/products.service';
+import { ReviewService, HomeReview } from '../core/services/review.service';
 import { formatPrice } from '../shared/utils/currency.util';
 
 interface Category {
   name: string;
   imageUrl: string;
   slug: string;
-}
-
-interface Review {
-  id: number;
-  quote: string;
-  author: string;
-  imageUrl: string;
 }
 
 @Component({
@@ -28,30 +22,14 @@ interface Review {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  @ViewChild('reviewsTrack')    reviewsTrack!:    ElementRef<HTMLDivElement>;
-  @ViewChild('categoriesTrack') categoriesTrack!: ElementRef<HTMLDivElement>;
-
-  private readonly authService    = inject(AuthService);
-  private readonly router         = inject(Router);
-  private readonly modalService   = inject(ModalService);
+  private readonly authService     = inject(AuthService);
+  private readonly router          = inject(Router);
+  private readonly modalService    = inject(ModalService);
   private readonly productsService = inject(ProductsService);
-
-  scrollCategories(dir: 'prev' | 'next'): void {
-    const el = this.categoriesTrack.nativeElement;
-    const card = el.querySelector<HTMLElement>('.home__category-item');
-    const step = (card?.offsetWidth ?? 240) + 24;
-    el.scrollBy({ left: dir === 'next' ? step : -step, behavior: 'smooth' });
-  }
+  private readonly reviewService   = inject(ReviewService);
 
   scrollToCategories(): void {
     document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  scrollReviews(dir: 'prev' | 'next'): void {
-    const el = this.reviewsTrack.nativeElement;
-    const card = el.querySelector<HTMLElement>('.home__review-card');
-    const step = (card?.offsetWidth ?? 280) + 24;
-    el.scrollBy({ left: dir === 'next' ? step : -step, behavior: 'smooth' });
   }
 
   guardedNav(route: string): void {
@@ -75,16 +53,10 @@ export class HomeComponent {
     { initialValue: [] as Product[] }
   );
 
-  readonly reviews = signal<Review[]>([
-    { id: 1, quote: '"Chiếc nhẫn hoàn hảo hơn cả mong đợi!"', author: 'Lan Anh', imageUrl: 'assets/images/review-customer.png' },
-    { id: 2, quote: '"Dịch vụ tư vấn rất chuyên nghiệp và tận tâm!"', author: 'Minh Tú', imageUrl: 'assets/images/review-customer.png' },
-    { id: 3, quote: '"Trang sức đẹp, chất lượng vượt trội!"', author: 'Thu Hương', imageUrl: 'assets/images/review-customer.png' },
-    { id: 4, quote: '"Sẽ quay lại mua thêm cho người thân!"', author: 'Ngọc Hà', imageUrl: 'assets/images/review-customer.png' },
-    { id: 5, quote: '"Thiết kế tinh tế, đóng gói rất cẩn thận!"', author: 'Bảo Châu', imageUrl: 'assets/images/review-customer.png' },
-    { id: 6, quote: '"Nhân viên tư vấn nhiệt tình, chu đáo!"', author: 'Khánh Linh', imageUrl: 'assets/images/review-customer.png' },
-    { id: 7, quote: '"Chiếc dây chuyền y hệt hình, rất hài lòng!"', author: 'Phương Mai', imageUrl: 'assets/images/review-customer.png' },
-    { id: 8, quote: '"Giao hàng nhanh, sản phẩm chất lượng cao!"', author: 'Trúc Anh', imageUrl: 'assets/images/review-customer.png' },
-  ]);
+  readonly reviews = toSignal(
+    this.reviewService.getHomeReviews(8),
+    { initialValue: [] as HomeReview[] }
+  );
 
   readonly features = [
     { icon: 'assets/icons/ic-feature-customize.svg', label: 'Tự thiết kế sản phẩm theo ý thích' },
@@ -99,7 +71,9 @@ export class HomeComponent {
     'Cá nhân hóa với đá chủ Moissanite hoặc Kim cương thiên nhiên',
   ];
 
-  readonly stars = [1, 2, 3, 4, 5];
+  starsArray(rating: number): number[] {
+    return Array.from({ length: rating }, (_, i) => i);
+  }
 
   readonly formatPrice = formatPrice;
 }

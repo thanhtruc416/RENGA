@@ -7,6 +7,8 @@ export function shortenName(name: string): string {
   let s = name.replace(/[\s|]+PNJ.*/i, '');
   // xóa các brand/từ thừa còn lại
   s = s.replace(BRAND_WORDS, '');
+  // xóa mã sản phẩm/style code còn sót ở cuối tên (VD: XMXMW005194, PFXMW000012)
+  s = s.replace(/\s+[A-Z]{2,}[0-9]{4,}\s*$/, '');
   return s.replace(/\s+/g, ' ').trim();
 }
 

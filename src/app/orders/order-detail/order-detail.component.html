@@ -14,12 +14,12 @@
       <div class="order-detail-title-row">
         <h1 class="order-detail-title">Chi tiết đơn hàng</h1>
         <div class="order-detail-actions">
-          @if (order().orderType === 'STUDIO' || order().status === 'CM') {
+          @if (order().status === 'CM') {
             <button type="button" class="order-detail-actions__btn order-detail-actions__btn--outline" (click)="openWarrantyModal()">
               Yêu cầu bảo hành
             </button>
           }
-          @if (order().orderType === 'STUDIO' || isCancellable()) {
+          @if (isCancellable()) {
             <button type="button" class="order-detail-actions__btn order-detail-actions__btn--dark" (click)="openCancelModal()">
               Yêu cầu hủy đơn
             </button>
@@ -32,170 +32,6 @@
 
   <div class="order-detail-body">
     <div class="order-detail-body__inner">
-
-      @if (order().orderType === 'STUDIO') {
-
-        <!-- STUDIO: LEFT = status bar + production timeline -->
-        <div class="order-detail-left">
-
-          <div
-            class="status-bar status-bar--studio"
-            role="region"
-            aria-label="Trạng thái đơn hàng"
-            [style.--progress-pct]="progressPct()"
-          >
-            <p class="status-bar__heading">Trạng thái đơn hàng</p>
-            <div class="status-bar__track">
-              @for (step of studioStatusSteps(); track step.code) {
-                <div
-                  class="status-step"
-                  [class.status-step--done]="step.state === 'done'"
-                  [class.status-step--active]="step.state === 'active'"
-                  [class.status-step--pending]="step.state === 'pending'"
-                  [attr.aria-current]="step.state === 'active' ? 'step' : null"
-                >
-                  <div class="status-step__dot" [attr.aria-label]="step.dotLabel">
-                    @if (step.state === 'active') {
-                      <div class="status-step__dot-inner"></div>
-                    }
-                  </div>
-                  <span class="status-step__label">{{ step.label }}</span>
-                </div>
-              }
-            </div>
-          </div>
-
-          <div class="production-section">
-            <p class="production-section__label">Tiến độ chế tác</p>
-            <div class="production-steps">
-              @for (step of studioTimelineSteps(); track step.num; let last = $last) {
-                <div
-                  class="production-step"
-                  [class.production-step--done]="step.state === 'done'"
-                  [class.production-step--active]="step.state === 'active'"
-                  [class.production-step--pending]="step.state === 'pending'"
-                >
-                  <div class="production-step__timeline">
-                    <div class="production-step__dot"></div>
-                    @if (!last) {
-                      <div class="production-step__connector"></div>
-                    }
-                  </div>
-                  <div class="production-step__body">
-                    <span class="production-step__num">Bước {{ step.num }}</span>
-                    <p class="production-step__name">{{ step.name }}</p>
-                    @if (step.date) {
-                      <p class="production-step__date">{{ step.date }}</p>
-                    }
-                    @if (step.state !== 'pending') {
-                      <p class="production-step__note">{{ step.desc }}</p>
-                    }
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-
-        </div>
-
-        <!-- STUDIO: RIGHT = order id + description + shipping + craftsman -->
-        <div class="order-detail-right">
-
-          <div class="order-id-row">
-            <span class="order-id-row__text">#{{ order().id }}</span>
-          </div>
-
-          <div class="desc-card">
-            <div class="desc-rows">
-              @if (studioDesc().stone) {
-                <div class="desc-row">
-                  <span class="desc-row__label">Đá chính</span>
-                  <span class="desc-row__value">{{ studioDesc().stone }}</span>
-                </div>
-              }
-              @if (studioDesc().material) {
-                <div class="desc-row">
-                  <span class="desc-row__label">Chất liệu</span>
-                  <span class="desc-row__value">{{ studioDesc().material }}</span>
-                </div>
-              }
-              <div class="desc-row">
-                <span class="desc-row__label">Thời gian giao hàng</span>
-                <span class="desc-row__value">{{ studioDesc().deliveryDate || '7–14 ngày làm việc' }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="shipping-card">
-            <div class="shipping-card__heading">
-              <span class="shipping-card__heading-text">Thông tin giao hàng</span>
-            </div>
-            <div class="shipping-rows">
-              <div class="shipping-row">
-                <span class="shipping-row__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                  </svg>
-                </span>
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Khách hàng</p>
-                  <p class="shipping-row__value shipping-row__value--bold">{{ order().shipping.name }}</p>
-                </div>
-              </div>
-              <div class="shipping-row">
-                <span class="shipping-row__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
-                  </svg>
-                </span>
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Điện thoại</p>
-                  <p class="shipping-row__value">{{ order().shipping.phone }}</p>
-                </div>
-              </div>
-              <div class="shipping-row">
-                <span class="shipping-row__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
-                  </svg>
-                </span>
-                <div class="shipping-row__info">
-                  <p class="shipping-row__label">Địa chỉ</p>
-                  <p class="shipping-row__value">{{ order().shipping.address }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="craftsman-card">
-            <div class="craftsman-card__heading">
-              <span class="craftsman-card__heading-text">Thông tin thợ chế tác</span>
-            </div>
-            <div class="craftsman-card__body">
-              <div class="craftsman-card__avatar-wrap">
-                <img
-                  class="craftsman-card__avatar-img"
-                  src="assets/images/craftsman.jpg"
-                  alt="Thợ chế tác"
-                  (error)="$any($event.target).style.display='none'"
-                />
-                <span class="craftsman-card__avatar-fallback">✦</span>
-              </div>
-              <div class="craftsman-card__info">
-                <p class="craftsman-card__name">Master Henri de Luca</p>
-                <p class="craftsman-card__role">Lead Setter, Aurelian Atelier</p>
-              </div>
-            </div>
-            <p class="craftsman-card__quote">"This piece requires our proprietary micro-setting technique, ensuring each diamond is flush-fit to create a seamless river of light."</p>
-          </div>
-
-          <button class="timeline-card__support-btn" type="button" (click)="openSupport()" style="margin-top:8px">
-            Hỗ trợ
-          </button>
-
-        </div>
-
-      } @else {
 
         <!-- STANDARD: LEFT = status bar + items list -->
         <div class="order-detail-left">
@@ -363,8 +199,6 @@
 
         </div>
 
-      }
-
     </div>
   </div>
 
@@ -388,7 +222,6 @@
     [orderStatus]="order().status"
     [productName]="firstItem()?.name ?? ''"
     [productImage]="firstItem()?.imageUrl ?? ''"
-    [mockShouldSucceed]="cancelMockSuccessNext"
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
     (contactRequested)="showCancelModal.set(false); openSupport()"

@@ -18,7 +18,7 @@ import { AuthPayload } from '../middlewares/auth.middleware';
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const JWT_SECRET           = process.env.JWT_SECRET || 'changeme';
-const JWT_ACCESS_EXPIRES   = '15m';
+const JWT_ACCESS_EXPIRES   = '24h';
 const REFRESH_EXPIRES_DAYS = 7;
 const OTP_EXPIRES_MINUTES  = 5;
 const OTP_RESEND_SECONDS   = 30;
@@ -769,6 +769,42 @@ export async function createGuestProfile(data: {
   });
 
   return { clientId };
+}
+
+function generateGuestPlaceholderPhone(): string {
+  // SĐT giả duy nhất cho riêng client guest này — KHÔNG phải SĐT người nhận thật.
+  return 'G' + Date.now().toString().slice(-9) + Math.floor(Math.random() * 10);
+}
+
+/**
+ * Đăng nhập tạm cho khách vãng lai lúc checkout. SĐT/email khách nhập ở form checkout là
+ * thông tin LIÊN HỆ GIAO HÀNG cho đơn này (VD: mua tặng bạn bè → là SĐT của bạn, không phải
+ * của người đặt) — không được dùng để tra/gộp vào 1 client_id có sẵn, vì có thể trùng với
+ * SĐT của 1 tài khoản CUSTOMER thật khác, khiến đơn hàng bị gán nhầm vào tài khoản người đó.
+ *
+ * Vì vậy mỗi lượt checkout guest luôn được cấp 1 client_id GUEST hoàn toàn mới, độc lập —
+ * không liên quan gì tới SĐT nhập trong form. SĐT/tên người nhận thật vẫn được lưu đúng chỗ
+ * của nó là bảng `address` (order.service.ts) để giao hàng & tra cứu đơn.
+ */
+export async function guestCheckout(_data: {
+  phone:  string;
+  email?: string;
+}): Promise<{ accessToken: string; clientId: string }> {
+  const clientId = generateClientId();
+
+  await withTransaction(async (conn) => {
+    await conn.query(
+      `INSERT INTO client (client_id, email, phone, client_type, status, created_at, updated_at)
+       VALUES (?, NULL, ?, 'GUEST', 'ANONYMOUS', NOW(), NOW())`,
+      [clientId, generateGuestPlaceholderPhone()],
+    );
+    await conn.query('INSERT INTO guest (client_id) VALUES (?)', [clientId]);
+  });
+
+  const payload: AuthPayload = { accountId: `GUEST-${clientId}`, clientId, role: 'GUEST' };
+  const accessToken = signAccessToken(payload);
+
+  return { accessToken, clientId };
 }
 
 // ─── OAuth ────────────────────────────────────────────────────────────────────

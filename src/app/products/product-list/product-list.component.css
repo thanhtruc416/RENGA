@@ -521,32 +521,6 @@
   color: var(--color-white);
 }
 
-/* ── Chatbot FAB ── */
-.product-list__chatbot {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  background-color: var(--color-primary);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  transition: opacity 0.2s;
-}
-
-.product-list__chatbot:hover {
-  opacity: 0.9;
-}
-
-.product-list__chatbot img {
-  width: 75px;
-  height: 79px;
-  object-fit: contain;
-}
-
 /* ── Responsive ── */
 @media (max-width: 1200px) {
   .product-list__hero-title { font-size: 52px; }

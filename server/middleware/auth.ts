@@ -2,15 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 export interface AuthPayload {
-  client_id: string;
-  phone: string;
-  full_name: string;
-}
-
-declare global {
-  namespace Express {
-    interface Request { user?: AuthPayload; }
-  }
+  accountId: string;
+  clientId: string;
+  role: 'CUSTOMER' | 'GUEST' | 'ADMIN' | 'DESIGNER';
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {

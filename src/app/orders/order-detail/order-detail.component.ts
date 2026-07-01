@@ -11,7 +11,7 @@ import {
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import localeVi from '@angular/common/locales/vi';
 import {
@@ -20,6 +20,7 @@ import {
 } from '../../shared/components/modal/cancel-order-modal/cancel-order-modal.component';
 import { WarrantyModalComponent } from '../../shared/components/modal/warranty-modal/warranty-modal.component';
 import { AuthService } from '../../core/services/auth.service';
+import { GuestOrderService } from '../../core/services/guest-order.service';
 import { environment } from '../../../environments/environment';
 
 registerLocaleData(localeVi);
@@ -61,20 +62,29 @@ export interface ShippingInfo {
 export interface OrderDetail {
   id: string;
   status: OrderStatus;
-  orderType: 'STANDARD' | 'STUDIO';
   items: OrderItem[];
   total: number;
   note: string;
   shipping: ShippingInfo;
   timeline: TimelineEvent[];
+  createdAtRaw: string;
+}
+
+// variant_name của nhẫn đã có sẵn nhãn ("Size 15"), nhưng vòng/lắc tay trong DB chỉ lưu số trần
+// (chu vi, VD "52") — thêm tiền tố "Size" cho nhất quán, tránh hiện số vô nghĩa không rõ ngữ cảnh.
+function formatVariantLabel(variantName: string | null | undefined): string {
+  if (!variantName) return '';
+  return /^\d+$/.test(variantName) ? `Size ${variantName}` : variantName;
 }
 
 const STEP_ORDER: OrderStatus[] = ['P', 'PC', 'PF', 'S', 'CM'];
 
 const DB_STATUS_MAP: Record<string, OrderStatus> = {
-  PENDING:    'P',
-  CONFIRMED:  'PC',
-  PROCESSING: 'PF',
+  PENDING:           'P',
+  PAYMENT_CONFIRMED: 'PC',
+  CONFIRMED:         'PC',
+  PACKED:            'PF',
+  PROCESSING:        'PF',
   SHIPPED:    'S',
   SHIPPING:   'S',
   DISPATCHED: 'S',
@@ -93,32 +103,17 @@ const STEP_LABELS: Record<OrderStatus, string> = {
   C: 'Đã hủy',
 };
 
-const STUDIO_STEP_LABELS: Record<string, string> = {
-  P:  'PLACED (P)',
-  PC: 'CONFIRMED (PC)',
-  PF: 'FULFILLED (PF)',
-  S:  'SHIPPING (S)',
-  CM: 'COMPLETE (CM)',
-  C:  'CANCELLED',
-};
-
+// Giá trị mặc định trước khi API load xong — trang này (/orders/:id) chỉ dành
+// cho đơn hàng có sẵn; đơn STUDIO/DESIGN đi qua /orders/custom/:id.
 const MOCK_ORDER: OrderDetail = {
-  id: 'AH-8829104',
-  status: 'PF',
-  orderType: 'STUDIO',
-  note: 'STUDIO - Nhẫn tùy chỉnh - 950 Platinum & 18k Gold - Colombian Emerald (8.2ct) - 15/09/2026',
+  id: '',
+  status: 'P',
+  note: '',
   items: [],
   total: 0,
-  shipping: {
-    name: 'Nguyễn Minh Anh',
-    phone: '090 - 456 - 7890',
-    address: '88 Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh',
-  },
-  timeline: [
-    { id: 'tl-1', state: 'done',   statusLabel: 'Hoàn tất', name: 'Đặt đơn',     date: '12/05/2026   14:30' },
-    { id: 'tl-2', state: 'done',   statusLabel: 'Hoàn tất', name: 'Xác nhận',    date: '13/05/2026   09:00' },
-    { id: 'tl-3', state: 'active', statusLabel: 'Hiện tại', name: 'Đang chế tác', date: '15/05/2026   10:00' },
-  ],
+  shipping: { name: '', phone: '', address: '' },
+  timeline: [],
+  createdAtRaw: '',
 };
 
 @Component({
@@ -131,10 +126,11 @@ const MOCK_ORDER: OrderDetail = {
   styleUrl: './order-detail.component.css',
 })
 export class OrderDetailComponent implements OnInit {
-  private readonly route       = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
-  private readonly http        = inject(HttpClient);
-  private readonly destroyRef  = inject(DestroyRef);
+  private readonly route             = inject(ActivatedRoute);
+  private readonly authService       = inject(AuthService);
+  private readonly http              = inject(HttpClient);
+  private readonly destroyRef        = inject(DestroyRef);
+  private readonly guestOrderService = inject(GuestOrderService);
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
   readonly isLoading = signal(true);
@@ -145,12 +141,25 @@ export class OrderDetailComponent implements OnInit {
   readonly order = signal<OrderDetail>(MOCK_ORDER);
 
   ngOnInit(): void {
-    if (!this.orderId || this.isGuest()) {
+    if (!this.orderId) {
       this.isLoading.set(false);
       return;
     }
+
+    // Khách vãng lai: chỉ load được nếu vừa checkout xong đơn NÀY trong phiên này
+    // (token guest tạm được lưu lúc đặt hàng — xem checkout.component.ts).
+    let headers: HttpHeaders | undefined;
+    if (this.isGuest()) {
+      const guestToken = this.guestOrderService.getToken(this.orderId);
+      if (!guestToken) {
+        this.isLoading.set(false);
+        return;
+      }
+      headers = new HttpHeaders({ Authorization: `Bearer ${guestToken}` });
+    }
+
     this.http
-      .get<{ success: boolean; data: any }>(`${environment.apiUrl}/orders/${this.orderId}`)
+      .get<{ success: boolean; data: any }>(`${environment.apiUrl}/orders/${this.orderId}`, headers ? { headers } : {})
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
@@ -181,6 +190,15 @@ export class OrderDetailComponent implements OnInit {
   }
 
   private buildTimeline(status: OrderStatus, createdAt: string, updatedAt: string): TimelineEvent[] {
+    // 'C' (Đã hủy) không nằm trong luồng P→PC→PF→S→CM nên phải xử lý riêng,
+    // nếu không buildTimeline trả mảng rỗng và khối "Thời gian cập nhật" trống trơn.
+    if (status === 'C') {
+      return [
+        { id: 'tl-0', state: 'done',   statusLabel: 'Hoàn tất', name: 'Đơn hàng được đặt', date: this.fmtDate(createdAt) },
+        { id: 'tl-1', state: 'active', statusLabel: 'Hiện tại', name: 'Đơn hàng đã hủy',   date: this.fmtDate(updatedAt) },
+      ];
+    }
+
     const FLOW: { code: OrderStatus; name: string }[] = [
       { code: 'P',  name: 'Đơn hàng được đặt' },
       { code: 'PC', name: 'Xác nhận đơn hàng' },
@@ -209,7 +227,6 @@ export class OrderDetailComponent implements OnInit {
     return {
       id: raw.order_id,
       status,
-      orderType: raw.order_type === 'STUDIO' ? 'STUDIO' : 'STANDARD',
       note: raw.note ?? '',
       total: raw.total_amount,
       shipping: {
@@ -219,20 +236,20 @@ export class OrderDetailComponent implements OnInit {
       },
       items: (raw.items ?? []).map((item: any): OrderItem => ({
         id: item.order_item_id,
-        collection: item.item_type === 'CUSTOMIZATION' ? 'Đơn thiết kế riêng' : (item.variant_name ?? ''),
+        collection: item.item_type === 'CUSTOMIZATION' ? 'Đơn thiết kế riêng' : formatVariantLabel(item.variant_name),
         name: item.product_name || (item.item_type === 'CUSTOMIZATION' ? 'Trang sức thiết kế theo yêu cầu' : 'Sản phẩm'),
         qty: item.quantity,
         price: item.unit_price,
         imageUrl: item.image_url || (item.item_type === 'CUSTOMIZATION' ? 'assets/images/studio-ring.png' : ''),
       })),
       timeline: this.buildTimeline(status, raw.created_at, raw.updated_at),
+      createdAtRaw: raw.created_at,
     };
   }
 
   readonly showWarrantyModal  = signal(false);
   warrantyMockSuccessNext     = true;
   readonly showCancelModal    = signal(false);
-  cancelMockSuccessNext       = true;
 
   readonly isCancellable = computed(() => {
     const s = this.order().status;
@@ -271,20 +288,6 @@ export class OrderDetailComponent implements OnInit {
     });
   });
 
-  readonly studioStatusSteps = computed<StatusStep[]>(() => {
-    const currentStatus = this.order().status;
-    const currentIdx    = STEP_ORDER.indexOf(currentStatus);
-    return STEP_ORDER.map((code, idx) => {
-      const state: StepState = idx < currentIdx ? 'done' : idx === currentIdx ? 'active' : 'pending';
-      return {
-        code,
-        label: STUDIO_STEP_LABELS[code] ?? code,
-        dotLabel: state === 'done' ? 'Đã hoàn tất' : state === 'active' ? 'Đang xử lý' : 'Chưa xử lý',
-        state,
-      };
-    });
-  });
-
   readonly progressPct = computed<number>(() => {
     const currentIdx = STEP_ORDER.indexOf(this.order().status);
     const total      = STEP_ORDER.length - 1;
@@ -297,31 +300,6 @@ export class OrderDetailComponent implements OnInit {
   });
 
   readonly firstItem = computed(() => this.order().items[0]);
-
-  readonly studioDesc = computed(() => {
-    const parts = (this.order().note ?? '').split(' - ');
-    return { blank: parts[1] ?? '', material: parts[2] ?? '', stone: parts[3] ?? '', deliveryDate: parts[4] ?? '' };
-  });
-
-  private readonly STUDIO_STATUS_IDX: Record<string, number> = { P: 0, PC: 1, PF: 2, S: 3, CM: 4 };
-
-  readonly studioTimelineSteps = computed(() => {
-    const o = this.order();
-    const currentIdx = this.STUDIO_STATUS_IDX[o.status] ?? 0;
-    const tl = o.timeline;
-    const STEPS = [
-      { num: '01', name: 'Đã nhận ý tưởng',                     desc: 'Yêu cầu thiết kế đã được ghi nhận và lên kế hoạch' },
-      { num: '02', name: 'Đang sắp xếp nghệ nhân chế tác',       desc: 'Alex Nguyễn sẽ là nghệ nhân chế tác đơn hàng của bạn.' },
-      { num: '03', name: 'Đang chế tác',                         desc: 'Nghệ nhân đang tiến hành khắc chữ lên thiết kế của bạn' },
-      { num: '04', name: 'Hoàn thiện',                           desc: 'Kiểm tra chất lượng và đánh bóng sản phẩm' },
-      { num: '05', name: 'Giao hàng',                            desc: 'Đóng gói & vận chuyển đến bạn' },
-    ];
-    return STEPS.map((s, idx) => ({
-      ...s,
-      state: (idx < currentIdx ? 'done' : idx === currentIdx ? 'active' : 'pending') as 'done' | 'active' | 'pending',
-      date: idx === 0 ? (tl[0]?.date ?? '') : '',
-    }));
-  });
 
   openWarrantyModal(): void {
     this.showWarrantyModal.set(true);
@@ -355,7 +333,15 @@ export class OrderDetailComponent implements OnInit {
     this.supportMockSuccessNext = !this.supportMockSuccessNext;
   }
 
-  onOrderCancelled(): void {}
+  onOrderCancelled(): void {
+    // Cập nhật ngay tại chỗ — đơn đã hủy thật trên server, không cần load lại trang mới thấy
+    const nowIso = new Date().toISOString();
+    this.order.update(o => ({
+      ...o,
+      status: 'C' as OrderStatus,
+      timeline: this.buildTimeline('C' as OrderStatus, o.createdAtRaw || nowIso, nowIso),
+    }));
+  }
 
   onModalClosed(): void {
     this.showCancelModal.set(false);

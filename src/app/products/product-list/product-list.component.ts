@@ -30,6 +30,16 @@ const MATERIALS = ['Vàng 14K', 'Vàng 18K', 'Bạc 925', 'Bạch Kim'];
 const STONES = ['Kim Cương', 'Moissanite', 'Ruby', 'Sapphire', 'Emerald', 'Ngọc Trai'];
 export const MAX_PRICE = 100_000_000;
 
+// Tên sản phẩm luôn chứa cụm chất liệu dạng "Vàng trắng 41,6% (10K)" / "Bạc 925" / "Bạch Kim" —
+// suy ra chất liệu trực tiếp từ tên vì list endpoint không trả field material riêng.
+function deriveMaterial(name: string): string | null {
+  if (/\(18k\)/i.test(name)) return 'Vàng 18K';
+  if (/\(14k\)/i.test(name)) return 'Vàng 14K';
+  if (/bạch\s*kim|platinum/i.test(name)) return 'Bạch Kim';
+  if (/\bbạc\b/i.test(name)) return 'Bạc 925';
+  return null;
+}
+
 export type SortKey = '' | 'price-asc' | 'price-desc';
 
 @Component({
@@ -109,6 +119,14 @@ export class ProductListComponent {
     const failed = this.failedImages();
     let list = this.products().filter(p => !failed.has(p.id));
 
+    const materials = this.selectedMaterials();
+    if (materials.length) {
+      list = list.filter(p => {
+        const mat = deriveMaterial(p.name);
+        return mat !== null && materials.includes(mat);
+      });
+    }
+
     const stones = this.selectedStones();
     if (stones.length) {
       list = list.filter(p =>
@@ -166,6 +184,14 @@ export class ProductListComponent {
 
   setDraftSortKey(key: SortKey): void {
     this.draftSortKey.set(key);
+  }
+
+  // "Bán chạy" chỉ chọn 1 giá trị → áp dụng và đóng panel ngay, không cần bấm ÁP DỤNG
+  selectSort(key: SortKey, e: MouseEvent): void {
+    e.stopPropagation();
+    this.draftSortKey.set(key);
+    this.sortKey.set(key);
+    this.openFilter.set(null);
   }
 
   hasAnyActive(): boolean {

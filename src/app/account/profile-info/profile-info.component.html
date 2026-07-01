@@ -74,17 +74,31 @@
                   (change)="setBirthDate($any($event.target).value)" />
               }
             </div>
-          </div>
-
-          <div class="profile__info-field profile__info-field--full">
-            <label class="profile__field-label">Địa chỉ</label>
-            @if (!isEditing()) {
-              <div class="profile__field-value">{{ user().address }}</div>
-            } @else {
-              <input class="profile__field-input" type="text"
-                [value]="draft().address"
-                (input)="setDraft('address', $any($event.target).value)" />
-            }
+            <div class="profile__info-field">
+              <label class="profile__field-label">Giới tính</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ genderLabel(user().gender) }}</div>
+              } @else {
+                <select class="profile__field-input"
+                  [value]="draft().gender"
+                  (change)="setDraft('gender', $any($event.target).value)">
+                  <option value="">Chưa cập nhật</option>
+                  <option value="MALE">Nam</option>
+                  <option value="FEMALE">Nữ</option>
+                  <option value="OTHER">Khác</option>
+                </select>
+              }
+            </div>
+            <div class="profile__info-field">
+              <label class="profile__field-label">Địa chỉ</label>
+              @if (!isEditing()) {
+                <div class="profile__field-value">{{ user().address }}</div>
+              } @else {
+                <input class="profile__field-input" type="text"
+                  [value]="draft().address"
+                  (input)="setDraft('address', $any($event.target).value)" />
+              }
+            </div>
           </div>
         </form>
       </section>
@@ -209,6 +223,21 @@
         </svg>
       </a>
 
+      <!-- LỊCH SỬ CỘNG ĐIỂM -->
+      <section class="profile__points-card">
+        <p class="profile__points-card__title">LỊCH SỬ CỘNG ĐIỂM</p>
+        <div class="profile__points-card__list">
+          @for (item of loyaltyHistory(); track item.label) {
+            <div class="profile__points-card__item">
+              <span class="profile__points-card__name">{{ item.label }}</span>
+              <span class="profile__points-card__points">+{{ item.points.toLocaleString('vi-VN') }}</span>
+            </div>
+          } @empty {
+            <p class="profile__points-card__empty">Chưa có giao dịch tích điểm nào.</p>
+          }
+        </div>
+      </section>
+
       <!-- HẠNG THÀNH VIÊN -->
       <section class="profile__loyalty-card">
         <svg class="profile__loyalty-sparkle" aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -245,16 +274,6 @@
           <div class="profile__loyalty-progress-bg">
             <div class="profile__loyalty-progress-fill" [style.width.%]="loyaltyProgress()"></div>
           </div>
-        </div>
-
-        <div class="profile__loyalty-history">
-          <p class="profile__loyalty-history-label">Điểm tích lũy</p>
-          @for (item of loyaltyHistory(); track item.label) {
-            <div class="profile__loyalty-history-item">
-              <span class="profile__loyalty-history-name">{{ item.label }}</span>
-              <span class="profile__loyalty-history-points">+{{ item.points.toLocaleString('vi-VN') }}</span>
-            </div>
-          }
         </div>
       </section>
 

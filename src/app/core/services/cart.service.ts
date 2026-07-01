@@ -75,6 +75,16 @@ export class CartService {
     this._items().reduce((n, i) => n + (i.quantity ?? 1), 0)
   );
 
+  // ── Buy-now (single product checkout, bypasses cart) ─────
+  private readonly _buyNowItem = signal<CartItem | null>(null);
+  readonly buyNowItem = this._buyNowItem.asReadonly();
+
+  setBuyNowItem(item: Omit<CartItem, 'id'>): void {
+    this._buyNowItem.set({ ...item, id: `buynow-${Date.now()}` });
+  }
+
+  clearBuyNowItem(): void { this._buyNowItem.set(null); }
+
   readonly isBumping = signal(false);
 
   triggerBump(): void {

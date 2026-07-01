@@ -5,6 +5,14 @@
   background: var(--color-white);
 }
 
+.odc-state {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 80px 24px;
+}
+
 /* -- Hero: breadcrumb + title + actions ----------- */
 .odc-hero {
   padding: 0 var(--container-px);
@@ -230,6 +238,143 @@
 .odc-spec-row__value {
   color: var(--color-white);
   font-weight: 400;
+}
+
+/* ══ TIMELINE CARD (Thời gian cập nhật) ═══════════ */
+.timeline-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-black);
+  padding: 33px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.timeline-card__heading {
+  border-bottom: 1px solid var(--color-border, #c4c7c7);
+  padding-bottom: 17px;
+}
+
+.timeline-card__heading-text {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  color: var(--color-text, #1a1c1c);
+}
+
+.order-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-left: 32px;
+  padding-bottom: 8px;
+}
+
+.order-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  bottom: 28px;
+  width: 2px;
+  background: #e2e2e2;
+  z-index: 0;
+}
+
+.order-timeline::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  height: var(--timeline-active-h, 0px);
+  width: 2px;
+  background: var(--color-primary);
+  z-index: 1;
+  transition: height 0.3s ease;
+}
+
+.order-timeline__item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 20px;
+}
+
+.order-timeline__item--pending {
+  opacity: 0.4;
+}
+
+.order-timeline__dot {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.order-timeline__dot--done {
+  width: 20px;
+  height: 20px;
+  left: -32px;
+  top: 0;
+  background: var(--color-primary);
+  border: 3px solid var(--color-white);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.order-timeline__dot--active {
+  width: 24px;
+  height: 24px;
+  left: -34px;
+  top: -2px;
+  background: var(--color-primary);
+  border: 3px solid var(--color-white);
+  box-shadow: 0 0 0 4px rgba(196, 96, 126, 0.25);
+}
+
+.order-timeline__dot--pending {
+  width: 20px;
+  height: 20px;
+  left: -32px;
+  top: 0;
+  background: #e2e2e2;
+  border: 3px solid var(--color-white);
+}
+
+.order-timeline__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-timeline__status {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.order-timeline__item--pending .order-timeline__status {
+  color: var(--color-text, #1a1c1c);
+}
+
+.order-timeline__name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-text, #1a1c1c);
+}
+
+.order-timeline__date {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+  color: var(--color-text-muted, #444748);
 }
 
 .odc-shipping-card {

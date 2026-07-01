@@ -13,6 +13,15 @@
     <p class="review-page__order-id">{{ orderId() }}</p>
   </div>
 
+  @if (isLoading()) {
+    <p class="review-page__state">Đang tải thông tin sản phẩm...</p>
+  } @else if (loadError()) {
+    <p class="review-page__state">
+      Không tìm thấy sản phẩm để đánh giá, hoặc bạn chưa mua/nhận sản phẩm này.
+      <a routerLink="/orders/reviews">Quay lại danh sách đánh giá</a>
+    </p>
+  } @else {
+
   <!-- ══ TWO-COLUMN BODY ══ -->
   <div class="review-page__body">
 
@@ -21,13 +30,13 @@
       <div class="review-product__image-wrap">
         <img
           class="review-product__image"
-          src="assets/images/collection-prod-diamond-ring.png"
-          alt="Sản phẩm đánh giá"
+          [src]="productImage()"
+          [alt]="productName()"
         />
       </div>
       <div class="review-product__specs">
         <p class="review-product__specs-label">MÔ TẢ ĐƠN HÀNG</p>
-        @for (spec of specs; track spec.label) {
+        @for (spec of specs(); track spec.label) {
           <div class="review-product__spec-row">
             <span class="review-product__spec-key">{{ spec.label }}</span>
             <span class="review-product__spec-val">{{ spec.value }}</span>
@@ -46,8 +55,11 @@
 
           <h2 class="review-form__title">Đánh giá sản phẩm của bạn</h2>
           <p class="review-form__desc">
-            Hãy chia sẻ trải nghiệm của bạn với chiếc Nhẫn Signet Vermeil. Những hình ảnh hoặc video đánh giá hợp lệ sẽ giúp bạn nhận thêm điểm thưởng thành viên cho lần mua sắm tiếp theo.
+            Hãy chia sẻ trải nghiệm của bạn với {{ productName() }}. Những hình ảnh hoặc video đánh giá hợp lệ sẽ giúp bạn nhận thêm điểm thưởng thành viên cho lần mua sắm tiếp theo.
           </p>
+          @if (submitError()) {
+            <p class="review-form__error">{{ submitError() }}</p>
+          }
 
           <!-- Star rating -->
           <div class="review-form__field">
@@ -131,6 +143,8 @@
 
     </section>
   </div>
+
+  }
 
 </main>
 

@@ -33,9 +33,11 @@ interface Order {
 }
 
 const DB_STATUS_MAP: Record<string, OrderStatus> = {
-  PENDING:    'in-progress',
-  CONFIRMED:  'in-progress',
-  PROCESSING: 'in-progress',
+  PENDING:           'in-progress',
+  PAYMENT_CONFIRMED: 'in-progress',
+  CONFIRMED:         'in-progress',
+  PACKED:            'in-progress',
+  PROCESSING:        'in-progress',
   SHIPPED:    'shipping',
   SHIPPING:   'shipping',
   DISPATCHED: 'shipping',
@@ -93,7 +95,7 @@ export class OrderTrackingComponent implements OnInit {
     const yyyy = d.getFullYear();
     return {
       id:        raw.order_id,
-      type:      raw.order_type === 'CUSTOMIZATION' ? 'bespoke' : 'standard',
+      type:      (raw.order_type === 'STUDIO' || raw.order_type === 'DESIGN') ? 'bespoke' : 'standard',
       date:      `${dd}/${mm}/${yyyy}`,
       rawDate:   d,
       product:   raw.first_product_name ?? 'Sản phẩm',

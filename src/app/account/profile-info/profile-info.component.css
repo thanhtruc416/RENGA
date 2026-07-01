@@ -153,10 +153,9 @@
 .profile__info-field {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 8px;
 }
-
-.profile__info-field--full { grid-column: 1 / -1; }
 
 .profile__field-label {
   font-family: var(--font-sans);
@@ -488,44 +487,58 @@
   transition: width 0.4s ease;
 }
 
-/* Point history */
-.profile__loyalty-history {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* ── Points history card (right col middle) ── */
+.profile__points-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  padding: 28px 24px;
 }
 
-.profile__loyalty-history-label {
+.profile__points-card__title {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-muted);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.profile__loyalty-history-item {
+.profile__points-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile__points-card__item {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.profile__loyalty-history-name {
+.profile__points-card__name {
   font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 400;
-  color: var(--color-white);
+  color: var(--color-black);
   line-height: 1.6;
 }
 
-.profile__loyalty-history-points {
+.profile__points-card__points {
   font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 500;
-  color: #fe8fae;
+  color: var(--color-primary);
   line-height: 1.6;
+}
+
+.profile__points-card__empty {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  font-style: italic;
 }
 
 /* -- Result popup ── */

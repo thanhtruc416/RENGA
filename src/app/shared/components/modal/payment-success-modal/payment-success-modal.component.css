@@ -124,10 +124,21 @@
   margin-bottom: 6px;
 }
 
+.order-info-card__meta-label--sm {
+  font-size: 12px;
+}
+
 .order-info-card__meta-value {
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
+  color: var(--color-black);
+}
+
+.order-info-card__total {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
   color: var(--color-black);
 }
 

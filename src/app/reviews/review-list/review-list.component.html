@@ -17,9 +17,9 @@
       <div class="rl__select-wrap">
         <select id="filter-type" class="rl__select" [value]="pendingType()" (change)="onOrderTypeChange($event)">
           <option value="">Tất cả</option>
-          <option value="LUXURY PACKAGING">Luxury Packaging</option>
-          <option value="CERTIFIED GIA">Certified GIA</option>
-          <option value="VINTAGE REPLICA">Vintage Replica</option>
+          <option value="STANDARD">Sản phẩm có sẵn</option>
+          <option value="STUDIO">Tùy biến (The Studio)</option>
+          <option value="DESIGN">Thiết kế riêng</option>
         </select>
         <svg class="rl__select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -72,11 +72,11 @@
         </tr>
       </thead>
       <tbody>
-        @for (order of pageItems(); track order.id) {
-          <tr class="rl__row" (dblclick)="navigateToReview(order.id)">
+        @for (order of pageItems(); track order.orderItemId) {
+          <tr class="rl__row" (dblclick)="navigateToReview(order.orderItemId)">
             <td class="rl__td rl__td--id">
               <span class="rl__order-id">{{ order.id }}</span>
-              <span class="rl__order-type">{{ order.type }}</span>
+              <span class="rl__order-type">{{ orderTypeLabel[order.type] ?? order.type }}</span>
             </td>
             <td class="rl__td rl__td--date">{{ order.date }}</td>
             <td class="rl__td rl__td--product">{{ order.product }}</td>
@@ -90,12 +90,15 @@
             </td>
             <td class="rl__td rl__td--action">
               @if (!order.reviewed) {
-                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderId: order.id }" class="rl__action-link">Đánh giá</a>
+                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderItemId: order.orderItemId }" class="rl__action-link">Đánh giá</a>
               } @else {
-                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderId: order.id }" class="rl__action-link">Chi tiết</a>
+                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderItemId: order.orderItemId }" class="rl__action-link">Chi tiết</a>
               }
             </td>
           </tr>
+        }
+        @if (!isLoading() && pageItems().length === 0) {
+          <tr class="rl__row"><td class="rl__td" colspan="6">Bạn chưa có đơn hàng nào đã hoàn tất để đánh giá.</td></tr>
         }
       </tbody>
     </table>

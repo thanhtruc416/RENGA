@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { formatVnd } from '../shared/utils/currency.util';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
+import { AccountService } from '../account/account.service';
 import { environment } from '../../environments/environment';
 
 interface Designer {
@@ -44,6 +45,10 @@ export class DesignComponent {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
+  private readonly accountService = inject(AccountService);
+
+  readonly memberName = signal('');
+  readonly memberTier = signal('');
 
   private readonly BADGE_MAP: Record<string, string> = {
     'Thiết kế nhẫn cưới': 'ETERNAL BOND',
@@ -103,7 +108,15 @@ export class DesignComponent {
 
   // Step 3 – voice input
   readonly isListening = signal(false);
+  readonly voiceError = signal('');
   private recognition: any = null;
+
+  private readonly VOICE_ERROR_MESSAGES: Record<string, string> = {
+    'no-speech':      'Không nghe thấy giọng nói, vui lòng thử lại.',
+    'audio-capture':  'Không tìm thấy micro. Vui lòng kiểm tra thiết bị.',
+    'not-allowed':    'Trình duyệt chưa được cấp quyền dùng micro.',
+    'network':        'Lỗi kết nối mạng khi nhận diện giọng nói.',
+  };
 
   toggleVoice(): void {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -114,6 +127,7 @@ export class DesignComponent {
       return;
     }
 
+    this.voiceError.set('');
     this.recognition = new SpeechRecognition();
     this.recognition.lang = 'vi-VN';
     this.recognition.interimResults = false;
@@ -121,9 +135,19 @@ export class DesignComponent {
 
     this.recognition.onstart  = () => this.isListening.set(true);
     this.recognition.onend    = () => this.isListening.set(false);
-    this.recognition.onerror  = () => this.isListening.set(false);
+    this.recognition.onerror  = (event: any) => {
+      this.isListening.set(false);
+      this.voiceError.set(
+        this.VOICE_ERROR_MESSAGES[event?.error] ?? 'Không nhận diện được giọng nói, vui lòng thử lại.'
+      );
+    };
     this.recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
+      // Câu dài có ngắt quãng có thể bị tách thành nhiều result — phải nối hết,
+      // chỉ lấy results[0] sẽ làm rớt mất phần nói sau chỗ ngắt quãng.
+      let transcript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
       const current = this.ideaForm.controls.ideaDesc.value;
       this.ideaForm.controls.ideaDesc.setValue(
         current ? `${current} ${transcript}` : transcript
@@ -238,6 +262,12 @@ export class DesignComponent {
     return date.toDateString() === sel.toDateString();
   });
 
+  readonly memberTierLabel = computed(() => {
+    const t = this.memberTier();
+    if (!t) return '';
+    return `${t.charAt(0)}${t.slice(1).toLowerCase()} Member`;
+  });
+
   readonly consultationFee  = computed(() => this.selectedDesigner()?.fee ?? 0);
   readonly memberDiscount   = computed(() => Math.round(this.consultationFee() * this.MEMBER_DISCOUNT));
   readonly netFee           = computed(() => this.consultationFee() - this.memberDiscount() - this.voucherDiscount());
@@ -264,6 +294,18 @@ export class DesignComponent {
             })));
           }
         },
+      });
+
+    this.accountService.getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => { if (res.success) this.memberName.set(res.data.fullName || ''); },
+      });
+
+    this.accountService.getLoyaltyPoints()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => { if (res.success) this.memberTier.set(res.data.tierName ?? ''); },
       });
   }
 
@@ -363,10 +405,16 @@ export class DesignComponent {
     this.selectedPayment.set(id);
   }
 
+  readonly bookingError = signal('');
+
   completeBooking(): void {
+    this.bookingError.set('');
     const time     = this.selectedTime();
     const slotId   = time ? (this.slotIdByTime[time] ?? null) : null;
-    if (!slotId) { this.showFailModal.set(true); return; }
+    if (!slotId) {
+      this.bookingError.set('Vui lòng chọn lại ngày & giờ tư vấn.');
+      return;
+    }
 
     this.isSubmitting.set(true);
     this.http.post<any>(`${environment.apiUrl}/design/appointments`, {
@@ -379,12 +427,19 @@ export class DesignComponent {
           this.placedAppointmentId.set(res.data.appointment_id);
           this.showSuccessModal.set(true);
         } else {
-          this.showFailModal.set(true);
+          this.bookingError.set(res.message ?? 'Đặt lịch không thành công.');
         }
         this.isSubmitting.set(false);
       },
-      error: () => {
-        this.showFailModal.set(true);
+      error: (err) => {
+        // Lỗi nghiệp vụ (slot đã bị đặt, chưa đủ 24h, v.v.) không phải lỗi thanh toán —
+        // hiện rõ lý do thay vì luôn quy về modal "thanh toán thất bại" chung chung.
+        const backendMessage: string | undefined = err?.error?.message;
+        if (backendMessage) {
+          this.bookingError.set(backendMessage);
+        } else {
+          this.showFailModal.set(true);
+        }
         this.isSubmitting.set(false);
       },
     });

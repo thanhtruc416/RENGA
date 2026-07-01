@@ -16,6 +16,7 @@ export interface Customer extends User {
   address?: string;
   tierId?: string;
   loyaltyPoints?: number;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | '';
 }
 
 export interface Employee extends User {

@@ -2,10 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
   signal,
 } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
+import { GuestOrderService } from '../../../../core/services/guest-order.service';
 
 export type CustomOrderStatus = 'P' | 'PC' | 'CR' | 'FN' | 'PF' | 'S' | 'CM' | 'C';
 
@@ -18,10 +22,12 @@ export type CustomOrderStatus = 'P' | 'PC' | 'CR' | 'FN' | 'PF' | 'S' | 'CM' | '
   styleUrl: './cancel-design-modal.component.css',
 })
 export class CancelDesignModalComponent {
+  private readonly http              = inject(HttpClient);
+  private readonly guestOrderService = inject(GuestOrderService);
+
   // ── Inputs ──────────────────────────────────────────────────────────────────
-  readonly orderId         = input.required<string>();
-  readonly orderStatus     = input.required<CustomOrderStatus>();
-  readonly mockShouldSucceed = input<boolean>(true);
+  readonly orderId     = input.required<string>();
+  readonly orderStatus = input.required<CustomOrderStatus>();
 
   // ── Outputs ─────────────────────────────────────────────────────────────────
   readonly cancelled = output<void>();
@@ -64,12 +70,25 @@ export class CancelDesignModalComponent {
 
     this.isSubmitting.set(true);
 
-    // TODO: gọi OrdersService.requestCancelDesign(orderId, reason)
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      this.isSuccess.set(this.mockShouldSucceed());
-      this.submitted.set(true);
-    }, 600);
+    const guestToken = this.guestOrderService.getToken(this.orderId());
+    const headers = guestToken ? new HttpHeaders({ Authorization: `Bearer ${guestToken}` }) : undefined;
+
+    this.http.patch<{ success: boolean }>(
+      `${environment.apiUrl}/orders/${this.orderId()}/cancel`,
+      { reason: this.reason().trim() },
+      headers ? { headers } : {},
+    ).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        this.isSuccess.set(!!res.success);
+        this.submitted.set(true);
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.isSuccess.set(false);
+        this.submitted.set(true);
+      },
+    });
   }
 
   onClose(): void {

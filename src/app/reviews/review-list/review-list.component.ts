@@ -3,12 +3,16 @@ import {
   Component,
   computed,
   inject,
+  OnInit,
   signal,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { ReviewService, ReviewableItem } from '../../core/services/review.service';
+import { formatPrice } from '../../shared/utils/currency.util';
 
 interface ReviewOrder {
   id: string;
+  orderItemId: string;
   type: string;
   date: string;
   product: string;
@@ -16,20 +20,11 @@ interface ReviewOrder {
   reviewed: boolean;
 }
 
-const ALL_ORDERS: ReviewOrder[] = [
-  { id: '#AH-29384', type: 'LUXURY PACKAGING', date: '14/05/2024', product: 'Bespoke Diamond Tiara',    total: '850.000.000₫', reviewed: false },
-  { id: '#AH-28110', type: 'CERTIFIED GIA',    date: '22/03/2024', product: 'Aurelian Gold Cufflinks',  total: '42.500.000₫',  reviewed: true  },
-  { id: '#AH-27552', type: 'VINTAGE REPLICA',  date: '02/01/2024', product: 'Heritage Emerald Necklace', total: '320.000.000₫', reviewed: true  },
-  { id: '#AH-26901', type: 'CERTIFIED GIA',    date: '18/11/2023', product: 'Celestial Sapphire Ring',  total: '195.000.000₫', reviewed: true  },
-  { id: '#AH-26415', type: 'LUXURY PACKAGING', date: '05/10/2023', product: 'Vermeil Signet Ring',       total: '28.500.000₫',  reviewed: false },
-  { id: '#AH-25870', type: 'VINTAGE REPLICA',  date: '12/09/2023', product: 'Art Deco Pearl Brooch',    total: '76.000.000₫',  reviewed: true  },
-  { id: '#AH-25211', type: 'CERTIFIED GIA',    date: '01/08/2023', product: 'Colombian Emerald Pendant', total: '412.000.000₫', reviewed: true  },
-  { id: '#AH-24788', type: 'LUXURY PACKAGING', date: '20/07/2023', product: 'Aurelian Cuff Bracelet',   total: '63.000.000₫',  reviewed: false },
-  { id: '#AH-24102', type: 'VINTAGE REPLICA',  date: '09/06/2023', product: 'Moonstone Halo Earrings',  total: '34.000.000₫',  reviewed: true  },
-  { id: '#AH-23547', type: 'CERTIFIED GIA',    date: '28/05/2023', product: 'Diamond Tennis Bracelet',  total: '680.000.000₫', reviewed: true  },
-  { id: '#AH-22983', type: 'LUXURY PACKAGING', date: '14/04/2023', product: 'Ruby Pavé Ring',           total: '125.000.000₫', reviewed: false },
-  { id: '#AH-22310', type: 'VINTAGE REPLICA',  date: '02/03/2023', product: 'Victorian Garnet Necklace', total: '89.000.000₫',  reviewed: true  },
-];
+const ORDER_TYPE_LABEL: Record<string, string> = {
+  STANDARD: 'Sản phẩm có sẵn',
+  STUDIO:   'Tùy biến (The Studio)',
+  DESIGN:   'Thiết kế riêng',
+};
 
 const PAGE_SIZE = 4;
 
@@ -41,11 +36,37 @@ const PAGE_SIZE = 4;
   templateUrl: './review-list.component.html',
   styleUrl: './review-list.component.css',
 })
-export class ReviewListComponent {
-  private readonly router = inject(Router);
+export class ReviewListComponent implements OnInit {
+  private readonly router        = inject(Router);
+  private readonly reviewService = inject(ReviewService);
 
-  navigateToReview(orderId: string): void {
-    this.router.navigate(['/orders/reviews/write'], { queryParams: { orderId } });
+  readonly isLoading = signal(true);
+  readonly allOrders = signal<ReviewOrder[]>([]);
+
+  ngOnInit(): void {
+    this.reviewService.getReviewableItems().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.allOrders.set((res.data as ReviewableItem[]).map((item): ReviewOrder => ({
+            id: item.orderId,
+            orderItemId: item.orderItemId,
+            type: item.orderType,
+            date: new Date(item.date).toLocaleDateString('vi-VN'),
+            product: item.productName,
+            total: formatPrice(item.price) + '₫',
+            reviewed: item.reviewed,
+          })));
+        }
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false),
+    });
+  }
+
+  readonly orderTypeLabel = ORDER_TYPE_LABEL;
+
+  navigateToReview(orderItemId: string): void {
+    this.router.navigate(['/orders/reviews/write'], { queryParams: { orderItemId } });
   }
   // Draft — what user selected but not yet applied
   readonly pendingType   = signal('');
@@ -72,7 +93,7 @@ export class ReviewListComponent {
   );
 
   readonly filtered = computed(() => {
-    let list = ALL_ORDERS;
+    let list = this.allOrders();
     const type   = this.activeType();
     const status = this.activeStatus();
     if (type)   list = list.filter(o => o.type === type);

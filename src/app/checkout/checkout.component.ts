@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signa
 import { DecimalPipe } from '@angular/common';
 import { AbstractControl, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { CartService } from '../core/services/cart.service';
 import { AuthService } from '../core/services/auth.service';
+import { GuestOrderService } from '../core/services/guest-order.service';
 import { environment } from '../../environments/environment';
 
 interface OrderItem {
@@ -45,20 +46,21 @@ function noWhitespace(control: AbstractControl) {
 export class CheckoutComponent {
   private readonly destroyRef  = inject(DestroyRef);
   private readonly cartService = inject(CartService);
-  private readonly auth        = inject(AuthService);
+  readonly auth                = inject(AuthService);
   private readonly http        = inject(HttpClient);
   private readonly router      = inject(Router);
+  private readonly guestOrderService = inject(GuestOrderService);
 
   readonly showSuccessModal      = signal(false);
   readonly showFailModal         = signal(false);
   readonly showSuccessGuestModal = signal(false);
   readonly placedOrderId         = signal('');
 
-  readonly orderItems = computed<OrderItem[]>(() =>
-    this.cartService.items()
-      .filter(i => i.type === 'available')
-      .map(i => ({ id: i.id, name: i.name, spec: i.spec, qty: i.quantity ?? 1, price: i.price, image: i.image, variantId: i.variantId }))
-  );
+  readonly orderItems = computed<OrderItem[]>(() => {
+    const buyNow = this.cartService.buyNowItem();
+    const source = buyNow ? [buyNow] : this.cartService.items().filter(i => i.type === 'available');
+    return source.map(i => ({ id: i.id, name: i.name, spec: i.spec, qty: i.quantity ?? 1, price: i.price, image: i.image, variantId: i.variantId }));
+  });
 
   readonly orderCount = computed(() => this.orderItems().length);
 
@@ -108,19 +110,33 @@ export class CheckoutComponent {
   readonly selectedPayment = signal<PaymentMethod>('cod');
   selectPayment(method: PaymentMethod): void { this.selectedPayment.set(method); }
 
-  readonly remainingSeconds = signal(60 * 60 - 4);
+  readonly isCod = computed(() => this.selectedPayment() === 'cod');
+
+  readonly remainingSeconds = signal(60 * 60);
   readonly countdownDisplay = computed(() => {
     const t = this.remainingSeconds();
     const pad = (n: number) => n.toString().padStart(2, '0');
     return `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`;
   });
 
-  private readonly _countdownRef = (() => {
-    const id = setInterval(() => {
-      this.remainingSeconds.update(s => { if (s <= 0) { clearInterval(id); return 0; } return s - 1; });
-    }, 1000);
-    this.destroyRef.onDestroy(() => clearInterval(id));
-  })();
+  private _countdownId: ReturnType<typeof setInterval> | null = null;
+
+  constructor() {
+    // Bắt đầu đếm ngược 60 phút ngay khi vào trang (đồng bộ lại với server sau khi đặt hàng)
+    this.startCountdown(new Date(Date.now() + 60 * 60 * 1000).toISOString());
+    this.destroyRef.onDestroy(() => { if (this._countdownId) clearInterval(this._countdownId); });
+  }
+
+  private startCountdown(expiresAt: string): void {
+    if (this._countdownId) clearInterval(this._countdownId);
+    const tick = () => {
+      const secs = Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000));
+      this.remainingSeconds.set(secs);
+      if (secs <= 0) { clearInterval(this._countdownId!); this._countdownId = null; }
+    };
+    tick();
+    this._countdownId = setInterval(tick, 1000);
+  }
 
   // Danh sách 34 tỉnh thành sau sáp nhập 2025 (hiệu lực từ 1/7/2025)
   readonly PROVINCES = [
@@ -456,32 +472,21 @@ export class CheckoutComponent {
       return;
     }
 
-    this.isSubmitting.set(true);
-
-    if (!this.auth.isLoggedIn()) {
-      const allIds = new Set(this.orderItems().map(i => i.id));
-      setTimeout(() => {
-        this.isSubmitting.set(false);
-        this.cartService.removeItems(allIds);
-        this.showSuccessGuestModal.set(true);
-      }, 800);
+    const itemsWithVariant = this.orderItems().filter(i => i.variantId);
+    if (!itemsWithVariant.length) {
+      this.voucherStatus.set('error');
+      this.voucherMsg.set('Không có sản phẩm hợp lệ để đặt hàng. Vui lòng thêm sản phẩm từ trang chi tiết.');
       return;
     }
+
+    this.isSubmitting.set(true);
 
     const form = this.shippingForm.getRawValue();
     const PROVINCE_LABELS = Object.fromEntries(this.PROVINCES.map(p => [p.value, p.label]));
     const provinceLabel = PROVINCE_LABELS[form.province] ?? form.province;
     const districtLabel = this.availableDistricts().find(d => d.value === form.district)?.label ?? form.district;
 
-    const itemsWithVariant = this.orderItems().filter(i => i.variantId);
-    if (!itemsWithVariant.length) {
-      this.isSubmitting.set(false);
-      this.voucherStatus.set('error');
-      this.voucherMsg.set('Không có sản phẩm hợp lệ để đặt hàng. Vui lòng thêm sản phẩm từ trang chi tiết.');
-      return;
-    }
-
-    this.http.post<any>(`${environment.apiUrl}/orders`, {
+    const orderPayload = {
       items: itemsWithVariant.map(i => ({ variant_id: i.variantId, quantity: i.qty, unit_price: i.price })),
       address: {
         recipient_name: form.fullName,
@@ -491,13 +496,48 @@ export class CheckoutComponent {
       },
       discount_amount: this.voucherDiscount(),
       customer_voucher_id: this._appliedCustomerVoucherId(),
+      payment_method: this.selectedPayment(),
       note: null,
+    };
+
+    const isGuest = !this.auth.isLoggedIn();
+
+    const placeOrder = (headers?: HttpHeaders, guestToken?: string): void => {
+      this.http.post<any>(`${environment.apiUrl}/orders`, orderPayload, headers ? { headers } : {}).subscribe({
+        next: (res) => {
+          this.isSubmitting.set(false);
+          const orderId = res.data?.order_id ?? '';
+          this.placedOrderId.set(orderId);
+          if (res.data?.payment_expires_at) this.startCountdown(res.data.payment_expires_at);
+          this.cartService.clearBuyNowItem();
+          this.cartService.removeItems(new Set(itemsWithVariant.map(i => i.id)));
+          if (isGuest) {
+            if (guestToken && orderId) this.guestOrderService.save(orderId, guestToken);
+            this.showSuccessGuestModal.set(true);
+          } else {
+            this.showSuccessModal.set(true);
+          }
+        },
+        error: () => {
+          this.isSubmitting.set(false);
+          this.showFailModal.set(true);
+        },
+      });
+    };
+
+    if (!isGuest) {
+      placeOrder();
+      return;
+    }
+
+    // Guest: xin token tạm (role GUEST) theo SĐT để có thể gọi API tạo đơn hàng thật
+    this.http.post<any>(`${environment.apiUrl}/auth/guest-checkout`, {
+      phone: form.phone,
+      email: form.email || undefined,
     }).subscribe({
       next: (res) => {
-        this.isSubmitting.set(false);
-        this.placedOrderId.set(res.data?.order_id ?? '');
-        this.cartService.removeItems(new Set(itemsWithVariant.map(i => i.id)));
-        this.showSuccessModal.set(true);
+        if (!res.accessToken) { this.isSubmitting.set(false); this.showFailModal.set(true); return; }
+        placeOrder(new HttpHeaders({ Authorization: `Bearer ${res.accessToken}` }), res.accessToken);
       },
       error: () => {
         this.isSubmitting.set(false);
