@@ -115,21 +115,21 @@
                     <button
                       class="filter-panel__sort-btn"
                       [class.is-selected]="draftSortKey() === ''"
-                      (click)="setDraftSortKey('')"
+                      (click)="selectSort('', $event)"
                     >Mặc định</button>
                   </li>
                   <li>
                     <button
                       class="filter-panel__sort-btn"
                       [class.is-selected]="draftSortKey() === 'price-asc'"
-                      (click)="setDraftSortKey('price-asc')"
+                      (click)="selectSort('price-asc', $event)"
                     >Giá tăng dần</button>
                   </li>
                   <li>
                     <button
                       class="filter-panel__sort-btn"
                       [class.is-selected]="draftSortKey() === 'price-desc'"
-                      (click)="setDraftSortKey('price-desc')"
+                      (click)="selectSort('price-desc', $event)"
                     >Giá giảm dần</button>
                   </li>
                 </ul>
@@ -187,8 +187,3 @@
   }
 
 </div>
-
-<!-- Chatbot FAB -->
-<button class="product-list__chatbot" aria-label="Mở chatbot hỗ trợ">
-  <img src="assets/icons/ic-chatbot.png" alt="Chatbot" />
-</button>

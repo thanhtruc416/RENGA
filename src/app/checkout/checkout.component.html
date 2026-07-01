@@ -278,12 +278,15 @@
 <app-payment-success-modal
   [isOpen]="showSuccessGuestModal()"
   [isGuest]="true"
+  [orderId]="placedOrderId()"
   (closed)="showSuccessGuestModal.set(false)"
 />
 
 <app-payment-fail-modal
   [isOpen]="showFailModal()"
-  [isGuest]="false"
+  [isGuest]="!auth.isLoggedIn()"
+  [orderId]="placedOrderId()"
+  [total]="total()"
   (closed)="showFailModal.set(false)"
 />
 

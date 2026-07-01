@@ -11,6 +11,9 @@ declare global {
       employeeType?: 'ADMIN' | 'DESIGNER';
       adminRole?:    'SUPER_ADMIN' | 'STAFF';
     }
+    interface Request {
+      user?: AuthPayload;
+    }
   }
 }
 

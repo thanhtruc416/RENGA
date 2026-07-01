@@ -683,6 +683,13 @@
   margin-top: auto;
 }
 
+.product-detail__reviews-empty {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--color-muted);
+  padding: 12px 4px;
+}
+
 /* ── FAQ ── */
 .product-detail__faq {
   background: #2a2a2a;

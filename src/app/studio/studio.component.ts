@@ -1,5 +1,5 @@
 ﻿import { DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, signal, DestroyRef, inject, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -67,7 +67,7 @@ interface CheckoutForm {
   templateUrl: './studio.component.html',
   styleUrl: './studio.component.css',
 })
-export class StudioComponent {
+export class StudioComponent implements OnInit {
   // ─── Constants ───────────────────────────────────────────────────────
   readonly CRAFT_FEE = 5_000_000;
   readonly ENGRAVE_FEE_PER_CHAR = 50_000;
@@ -624,6 +624,10 @@ export class StudioComponent {
   // Step 5 has two sub-views: 1 = price analysis, 2 = checkout form
   readonly checkoutSubStep = signal<1 | 2>(1);
 
+  // ─── Draft persistence (survives leaving/returning to /studio) ────────
+  private readonly DRAFT_KEY = 'renga_studio_draft';
+  private pendingBlankId: string | null = null;
+
   constructor() {
     this.blanksLoading.set(true);
     this.http.get<any>(`${environment.apiUrl}/studio/blanks`)
@@ -641,6 +645,11 @@ export class StudioComponent {
             })));
           }
           this.blanksLoading.set(false);
+          if (this.pendingBlankId) {
+            const blank = this.allBlanks().find(b => b.id === this.pendingBlankId);
+            if (blank) this.selectedBlank.set(blank);
+            this.pendingBlankId = null;
+          }
         },
         error: () => {
           this.blanksLoading.set(false);
@@ -660,6 +669,84 @@ export class StudioComponent {
           this.checkoutSubStep.set(sub);
         }
       });
+  }
+
+  ngOnInit(): void {
+    this.restoreDraft();
+
+    this.checkoutForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.saveDraft());
+
+    effect(() => {
+      // Đọc mọi signal cần lưu để effect tự chạy lại khi bất kỳ cái nào đổi
+      this.selectedMaterial(); this.selectedStone(); this.carat();
+      this.engraveText(); this.engraveFont(); this.selectedPaymentMethod();
+      this.voucherCode(); this.voucherDiscount(); this.voucherMsg(); this.voucherStatus();
+      this.selectedProvince(); this.currentStep(); this.checkoutSubStep();
+      this.selectedBlank();
+      this.saveDraft();
+    });
+  }
+
+  private restoreDraft(): void {
+    let draft: any;
+    try {
+      const raw = sessionStorage.getItem(this.DRAFT_KEY);
+      draft = raw ? JSON.parse(raw) : null;
+    } catch {
+      draft = null;
+    }
+    if (!draft) return;
+
+    if (draft.blankId) this.pendingBlankId = draft.blankId;
+    const material = this.materials.find(m => m.id === draft.materialId);
+    if (material) this.selectedMaterial.set(material);
+    const stone = this.stones.find(s => s.id === draft.stoneId);
+    if (stone) this.selectedStone.set(stone);
+    if (typeof draft.carat === 'number') this.carat.set(draft.carat);
+    if (typeof draft.engraveText === 'string') this.engraveText.set(draft.engraveText);
+    if (draft.engraveFont) this.engraveFont.set(draft.engraveFont);
+    if (draft.selectedPaymentMethod) this.selectedPaymentMethod.set(draft.selectedPaymentMethod);
+    if (typeof draft.voucherCode === 'string') this.voucherCode.set(draft.voucherCode);
+    if (typeof draft.voucherDiscount === 'number') this.voucherDiscount.set(draft.voucherDiscount);
+    if (typeof draft.voucherMsg === 'string') this.voucherMsg.set(draft.voucherMsg);
+    if (draft.voucherStatus) this.voucherStatus.set(draft.voucherStatus);
+    if (draft.appliedCustomerVoucherId) this.appliedCustomerVoucherId = draft.appliedCustomerVoucherId;
+    if (draft.selectedProvince) this.selectedProvince.set(draft.selectedProvince);
+    if (draft.checkoutForm) this.checkoutForm.patchValue(draft.checkoutForm);
+    if (draft.currentStep >= 1 && draft.currentStep <= 5) this.currentStep.set(draft.currentStep);
+    if (draft.checkoutSubStep === 1 || draft.checkoutSubStep === 2) this.checkoutSubStep.set(draft.checkoutSubStep);
+  }
+
+  private saveDraft(): void {
+    const draft = {
+      blankId:                 this.selectedBlank()?.id ?? null,
+      materialId:              this.selectedMaterial().id,
+      stoneId:                 this.selectedStone().id,
+      carat:                   this.carat(),
+      engraveText:             this.engraveText(),
+      engraveFont:             this.engraveFont(),
+      selectedPaymentMethod:   this.selectedPaymentMethod(),
+      voucherCode:             this.voucherCode(),
+      voucherDiscount:         this.voucherDiscount(),
+      voucherMsg:              this.voucherMsg(),
+      voucherStatus:           this.voucherStatus(),
+      appliedCustomerVoucherId: this.appliedCustomerVoucherId,
+      selectedProvince:        this.selectedProvince(),
+      checkoutForm:            this.checkoutForm.getRawValue(),
+      currentStep:             this.currentStep(),
+      checkoutSubStep:         this.checkoutSubStep(),
+    };
+    try {
+      sessionStorage.setItem(this.DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      // sessionStorage đầy/bị chặn — bỏ qua, không ảnh hưởng luồng chính
+    }
+  }
+
+  private clearDraft(): void {
+    try { sessionStorage.removeItem(this.DRAFT_KEY); } catch {}
   }
 
   // Step 1
@@ -744,6 +831,11 @@ export class StudioComponent {
     }
   }
 
+  @HostListener('document:click')
+  closeAddressPicker(): void {
+    this.showAddressPicker.set(false);
+  }
+
   applyAddress(addr: any): void {
     const provinceVal = this.PROVINCES.find(p => p.value === addr.province || p.label === addr.province)?.value ?? '';
     this.selectedProvince.set(provinceVal);
@@ -811,10 +903,10 @@ export class StudioComponent {
 
   readonly priceSummaryVisible = computed(() => this.currentStep() >= 2 && this.currentStep() < 5);
 
-  readonly priceSummaryAmount = computed(() => {
-    if (this.currentStep() >= 3) return this.formatVnd(this.totalPrice());
-    return this.formatVnd(this.selectedMaterial().priceVnd);
-  });
+  // totalPrice() đã gồm phôi + chất liệu + đá + khắc chữ + phí chế tác — không tách
+  // riêng theo bước nữa vì trước đây ở bước 2 chỉ hiện giá chất liệu, thiếu giá phôi
+  // + phí chế tác đã chọn từ bước 1, khiến tổng tiền "nhảy" đột ngột khi qua bước 3.
+  readonly priceSummaryAmount = computed(() => this.formatVnd(this.totalPrice()));
 
   readonly priceSummaryDetail = computed(() =>
     this.currentStep() >= 3 ? this.selectedStone().label : this.selectedMaterial().label,
@@ -1001,6 +1093,7 @@ export class StudioComponent {
         if (res.success) {
           this.placedOrderId.set(res.data.order_id);
           this.showSuccessModal.set(true);
+          this.clearDraft();
         } else {
           this.showFailModal.set(true);
         }

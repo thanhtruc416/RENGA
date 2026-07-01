@@ -12,6 +12,7 @@ interface UserProfile {
   phone: string;
   birthDate: string;
   address: string;
+  gender: '' | 'MALE' | 'FEMALE' | 'OTHER';
 }
 
 interface PointHistoryItem {
@@ -36,7 +37,7 @@ export class ProfileInfoComponent implements OnInit {
   readonly isLoading = signal(true);
 
   readonly user = signal<UserProfile>({
-    fullName: '', email: '', phone: '', birthDate: '', address: '',
+    fullName: '', email: '', phone: '', birthDate: '', address: '', gender: '',
   });
 
   readonly isEditing = signal(false);
@@ -67,6 +68,7 @@ export class ProfileInfoComponent implements OnInit {
       phone: d.phone,
       birthDate: d.birthDate,
       address: d.address,
+      gender: d.gender,
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         this.isSaving.set(false);
@@ -78,15 +80,19 @@ export class ProfileInfoComponent implements OnInit {
           this.showPopup(false, 'Cập nhật thất bại!', res.message ?? 'Vui lòng thử lại.');
         }
       },
-      error: () => {
+      error: (err) => {
         this.isSaving.set(false);
-        this.showPopup(false, 'Cập nhật thất bại!', 'Đã xảy ra lỗi. Vui lòng thử lại.');
+        this.showPopup(false, 'Cập nhật thất bại!', err?.error?.message ?? 'Đã xảy ra lỗi. Vui lòng thử lại.');
       },
     });
   }
 
   setDraft(field: keyof UserProfile, value: string): void {
-    this.draft.update(d => ({ ...d, [field]: value }));
+    this.draft.update(d => ({ ...d, [field]: value } as UserProfile));
+  }
+
+  genderLabel(gender: UserProfile['gender']): string {
+    return gender === 'MALE' ? 'Nam' : gender === 'FEMALE' ? 'Nữ' : gender === 'OTHER' ? 'Khác' : 'Chưa cập nhật';
   }
 
   setBirthDate(isoDate: string): void {
@@ -199,6 +205,7 @@ export class ProfileInfoComponent implements OnInit {
               phone:     d.phone     ?? '',
               birthDate: d.birthDate ?? '',
               address:   d.address   ?? '',
+              gender:    d.gender    ?? '',
             });
           }
           this.isLoading.set(false);

@@ -2,11 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
   signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
+import { formatVnd } from '../../../utils/currency.util';
+import { GuestOrderService } from '../../../../core/services/guest-order.service';
 
 export type OrderStatus = 'P' | 'PC' | 'PF' | 'S' | 'CM' | 'C';
 type ModalStep = 'form' | 'success' | 'fail';
@@ -37,14 +42,15 @@ const REASONS: CancelReason[] = [
   styleUrl: './cancel-order-modal.component.css',
 })
 export class CancelOrderModalComponent {
+  private readonly http = inject(HttpClient);
+  private readonly guestOrderService = inject(GuestOrderService);
+
   // ── Inputs ──────────────────────────────────────────────────────────────────
   readonly orderId           = input.required<string>();
   readonly orderStatus       = input.required<OrderStatus>();
   readonly productName       = input<string>('');
   readonly productSpec       = input<string>('');
   readonly productImage      = input<string>('assets/images/product-placeholder.webp');
-  readonly refundAmount      = input<string>('');
-  readonly mockShouldSucceed = input<boolean>(true);
 
   // ── Outputs ─────────────────────────────────────────────────────────────────
   readonly cancelled         = output<void>();
@@ -56,6 +62,7 @@ export class CancelOrderModalComponent {
   readonly selectedReasonId = signal<string>('');
   readonly otherNote        = signal('');
   readonly isSubmitting     = signal(false);
+  readonly refundAmountDisplay = signal('');
 
   // ── Computed ────────────────────────────────────────────────────────────────
   readonly reasons = REASONS;
@@ -116,16 +123,31 @@ export class CancelOrderModalComponent {
     if (!this.canSubmit() || this.isSubmitting()) return;
     this.isSubmitting.set(true);
 
-    // TODO: gọi OrdersService.cancelOrder(orderId, reasons)
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      if (this.mockShouldSucceed()) {
+    const reasonLabel = this.otherSelected()
+      ? this.otherNote().trim()
+      : this.reasons.find(r => r.id === this.selectedReasonId())?.label ?? '';
+
+    // Khách vãng lai xem đơn bằng token guest tạm (không lưu trong AuthService) —
+    // phải tự gắn lại đúng token đó thì API hủy đơn mới xác thực được.
+    const guestToken = this.guestOrderService.getToken(this.orderId());
+    const headers = guestToken ? new HttpHeaders({ Authorization: `Bearer ${guestToken}` }) : undefined;
+
+    this.http.patch<{ success: boolean; data?: { refundAmount: number } }>(
+      `${environment.apiUrl}/orders/${this.orderId()}/cancel`,
+      { reason: reasonLabel },
+      headers ? { headers } : {},
+    ).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        this.refundAmountDisplay.set(formatVnd(res.data?.refundAmount ?? 0) + '₫');
         this.step.set('success');
         this.cancelled.emit();
-      } else {
+      },
+      error: () => {
+        this.isSubmitting.set(false);
         this.step.set('fail');
-      }
-    }, 600);
+      },
+    });
   }
 
   onClose(): void {

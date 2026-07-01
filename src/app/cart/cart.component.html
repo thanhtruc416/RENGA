@@ -146,7 +146,7 @@
         <div class="cart-summary__right">
           <span class="cart-summary__amount">{{ totalPrice() | number: '1.0-0' }}<u>đ</u></span>
           @if (activeTab() === 'available') {
-            <a routerLink="/checkout" class="cart-summary__checkout-btn">Đặt hàng</a>
+            <a routerLink="/checkout" (click)="clearBuyNow()" class="cart-summary__checkout-btn">Đặt hàng</a>
           }
         </div>
       </div>
@@ -170,6 +170,7 @@
           @if (activeTab() === 'available') {
             <a
               routerLink="/checkout"
+              (click)="clearBuyNow()"
               class="cart-action-bar__btn cart-action-bar__btn--pay"
               [class.is-disabled]="selectedCount() === 0"
             >Thanh toán</a>

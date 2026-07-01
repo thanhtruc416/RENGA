@@ -89,7 +89,7 @@
         <h2 class="cancel-success__title">Hủy đơn thành công</h2>
         <p class="cancel-success__desc">
           Đơn hàng của bạn <strong>#{{ orderId() }}</strong> đã được hủy thành công.
-          Số tiền hoàn lại là <strong>{{ refundAmount() }}</strong> sẽ được chuyển lại
+          Số tiền hoàn lại là <strong>{{ refundAmountDisplay() }}</strong> sẽ được chuyển lại
           vào tài khoản thanh toán của bạn và được phép phản ánh trong 5-7 ngày.
         </p>
 
@@ -106,7 +106,7 @@
             <div class="cancel-success__card-footer">
               <div>
                 <span class="cancel-success__refund-label">Tiền hoàn trả</span>
-                <p class="cancel-success__refund-amount">{{ refundAmount() }}</p>
+                <p class="cancel-success__refund-amount">{{ refundAmountDisplay() }}</p>
               </div>
               <div>
                 <span class="cancel-success__status-label">Trạng thái</span>

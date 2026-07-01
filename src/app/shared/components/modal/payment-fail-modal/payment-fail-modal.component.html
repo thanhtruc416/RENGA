@@ -1,5 +1,5 @@
 <div class="modal-backdrop" [class.is-open]="isOpen()">
-  <div class="payment-modal payment-modal--failure is-active">
+  <div class="payment-modal payment-modal--failure" [class.is-active]="isOpen()">
 
     <button class="payment-modal__close" type="button" (click)="close()" aria-label="Đóng">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -27,11 +27,11 @@
         <div class="order-info-card__header">
           <div>
             <p class="order-info-card__meta-label">Mã đơn hàng</p>
-            <p class="order-info-card__meta-value">#AH-8829104</p>
+            <p class="order-info-card__meta-value">#{{ orderId() || '—' }}</p>
           </div>
           <div class="order-info-card__header-right">
             <p class="order-info-card__meta-label order-info-card__meta-label--sm">Tổng cộng</p>
-            <p class="order-info-card__total">245.000.000<u>đ</u></p>
+            <p class="order-info-card__total">{{ total() | number }}<u>đ</u></p>
           </div>
         </div>
         <hr class="order-info-card__sep" />
@@ -41,8 +41,7 @@
             <path d="M10 5v5l3 3" stroke="#9a3f5c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <p class="order-info-card__hold-desc">
-            Chúng tôi sẽ giữ các sản phẩm này trong giỏ hàng của bạn trong vòng:
-            <span class="order-info-card__timer">{{ countdownDisplay() }}</span>
+            Chúng tôi sẽ giữ đơn hàng của bạn trong vòng 60 phút kể từ khi đặt.
           </p>
         </div>
       </div>

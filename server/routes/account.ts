@@ -27,7 +27,7 @@ router.get('/profile', authenticate, async (req, res) => {
   try {
     const [[row]] = await pool.execute<any[]>(
       `SELECT c.client_id, c.email, c.phone,
-              cu.full_name, cu.birth_date,
+              cu.full_name, cu.birth_date, cu.gender,
               cu.tier_id, cu.loyalty_points,
               a.address_line, a.ward, a.province
        FROM client c
@@ -49,6 +49,7 @@ router.get('/profile', authenticate, async (req, res) => {
         email:         row.email      ?? '',
         phone:         row.phone      ?? '',
         birthDate:     toDisplayDate(row.birth_date),
+        gender:        row.gender     ?? '',
         address:       addressParts.join(', '),
         role:          'customer',
         tierId:        row.tier_id,
@@ -63,8 +64,8 @@ router.get('/profile', authenticate, async (req, res) => {
 // ── PATCH /api/account/profile ────────────────────────────────────────────────
 router.patch('/profile', authenticate, async (req, res) => {
   const clientId = req.user!.clientId!;
-  const { fullName, email, phone, birthDate } = req.body as {
-    fullName?: string; email?: string; phone?: string; birthDate?: string;
+  const { fullName, email, phone, birthDate, gender } = req.body as {
+    fullName?: string; email?: string; phone?: string; birthDate?: string; gender?: string;
   };
   try {
     const clientSets: string[] = [];
@@ -83,6 +84,7 @@ router.patch('/profile', authenticate, async (req, res) => {
     const cuVals: any[]    = [];
     if (fullName  !== undefined) { cuSets.push('full_name = ?');  cuVals.push(fullName  || null); }
     if (birthDate !== undefined) { cuSets.push('birth_date = ?'); cuVals.push(toISODate(birthDate)); }
+    if (gender    !== undefined) { cuSets.push('gender = ?');     cuVals.push(gender || null); }
     if (cuSets.length) {
       await pool.execute(
         `UPDATE customer SET ${cuSets.join(', ')} WHERE client_id = ?`,
@@ -92,6 +94,13 @@ router.patch('/profile', authenticate, async (req, res) => {
 
     res.json({ success: true, data: null });
   } catch (err: any) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      const field = String(err.message).includes('uq_client_email') ? 'Email'
+        : String(err.message).includes('uq_client_phone') ? 'Số điện thoại'
+        : 'Thông tin';
+      res.status(409).json({ success: false, message: `${field} này đã được sử dụng bởi tài khoản khác.` });
+      return;
+    }
     res.status(500).json({ success: false, message: err.message });
   }
 });

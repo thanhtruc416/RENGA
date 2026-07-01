@@ -15,15 +15,25 @@
     </div>
 
     <div class="odc-hero__actions">
-      <button type="button" class="odc-hero__btn" (click)="openWarrantyModal()">
-        Yêu cầu bảo hành
-      </button>
-      <button type="button" class="odc-hero__btn" (click)="openCancelModal()">
-        Yêu cầu hủy đơn
-      </button>
+      @if (order().status === 'CM') {
+        <button type="button" class="odc-hero__btn" (click)="openWarrantyModal()">
+          Yêu cầu bảo hành
+        </button>
+      }
+      @if (isCancellable()) {
+        <button type="button" class="odc-hero__btn" (click)="openCancelModal()">
+          Yêu cầu hủy đơn
+        </button>
+      }
     </div>
   </div>
 </div>
+
+@if (isLoading()) {
+  <p class="odc-state">Đang tải chi tiết đơn hàng...</p>
+} @else if (loadError()) {
+  <p class="odc-state">Không tìm thấy đơn hàng, hoặc đơn không thuộc về tài khoản của bạn.</p>
+} @else {
 
 <div class="odc-body">
   <div class="odc-body__inner">
@@ -99,6 +109,43 @@
         }
       </div>
 
+      <div class="timeline-card">
+        <div class="timeline-card__heading">
+          <span class="timeline-card__heading-text">Thời gian cập nhật</span>
+        </div>
+
+        <div
+          class="order-timeline"
+          role="list"
+          [style.--timeline-active-h]="timelineActiveHeight()"
+        >
+          @for (event of order().timeline; track event.id) {
+            <div
+              class="order-timeline__item"
+              [class.order-timeline__item--done]="event.state === 'done'"
+              [class.order-timeline__item--active]="event.state === 'active'"
+              [class.order-timeline__item--pending]="event.state === 'pending'"
+              role="listitem"
+            >
+              <div
+                class="order-timeline__dot"
+                [class.order-timeline__dot--done]="event.state === 'done'"
+                [class.order-timeline__dot--active]="event.state === 'active'"
+                [class.order-timeline__dot--pending]="event.state === 'pending'"
+                [attr.aria-current]="event.state === 'active' ? 'step' : null"
+                aria-hidden="true"
+              ></div>
+
+              <div class="order-timeline__content">
+                <p class="order-timeline__status">{{ event.statusLabel }}</p>
+                <p class="order-timeline__name">{{ event.name }}</p>
+                <p class="order-timeline__date">{{ event.date }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
       <div class="odc-shipping-card">
         <p class="odc-shipping-card__heading">Thông tin giao hàng</p>
 
@@ -143,26 +190,12 @@
         </div>
       </div>
 
-      <div class="odc-artisan-card">
-        <p class="odc-artisan-card__heading">Thông tin thợ chế tác</p>
-
-        <div class="odc-artisan-profile">
-          <div class="odc-artisan-avatar">
-            <img [src]="order().artisan.avatarUrl" [alt]="order().artisan.name" />
-          </div>
-          <div>
-            <p class="odc-artisan-name">{{ order().artisan.name }}</p>
-            <p class="odc-artisan-role">{{ order().artisan.role }}</p>
-          </div>
-        </div>
-
-        <p class="odc-artisan-quote">"{{ order().artisan.quote }}"</p>
-      </div>
-
     </div>
 
   </div>
 </div>
+
+}
 
 @if (showWarrantyModal()) {
   <app-warranty-modal
@@ -175,7 +208,6 @@
   <app-cancel-design-modal
     [orderId]="order().id"
     [orderStatus]="order().status"
-    [mockShouldSucceed]="cancelMockSuccessNext"
     (cancelled)="onOrderCancelled()"
     (closed)="showCancelModal.set(false)"
   />

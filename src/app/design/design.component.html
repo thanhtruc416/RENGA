@@ -266,6 +266,9 @@
             </div>
             <textarea class="ds-form__textarea" id="idea-desc" formControlName="ideaDesc" rows="6"
               placeholder="Chia sẻ ý tưởng, cảm hứng và yêu cầu đặc biệt của bạn..."></textarea>
+            @if (voiceError()) {
+              <p class="ds-voice-error">{{ voiceError() }}</p>
+            }
           </div>
 
           <div class="ds-form__group ds-form__group--full">
@@ -368,8 +371,8 @@
           <div class="ds-member-card">
             <div class="ds-member-card__info">
               <p class="ds-member-card__label">RENGA MEMBER</p>
-              <p class="ds-member-card__name">Nguyễn Thị Trúc</p>
-              <p class="ds-member-card__tier">Gold Member</p>
+              <p class="ds-member-card__name">{{ memberName() || 'Thành viên RENGA' }}</p>
+              <p class="ds-member-card__tier">{{ memberTierLabel() }}</p>
             </div>
             <div class="ds-member-card__benefit">
               <span class="ds-member-card__discount">Ưu đãi 10%</span>
@@ -441,6 +444,9 @@
           <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()" [disabled]="isSubmitting()">
             {{ isSubmitting() ? 'Đang xử lý...' : 'HOÀN TẤT ĐẶT LỊCH' }}
           </button>
+          @if (bookingError()) {
+            <p class="ds-voucher__error">{{ bookingError() }}</p>
+          }
           <p class="ds-pay-summary__note">
             Phí tư vấn được thanh toán toàn bộ khi đặt lịch và có thể được khấu trừ vào đơn hàng nếu chốt đơn.
           </p>

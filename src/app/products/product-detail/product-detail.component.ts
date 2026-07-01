@@ -3,19 +3,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, map, filter } from 'rxjs';
 import { ProductsService, ProductDetail } from '../products.service';
-import { CartService } from '../../core/services/cart.service';
+import { CartService, CartItem } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ModalService } from '../../core/services/modal.service';
+import { ReviewService, ProductReview } from '../../core/services/review.service';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { RingSizeGuideModalComponent } from '../../shared/components/modal/ring-size-guide-modal/ring-size-guide-modal.component';
-
-interface Review {
-  id: number;
-  name: string;
-  imageUrl: string;
-  rating: number;
-  quote: string;
-  date: string;
-}
 
 @Component({
   selector: 'app-product-detail',
@@ -31,6 +24,8 @@ export class ProductDetailComponent {
   private readonly productsService = inject(ProductsService);
   private readonly cartService = inject(CartService);
   private readonly authService = inject(AuthService);
+  private readonly modalService = inject(ModalService);
+  private readonly reviewService = inject(ReviewService);
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
@@ -51,49 +46,13 @@ export class ProductDetailComponent {
 
   readonly specs = computed(() => this.product().specs);
 
-  // TODO: lấy từ API — /api/products/:id/reviews
-  readonly reviews = signal<Review[]>([
-    {
-      id: 1,
-      name: 'MINH THƯ H.',
-      imageUrl: 'assets/images/product-detail-nhan-aeterna-3.png',
-      rating: 5,
-      quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
-      date: '20 THÁNG 10, 2023',
-    },
-    {
-      id: 2,
-      name: 'LAN ANH T.',
-      imageUrl: 'assets/images/product-detail-nhan-aeterna-2.png',
-      rating: 5,
-      quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
-      date: '15 THÁNG 09, 2023',
-    },
-    {
-      id: 3,
-      name: 'THU HƯƠNG N.',
-      imageUrl: 'assets/images/product-detail-nhan-aeterna-3.png',
-      rating: 5,
-      quote: '"Sản phẩm thực tế còn lộng lẫy hơn trong hình. Dịch vụ chăm sóc khách hàng rất chuyên nghiệp, khâu đóng gói cực kỳ cao cấp."',
-      date: '01 THÁNG 08, 2023',
-    },
-    {
-      id: 4,
-      name: 'NGỌC HÀ P.',
-      imageUrl: 'assets/images/product-detail-nhan-aeterna-2.png',
-      rating: 5,
-      quote: '"Nhẫn đẹp hơn cả mong đợi, chất vàng rất tốt và viên đá sáng lung linh. Sẽ quay lại mua thêm làm quà cho người thân!"',
-      date: '10 THÁNG 07, 2023',
-    },
-    {
-      id: 5,
-      name: 'BẢO CHÂU T.',
-      imageUrl: 'assets/images/product-detail-nhan-aeterna-1.png',
-      rating: 5,
-      quote: '"Thiết kế tinh tế, đóng gói sang trọng như quà tặng cao cấp. Được tặng kèm túi giấy và hộp nhung rất xịn!"',
-      date: '22 THÁNG 06, 2023',
-    },
-  ]);
+  readonly reviews = toSignal(
+    toObservable(this.product).pipe(
+      filter(p => !!p.id),
+      switchMap(p => this.reviewService.getProductReviews(p.id, 20)),
+    ),
+    { initialValue: [] as ProductReview[] },
+  );
 
   readonly relatedProducts = toSignal(
     toObservable(this.product).pipe(
@@ -155,16 +114,9 @@ export class ProductDetailComponent {
   ]);
 
   readonly qaInput = signal('');
-  readonly qaGuestError = signal(false);
   readonly expandedReplies = signal(new Set([1, 2]));
 
   onQaInput(e: Event): void {
-    if (this.isGuest()) {
-      (e.target as HTMLInputElement).value = '';
-      this.qaGuestError.set(true);
-      return;
-    }
-    this.qaGuestError.set(false);
     this.qaInput.set((e.target as HTMLInputElement).value);
   }
 
@@ -177,7 +129,7 @@ export class ProductDetailComponent {
   }
 
   sendQa(): void {
-    if (this.isGuest()) { this.qaGuestError.set(true); return; }
+    if (this.isGuest()) { this.modalService.openLoginRequired(); return; }
     const text = this.qaInput().trim();
     if (!text) return;
     this.qaMessages.update(msgs => [
@@ -199,8 +151,15 @@ export class ProductDetailComponent {
     afterNextRender(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   }
 
-  readonly stars = [1, 2, 3, 4, 5];
-  readonly reviewCount = signal(30);
+  starsArray(rating: number): number[] {
+    return Array.from({ length: rating }, (_, i) => i);
+  }
+
+  formatReviewDate(iso: string): string {
+    const d = new Date(iso);
+    return `${d.getDate()} THÁNG ${d.getMonth() + 1}, ${d.getFullYear()}`;
+  }
+  readonly reviewCount = computed(() => this.reviews().length);
   readonly activeImageIndex = signal(0);
 
   @ViewChild('reviewsTrack') reviewsTrack!: ElementRef<HTMLDivElement>;
@@ -264,19 +223,19 @@ export class ProductDetailComponent {
     this.selectedSize.set(size);
   }
 
-  addToCart(): void {
+  private buildCartItem(): Omit<CartItem, 'id'> | null {
     const p = this.product();
-    if (!p.id) return;
+    if (!p.id) return null;
     const size = this.selectedSize();
     const variant = p.variants.find(v => Number(v.size_value) === size)
       ?? p.variants[0];
-    if (!variant) return;
+    if (!variant) return null;
     const spec = size ? `Size ${size}` : (variant.variant_name ?? '');
     const image = p.imageUrl
       || p.images.find(i => i.is_primary)?.image_url
       || p.images[0]?.image_url
       || '';
-    this.cartService.addItem({
+    return {
       type: 'available',
       name: p.name,
       spec,
@@ -284,7 +243,13 @@ export class ProductDetailComponent {
       image,
       quantity: 1,
       variantId: variant.variant_id,
-    });
+    };
+  }
+
+  addToCart(): void {
+    const item = this.buildCartItem();
+    if (!item) return;
+    this.cartService.addItem(item);
   }
 
   flyToCart(event: MouseEvent): void {
@@ -332,7 +297,9 @@ export class ProductDetailComponent {
   }
 
   buyNow(): void {
-    this.addToCart();
+    const item = this.buildCartItem();
+    if (!item) return;
+    this.cartService.setBuyNowItem(item);
     this.router.navigate(['/checkout']);
   }
 

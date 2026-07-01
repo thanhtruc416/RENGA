@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { requireAuth } from '../middleware/auth';
+import { authenticate } from '../middlewares/auth.middleware';
 import { getBlanks, createStudioOrder } from '../services/studio.service';
 
 const router = Router();
@@ -13,7 +13,7 @@ router.get('/blanks', async (req, res) => {
   }
 });
 
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', authenticate as any, async (req, res) => {
   const { totalPrice, discountAmount, customerVoucherId, blankId, materialId, address, note } = req.body;
   if (!totalPrice || !address) {
     res.status(400).json({ success: false, message: 'Thiếu thông tin đơn hàng' });
@@ -21,7 +21,7 @@ router.post('/', requireAuth, async (req, res) => {
   }
   try {
     const orderId = await createStudioOrder({
-      clientId: req.user!.client_id,
+      clientId: req.user!.clientId,
       totalPrice, discountAmount, customerVoucherId, blankId, materialId, address, note,
     });
     res.status(201).json({ success: true, data: { order_id: orderId } });

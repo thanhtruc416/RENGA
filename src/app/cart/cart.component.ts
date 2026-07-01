@@ -18,6 +18,12 @@ export class CartComponent {
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
+  // Đi checkout từ giỏ hàng luôn thanh toán toàn bộ/đã chọn — bỏ item "mua ngay" còn sót
+  // lại từ trang chi tiết sản phẩm (nếu trước đó khách bỏ dở), tránh checkout chỉ hiện 1 món.
+  clearBuyNow(): void {
+    this.cartService.clearBuyNowItem();
+  }
+
   readonly activeTab = signal<'available' | 'studio'>('available');
   readonly selectedIds = signal<Set<string>>(new Set());
 

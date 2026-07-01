@@ -21,7 +21,7 @@
       Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi
     </p>
 
-    @if (!isGuest() && orderId()) {
+    @if (orderId()) {
       <div class="order-info-card">
         <div class="order-info-card__header">
           <div>
@@ -29,8 +29,13 @@
             <p class="order-info-card__meta-value">#{{ orderId() }}</p>
           </div>
           <div class="order-info-card__header-right">
-            <p class="order-info-card__meta-label">Trạng thái</p>
-            <p class="order-info-card__date">Đang xử lý</p>
+            @if (amount() > 0) {
+              <p class="order-info-card__meta-label order-info-card__meta-label--sm">Số tiền đã thanh toán</p>
+              <p class="order-info-card__total">{{ amount() | number }}<u>đ</u></p>
+            } @else {
+              <p class="order-info-card__meta-label">Trạng thái</p>
+              <p class="order-info-card__date">Đang xử lý</p>
+            }
           </div>
         </div>
       </div>
@@ -41,6 +46,10 @@
         @if (mode() === 'appointment') {
           <a class="modal-actions__primary" routerLink="/appointment-history" (click)="close()">
             Xem chi tiết lịch tư vấn
+          </a>
+        } @else if (isCustomOrder()) {
+          <a class="modal-actions__primary" [routerLink]="['/orders', 'custom', orderId()]" (click)="close()">
+            Xem chi tiết đơn hàng
           </a>
         } @else {
           <a class="modal-actions__primary" [routerLink]="['/orders', orderId()]" (click)="close()">

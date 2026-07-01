@@ -58,12 +58,14 @@ export async function createAppointment(payload: CreateAppointmentPayload) {
       throw new Error('Chỉ được đặt lịch trước ít nhất 24 giờ');
     }
 
+    // BR-18: The Designer phải thanh toán 100% phí tư vấn ngay khi đặt lịch —
+    // submit ở bước 4 đã đại diện cho hành động thanh toán, nên ghi nhận payment_status='PAID' ngay.
     const appointmentId = await nextId('APT', 'appointment', 'appointment_id');
     await conn.execute(
       `INSERT INTO appointment
          (appointment_id, client_id, slot_id, idea_description, consultation_fee,
           payment_status, appointment_status, created_at, updated_at)
-       VALUES (?,?,?,?,?,'UNPAID','PENDING',NOW(),NOW())`,
+       VALUES (?,?,?,?,?,'PAID','PENDING',NOW(),NOW())`,
       [appointmentId, payload.clientId, payload.slotId,
         payload.ideaDescription ?? null, payload.consultationFee]
     );
