@@ -47,10 +47,10 @@ export async function getProducts(category?: string, page = 1, limit = 12) {
        c.category_name,
        pri.image_url AS image_url,
        try.image_url AS tryon_url
-     FROM PRODUCT p
-     JOIN CATEGORY c ON c.category_id = p.category_id
-     JOIN PRODUCT_IMAGE pri ON pri.product_id = p.product_id AND pri.is_primary = 1
-     LEFT JOIN PRODUCT_IMAGE try ON try.product_id = p.product_id AND try.image_type = 'TRYON'
+     FROM product p
+     JOIN category c ON c.category_id = p.category_id
+     JOIN product_image pri ON pri.product_id = p.product_id AND pri.is_primary = 1
+     LEFT JOIN product_image try ON try.product_id = p.product_id AND try.image_type = 'TRYON'
      ${where}
      ORDER BY p.product_id
      LIMIT ${limit} OFFSET ${offset}`,
@@ -58,9 +58,9 @@ export async function getProducts(category?: string, page = 1, limit = 12) {
   );
 
   const [[{ total }]] = await pool.execute<any[]>(
-    `SELECT COUNT(*) AS total FROM PRODUCT p
-     JOIN CATEGORY c ON c.category_id = p.category_id
-     JOIN PRODUCT_IMAGE pri ON pri.product_id = p.product_id AND pri.is_primary = 1
+    `SELECT COUNT(*) AS total FROM product p
+     JOIN category c ON c.category_id = p.category_id
+     JOIN product_image pri ON pri.product_id = p.product_id AND pri.is_primary = 1
      ${where}`,
     params
   );
@@ -83,8 +83,8 @@ export async function getProductById(id: string) {
        p.status,
        c.slug        AS category,
        c.category_name
-     FROM PRODUCT p
-     JOIN CATEGORY c ON c.category_id = p.category_id
+     FROM product p
+     JOIN category c ON c.category_id = p.category_id
      WHERE p.product_id = ?`,
     [id]
   );
@@ -92,7 +92,7 @@ export async function getProductById(id: string) {
 
   const [images] = await pool.execute<any[]>(
     `SELECT image_url, is_primary, image_type
-     FROM PRODUCT_IMAGE
+     FROM product_image
      WHERE product_id = ?
      ORDER BY display_order`,
     [id]
@@ -100,7 +100,7 @@ export async function getProductById(id: string) {
 
   const [variants] = await pool.execute<any[]>(
     `SELECT variant_id, variant_name, size_value, price, stock_quantity, status
-     FROM PRODUCT_VARIANT
+     FROM product_variant
      WHERE product_id = ?
      ORDER BY CAST(size_value AS UNSIGNED)`,
     [id]
