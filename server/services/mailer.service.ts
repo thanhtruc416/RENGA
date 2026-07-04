@@ -6,6 +6,9 @@ export const transporter = nodemailer.createTransport({
   host:   process.env.SMTP_HOST,
   port:   Number(process.env.SMTP_PORT) || 587,
   secure: false,
+  // Ép IPv4 — một số nền tảng hosting (vd Railway) không route được IPv6 ra ngoài,
+  // trong khi Gmail SMTP trả về địa chỉ IPv6 trước tiên, gây ENETUNREACH.
+  family: 4,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
