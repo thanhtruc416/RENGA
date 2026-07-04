@@ -156,7 +156,7 @@ router.get('/loyalty', authenticate, async (req, res) => {
     let history: any[] = [];
     try {
       const [rows] = await pool.execute<any[]>(
-        `SELECT transaction_id, transaction_type, points, description, created_at
+        `SELECT transaction_id, transaction_type, points_changed, note, created_at
          FROM loyalty_transaction
          WHERE client_id = ?
          ORDER BY created_at DESC
@@ -165,9 +165,9 @@ router.get('/loyalty', authenticate, async (req, res) => {
       );
       history = (rows as any[]).map(h => ({
         id:          h.transaction_id,
-        type:        String(h.transaction_type).toUpperCase() === 'EARN' ? 'earn' : 'redeem',
-        points:      Number(h.points),
-        description: h.description ?? '',
+        type:        Number(h.points_changed) >= 0 ? 'earn' : 'redeem',
+        points:      Math.abs(Number(h.points_changed)),
+        description: h.note ?? '',
         createdAt:   h.created_at,
       }));
     } catch { /* loyalty_transaction table may not exist yet */ }

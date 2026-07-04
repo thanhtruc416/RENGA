@@ -47,7 +47,7 @@ const DB_STATUS_MAP: Record<string, OrderStatus> = {
   CANCELED:   'cancelled',
 };
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 5;
 
 @Component({
   selector: 'app-order-tracking',

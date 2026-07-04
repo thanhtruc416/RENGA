@@ -77,7 +77,7 @@
             @if (auth.isLoggedIn()) {
               <img
                 class="site-header__avatar"
-                [src]="auth.currentUser()?.avatarUrl || 'assets/images/header-avatar.jpg'"
+                [src]="auth.currentUser()?.avatarUrl || 'assets/images/default-avatar.svg'"
                 alt="Tài khoản"
               >
             } @else {

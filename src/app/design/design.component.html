@@ -130,9 +130,9 @@
         <div class="ds-calendar-panel">
           <div class="ds-calendar">
             <div class="ds-calendar__header">
-              <button class="ds-calendar__nav" type="button" aria-label="Tháng trước" (click)="prevMonth()">&#8249;</button>
-              <span class="ds-calendar__month-label">{{ calendarMonthLabel() }}</span>
-              <button class="ds-calendar__nav" type="button" aria-label="Tháng sau" (click)="nextMonth()">&#8250;</button>
+              <button class="ds-calendar__nav" type="button" aria-label="Tuần trước" (click)="prevPeriod()">&#8249;</button>
+              <span class="ds-calendar__month-label">{{ calendarRangeLabel() }}</span>
+              <button class="ds-calendar__nav" type="button" aria-label="Tuần sau" (click)="nextPeriod()">&#8250;</button>
             </div>
             <div class="ds-calendar__grid" role="grid">
               @for (header of ['T2','T3','T4','T5','T6','T7','CN']; track $index) {
@@ -172,6 +172,10 @@
                   >{{ slot }}</button>
                 }
               </div>
+            </div>
+          } @else {
+            <div class="ds-timeslot-section ds-timeslot-section--empty">
+              <p>Chọn 1 ngày trên lịch để xem giờ tư vấn còn trống.</p>
             </div>
           }
         </div>
@@ -305,6 +309,7 @@
         <div class="design-step__actions">
           <div class="step3-actions">
             <button class="btn btn--ghost" type="button" (click)="goToStep(2)">← Trước đó</button>
+            <button class="btn btn--ghost" type="button" (click)="goToStep(4)">Bỏ qua</button>
             <button class="ds-cta-btn step3-cta" type="submit">XÁC NHẬN LỊCH HẸN</button>
           </div>
         </div>

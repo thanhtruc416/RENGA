@@ -9,7 +9,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../../core/services/auth.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-warranty-modal',
@@ -22,6 +24,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class WarrantyModalComponent {
   private readonly auth = inject(AuthService);
+  private readonly http = inject(HttpClient);
 
   // ── Inputs ──────────────────────────────────────────
   readonly orderId       = input<string>('');
@@ -38,11 +41,12 @@ export class WarrantyModalComponent {
   readonly confirmed = output<void>();
 
   // ── State ───────────────────────────────────────────
-  readonly mockShouldSucceed = input<boolean>(true);
-  readonly submitted   = signal(false);
-  readonly isSuccess   = signal(false);
-  readonly isFailure   = signal(false);
-  readonly previewUrls = signal<string[]>([]);
+  readonly submitted    = signal(false);
+  readonly isSubmitting = signal(false);
+  readonly isSuccess    = signal(false);
+  readonly isFailure    = signal(false);
+  readonly failureMessage = signal('');
+  readonly previewUrls  = signal<string[]>([]);
 
   readonly form = new FormGroup({
     name:    new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -81,13 +85,28 @@ export class WarrantyModalComponent {
 
   onSubmit(): void {
     this.submitted.set(true);
-    if (this.form.invalid) return;
-    if (this.mockShouldSucceed()) {
-      this.isSuccess.set(true);
-      this.confirmed.emit();
-    } else {
-      this.isFailure.set(true);
-    }
+    if (this.form.invalid || this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
+    this.http.post<{ success: boolean; message?: string }>(
+      `${environment.apiUrl}/warranty`,
+      {
+        orderId: this.orderId(),
+        issueDescription: this.form.controls.issue.value,
+        evidenceImages: this.previewUrls(),
+      },
+    ).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.isSuccess.set(true);
+        this.confirmed.emit();
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.failureMessage.set(err?.error?.message ?? 'Không thể gửi yêu cầu bảo hành.');
+        this.isFailure.set(true);
+      },
+    });
   }
 
   onClose(): void {

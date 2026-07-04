@@ -137,6 +137,9 @@
   line-height: 1.625;
   padding: 20px;
   border-radius: 10px;
+  /* Trả lời AI có xuống dòng thật (\n) — không set cái này thì trình duyệt
+     gộp hết thành 1 khối chữ dính liền, nhìn như bị lỗi. */
+  white-space: pre-line;
 }
 
 .chatbot__bubble--user {
@@ -296,6 +299,9 @@
 }
 
 .chatbot__card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   min-width: 120px;
   font-family: var(--font-sans);
@@ -307,6 +313,7 @@
   transition: opacity 0.2s;
   border: 1.5px solid var(--color-dark);
   text-align: center;
+  text-decoration: none;
 }
 
 .chatbot__card-btn--primary  { background: var(--color-dark); color: #fff; }
@@ -333,6 +340,7 @@
   cursor: pointer;
   transition: opacity 0.2s;
   border: 1.5px solid var(--color-dark);
+  text-decoration: none;
 }
 
 .chatbot__cta-btn--primary  { background: var(--color-dark); color: #fff; }
@@ -393,4 +401,44 @@
   background-color: var(--color-primary-light, #fdf5f7);
   border-color: var(--color-primary);
   color: var(--color-primary);
+}
+
+/* ── Tablet (≤ 992px) ────────────────────────── */
+@media (max-width: 992px) {
+  .chatbot__window {
+    bottom: 120px;
+    right: 24px;
+    width: 420px;
+    max-width: calc(100vw - 48px);
+  }
+
+  .chatbot__header { padding: 16px 20px; }
+  .chatbot__name { font-size: 20px; }
+  .chatbot__body { height: 380px; padding: 24px 20px; gap: 18px; }
+}
+
+/* ── Mobile (≤ 576px) ────────────────────────── */
+@media (max-width: 576px) {
+  .chatbot__fab {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+  }
+
+  .chatbot__window {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+  }
+
+  .chatbot__header { padding: 14px 16px; }
+  .chatbot__name { font-size: 18px; }
+  .chatbot__desc { font-size: 9px; }
+  .chatbot__body { height: auto; flex: 1; padding: 20px 16px; gap: 16px; }
+  .chatbot__footer { padding: 12px 16px; }
 }

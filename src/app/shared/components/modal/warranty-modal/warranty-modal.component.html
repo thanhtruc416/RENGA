@@ -29,7 +29,7 @@
         </div>
         <h2 class="warranty-result__title">Yêu cầu thất bại</h2>
         <div class="warranty-result__divider"></div>
-        <p class="warranty-result__desc">Rất tiếc, chúng tôi không thể xử lý yêu cầu của bạn lúc này. Vui lòng thử lại sau.</p>
+        <p class="warranty-result__desc">{{ failureMessage() || 'Rất tiếc, chúng tôi không thể xử lý yêu cầu của bạn lúc này. Vui lòng thử lại sau.' }}</p>
         <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onClose()">Đóng</button>
       </div>
 
@@ -130,8 +130,8 @@
 
       <div class="warranty-modal__actions">
         <button class="warranty-modal__btn warranty-modal__btn--outline" type="button" (click)="onClose()">Hủy</button>
-        <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onSubmit()">
-          Gửi yêu cầu
+        <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onSubmit()" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Đang gửi...' : 'Gửi yêu cầu' }}
         </button>
       </div>
 

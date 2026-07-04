@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ChatbotService } from '../../core/services/chatbot.service';
 
 interface LookupForm {
   orderId: FormControl<string>;
@@ -17,6 +18,7 @@ interface LookupForm {
 })
 export class OrderLookupComponent {
   private readonly router = inject(Router);
+  private readonly chatbotService = inject(ChatbotService);
 
   readonly lookupForm = new FormGroup<LookupForm>({
     orderId: new FormControl('', {
@@ -79,8 +81,6 @@ export class OrderLookupComponent {
   }
 
   openSupportChat(): void {
-    // TODO: mở widget chatbot (app-chatbot trong shared/components/chatbot)
-    // Nếu chatbot là 1 service riêng quản lý signal global, gọi service đó ở đây.
-    // Ví dụ: this.chatbotService.open();
+    this.chatbotService.open();
   }
 }

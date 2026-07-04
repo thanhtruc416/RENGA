@@ -64,7 +64,13 @@ export class ProductsService {
   getProductById(id: string): Observable<ProductDetail> {
     return this.http.get<any>(`${this.base}/${id}`).pipe(
       map(p => {
-        const { specs, description } = this.parseDescription(p.description ?? '');
+        const { specs: parsedSpecs, description } = this.parseDescription(p.description ?? '');
+        // ~23% sản phẩm (crawl từ PNJ) có mô tả chỉ là văn xuôi marketing, không có
+        // dạng "NHÃN: giá trị" nào để parse — suy ra thông số cơ bản từ tên SP +
+        // variant thay vì để trống hẳn khối "Thông số chi tiết".
+        const specs = parsedSpecs.length
+          ? parsedSpecs
+          : this.deriveFallbackSpecs(p.product_name ?? '', p.category_name ?? '', p.variants ?? []);
         const imgs: any[] = p.images ?? [];
         const primaryImg = imgs.find((i: any) => i.is_primary)?.image_url
           ?? imgs[0]?.image_url
@@ -81,6 +87,36 @@ export class ProductsService {
         };
       })
     );
+  }
+
+  private deriveFallbackSpecs(productName: string, categoryName: string, variants: any[]): ProductSpec[] {
+    const n = productName.toLowerCase();
+    const specs: ProductSpec[] = [];
+
+    let material = '';
+    if (/99%|9999|vàng ta/.test(n)) material = 'Vàng ta (24K/9999)';
+    else if (/75%|\(18k\)/.test(n)) material = 'Vàng 18K';
+    else if (/58,5%|\(14k\)/.test(n)) material = 'Vàng 14K';
+    else if (/41,6%|\(10k\)/.test(n)) material = 'Vàng 10K';
+    else if (/bạch kim|platinum/.test(n)) material = 'Bạch kim';
+    else if (/bạc/.test(n)) material = 'Bạc 925';
+    if (n.includes('vàng trắng') && material.startsWith('Vàng')) material += ' (Vàng trắng)';
+    if (material) specs.push({ label: 'CHẤT LIỆU', value: material });
+
+    if (categoryName) specs.push({ label: 'LOẠI SẢN PHẨM', value: categoryName });
+
+    if (/kim cương/.test(n)) specs.push({ label: 'ĐÁ ĐÍNH KÈM', value: 'Kim cương' });
+    else if (/đính đá|sapphire|ruby|topaz|emerald|ngọc|opal|citrine|ecz/.test(n)) {
+      const stoneMatch = n.match(/sapphire|ruby|topaz|emerald|citrine/);
+      specs.push({ label: 'ĐÁ ĐÍNH KÈM', value: stoneMatch ? stoneMatch[0] : 'Đá tự nhiên/nhân tạo' });
+    }
+
+    const sizeValues = [...new Set(variants.map((v: any) => v.size_value).filter(Boolean))];
+    if (sizeValues.length) {
+      specs.push({ label: 'KÍCH THƯỚC', value: sizeValues.join(', ') });
+    }
+
+    return specs;
   }
 
   private cleanSpecValue(value: string): string {

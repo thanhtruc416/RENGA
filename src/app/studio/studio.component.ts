@@ -766,6 +766,38 @@ export class StudioComponent implements OnInit {
     if (this.saveTimer) clearTimeout(this.saveTimer);
     this.savedToast.set(true);
     this.saveTimer = setTimeout(() => this.savedToast.set(false), 2500);
+    this.downloadDesignFile();
+  }
+
+  // "Lưu thiết kế" trước đây chỉ hiện toast giả, không lưu gì cả — giờ tải thật 1
+  // file .txt tóm tắt đầy đủ lựa chọn + giá về máy người dùng (không cần server).
+  private downloadDesignFile(): void {
+    const blank = this.selectedBlank();
+    const stone = this.selectedStone();
+    const lines = [
+      'RENGA — THIẾT KẾ TÙY BIẾN CỦA BẠN',
+      '='.repeat(44),
+      `Phôi:        ${blank?.name ?? 'Chưa chọn'}`,
+      `Chất liệu:   ${this.selectedMaterial().label}`,
+      `Đá quý:      ${stone.id === 'none' ? 'Không đá' : `${stone.label} (${this.carat().toFixed(1)} carat)`}`,
+      `Khắc chữ:    ${this.engraveText() || 'Không khắc'}`,
+      '',
+      'CHI TIẾT GIÁ',
+      '-'.repeat(44),
+      ...this.orderItems().map(i => `${i.name.padEnd(30)} ${this.formatVnd(i.price)}đ`),
+      '-'.repeat(44),
+      `TỔNG CỘNG:   ${this.formatVnd(this.totalPrice())}đ`,
+      '',
+      `Lưu lúc: ${new Date().toLocaleString('vi-VN')}`,
+    ];
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `renga-thiet-ke-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   openSharePopup(): void {
@@ -798,7 +830,12 @@ export class StudioComponent implements OnInit {
   readonly wardPlaceholder    = computed(() => this.selectedProvince() === 'hn' ? 'Chọn Quận/Huyện' : 'Chọn Phường/Xã');
 
   onProvinceChange(): void {
-    this.selectedProvince.set(this.checkoutForm.get('province')!.value);
+    // Ô nhập giờ cho gõ tự do (datalist), giá trị thật là LABEL người đọc được
+    // chứ không còn là key nội bộ ('hcm') như <select> cũ — phải dò lại key từ
+    // label mới tra được DISTRICTS; gõ tự do/không khớp → không gợi ý khu vực.
+    const rawValue = this.checkoutForm.get('province')!.value;
+    const matchedKey = this.PROVINCES.find(p => p.label === rawValue)?.value ?? '';
+    this.selectedProvince.set(matchedKey);
     this.checkoutForm.get('ward')!.setValue('');
   }
 
@@ -837,15 +874,19 @@ export class StudioComponent implements OnInit {
   }
 
   applyAddress(addr: any): void {
-    const provinceVal = this.PROVINCES.find(p => p.value === addr.province || p.label === addr.province)?.value ?? '';
-    this.selectedProvince.set(provinceVal);
-    const wardVal = (this.DISTRICTS[provinceVal] ?? []).find(d => d.value === addr.ward || d.label === addr.ward)?.value ?? '';
+    // Ô nhập province/ward giờ hiện LABEL (text tự do), không còn phải key nội bộ
+    // như lúc còn <select> — patch label vào form để hiển thị đúng, còn key chỉ
+    // giữ riêng trong selectedProvince() để tra cứu DISTRICTS.
+    const provinceEntry = this.PROVINCES.find(p => p.value === addr.province || p.label === addr.province);
+    const provinceKey = provinceEntry?.value ?? '';
+    this.selectedProvince.set(provinceKey);
+    const wardEntry = (this.DISTRICTS[provinceKey] ?? []).find(d => d.value === addr.ward || d.label === addr.ward);
     this.checkoutForm.patchValue({
       name:     addr.recipient_name,
       phone:    addr.recipient_phone,
       address:  addr.address_line,
-      province: provinceVal || addr.province,
-      ward:     wardVal || addr.ward,
+      province: provinceEntry?.label ?? addr.province,
+      ward:     wardEntry?.label ?? addr.ward,
     });
     this.showAddressPicker.set(false);
   }
@@ -1075,11 +1116,14 @@ export class StudioComponent implements OnInit {
 
     this.isSubmitting.set(true);
     this.http.post<any>(`${environment.apiUrl}/studio`, {
-      totalPrice:         this.totalPrice(),
-      discountAmount:     this.voucherDiscount(),
+      // BR-16: giá chốt cuối cùng tính lại ở server từ các lựa chọn thô này,
+      // không gửi totalPrice/discountAmount trực tiếp để tránh sửa request gian lận giá.
       customerVoucherId:  this.appliedCustomerVoucherId,
       blankId:            this.selectedBlank()?.id ?? null,
       materialId:         this.selectedMaterial().id,
+      stoneId:            this.selectedStone().id,
+      carat:              this.carat(),
+      engraveTextLength:  this.engraveText().length,
       address: {
         recipient_name:  form.name,
         recipient_phone: form.phone,

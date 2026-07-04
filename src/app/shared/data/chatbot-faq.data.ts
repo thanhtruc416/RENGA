@@ -2,6 +2,10 @@ export interface ActionBtn {
   label: string;
   style: 'primary' | 'secondary';
   icon?: 'mail' | 'arrow';
+  /** Route nội bộ Angular (dùng routerLink) — VD '/bo-suu-tap' */
+  route?: string;
+  /** Link ngoài (tel:/mailto:) — dùng khi không có route nội bộ tương ứng */
+  href?: string;
 }
 
 export interface BotCard {
@@ -26,8 +30,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Bảo hành lỗi kỹ thuật chế tác trong vòng <strong>12 tháng</strong>.',
       ],
       actions: [
-        { label: 'Xem chi tiết chính sách', style: 'primary' },
-        { label: 'Hỏi về sản phẩm cụ thể', style: 'secondary' },
+        { label: 'Xem chi tiết chính sách', style: 'primary', route: '/chinh-sach-bao-hanh' },
+        { label: 'Hỏi về sản phẩm cụ thể', style: 'secondary', route: '/products' },
       ],
     },
   },
@@ -43,8 +47,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Bộ sưu tập Hoàng Gia — xa hoa, đẳng cấp.',
       ],
       actions: [
-        { label: 'Xem bộ sưu tập', style: 'primary' },
-        { label: 'Tư vấn thêm', style: 'secondary' },
+        { label: 'Xem bộ sưu tập', style: 'primary', route: '/bo-suu-tap' },
+        { label: 'Tư vấn thêm', style: 'secondary', route: '/the-designer' },
       ],
     },
   },
@@ -59,8 +63,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Số điện thoại đã đặt hàng.',
       ],
       actions: [
-        { label: 'Kiểm tra đơn hàng', style: 'primary' },
-        { label: 'Liên hệ CSKH', style: 'secondary' },
+        { label: 'Kiểm tra đơn hàng', style: 'primary', route: '/orders/lookup' },
+        { label: 'Liên hệ CSKH', style: 'secondary', href: 'tel:19000607' },
       ],
     },
   },
@@ -76,8 +80,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Mức độ phức tạp của thiết kế.',
       ],
       actions: [
-        { label: 'Xem bảng giá', style: 'primary' },
-        { label: 'Tư vấn thiết kế', style: 'secondary' },
+        { label: 'Xem bảng giá', style: 'primary', route: '/products' },
+        { label: 'Tư vấn thiết kế', style: 'secondary', route: '/the-designer' },
       ],
     },
   },
@@ -93,8 +97,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Giao hàng nhanh trong ngày tại Hà Nội & TP.HCM.',
       ],
       actions: [
-        { label: 'Theo dõi đơn hàng', style: 'primary' },
-        { label: 'Hỏi thêm', style: 'secondary' },
+        { label: 'Theo dõi đơn hàng', style: 'primary', route: '/orders/lookup' },
+        { label: 'Hỏi thêm', style: 'secondary', href: 'tel:19000607' },
       ],
     },
   },
@@ -110,8 +114,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Đá chủ: Moissanite hoặc Kim cương thiên nhiên GIA.',
       ],
       actions: [
-        { label: 'Tìm hiểu thêm', style: 'primary' },
-        { label: 'Đặt lịch tư vấn', style: 'secondary' },
+        { label: 'Tìm hiểu thêm', style: 'primary', route: '/vat-lieu-ben-vung' },
+        { label: 'Đặt lịch tư vấn', style: 'secondary', route: '/the-designer' },
       ],
     },
   },
@@ -127,8 +131,8 @@ export const FAQ_DB: { keywords: string[]; card: BotCard }[] = [
         'Phí tư vấn <strong>500.000đ</strong> (trừ trực tiếp vào đơn hàng).',
       ],
       actions: [
-        { label: 'Đặt lịch hẹn ngay', style: 'primary' },
-        { label: 'Tìm hiểu thêm', style: 'secondary' },
+        { label: 'Đặt lịch hẹn ngay', style: 'primary', route: '/the-designer' },
+        { label: 'Tìm hiểu thêm', style: 'secondary', route: '/studio' },
       ],
     },
   },
@@ -140,7 +144,7 @@ export const SPECIAL_RESPONSE: BotCard = {
   text: 'Rất tiếc, tôi chưa thể trả lời yêu cầu thiết kế riêng chuyên sâu này. Bạn có muốn kết nối trực tiếp với chuyên viên tư vấn của chúng tôi không?',
   italic: true,
   ctaButtons: [
-    { label: 'GẶP NHÂN VIÊN CSKH', style: 'primary', icon: 'arrow' },
-    { label: 'ĐỂ LẠI THÔNG TIN LIÊN HỆ', style: 'secondary', icon: 'mail' },
+    { label: 'GẶP NHÂN VIÊN CSKH', style: 'primary', icon: 'arrow', href: 'tel:19000607' },
+    { label: 'ĐỂ LẠI THÔNG TIN LIÊN HỆ', style: 'secondary', icon: 'mail', href: 'mailto:hello@renga.vn' },
   ],
 };
