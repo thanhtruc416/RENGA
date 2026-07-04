@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.renga.vn/api',
+  apiUrl: 'https://renga-production.up.railway.app/api',
   mockAdminUser: '',
   mockAdminPass: '',
 };
