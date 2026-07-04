@@ -27,7 +27,11 @@ const app = express();
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+    if (
+      !origin ||
+      /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+      origin === 'https://renga-amber.vercel.app'
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
