@@ -1,9 +1,15 @@
+import dns from 'dns';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
 
 dotenv.config();
+
+// Một số nền tảng hosting (vd Railway) không route được IPv6 ra ngoài, trong khi
+// nhiều DNS (Gmail SMTP...) trả về địa chỉ IPv6 trước — ép ưu tiên IPv4 toàn cục
+// để tránh ENETUNREACH khi kết nối ra ngoài.
+dns.setDefaultResultOrder('ipv4first');
 
 import productRouter from './server/routes/product';
 import authRouter    from './server/routes/auth';
