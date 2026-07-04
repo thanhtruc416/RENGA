@@ -30,6 +30,9 @@ app.use(cors({
     if (
       !origin ||
       /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+      // renga-amber.vercel.app là domain ổn định; renga-<hash>-thanhtruc1.vercel.app
+      // là domain riêng Vercel tự tạo cho mỗi bản deploy/preview — cho phép cả 2.
+      /^https:\/\/renga(-[a-z0-9]+)*-thanhtruc1\.vercel\.app$/.test(origin) ||
       origin === 'https://renga-amber.vercel.app'
     ) {
       callback(null, true);
