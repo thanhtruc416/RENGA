@@ -447,7 +447,12 @@ export class CheckoutComponent {
   readonly districtPlaceholder = computed(() => this.selectedProvince() === 'hn' ? 'Chọn Quận/Huyện' : 'Chọn Khu vực');
 
   onProvinceChange(): void {
-    this.selectedProvince.set(this.shippingForm.get('province')!.value);
+    // Ô nhập giờ cho gõ tự do (datalist), giá trị thật là LABEL người đọc được
+    // (VD "TP. Hồ Chí Minh") chứ không còn là key nội bộ ('hcm') như <select> cũ —
+    // phải dò lại key từ label mới tra được DISTRICTS; gõ tự do/không khớp → không gợi ý khu vực.
+    const rawValue = this.shippingForm.get('province')!.value;
+    const matchedKey = this.PROVINCES.find(p => p.label === rawValue)?.value ?? '';
+    this.selectedProvince.set(matchedKey);
     this.shippingForm.get('district')!.setValue('');
   }
 

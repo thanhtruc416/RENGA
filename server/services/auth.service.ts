@@ -9,11 +9,11 @@ console.log('SMTP config:', {
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import db, { withTransaction } from '../db';
 import { AuthPayload } from '../middlewares/auth.middleware';
+import { sendMail } from './mailer.service';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -67,21 +67,6 @@ export function validateEmail(email: string): void {
 
 // ─── Mailer ───────────────────────────────────────────────────────────────────
 
-const transporter = nodemailer.createTransport({
-  host:   process.env.SMTP_HOST,
-  port:   Number(process.env.SMTP_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
-transporter.verify((error) => {
-  if (error) console.error('❌ SMTP lỗi:', error);
-  else       console.log('✅ SMTP kết nối thành công');
-});
-
 const OTP_SUBJECT: Record<OtpPurpose, string> = {
   REGISTER:       'Xác thực đăng ký tài khoản RENGA',
   RESET_PASSWORD: 'Đặt lại mật khẩu RENGA',
@@ -90,23 +75,11 @@ const OTP_SUBJECT: Record<OtpPurpose, string> = {
 };
 
 async function sendOtpEmail(to: string, otp: string, purpose: OtpPurpose): Promise<void> {
-  const info = await transporter.sendMail({
-    from:    `"RENGA" <${process.env.SMTP_USER}>`,
-    to,
-    subject: OTP_SUBJECT[purpose],
-    html: `
-      <p>Mã OTP của bạn là: <strong>${otp}</strong></p>
-      <p>Mã có hiệu lực trong <strong>${OTP_EXPIRES_MINUTES} phút</strong>.</p>
-      <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
-    `,
-  });
-
-  console.log('SMTP response:', {
-    messageId: info.messageId,
-    accepted:  info.accepted,
-    rejected:  info.rejected,
-    response:  info.response,
-  });
+  await sendMail(to, OTP_SUBJECT[purpose], `
+    <p>Mã OTP của bạn là: <strong>${otp}</strong></p>
+    <p>Mã có hiệu lực trong <strong>${OTP_EXPIRES_MINUTES} phút</strong>.</p>
+    <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
+  `);
 }
 
 // ─── Token helpers ────────────────────────────────────────────────────────────

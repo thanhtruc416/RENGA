@@ -29,25 +29,14 @@
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="appt-tabs-bar">
-    <div class="appt-tabs-bar__inner">
-      <div class="appt-tabs">
-        <button class="appt-tab" [class.is-active]="activeTab() === 'sap-toi'" (click)="setTab('sap-toi')">SẮP TỚI</button>
-        <button class="appt-tab" [class.is-active]="activeTab() === 'lich-su'" (click)="setTab('lich-su')">LỊCH SỬ</button>
-      </div>
-    </div>
-  </div>
-
   <div class="appt-body">
 
     <!-- Upcoming appointment card -->
-    @if (activeTab() === 'sap-toi') {
-      @if (isLoading()) {
-        <p class="appt-empty">Đang tải lịch hẹn...</p>
-      } @else if (loadError()) {
-        <p class="appt-empty">Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
-      } @else if (upcomingAppointment(); as upcoming) {
+    @if (isLoading()) {
+      <p class="appt-empty">Đang tải lịch hẹn...</p>
+    } @else if (loadError()) {
+      <p class="appt-empty">Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
+    } @else if (upcomingAppointment(); as upcoming) {
         <div class="appt-card" [class.appt-card--cancelled]="upcoming.status === 'cancelled'">
           <div class="appt-card__photo">
             <img [src]="upcoming.designerThumb" [alt]="upcoming.designer">
@@ -104,7 +93,6 @@
       } @else {
         <p class="appt-empty">Bạn chưa có lịch hẹn sắp tới.</p>
       }
-    }
 
     <!-- History section -->
     <div class="appt-history-section">

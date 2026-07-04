@@ -47,7 +47,6 @@ export class AppointmentHistoryComponent implements OnInit {
   private readonly http       = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly activeTab      = signal<'sap-toi' | 'lich-su'>('sap-toi');
   readonly cancelModalOpen  = signal(false);
   readonly sketchPopupOpen  = signal(false);
   readonly isLoading        = signal(true);
@@ -99,10 +98,6 @@ export class AppointmentHistoryComponent implements OnInit {
 
   loadMore(): void {
     this.visibleCount.update(n => n + PAGE_SIZE);
-  }
-
-  setTab(tab: 'sap-toi' | 'lich-su'): void {
-    this.activeTab.set(tab);
   }
 
   openCancel(): void  { this.cancelModalOpen.set(true); }

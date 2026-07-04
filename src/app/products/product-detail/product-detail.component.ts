@@ -173,6 +173,13 @@ export class ProductDetailComponent {
   readonly lightboxOpen = signal(false);
   readonly arPopupOpen = signal(false);
 
+  // "Test nhẫn": không có AR camera thật, nhưng DB đã có sẵn ảnh tham khảo
+  // ướm-trên-tay cho từng sản phẩm (product_image.image_type='TRYON') mà trước
+  // giờ chưa được hiển thị ở đâu cả — dùng ảnh thật này thay vì popup "sắp ra mắt".
+  readonly tryonImageUrl = computed(() =>
+    this.product().images.find(i => i.image_type === 'TRYON')?.image_url ?? null
+  );
+
   openLightbox(): void { this.lightboxOpen.set(true); }
   closeLightbox(): void { this.lightboxOpen.set(false); }
 

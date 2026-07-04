@@ -521,29 +521,32 @@
 
                 <div class="form-field">
                   <label class="form-field__label" for="checkout-province">TỈNH/THÀNH *</label>
-                  <select id="checkout-province" class="form-field__input form-field__select"
-                          formControlName="province" (change)="onProvinceChange()">
-                    <option value="">Chọn Tỉnh/Thành</option>
+                  <input id="checkout-province" class="form-field__input" type="text"
+                         formControlName="province" list="studio-province-options" autocomplete="address-level1"
+                         placeholder="Chọn hoặc tự nhập Tỉnh/Thành"
+                         (change)="onProvinceChange()" (blur)="onProvinceChange()" />
+                  <datalist id="studio-province-options">
                     @for (p of PROVINCES; track p.value) {
-                      <option [value]="p.value">{{ p.label }}</option>
+                      <option [value]="p.label"></option>
                     }
-                  </select>
+                  </datalist>
                   @if (checkoutForm.controls.province.invalid && checkoutForm.controls.province.touched) {
-                    <span class="form-field__error">Vui lòng chọn tỉnh/thành</span>
+                    <span class="form-field__error">Vui lòng nhập tỉnh/thành</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-field__label" for="checkout-ward">{{ wardLabel() }} *</label>
-                  <select id="checkout-ward" class="form-field__input form-field__select" formControlName="ward"
-                          [disabled]="!selectedProvince()">
-                    <option value="">{{ wardPlaceholder() }}</option>
+                  <input id="checkout-ward" class="form-field__input" type="text"
+                         formControlName="ward" list="studio-ward-options" autocomplete="address-level2"
+                         [placeholder]="'Chọn hoặc tự nhập ' + wardPlaceholder()" />
+                  <datalist id="studio-ward-options">
                     @for (d of availableDistricts(); track d.value) {
-                      <option [value]="d.value">{{ d.label }}</option>
+                      <option [value]="d.label"></option>
                     }
-                  </select>
+                  </datalist>
                   @if (checkoutForm.controls.ward.invalid && checkoutForm.controls.ward.touched) {
-                    <span class="form-field__error">Vui lòng chọn {{ wardLabel().toLowerCase() }}</span>
+                    <span class="form-field__error">Vui lòng nhập {{ wardLabel().toLowerCase() }}</span>
                   }
                 </div>
 
@@ -718,8 +721,8 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <h3 class="studio-save-popup__title">Lưu thiết kế thành công!</h3>
-      <p class="studio-save-popup__desc">Thiết kế của bạn đã được lưu lại. Bạn có thể tiếp tục chỉnh sửa hoặc đặt hàng bất cứ lúc nào.</p>
+      <h3 class="studio-save-popup__title">Đã tải thiết kế về máy!</h3>
+      <p class="studio-save-popup__desc">File tóm tắt thiết kế của bạn đã được tải xuống. Bạn có thể tiếp tục chỉnh sửa hoặc đặt hàng ngay trên trang này.</p>
       <button class="studio-save-popup__btn" type="button" (click)="savedToast.set(false)">Đóng</button>
     </div>
   </div>

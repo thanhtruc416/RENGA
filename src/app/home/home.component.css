@@ -424,8 +424,8 @@
 .home__studio-visual {
   position: relative;
   flex-shrink: 0;
-  width: 430px;
-  height: 550px;
+  width: 360px;
+  height: 460px;
 }
 
 .home__studio-img {
@@ -473,8 +473,8 @@
 
 .home__designer-visual {
   flex-shrink: 0;
-  width: 512px;
-  height: 512px;
+  width: 420px;
+  height: 420px;
   border-radius: 100px 0 100px 0;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -592,7 +592,7 @@
   display: flex;
   gap: 24px;
   width: max-content;
-  animation: reviews-scroll 32s linear infinite;
+  animation: reviews-scroll 60s linear infinite;
 }
 
 .home__reviews-track-wrap:hover .home__reviews-track {
@@ -644,8 +644,8 @@
   .home__reviews-title { font-size: 52px; }
 
   .home__designer-subtitle { font-size: 36px; }
-  .home__studio-visual { width: 360px; height: 460px; }
-  .home__designer-visual { width: 420px; height: 420px; }
+  .home__studio-visual { width: 320px; height: 410px; }
+  .home__designer-visual { width: 380px; height: 380px; }
 }
 
 @media (max-width: 960px) {
@@ -665,12 +665,12 @@
 
   .home__studio { flex-direction: column; min-height: auto; gap: 32px; padding-top: 56px; padding-bottom: 56px; }
   .home__studio-content { max-width: 100%; }
-  .home__studio-visual { width: 100%; max-width: 360px; height: 360px; align-self: center; }
+  .home__studio-visual { width: 100%; max-width: 300px; height: 300px; align-self: center; }
   .home__studio-callout--left,
   .home__studio-callout--right { display: none; }
 
   .home__designer { flex-direction: column; min-height: auto; gap: 32px; padding-top: 56px; padding-bottom: 56px; }
-  .home__designer-visual { width: 260px; height: 260px; align-self: center; }
+  .home__designer-visual { width: 240px; height: 240px; align-self: center; }
   .home__designer-subtitle { font-size: 26px; }
   .home__designer-desc { font-size: 15px; }
   .home__designer-fee strong { white-space: normal; }
@@ -758,7 +758,7 @@
 
   /* Studio */
   .home__studio { padding: 36px 16px; gap: 24px; }
-  .home__studio-visual { max-width: 260px; height: 260px; }
+  .home__studio-visual { max-width: 220px; height: 220px; }
   .home__studio-step { gap: 16px; }
   .home__studio-step-num { font-size: 26px; min-width: 32px; }
   .home__studio-step-text { font-size: 15px; }
@@ -769,7 +769,7 @@
   .home__designer-title { font-size: 24px; letter-spacing: -0.5px; }
   .home__designer-subtitle { font-size: 18px; }
   .home__designer-desc { font-size: 14px; }
-  .home__designer-visual { width: 180px; height: 180px; border-radius: 40px 0 40px 0; }
+  .home__designer-visual { width: 160px; height: 160px; border-radius: 40px 0 40px 0; }
   .home__designer-btn { font-size: 13px; padding: 13px 24px; }
 
   /* Reviews */

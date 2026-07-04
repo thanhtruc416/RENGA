@@ -89,11 +89,19 @@ export class DesignComponent {
   // Step 1
   readonly selectedDesigner = signal<Designer | null>(null);
 
-  // Step 2 – calendar
-  readonly calendarYear = signal(2026);
-  readonly calendarMonth = signal(5); // 0-based: 5 = June
+  // Step 2 – calendar: cửa sổ trượt 3 tuần (không cố định theo tháng dương lịch),
+  // điều hướng < > nhảy theo tuần để vẫn xem được mọi ngày trong tương lai.
+  private readonly WINDOW_WEEKS = 4;
+  readonly calendarWindowStart = signal<Date>(this.startOfWeek(new Date()));
   readonly selectedDate = signal<Date | null>(null);
   readonly selectedTime = signal<string | null>(null);
+
+  private startOfWeek(d: Date): Date {
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const diffToMonday = (date.getDay() + 6) % 7; // 0=Sun..6=Sat → khoảng cách tới Thứ 2
+    date.setDate(date.getDate() - diffToMonday);
+    return date;
+  }
 
   // Step 3
   readonly selectedOccasion = signal('qua-tang');
@@ -225,27 +233,23 @@ export class DesignComponent {
   }
 
   // ─── Computed ─────────────────────────────────────────────────────────
-  readonly calendarMonthLabel = computed(() => {
-    const d = new Date(this.calendarYear(), this.calendarMonth(), 1);
-    return d.toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
+  readonly calendarRangeLabel = computed(() => {
+    const start = this.calendarWindowStart();
+    const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + this.WINDOW_WEEKS * 7 - 1);
+    const startLabel = start.toLocaleDateString('vi-VN', { day: 'numeric', month: 'numeric' });
+    const endLabel   = end.toLocaleDateString('vi-VN', { day: 'numeric', month: 'numeric', year: 'numeric' });
+    return `${startLabel} – ${endLabel}`;
   });
 
   readonly calendarDays = computed((): CalendarDay[] => {
-    const year = this.calendarYear();
-    const month = this.calendarMonth();
-    const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
-    // Convert to Mon-based: Mon=0 … Sun=6
-    const startOffset = (firstDay + 6) % 7;
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const days: CalendarDay[] = [];
-    for (let i = 0; i < startOffset; i++) {
-      days.push({ date: null, dayNum: null, disabled: true });
-    }
+    const start = this.calendarWindowStart();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(year, month, d);
-      days.push({ date, dayNum: d, disabled: date < today });
+    const days: CalendarDay[] = [];
+    const totalDays = this.WINDOW_WEEKS * 7;
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+      days.push({ date, dayNum: date.getDate(), disabled: date < today });
     }
     return days;
   });
@@ -324,22 +328,14 @@ export class DesignComponent {
     this.goToStep(2);
   }
 
-  prevMonth(): void {
-    if (this.calendarMonth() === 0) {
-      this.calendarMonth.set(11);
-      this.calendarYear.update(y => y - 1);
-    } else {
-      this.calendarMonth.update(m => m - 1);
-    }
+  prevPeriod(): void {
+    this.calendarWindowStart.update(d =>
+      new Date(d.getFullYear(), d.getMonth(), d.getDate() - this.WINDOW_WEEKS * 7));
   }
 
-  nextMonth(): void {
-    if (this.calendarMonth() === 11) {
-      this.calendarMonth.set(0);
-      this.calendarYear.update(y => y + 1);
-    } else {
-      this.calendarMonth.update(m => m + 1);
-    }
+  nextPeriod(): void {
+    this.calendarWindowStart.update(d =>
+      new Date(d.getFullYear(), d.getMonth(), d.getDate() + this.WINDOW_WEEKS * 7));
   }
 
   selectDate(day: CalendarDay): void {

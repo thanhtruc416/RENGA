@@ -71,35 +71,35 @@
             </div>
 
             <div class="fields-row fields-row--2col">
-              <div class="field-group field-group--select"
+              <div class="field-group"
                 [class.field-group--error]="shippingForm.get('province')?.invalid && shippingForm.get('province')?.touched">
                 <label class="field-group__label field-group__label--above" for="province">TỈNH/THÀNH *</label>
-                <div class="field-group__select-wrap">
-                  <select class="field-group__select" id="province" formControlName="province"
-                    (change)="onProvinceChange()">
-                    <option value="" disabled>Chọn Tỉnh/Thành</option>
-                    @for (p of PROVINCES; track p.value) {
-                      <option [value]="p.value">{{ p.label }}</option>
-                    }
-                  </select>
-                </div>
+                <input class="field-group__input" id="province" type="text"
+                  formControlName="province" list="province-options" autocomplete="address-level1"
+                  placeholder="Chọn hoặc tự nhập Tỉnh/Thành"
+                  (change)="onProvinceChange()" (blur)="onProvinceChange()" />
+                <datalist id="province-options">
+                  @for (p of PROVINCES; track p.value) {
+                    <option [value]="p.label"></option>
+                  }
+                </datalist>
                 @if (shippingForm.get('province')?.invalid && shippingForm.get('province')?.touched) {
-                  <span class="field-group__error">Vui lòng chọn tỉnh/thành</span>
+                  <span class="field-group__error">Vui lòng nhập tỉnh/thành</span>
                 }
               </div>
-              <div class="field-group field-group--select"
+              <div class="field-group"
                 [class.field-group--error]="shippingForm.get('district')?.invalid && shippingForm.get('district')?.touched">
                 <label class="field-group__label field-group__label--above" for="district">{{ districtLabel() }} *</label>
-                <div class="field-group__select-wrap">
-                  <select class="field-group__select" id="district" formControlName="district">
-                    <option value="" disabled>{{ districtPlaceholder() }}</option>
-                    @for (d of availableDistricts(); track d.value) {
-                      <option [value]="d.value">{{ d.label }}</option>
-                    }
-                  </select>
-                </div>
+                <input class="field-group__input" id="district" type="text"
+                  formControlName="district" list="district-options" autocomplete="address-level2"
+                  [placeholder]="'Chọn hoặc tự nhập ' + districtPlaceholder()" />
+                <datalist id="district-options">
+                  @for (d of availableDistricts(); track d.value) {
+                    <option [value]="d.label"></option>
+                  }
+                </datalist>
                 @if (shippingForm.get('district')?.invalid && shippingForm.get('district')?.touched) {
-                  <span class="field-group__error">Vui lòng chọn phường/xã</span>
+                  <span class="field-group__error">Vui lòng nhập {{ districtLabel().toLowerCase() }}</span>
                 }
               </div>
             </div>

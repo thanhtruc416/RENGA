@@ -248,7 +248,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   readonly showWarrantyModal  = signal(false);
-  warrantyMockSuccessNext     = true;
   readonly showCancelModal    = signal(false);
 
   readonly isCancellable = computed(() => {
@@ -303,7 +302,6 @@ export class OrderDetailComponent implements OnInit {
 
   openWarrantyModal(): void {
     this.showWarrantyModal.set(true);
-    this.warrantyMockSuccessNext = !this.warrantyMockSuccessNext;
   }
 
   openCancelModal(): void {

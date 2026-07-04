@@ -14,6 +14,8 @@ import studioRouter  from './server/routes/studio';
 import designRouter  from './server/routes/design';
 import accountRouter from './server/routes/account';
 import reviewRouter  from './server/routes/review';
+import warrantyRouter from './server/routes/warranty';
+import chatbotRouter  from './server/routes/chatbot';
 
 const app = express();
 
@@ -47,6 +49,8 @@ app.use('/api/studio',   studioRouter);
 app.use('/api/design',   designRouter);
 app.use('/api/account',  accountRouter);
 app.use('/api/reviews',  reviewRouter);
+app.use('/api/warranty', warrantyRouter);
+app.use('/api/chatbot',  chatbotRouter);
 
 // Error handler — phải ở cuối cùng
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -54,16 +58,7 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
 });
 
-app.use('/api/products', productRouter);
-app.use('/api/auth',     authRouter);
-app.use('/api/cart',     cartRouter);
-app.use('/api/orders',   orderRouter);
-app.use('/api/vouchers', voucherRouter);
-app.use('/api/studio',   studioRouter);
-app.use('/api/design',   designRouter);
-app.use('/api/account',  accountRouter);
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4200;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
 
 export default app;

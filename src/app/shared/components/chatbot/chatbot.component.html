@@ -77,12 +77,14 @@
               @if (msg.card!.actions?.length) {
                 <div class="chatbot__card-actions">
                   @for (btn of msg.card!.actions!; track btn.label) {
-                    <button
+                    <a
                       class="chatbot__card-btn"
                       [class.chatbot__card-btn--primary]="btn.style === 'primary'"
                       [class.chatbot__card-btn--secondary]="btn.style === 'secondary'"
-                      type="button"
-                    >{{ btn.label }}</button>
+                      [routerLink]="btn.route ?? null"
+                      [href]="btn.route ? null : btn.href"
+                      (click)="close()"
+                    >{{ btn.label }}</a>
                   }
                 </div>
               }
@@ -103,11 +105,13 @@
               @if (msg.card!.ctaButtons?.length) {
                 <div class="chatbot__cta-wrap">
                   @for (btn of msg.card!.ctaButtons!; track btn.label) {
-                    <button
+                    <a
                       class="chatbot__cta-btn"
                       [class.chatbot__cta-btn--primary]="btn.style === 'primary'"
                       [class.chatbot__cta-btn--secondary]="btn.style === 'secondary'"
-                      type="button"
+                      [routerLink]="btn.route ?? null"
+                      [href]="btn.route ? null : btn.href"
+                      (click)="close()"
                     >
                       {{ btn.label }}
                       @if (btn.icon === 'arrow') {
@@ -120,7 +124,7 @@
                           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                         </svg>
                       }
-                    </button>
+                    </a>
                   }
                 </div>
               }

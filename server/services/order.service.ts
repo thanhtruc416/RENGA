@@ -1,6 +1,8 @@
 import pool from '../db';
 import { clearCart } from './cart.service';
 import { shortenName } from './product.service';
+import { awardPurchasePoints, revokePurchasePoints } from './loyalty.service';
+import { notifyOrderPlaced, notifyOrderCancelled } from './notification.service';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -98,10 +100,18 @@ export async function createOrder(payload: CreateOrderPayload) {
       );
     }
 
+    // 6. BR-40: cộng điểm tích lũy (bị hoàn lại nếu đơn bị hủy — xem cancelOrder/cancelExpiredOrders)
+    await awardPurchasePoints(conn, payload.clientId, orderId, finalTotal);
+
     await conn.commit();
 
     // 6. Xóa giỏ hàng
     await clearCart(payload.clientId);
+
+    // 7. Mail xác nhận đặt hàng — gửi sau khi transaction đã commit xong, lỗi mail
+    // không được làm hỏng đơn đã tạo thành công.
+    notifyOrderPlaced(orderId, payload.clientId, finalTotal, orderType === 'STANDARD' ? 'Đơn hàng tiêu chuẩn' : 'Đơn hàng tùy biến')
+      .catch(err => console.error(`[notification] notifyOrderPlaced(${orderId}) lỗi:`, err));
 
     return { orderId, expiresAt };
   } catch (err) {
@@ -160,6 +170,11 @@ export async function cancelExpiredOrders(): Promise<void> {
        WHERE order_id IN (${ph(orderIds.length)}) AND payment_status='PENDING'`,
       orderIds
     );
+
+    // BR-42: hoàn lại điểm đã cộng lúc đặt đơn (nếu có)
+    for (const orderId of orderIds) {
+      await revokePurchasePoints(conn, orderId);
+    }
 
     await conn.commit();
     console.log(`[AUTO-CANCEL] Hủy ${orderIds.length} đơn hết hạn:`, orderIds.join(', '));
@@ -223,8 +238,18 @@ export async function cancelOrder(orderId: string, clientId: string, reason: str
       [cancelId, orderId, reason, order.total_amount]
     );
 
+    // BR-42: hoàn lại điểm đã cộng lúc đặt đơn (nếu có)
+    await revokePurchasePoints(conn, orderId);
+
     await conn.commit();
-    return { refundAmount: Number(order.total_amount) };
+
+    // Mail thông báo hủy đơn — gửi sau khi transaction đã commit, lỗi mail không
+    // được làm hỏng việc hủy đơn đã thành công.
+    const refundAmount = Number(order.total_amount);
+    notifyOrderCancelled(orderId, clientId, reason, refundAmount)
+      .catch(err => console.error(`[notification] notifyOrderCancelled(${orderId}) lỗi:`, err));
+
+    return { refundAmount };
   } catch (err) {
     await conn.rollback();
     throw err;

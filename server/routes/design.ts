@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
 import { getDesigners, getAvailableSlots, createAppointment, getUserAppointments, cancelAppointment } from '../services/design.service';
+import { cancelUnpaidAppointments } from '../jobs/appointment-cancel.job';
+import { checkAndSendAppointmentConfirmedEmails } from '../services/notification.service';
 
 const router = Router();
 
@@ -15,6 +17,9 @@ router.get('/designers', async (_req, res) => {
 
 router.get('/appointments', authenticate as any, async (req, res) => {
   try {
+    await cancelUnpaidAppointments();
+    // Dormant cho tới khi có luồng admin xác nhận lịch hẹn thật (xem notification.service.ts)
+    checkAndSendAppointmentConfirmedEmails().catch(err => console.error('[notification] checkAndSendAppointmentConfirmedEmails lỗi:', err));
     const data = await getUserAppointments(req.user!.clientId);
     res.json({ success: true, data });
   } catch (err: any) {
