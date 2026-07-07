@@ -9,7 +9,7 @@ console.log('SMTP config:', {
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import db, { withTransaction } from '../db';
 import { AuthPayload } from '../middlewares/auth.middleware';
@@ -94,7 +94,7 @@ async function createRefreshToken(
   ip?:       string,
 ): Promise<string> {
   const tokenId      = uuidv4();
-  const refreshToken = crypto.randomBytes(64).toString('hex');
+  const refreshToken = randomBytes(64).toString('hex');
   // Dùng NOW() + INTERVAL thay vì Date() để tránh lệch timezone
   await db.query(
     `INSERT INTO refresh_token (token_id, account_id, refresh_token, device, ip_address, expired_at)
