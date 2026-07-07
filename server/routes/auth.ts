@@ -6,6 +6,7 @@ const router = Router();
 function handleError(err: any, res: Response): void {
   const status  = typeof err?.status === 'number' ? err.status : 500;
   const message = err?.message ?? 'Lỗi máy chủ nội bộ.';
+  if (status === 500) console.error('[auth] Lỗi 500:', err);
   res.status(status).json({
     success: false,
     message,
