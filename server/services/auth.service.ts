@@ -9,8 +9,7 @@ console.log('SMTP config:', {
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { randomBytes } from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
+import { randomBytes, randomUUID } from 'crypto';
 import db, { withTransaction } from '../db';
 import { AuthPayload } from '../middlewares/auth.middleware';
 import { sendMail } from './mailer.service';
@@ -93,7 +92,7 @@ async function createRefreshToken(
   device?:   string,
   ip?:       string,
 ): Promise<string> {
-  const tokenId      = uuidv4();
+  const tokenId      = randomUUID();
   const refreshToken = randomBytes(64).toString('hex');
   // Dùng NOW() + INTERVAL thay vì Date() để tránh lệch timezone
   await db.query(
@@ -174,7 +173,7 @@ async function issueOtp(params: {
   await db.query(
     `INSERT INTO otp_request (otp_id, client_id, phone, email, otp_code, purpose, expired_at)
      VALUES (?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE))`,
-    [uuidv4(), clientId ?? null, phone ?? null, email ?? null, otp, purpose, OTP_EXPIRES_MINUTES],
+    [randomUUID(), clientId ?? null, phone ?? null, email ?? null, otp, purpose, OTP_EXPIRES_MINUTES],
   );
 
   return otp;
