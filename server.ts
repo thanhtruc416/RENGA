@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 // Một số nền tảng hosting (vd Railway) không route được IPv6 ra ngoài, trong khi
 // nhiều DNS (Gmail SMTP...) trả về địa chỉ IPv6 trước — ép ưu tiên IPv4 toàn cục

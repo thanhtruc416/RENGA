@@ -27,7 +27,7 @@ export interface ProductDetailRow extends ProductRow {
   description: string;
 }
 
-export async function getProducts(category?: string, page = 1, limit = 12) {
+export async function getProducts(category?: string, page = 1, limit = 12, q?: string) {
   const offset = (page - 1) * limit;
 
   const params: any[] = [];
@@ -35,6 +35,10 @@ export async function getProducts(category?: string, page = 1, limit = 12) {
   if (category) {
     where += ' AND c.slug = ?';
     params.push(category);
+  }
+  if (q) {
+    where += ' AND p.product_name LIKE ?';
+    params.push(`%${q}%`);
   }
 
   const [rows] = await pool.execute<any[]>(

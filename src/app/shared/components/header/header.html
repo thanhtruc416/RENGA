@@ -161,11 +161,36 @@
         </div>
       </nav>
 
-      <div class="site-header__search">
+      <div class="site-header__search" (click)="$event.stopPropagation()">
         <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
-        <input class="site-header__search-input" type="search" placeholder="" autocomplete="off">
+        <input
+          class="site-header__search-input"
+          type="search"
+          placeholder="Tìm nhẫn, dây chuyền..."
+          autocomplete="off"
+          [value]="searchTerm()"
+          (input)="onSearchInput($any($event.target).value)"
+          (focus)="onSearchFocus()">
+
+        @if (showSearchResults()) {
+          <div class="site-header__search-results">
+            @if (searchResults().length) {
+              @for (product of searchResults(); track product.id) {
+                <button type="button" class="site-header__search-result" (click)="selectSearchResult(product, $event)">
+                  <img [src]="product.imageUrl" [alt]="product.name" class="site-header__search-result-img">
+                  <span class="site-header__search-result-info">
+                    <span class="site-header__search-result-name">{{ product.name }}</span>
+                    <span class="site-header__search-result-price">{{ product.price | number }}đ</span>
+                  </span>
+                </button>
+              }
+            } @else {
+              <p class="site-header__search-empty">Không tìm thấy sản phẩm phù hợp</p>
+            }
+          </div>
+        }
       </div>
     </div>
 

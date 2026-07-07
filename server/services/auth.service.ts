@@ -1,5 +1,5 @@
 ﻿import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ quiet: true });
 
 console.log('SMTP config:', {
   host: process.env.SMTP_HOST,

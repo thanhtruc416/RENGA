@@ -50,11 +50,12 @@ export class ProductsService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/products`;
 
-  getProducts(category?: string, page = 1, limit = 48): Observable<Product[]> {
+  getProducts(category?: string, page = 1, limit = 48, q?: string): Observable<Product[]> {
     let params = new HttpParams()
       .set('page', page)
       .set('limit', limit);
     if (category) params = params.set('category', category);
+    if (q) params = params.set('q', q);
 
     return this.http.get<{ products: any[]; total: number }>(this.base, { params }).pipe(
       map(res => res.products.map(p => this.mapProduct(p)))
