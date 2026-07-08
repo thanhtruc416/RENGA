@@ -312,21 +312,17 @@
 
 @if (arPopupOpen()) {
   <div class="product-detail__ar-backdrop" (click)="closeArPopup()">
-    <div class="product-detail__ar-popup" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
-      <button class="product-detail__ar-close" type="button" (click)="closeArPopup()" aria-label="Đóng">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-
-      @if (tryonImageUrl(); as tryonUrl) {
-        <img class="product-detail__ar-tryon-img" [src]="tryonUrl" alt="Hình ảnh ướm thử sản phẩm" />
-        <h3 class="product-detail__ar-title">Ướm thử sản phẩm</h3>
-        <p class="product-detail__ar-desc">
-          Hình ảnh tham khảo giúp bạn hình dung sản phẩm khi đeo trên tay.
-          Tính năng AR qua camera thực tế đang được đội ngũ RENGA phát triển, sắp ra mắt!
-        </p>
-      } @else {
+    @if (tryonCandidateUrls().length) {
+      <div (click)="$event.stopPropagation()">
+        <app-ring-ar-tryon [candidateImageUrls]="tryonCandidateUrls()" (closed)="closeArPopup()" />
+      </div>
+    } @else {
+      <div class="product-detail__ar-popup" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+        <button class="product-detail__ar-close" type="button" (click)="closeArPopup()" aria-label="Đóng">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
         <div class="product-detail__ar-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 8h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/>
@@ -338,13 +334,12 @@
         </div>
         <h3 class="product-detail__ar-title">Tính năng đang phát triển</h3>
         <p class="product-detail__ar-desc">
-          Tính năng ướm thử nhẫn AR qua camera đang được đội ngũ RENGA phát triển.
-          Sắp ra mắt trong thời gian tới!
+          Sản phẩm này chưa có ảnh nhẫn phù hợp cho tính năng ướm thử AR.
+          Đội ngũ RENGA đang bổ sung dần cho từng sản phẩm!
         </p>
-      }
-
-      <button class="product-detail__ar-cta" type="button" (click)="closeArPopup()">Đã hiểu</button>
-    </div>
+        <button class="product-detail__ar-cta" type="button" (click)="closeArPopup()">Đã hiểu</button>
+      </div>
+    }
   </div>
 }
 

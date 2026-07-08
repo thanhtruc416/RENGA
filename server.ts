@@ -22,6 +22,7 @@ import accountRouter from './server/routes/account';
 import reviewRouter  from './server/routes/review';
 import warrantyRouter from './server/routes/warranty';
 import chatbotRouter  from './server/routes/chatbot';
+import adminRouter    from './server/routes/admin';
 
 const app = express();
 
@@ -64,6 +65,7 @@ app.use('/api/account',  accountRouter);
 app.use('/api/reviews',  reviewRouter);
 app.use('/api/warranty', warrantyRouter);
 app.use('/api/chatbot',  chatbotRouter);
+app.use('/api/admin',    adminRouter);
 
 // Error handler — phải ở cuối cùng
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

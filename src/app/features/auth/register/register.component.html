@@ -78,10 +78,6 @@
           }
         </div>
 
-        @if (serverError()) {
-          <p class="register__server-error">{{ serverError() }}</p>
-        }
-
         <button class="register__submit" type="submit" [disabled]="isSubmitting()">
           {{ isSubmitting() ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ' }}
         </button>
@@ -216,6 +212,29 @@
       <div class="reg-popup__actions">
         <button class="reg-popup__btn reg-popup__btn--outline" type="button" (click)="closePhoneExistsPopup()">THỬ SĐT KHÁC</button>
         <a routerLink="/dang-nhap" class="reg-popup__btn">ĐĂNG NHẬP NGAY</a>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ── Popup lỗi chung (server lỗi/mất kết nối) ────────────────────────────────── -->
+@if (showServerErrorPopup()) {
+  <div class="reg-popup-backdrop" (click)="closeServerErrorPopup()">
+    <div class="reg-popup" (click)="$event.stopPropagation()">
+      <button class="reg-popup__close" type="button" (click)="closeServerErrorPopup()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="reg-popup__icon reg-popup__icon--fail">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h2 class="reg-popup__title">Đăng ký thất bại</h2>
+      <p class="reg-popup__desc">{{ serverError() }}</p>
+      <div class="reg-popup__actions">
+        <button class="reg-popup__btn" type="button" (click)="closeServerErrorPopup()">THỬ LẠI</button>
       </div>
     </div>
   </div>

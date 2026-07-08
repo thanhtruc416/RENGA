@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { LoginFailModalComponent } from '../../../shared/components/modal/login-fail-modal/login-fail-modal.component';
 import { PhoneNotFoundModalComponent } from '../../../shared/components/modal/phone-not-found-modal/phone-not-found-modal.component';
 
@@ -15,9 +16,10 @@ import { PhoneNotFoundModalComponent } from '../../../shared/components/modal/ph
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly notify = inject(NotificationService);
   private readonly router = inject(Router);
 
-  readonly phone = signal('');
+  readonly identifier = signal('');
   readonly password = signal('');
   readonly showPassword = signal(false);
   readonly isSubmitting = signal(false);
@@ -28,18 +30,28 @@ export class LoginComponent {
   readonly showInactive      = signal(false);
   readonly remainingAttempts = signal(5);
 
-  setPhone(value: string): void { this.phone.set(value); }
+  setIdentifier(value: string): void { this.identifier.set(value); }
   setPassword(value: string): void { this.password.set(value); }
   togglePassword(): void { this.showPassword.update((v) => !v); }
 
+  // Một link đăng nhập duy nhất: email → tài khoản nhân viên/admin, còn lại → khách hàng (SĐT).
+  private isEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  }
+
   login(): void {
     if (this.isSubmitting()) return;
-    if (this.phone() === 'admin' && this.password() === 'renga@2026') {
-      this.authService.mockAdminLogin();
-      return;
-    }
     this.isSubmitting.set(true);
-    this.authService.login({ phone: this.phone(), password: this.password() }).subscribe({
+
+    if (this.isEmail(this.identifier())) {
+      this.loginAsEmployee();
+    } else {
+      this.loginAsCustomer();
+    }
+  }
+
+  private loginAsCustomer(): void {
+    this.authService.login({ phone: this.identifier(), password: this.password() }).subscribe({
       next: () => this.router.navigate(['/']),
       error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
@@ -57,7 +69,19 @@ export class LoginComponent {
           this.showAccountLocked.set(true);
         } else if (err.status === 403) {
           this.showInactive.set(true);
+        } else {
+          this.notify.error(err.error?.message ?? 'Đăng nhập thất bại. Vui lòng thử lại.');
         }
+      },
+    });
+  }
+
+  private loginAsEmployee(): void {
+    this.authService.adminLogin({ email: this.identifier(), password: this.password() }).subscribe({
+      next: () => this.router.navigate(['/admin']),
+      error: (err: HttpErrorResponse) => {
+        this.isSubmitting.set(false);
+        this.notify.error(err.error?.message ?? 'Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.');
       },
     });
   }

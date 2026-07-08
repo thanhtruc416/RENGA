@@ -11,7 +11,6 @@ import {
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
-import { environment } from '../../../../environments/environment';
 import { OldOrdersModalComponent } from '../../../shared/components/modal/old-orders-modal/old-orders-modal.component';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
@@ -49,6 +48,7 @@ export class RegisterComponent {
   readonly otpError        = signal('');
   readonly serverError     = signal('');
   readonly showPhoneExists = signal(false);
+  readonly showServerErrorPopup = signal(false);
 
   // Countdown gửi lại OTP
   readonly countdown     = signal(0);
@@ -104,23 +104,19 @@ export class RegisterComponent {
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
-          // Lỗi validation (phone/email đã tồn tại) → luôn hiện popup, kể cả dev
+          // Lỗi validation (phone/email đã tồn tại) → hiện popup riêng
           if (err.status === 400 || err.status === 409) {
             this.showPhoneExists.set(true);
             return;
           }
-          // Dev mode: bypass lỗi kết nối / route chưa tồn tại để test UI
-          if (!environment.production) {
-            this.step.set('otp');
-            this.startCountdown();
-            return;
-          }
           this.serverError.set(err.error?.message ?? 'Đã xảy ra lỗi. Vui lòng thử lại.');
+          this.showServerErrorPopup.set(true);
         },
       });
   }
 
   closePhoneExistsPopup(): void { this.showPhoneExists.set(false); }
+  closeServerErrorPopup(): void { this.showServerErrorPopup.set(false); }
 
   // ── OTP input handling ─────────────────────────────────────────────────────
 
@@ -231,11 +227,6 @@ export class RegisterComponent {
           this.startCountdown();
         },
         error: (err: HttpErrorResponse) => {
-          if (!environment.production) {
-            this._clearOtp();
-            this.startCountdown();
-            return;
-          }
           this.otpError.set(err.error?.message ?? 'Không thể gửi lại mã.');
         },
       });

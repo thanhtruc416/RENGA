@@ -210,7 +210,10 @@ export class ProfileInfoComponent implements OnInit {
           }
           this.isLoading.set(false);
         },
-        error: () => this.isLoading.set(false),
+        error: () => {
+          this.isLoading.set(false);
+          this.showPopup(false, 'Không tải được hồ sơ', 'Vui lòng tải lại trang để thử lại.');
+        },
       });
 
     this.accountService.getLoyaltyPoints()
@@ -234,6 +237,7 @@ export class ProfileInfoComponent implements OnInit {
             }
           }
         },
+        error: (err) => console.error('[profile-info] Không tải được điểm thành viên:', err),
       });
   }
 }

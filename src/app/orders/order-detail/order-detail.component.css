@@ -1101,3 +1101,38 @@
   border-top: none;
   margin-top: 4px;
 }
+
+.order-detail-state {
+  max-width: 480px;
+  margin: 80px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.order-detail-state h2 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--color-dark);
+  margin: 0 0 12px;
+}
+
+.order-detail-state p {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.order-detail-state__link {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}

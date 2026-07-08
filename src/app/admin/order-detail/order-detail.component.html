@@ -2,268 +2,140 @@
   <!-- ── Page Header ── -->
   <app-admin-header
     title="Chi tiết đơn hàng"
-    subtitle="Cập nhật và quản lý lịch hẹn của khách hàng với nhà thiết kế">
+    subtitle="Xem và cập nhật trạng thái đơn hàng của khách hàng">
   </app-admin-header>
 
-  <!-- ── Order Meta bar ── -->
-  <div class="od__meta-bar">
-    <div class="od__meta-left">
-      <h2 class="od__order-id">Order {{ orderId }}</h2>
-      <span class="od__status-badge od__status--crafting">{{ orderStatus }}</span>
-      <span class="od__meta-date">{{ orderDate }}</span>
-    </div>
-    <div class="od__meta-actions">
-      <a class="od__action-btn od__action-btn--outline" routerLink="/admin/don-hang">QUAY LẠI</a>
-      <button class="od__action-btn od__action-btn--danger" type="button" (click)="cancelOrder()">HỦY ĐƠN</button>
-      <button class="od__action-btn od__action-btn--primary" type="button" (click)="openProgressModal()">CẬP NHẬT TIẾN ĐỘ</button>
-    </div>
-  </div>
-
-  <!-- ── Main layout ── -->
-  <div class="od__layout">
-
-    <!-- ── Left column ── -->
-    <div class="od__main">
-
-      <!-- Product detail card -->
-      <div class="od__card">
-        <div class="od__card-header">
-          <h3 class="od__card-title">Chi tiết sản phẩm ({{ items.length }})</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" color="var(--color-muted)" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        </div>
-
-        @for (item of items; track item.name) {
-          <div class="od__product-item">
-            <img class="od__product-img" [src]="item.image" [alt]="item.name">
-            <div class="od__product-info">
-              <div class="od__product-header">
-                <h4 class="od__product-name">{{ item.name }}</h4>
-                <span class="od__product-price">{{ formatPrice(item.price) }}₫</span>
-              </div>
-              <p class="od__product-note">{{ item.note }}</p>
-              <div class="od__product-specs">
-                @if (item.material) {
-                  <div class="od__spec-row">
-                    <span class="od__spec-label">CHẤT LIỆU:</span>
-                    <span class="od__spec-value">{{ item.material }}</span>
-                  </div>
-                }
-                @if (item.stone) {
-                  <div class="od__spec-row">
-                    <span class="od__spec-label">ĐÁ:</span>
-                    <span class="od__spec-value">{{ item.stone }}</span>
-                  </div>
-                }
-                @if (item.size) {
-                  <div class="od__spec-row">
-                    <span class="od__spec-label">SIZE:</span>
-                    <span class="od__spec-value">{{ item.size }}</span>
-                  </div>
-                }
-                @if (item.length) {
-                  <div class="od__spec-row">
-                    <span class="od__spec-label">ĐỘ DÀI:</span>
-                    <span class="od__spec-value">{{ item.length }}</span>
-                  </div>
-                }
-              </div>
-            </div>
-          </div>
-          @if (!$last) { <div class="od__product-divider"></div> }
+  @if (isLoading()) {
+    <p style="padding: 24px;">Đang tải...</p>
+  } @else if (!order()) {
+    <p style="padding: 24px;">Không tìm thấy đơn hàng.</p>
+  } @else {
+    <!-- ── Order Meta bar ── -->
+    <div class="od__meta-bar">
+      <div class="od__meta-left">
+        <h2 class="od__order-id">Đơn {{ order().order_id }}</h2>
+        <span class="od__status-badge od__status--crafting">{{ statusLabel(order().order_status) }}</span>
+        <span class="od__meta-date">{{ order().created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="od__meta-actions">
+        <a class="od__action-btn od__action-btn--outline" routerLink="/admin/don-hang">QUAY LẠI</a>
+        @if (canCancel(order().order_status)) {
+          <button class="od__action-btn od__action-btn--danger" type="button" (click)="cancelOrder()">HỦY ĐƠN</button>
+        }
+        @if (canAdvance(order().order_status)) {
+          <button class="od__action-btn od__action-btn--primary" type="button" (click)="advanceStatus()">
+            {{ nextActionLabel(order().order_status) }}
+          </button>
         }
       </div>
+    </div>
 
-      <!-- Progress timeline card -->
-      <div class="od__card">
-        <div class="od__card-header">
-          <h3 class="od__card-title">Tiến độ đơn hàng</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" color="var(--color-muted)" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 15 15"/></svg>
-        </div>
-        <div class="od__timeline">
-          @for (step of steps; track step.label) {
-            <div class="od__step" [class.od__step--done]="step.done" [class.od__step--pending]="!step.done">
-              <div class="od__step-dot"></div>
-              <div class="od__step-content">
-                <div class="od__step-header">
-                  <span class="od__step-label">{{ step.label }}</span>
-                  @if (step.time) {
-                    <span class="od__step-time">{{ step.time }}</span>
-                  }
+    <!-- ── Main layout ── -->
+    <div class="od__layout">
+
+      <!-- ── Left column ── -->
+      <div class="od__main">
+
+        <!-- Product detail card -->
+        <div class="od__card">
+          <div class="od__card-header">
+            <h3 class="od__card-title">Chi tiết sản phẩm ({{ order().items.length }})</h3>
+          </div>
+
+          @for (item of order().items; track item.order_item_id) {
+            <div class="od__product-item">
+              <div class="od__product-info">
+                <div class="od__product-header">
+                  <h4 class="od__product-name">{{ item.product_name ?? 'Trang sức tùy chỉnh' }}</h4>
+                  <span class="od__product-price">{{ formatPrice(item.unit_price) }}₫</span>
                 </div>
-                <p class="od__step-desc">{{ step.desc }}</p>
+                <div class="od__product-specs">
+                  @if (item.variant_name) {
+                    <div class="od__spec-row">
+                      <span class="od__spec-label">PHIÊN BẢN:</span>
+                      <span class="od__spec-value">{{ item.variant_name }}</span>
+                    </div>
+                  }
+                  @if (item.size_value) {
+                    <div class="od__spec-row">
+                      <span class="od__spec-label">SIZE:</span>
+                      <span class="od__spec-value">{{ item.size_value }}</span>
+                    </div>
+                  }
+                  <div class="od__spec-row">
+                    <span class="od__spec-label">SỐ LƯỢNG:</span>
+                    <span class="od__spec-value">{{ item.quantity }}</span>
+                  </div>
+                </div>
               </div>
             </div>
+            @if (!$last) { <div class="od__product-divider"></div> }
           }
         </div>
       </div>
-    </div>
 
-    <!-- ── Right sidebar ── -->
-    <aside class="od__sidebar">
+      <!-- ── Right sidebar ── -->
+      <aside class="od__sidebar">
 
-      <!-- Customer info -->
-      <div class="od__card od__card--sidebar">
-        <div class="od__card-header">
-          <h3 class="od__card-title od__card-title--sm">THÔNG TIN KHÁCH HÀNG</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" color="var(--color-muted)" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <div class="od__customer">
-          <div class="od__customer-avatar">{{ customer.initials }}</div>
-          <div>
-            <p class="od__customer-name">{{ customer.name }}</p>
-            <p class="od__customer-tier">{{ customer.tier }}</p>
+        <!-- Customer info -->
+        <div class="od__card od__card--sidebar">
+          <div class="od__card-header">
+            <h3 class="od__card-title od__card-title--sm">THÔNG TIN KHÁCH HÀNG</h3>
+          </div>
+          <div class="od__customer">
+            <div class="od__customer-avatar">{{ (order().customer_name ?? order().phone).charAt(0) }}</div>
+            <div>
+              <p class="od__customer-name">{{ order().customer_name ?? 'Khách vãng lai' }}</p>
+            </div>
+          </div>
+          <div class="od__customer-details">
+            <div class="od__detail-group">
+              <p class="od__detail-label">THÔNG TIN LIÊN HỆ</p>
+              <p class="od__detail-value">{{ order().phone }}</p>
+            </div>
+            <div class="od__detail-group">
+              <p class="od__detail-label">ĐỊA CHỈ GIAO HÀNG</p>
+              <p class="od__detail-value">{{ order().recipient_name }} — {{ order().recipient_phone }}</p>
+              <p class="od__detail-value">{{ order().address_line }}</p>
+              <p class="od__detail-value">{{ order().ward ? order().ward + ', ' : '' }}{{ order().province }}</p>
+            </div>
           </div>
         </div>
-        <div class="od__customer-details">
-          <div class="od__detail-group">
-            <p class="od__detail-label">THÔNG TIN LIÊN HỆ</p>
-            <p class="od__detail-value">{{ customer.email }}</p>
-            <p class="od__detail-value">{{ customer.phone }}</p>
+
+        <!-- Invoice card -->
+        <div class="od__card od__card--invoice">
+          <div class="od__card-header">
+            <h3 class="od__card-title od__card-title--sm od__card-title--light">HÓA ĐƠN THANH TOÁN</h3>
           </div>
-          <div class="od__detail-group">
-            <p class="od__detail-label">ĐỊA CHỈ GIAO HÀNG</p>
-            @for (line of customer.address.split('\n'); track $index) {
-              <p class="od__detail-value">{{ line }}</p>
+          <div class="od__invoice-rows">
+            @if (order().discount_amount > 0) {
+              <div class="od__invoice-row">
+                <span>Giảm giá</span>
+                <span class="od__invoice-discount">-{{ formatPrice(order().discount_amount) }}₫</span>
+              </div>
             }
           </div>
+          <div class="od__invoice-total">
+            <span>Tổng đơn</span>
+            <span>{{ formatPrice(order().total_amount) }}₫</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Invoice card -->
-      <div class="od__card od__card--invoice">
-        <div class="od__card-header">
-          <h3 class="od__card-title od__card-title--sm od__card-title--light">HÓA ĐƠN THANH TOÁN</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" color="rgba(255,255,255,0.6)" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        </div>
-        <div class="od__invoice-rows">
-          <div class="od__invoice-row">
-            <span>Tổng hóa đơn</span>
-            <span>{{ formatPrice(invoice.subtotal) }}₫</span>
+        <!-- Notes card -->
+        @if (order().note) {
+          <div class="od__card od__card--sidebar">
+            <div class="od__card-header">
+              <h3 class="od__card-title od__card-title--sm">GHI CHÚ</h3>
+            </div>
+            <div class="od__note">
+              <p class="od__note-text">{{ order().note }}</p>
+            </div>
           </div>
-          <div class="od__invoice-row">
-            <span>Giảm giá</span>
-            <span class="od__invoice-discount">{{ formatPrice(invoice.discount) }}₫</span>
-          </div>
-          <div class="od__invoice-row">
-            <span>Phí vận chuyển</span>
-            <span>{{ formatPrice(invoice.shipping) }}₫</span>
-          </div>
-        </div>
-        <div class="od__invoice-total">
-          <span>Tổng đơn</span>
-          <span>{{ formatPrice(invoice.total) }}₫</span>
-        </div>
-        <div class="od__invoice-deposit">
-          <div class="od__invoice-row od__invoice-row--paid">
-            <span>ĐÃ THANH TOÁN CỌC</span>
-            <span>{{ formatPrice(invoice.paid) }}₫</span>
-          </div>
-          <div class="od__invoice-row od__invoice-row--remaining">
-            <span>CÒN LẠI</span>
-            <span>{{ formatPrice(invoice.remaining) }}₫</span>
-          </div>
-        </div>
-        <button class="od__invoice-export" type="button">XUẤT HÓA ĐƠN</button>
-      </div>
-
-      <!-- Notes card -->
-      <div class="od__card od__card--sidebar" [formGroup]="noteForm">
-  <div class="od__card-header">
-    <h3 class="od__card-title od__card-title--sm">GHI CHÚ</h3>
-  </div>
-
-  @for (note of notes; track $index) {
-    <div class="od__note">
-      @if (isEditingNote()) {
-        <textarea class="od__note-textarea" formControlName="text"></textarea>
-        <textarea class="od__note-textarea od__note-textarea--author" formControlName="author"></textarea>
-      } @else {
-        <p class="od__note-text">{{ note.text }}</p>
-        <p class="od__note-author">{{ note.author }}</p>
-      }
+        }
+      </aside>
     </div>
   }
-
-  @if (isEditingNote()) {
-    <button class="od__add-note" type="button" (click)="saveNote()">LƯU</button>
-  } @else {
-    <button class="od__add-note" type="button" (click)="isEditingNote.set(true)">CHỈNH SỬA GHI CHÚ</button>
-  }
 </div>
-    </aside>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     MODAL: Cập nhật tiến độ đơn hàng
-═══════════════════════════════════════════ -->
-@if (showProgressModal()) {
-  <div class="od-overlay" (click)="closeProgressModal()" role="dialog" aria-modal="true" aria-label="Cập nhật tiến độ đơn hàng">
-    <div class="od-modal" (click)="$event.stopPropagation()">
-
-      <!-- Header -->
-      <div class="od-modal__content">
-        <div class="od-modal__header">
-          <div>
-            <h2 class="od-modal__title">Cập nhật tiến độ đơn hàng</h2>
-            <p class="od-modal__subtitle">Cập nhật tiến độ đơn hàng theo từng giai đoạn</p>
-          </div>
-          <button class="od-modal__close" type="button" (click)="closeProgressModal()" aria-label="Đóng">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
-
-        <!-- Status select -->
-        <div class="od-modal__field">
-          <label class="od-modal__label">TRẠNG THÁI</label>
-          <div class="od-modal__select-wrap">
-            <select class="od-modal__select" [value]="progressStatus()" (change)="progressStatus.set($any($event.target).value)">
-              @for (s of progressStatuses; track s.value) {
-                <option [value]="s.value">{{ s.label }}</option>
-              }
-            </select>
-            <svg class="od-modal__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-        </div>
-
-        <!-- Notify toggle -->
-        <div class="od-modal__toggle-row">
-          <div class="od-modal__toggle-info">
-            <p class="od-modal__toggle-title">Gửi thông báo cho khách hàng</p>
-            <p class="od-modal__toggle-desc">Khách hàng sẽ nhận email cập nhật về tiến độ</p>
-          </div>
-          <button
-            class="od-modal__toggle"
-            [class.od-modal__toggle--on]="notifyCustomer()"
-            type="button"
-            role="switch"
-            [attr.aria-checked]="notifyCustomer()"
-            (click)="notifyCustomer.set(!notifyCustomer())"
-            aria-label="Gửi thông báo">
-            <span class="od-modal__toggle-thumb"></span>
-          </button>
-        </div>
-
-        <!-- Info note -->
-        <div class="od-modal__info-box">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <p class="od-modal__info-text">
-            Cập nhật trạng thái này sẽ được lưu vào lịch sử chế tác. Đảm bảo các tài liệu đính kèm là phiên bản cuối cùng trước khi chuyển sang phê duyệt.
-          </p>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="od-modal__footer">
-        <button class="od-modal__btn od-modal__btn--cancel" type="button" (click)="closeProgressModal()">HỦY BỎ</button>
-        <button class="od-modal__btn od-modal__btn--save" type="button"  (click)="saveProgressUpdate()">LƯU CẬP NHẬT</button>
-
-        
-      </div>
-    </div>
-    
-  </div>
-}
 
 @if (showToast()) {
   <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">

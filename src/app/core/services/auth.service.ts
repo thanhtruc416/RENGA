@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { User } from '../../models/user.model';
+import { User, UserRole } from '../../models/user.model';
 import { environment } from '../../../environments/environment';
 
 // ─── Payloads ─────────────────────────────────────────────────────────────────
@@ -28,6 +28,11 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface AdminLoginPayload {
+  email: string;
+  password: string;
+}
+
 export interface ForgotPasswordVerifyOtpResponse {
   resetToken: string;
 }
@@ -44,6 +49,14 @@ export interface AuthTokenResponse {
   accessToken:  string;
   refreshToken: string;
   clientId:     string;
+  fullName:     string;
+}
+
+export interface AdminAuthTokenResponse {
+  accessToken:  string;
+  refreshToken: string;
+  employeeId:   string;
+  employeeType: string;
   fullName:     string;
 }
 
@@ -110,6 +123,14 @@ export class AuthService {
     ).pipe(tap(res => this._saveSession(res)));
   }
 
+  // ── Đăng nhập Admin/Employee ──────────────────────────────────────────────
+
+  adminLogin(payload: AdminLoginPayload): Observable<AdminAuthTokenResponse> {
+    return this.http.post<AdminAuthTokenResponse>(
+      `${environment.apiUrl}/auth/employee/login`, payload
+    ).pipe(tap(res => this._saveAdminSession(res)));
+  }
+
   // ── Quên mật khẩu bước 1: gửi OTP ────────────────────────────────────────
 
   forgotPasswordSendOtp(phone: string): Observable<MessageResponse> {
@@ -173,32 +194,22 @@ export class AuthService {
 
   getToken(): string | null { return this._accessToken(); }
 
-  // ── Mock dev ───────────────────────────────────────────────────────────────
-
-  mockLogin(): void {
-    const u: User = { id: '1', fullName: 'Test User', email: 'test@gmail.com', role: 'customer', avatarUrl: '' };
-    localStorage.setItem(ACCESS_TOKEN_KEY, 'mock-token-dev');
-    localStorage.setItem(USER_KEY, JSON.stringify(u));
-    this._accessToken.set('mock-token-dev');
-    this._currentUser.set(u);
-    this.router.navigate(['/']);
-  }
-
-  mockAdminLogin(): void {
-    const u: User = { id: '1', fullName: 'Admin RENGA', email: 'admin@renga.vn', role: 'admin', avatarUrl: '' };
-    localStorage.setItem(ACCESS_TOKEN_KEY, 'mock-admin-token');
-    localStorage.setItem(USER_KEY, JSON.stringify(u));
-    this._accessToken.set('mock-admin-token');
-    this._currentUser.set(u);
-    this.router.navigate(['/admin']);
-  }
-
   // ── Private ────────────────────────────────────────────────────────────────
 
   private _saveSession(res: AuthTokenResponse): void {
     localStorage.setItem(ACCESS_TOKEN_KEY,  res.accessToken);
     localStorage.setItem(REFRESH_TOKEN_KEY, res.refreshToken);
     const user: User = { id: res.clientId, fullName: res.fullName, email: '', role: 'customer', avatarUrl: '' };
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    this._accessToken.set(res.accessToken);
+    this._currentUser.set(user);
+  }
+
+  private _saveAdminSession(res: AdminAuthTokenResponse): void {
+    localStorage.setItem(ACCESS_TOKEN_KEY,  res.accessToken);
+    localStorage.setItem(REFRESH_TOKEN_KEY, res.refreshToken);
+    const role: UserRole = res.employeeType === 'ADMIN' ? 'admin' : 'employee';
+    const user: User = { id: res.employeeId, fullName: res.fullName, email: '', role, avatarUrl: '' };
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     this._accessToken.set(res.accessToken);
     this._currentUser.set(user);

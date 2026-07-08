@@ -1,73 +1,61 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  AdminService, AdminAppointment, AdminDesigner, AdminSlot, AppointmentStatus,
+} from '../admin.service';
+import { NotificationService } from '../../core/services/notification.service';
 
-export interface Appointment {
-  readonly id: string;
-  readonly customer: {
-    readonly initials: string;
-    readonly name: string;
-    readonly tier: string;
-    readonly bgColor: string;
-  };
-  readonly designer: {
-    readonly name: string;
-    readonly avatarUrl: string;
-  };
-  readonly date: string;
-  readonly time: string;
-  readonly status: 'booked' | 'completed';
-  isHidden?: boolean; // <-- Thêm trường để làm mờ
-}
+const STATUS_LABEL: Record<AppointmentStatus, string> = {
+  PENDING: 'CHỜ XÁC NHẬN',
+  CONFIRMED: 'ĐÃ XÁC NHẬN',
+  CANCELLED: 'ĐÃ HỦY',
+  COMPLETED: 'ĐÃ HOÀN TẤT',
+  NO_SHOW: 'KHÔNG ĐẾN',
+};
 
-export interface DesignerInfo {
-  readonly id: string;
-  readonly name: string;
-  readonly role: string;
-  readonly avatarUrl: string;
-  isCurrent?: boolean;
-}
-
-interface UpdateResultForm {
-  notes: FormControl<string>;
-  designStyle: FormControl<string>;
-  estimatedBudget: FormControl<string>;
-  nextAppointment: FormControl<string>;
-}
+const NEXT_ACTIONS: Record<AppointmentStatus, Array<{ status: AppointmentStatus; label: string }>> = {
+  PENDING:   [{ status: 'CONFIRMED', label: 'Xác nhận' }, { status: 'CANCELLED', label: 'Hủy' }],
+  CONFIRMED: [{ status: 'COMPLETED', label: 'Hoàn tất' }, { status: 'NO_SHOW', label: 'Không đến' }, { status: 'CANCELLED', label: 'Hủy' }],
+  CANCELLED: [],
+  COMPLETED: [],
+  NO_SHOW:   [],
+};
 
 @Component({
   selector: 'app-appointment-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [],
   templateUrl: './appointment-management.component.html',
   styleUrl: './appointment-management.component.css'
 })
-export class AppointmentManagementComponent {
-  readonly activeModal = signal<'none' | 'change-info' | 'update-result'>('none');
-  readonly selectedAppointment = signal<Appointment | null>(null);
+export class AppointmentManagementComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
+  private readonly notify = inject(NotificationService);
 
-  // --- STATE MODAL 1: THAY ĐỔI THÔNG TIN LỊCH HẸN ---
-  readonly changeApptTab = signal<'designer' | 'datetime'>('designer');
+  readonly statusLabel = STATUS_LABEL;
+  readonly nextActions = NEXT_ACTIONS;
+  readonly statusOptions: AppointmentStatus[] = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED', 'NO_SHOW'];
 
-  // --- STATE TOAST MESSAGE ---
-  showToast = signal(false);
-  toastMessage = signal('');
-  toastType = signal<'success' | 'error'>('success');
-
-  // --- STATE PHÂN TRANG ---
-  currentPage = signal(1);
+  readonly isLoading = signal(true);
+  readonly appointments = signal<AdminAppointment[]>([]);
+  readonly total = signal(0);
+  readonly currentPage = signal(1);
   readonly itemsPerPage = 5;
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
+  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
-  filterDesigner  = signal('');
-  filterStatus    = signal('');
-  filterDateFrom  = signal('');
-  filterDateTo    = signal('');
-  filterApplied   = signal(false);
-  showDatePicker  = signal(false);
-  activeDesigner  = signal('');
-  activeStatus    = signal('');
-  activeDateFrom  = signal('');
-  activeDateTo    = signal('');
+  readonly designersList = signal<AdminDesigner[]>([]);
+
+  filterDesigner = signal('');
+  filterStatus   = signal('');
+  filterDateFrom = signal('');
+  filterDateTo   = signal('');
+  filterApplied  = signal(false);
+  showDatePicker = signal(false);
+  private activeDesigner = '';
+  private activeStatus   = '';
+  private activeDateFrom = '';
+  private activeDateTo   = '';
 
   readonly filterDateDisplay = computed(() => {
     const from = this.filterDateFrom();
@@ -78,100 +66,50 @@ export class AppointmentManagementComponent {
     return from ? fmt(from) : fmt(to);
   });
 
-  readonly appointments = signal<Appointment[]>([
-    {
-      id: 'a1',
-      customer: { initials: 'EN', name: 'Eleanor Neale', tier: 'Hạng Vàng', bgColor: '#f6d6d6' },
-      designer: { name: 'Sofia Laurent', avatarUrl: 'https://i.pravatar.cc/150?img=5' },
-      date: '25/7/2026', time: '14:30 PM', status: 'booked'
-    },
-    {
-      id: 'a2',
-      customer: { initials: 'EN', name: 'Eleanor Neale', tier: 'Hạng Vàng', bgColor: '#f6d6d6' },
-      designer: { name: 'Sofia Laurent', avatarUrl: 'https://i.pravatar.cc/150?img=5' },
-      date: '25/7/2026', time: '14:30 PM', status: 'booked'
-    },
-    {
-      id: 'a3',
-      customer: { initials: 'CH', name: 'Clara Hughes', tier: 'Hạng Kim Cương', bgColor: '#e6c4c4' },
-      designer: { name: 'Isabella Vance', avatarUrl: 'https://i.pravatar.cc/150?img=9' },
-      date: '25/7/2026', time: '14:30 PM', status: 'completed'
-    },
-    {
-      id: 'a4',
-      customer: { initials: 'CH', name: 'Clara Hughes', tier: 'Hạng Kim Cương', bgColor: '#e6c4c4' },
-      designer: { name: 'Isabella Vance', avatarUrl: 'https://i.pravatar.cc/150?img=9' },
-      date: '25/7/2026', time: '14:30 PM', status: 'completed'
-    },
-    {
-      id: 'a5',
-      customer: { initials: 'CH', name: 'Clara Hughes', tier: 'Hạng Kim Cương', bgColor: '#e6c4c4' },
-      designer: { name: 'Isabella Vance', avatarUrl: 'https://i.pravatar.cc/150?img=9' },
-      date: '25/7/2026', time: '14:30 PM', status: 'booked'
-    },
-    {
-      id: 'a6',
-      customer: { initials: 'AB', name: 'Alex Brown', tier: 'Hạng Bạc', bgColor: '#e2f0d9' },
-      designer: { name: 'Quốc Bảo', avatarUrl: 'https://i.pravatar.cc/150?img=11' },
-      date: '26/7/2026', time: '09:00 AM', status: 'booked'
-    }
-  ]);
+  // --- Modal đổi nhà thiết kế ---
+  readonly activeModal = signal<'none' | 'reassign'>('none');
+  readonly selectedAppointment = signal<AdminAppointment | null>(null);
+  readonly reassignDesignerId = signal('');
+  readonly reassignDate = signal('');
+  readonly reassignSlots = signal<AdminSlot[]>([]);
+  readonly reassignSlotId = signal('');
+  readonly isSubmitting = signal(false);
 
-  readonly filteredAppointments = computed(() => {
-    const designer = this.activeDesigner();
-    const status   = this.activeStatus();
-    const dateFrom = this.activeDateFrom();
-    const dateTo   = this.activeDateTo();
-    if (!designer && !status && !dateFrom && !dateTo) return this.appointments();
-    return this.appointments().filter(a => {
-      if (designer && a.designer.name !== designer) return false;
-      if (status   && a.status          !== status)   return false;
-      if (dateFrom || dateTo) {
-        const d = this._parseApptDate(a.date);
-        if (!d) return false;
-        if (dateFrom && d < new Date(dateFrom)) return false;
-        if (dateTo   && d > new Date(dateTo))   return false;
-      }
-      return true;
+  ngOnInit(): void {
+    this.adminService.getDesigners().subscribe({
+      next: (res) => { if (res.success) this.designersList.set(res.data); },
+      error: () => this.notify.error('Không tải được danh sách nhà thiết kế.'),
     });
-  });
-
-  // --- LOGIC PHÂN TRANG ---
-  readonly paginatedAppointments = computed(() => {
-    const start = (this.currentPage() - 1) * this.itemsPerPage;
-    return this.filteredAppointments().slice(start, start + this.itemsPerPage);
-  });
-
-  get totalItems() { return this.filteredAppointments().length; }
-  get totalPages() { return Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage)); }
-  get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage.set(page);
+    this.loadAppointments();
   }
 
-  private _parseApptDate(s: string): Date | null {
-    const parts = s.split('/').map(Number);
-    if (parts.length !== 3) return null;
-    const [d, m, y] = parts;
-    return new Date(y, m - 1, d);
+  loadAppointments(): void {
+    this.isLoading.set(true);
+    this.adminService.getAppointments({
+      page: this.currentPage(),
+      limit: this.itemsPerPage,
+      status: this.activeStatus || undefined,
+      designerId: this.activeDesigner || undefined,
+      dateFrom: this.activeDateFrom || undefined,
+      dateTo: this.activeDateTo || undefined,
+    }).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (res.success) { this.appointments.set(res.appointments); this.total.set(res.total); }
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.notify.error('Không tải được danh sách lịch hẹn.');
+      },
+    });
   }
 
-  readonly designersList = signal<DesignerInfo[]>([
-    { id: 'd1', name: 'Minh Anh (Hiện tại)', role: 'GOLDSMITH MASTER', avatarUrl: 'https://i.pravatar.cc/150?img=5', isCurrent: true },
-    { id: 'd2', name: 'Quốc Bảo', role: 'DIAMOND SPECIALIST', avatarUrl: 'https://i.pravatar.cc/150?img=11', isCurrent: false },
-    { id: 'd3', name: 'Thanh Hằng', role: 'CUSTOM DESIGNER', avatarUrl: 'https://i.pravatar.cc/150?img=1', isCurrent: false },
-    { id: 'd4', name: 'Tuấn Kiệt', role: 'GEMOLOGIST', avatarUrl: 'https://i.pravatar.cc/150?img=12', isCurrent: false }
-  ]);
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadAppointments();
+  }
 
-  readonly updateForm = new FormGroup<UpdateResultForm>({
-    notes: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    designStyle: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    estimatedBudget: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    nextAppointment: new FormControl('', { nonNullable: true })
-  });
-
-  // --- METHODS ---
   onDateFromChange(val: string): void {
     this.filterDateFrom.set(val);
     if (val && this.filterDateTo()) this.showDatePicker.set(false);
@@ -183,12 +121,13 @@ export class AppointmentManagementComponent {
   }
 
   applyFilters(): void {
-    this.activeDesigner.set(this.filterDesigner());
-    this.activeStatus.set(this.filterStatus());
-    this.activeDateFrom.set(this.filterDateFrom());
-    this.activeDateTo.set(this.filterDateTo());
+    this.activeDesigner = this.filterDesigner();
+    this.activeStatus   = this.filterStatus();
+    this.activeDateFrom = this.filterDateFrom();
+    this.activeDateTo   = this.filterDateTo();
     this.filterApplied.set(true);
     this.currentPage.set(1);
+    this.loadAppointments();
   }
 
   clearFilters(): void {
@@ -196,41 +135,29 @@ export class AppointmentManagementComponent {
     this.filterStatus.set('');
     this.filterDateFrom.set('');
     this.filterDateTo.set('');
-    this.activeDesigner.set('');
-    this.activeStatus.set('');
-    this.activeDateFrom.set('');
-    this.activeDateTo.set('');
+    this.activeDesigner = '';
+    this.activeStatus   = '';
+    this.activeDateFrom = '';
+    this.activeDateTo   = '';
     this.filterApplied.set(false);
     this.currentPage.set(1);
+    this.loadAppointments();
   }
 
-  // --- ẨN / HIỆN ---
-  toggleVisibility(appt: Appointment) {
-    this.appointments.update(list => list.map(a => 
-      a.id === appt.id ? { ...a, isHidden: !a.isHidden } : a
-    ));
-    this.displayToast(`${appt.isHidden ? 'Hiện' : 'Ẩn'} lịch hẹn thành công!`, 'success');
+  changeStatus(appt: AdminAppointment, status: AppointmentStatus): void {
+    this.adminService.updateAppointmentStatus(appt.appointment_id, status).subscribe({
+      next: () => { this.notify.success('Cập nhật trạng thái lịch hẹn thành công!'); this.loadAppointments(); },
+      error: (err) => this.notify.error(err?.error?.message ?? 'Cập nhật trạng thái thất bại.'),
+    });
   }
 
-  private displayToast(message: string, type: 'success' | 'error') {
-    this.toastMessage.set(message);
-    this.toastType.set(type);
-    this.showToast.set(true);
-    setTimeout(() => this.showToast.set(false), 3000);
-  }
-
-  openChangeInfoModal(appt: Appointment): void {
-    if (appt.isHidden) return;
+  openReassignModal(appt: AdminAppointment): void {
     this.selectedAppointment.set(appt);
-    this.changeApptTab.set('designer');
-    this.activeModal.set('change-info');
-  }
-
-  openUpdateResultModal(appt: Appointment): void {
-    if (appt.isHidden) return;
-    this.selectedAppointment.set(appt);
-    this.updateForm.reset();
-    this.activeModal.set('update-result');
+    this.reassignDesignerId.set('');
+    this.reassignDate.set(appt.slot_date?.slice(0, 10) ?? '');
+    this.reassignSlots.set([]);
+    this.reassignSlotId.set('');
+    this.activeModal.set('reassign');
   }
 
   closeModal(): void {
@@ -238,26 +165,47 @@ export class AppointmentManagementComponent {
     this.selectedAppointment.set(null);
   }
 
-  // Modal 1: Thay đổi thông tin lịch hẹn
-  selectNewDesigner(designerId: string): void {
-    this.designersList.update(list => list.map(d => ({
-      ...d,
-      isCurrent: d.id === designerId
-    })));
+  onReassignDesignerChange(designerId: string): void {
+    this.reassignDesignerId.set(designerId);
+    this.reassignSlotId.set('');
+    this.loadReassignSlots();
   }
 
-  submitChangeAppointment(): void {
-    this.displayToast('Cập nhật thông tin lịch hẹn thành công!', 'success');
-    this.closeModal();
+  onReassignDateChange(date: string): void {
+    this.reassignDate.set(date);
+    this.reassignSlotId.set('');
+    this.loadReassignSlots();
   }
 
-  // Modal 2: Cập nhật kết quả tư vấn
-  submitUpdateResult(): void {
-    if (this.updateForm.invalid) {
-      this.displayToast('Vui lòng điền đầy đủ thông tin bắt buộc!', 'error');
-      return; // Dừng lại, không đóng modal
-    }
-    this.displayToast('Lưu kết quả tư vấn thành công!', 'success');
-    this.closeModal(); // Thành công mới đóng modal
+  private loadReassignSlots(): void {
+    const designerId = this.reassignDesignerId();
+    const date = this.reassignDate();
+    if (!designerId || !date) { this.reassignSlots.set([]); return; }
+    this.adminService.getDesignerSlots(designerId, date).subscribe({
+      next: (res) => { if (res.success) this.reassignSlots.set(res.data.filter(s => s.is_available)); },
+      error: () => this.notify.error('Không tải được khung giờ trống.'),
+    });
   }
+
+  submitReassign(): void {
+    const appt = this.selectedAppointment();
+    const slotId = this.reassignSlotId();
+    if (!appt || !slotId) { this.notify.error('Vui lòng chọn khung giờ mới.'); return; }
+    this.isSubmitting.set(true);
+    this.adminService.reassignAppointment(appt.appointment_id, slotId).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.notify.success('Đổi lịch hẹn thành công!');
+        this.closeModal();
+        this.loadAppointments();
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.notify.error(err?.error?.message ?? 'Đổi lịch hẹn thất bại.');
+      },
+    });
+  }
+
+  formatTime(t: string): string { return t ? t.slice(0, 5) : ''; }
+  formatDate(d: string): string { return d ? new Date(d).toLocaleDateString('vi-VN') : ''; }
 }

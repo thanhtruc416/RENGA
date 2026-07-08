@@ -30,17 +30,17 @@
       <!-- Login Form -->
       <form class="login__form" (submit)="$event.preventDefault(); login()">
 
-        <!-- Phone number -->
+        <!-- Số điện thoại (khách hàng) hoặc email (nhân viên/admin) -->
         <div class="login__field">
-          <label class="login__label" for="login-phone">SỐ ĐIỆN THOẠI</label>
+          <label class="login__label" for="login-identifier">SỐ ĐIỆN THOẠI HOẶC EMAIL</label>
           <input
-            id="login-phone"
+            id="login-identifier"
             class="login__input"
-            type="tel"
-            placeholder="0881234567"
-            [value]="phone()"
-            (input)="setPhone($any($event.target).value)"
-            autocomplete="tel"
+            type="text"
+            placeholder="0881234567 hoặc email@renga.vn"
+            [value]="identifier()"
+            (input)="setIdentifier($any($event.target).value)"
+            autocomplete="username"
           />
         </div>
 

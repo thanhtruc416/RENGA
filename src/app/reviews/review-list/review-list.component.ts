@@ -9,6 +9,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { ReviewService, ReviewableItem } from '../../core/services/review.service';
 import { formatPrice } from '../../shared/utils/currency.util';
+import { NotificationService } from '../../core/services/notification.service';
 
 interface ReviewOrder {
   id: string;
@@ -39,6 +40,7 @@ const PAGE_SIZE = 4;
 export class ReviewListComponent implements OnInit {
   private readonly router        = inject(Router);
   private readonly reviewService = inject(ReviewService);
+  private readonly notify        = inject(NotificationService);
 
   readonly isLoading = signal(true);
   readonly allOrders = signal<ReviewOrder[]>([]);
@@ -59,7 +61,10 @@ export class ReviewListComponent implements OnInit {
         }
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false),
+      error: () => {
+        this.isLoading.set(false);
+        this.notify.error('Không tải được danh sách đơn hàng cần đánh giá.');
+      },
     });
   }
 

@@ -9,7 +9,8 @@
   <div class="pm__toolbar">
     <div class="pm__search-wrap">
       <svg class="pm__search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="pm__search" type="text" placeholder="Tìm kiếm" aria-label="Tìm kiếm sản phẩm">
+      <input class="pm__search" type="text" placeholder="Tìm kiếm" aria-label="Tìm kiếm sản phẩm"
+        [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" (keyup.enter)="onSearch()">
     </div>
     <button class="pm__add-btn" type="button" (click)="openAddModal()">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -40,22 +41,9 @@
       <div class="pm__select-wrap">
         <select class="pm__select" [value]="filterCategory()" (change)="filterCategory.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="Nhẫn">Nhẫn</option>
-          <option value="Vòng cổ">Vòng cổ</option>
-          <option value="Bông tai">Bông tai</option>
-          <option value="Vòng tay">Vòng tay</option>
-        </select>
-        <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
-    <div class="pm__filter-group">
-      <label class="pm__filter-label">CHẤT LIỆU</label>
-      <div class="pm__select-wrap">
-        <select class="pm__select" [value]="filterMaterial()" (change)="filterMaterial.set($any($event.target).value)">
-          <option value="">Tất cả</option>
-          <option value="Vàng 18K">Vàng 18K</option>
-          <option value="Vàng Trắng">Vàng Trắng</option>
-          <option value="Bạc">Bạc</option>
+          @for (cat of categories(); track cat.category_id) {
+            <option [value]="cat.category_id">{{ cat.category_name }}</option>
+          }
         </select>
         <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -65,9 +53,9 @@
       <div class="pm__select-wrap">
         <select class="pm__select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="active">Hoạt động</option>
-          <option value="out-of-stock">Hết hàng</option>
-          <option value="draft">Nháp</option>
+          <option value="ACTIVE">Hoạt động</option>
+          <option value="OUT_OF_STOCK">Hết hàng</option>
+          <option value="INACTIVE">Đã ẩn</option>
         </select>
         <svg class="pm__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -87,7 +75,6 @@
           <th class="pm__th pm__th--img">HÌNH ẢNH</th>
           <th class="pm__th">TÊN SẢN PHẨM</th>
           <th class="pm__th">DANH MỤC</th>
-          <th class="pm__th">CHẤT LIỆU</th>
           <th class="pm__th pm__th--num">GIÁ</th>
           <th class="pm__th pm__th--num">TỒN KHO</th>
           <th class="pm__th pm__th--center">TRẠNG THÁI</th>
@@ -95,37 +82,36 @@
         </tr>
       </thead>
       <tbody>
-        @for (product of paginatedProducts(); track product.id + $index) {
-          <tr class="pm__tr" [class.pm__tr--hidden]="product.isHidden">
+        @for (product of products(); track product.product_id) {
+          <tr class="pm__tr" [class.pm__tr--hidden]="product.status === 'INACTIVE'">
             <td class="pm__td pm__td--img">
-              <img class="pm__product-img" [src]="product.imageUrl" [alt]="product.name">
+              <img class="pm__product-img" [src]="product.image_url" [alt]="product.product_name">
             </td>
             <td class="pm__td">
-              <span class="pm__product-name">{{ product.name }}</span>
-              <span class="pm__product-id">ID: {{ product.id }}</span>
+              <span class="pm__product-name">{{ product.product_name }}</span>
+              <span class="pm__product-id">ID: {{ product.product_id }}</span>
             </td>
-            <td class="pm__td">{{ product.category }}</td>
-            <td class="pm__td">{{ product.material }}</td>
-            <td class="pm__td pm__td--num">{{ formatPrice(product.price) }}</td>
+            <td class="pm__td">{{ product.category_name }}</td>
+            <td class="pm__td pm__td--num">{{ formatPrice(product.base_price) }}</td>
             <td class="pm__td pm__td--num">{{ product.stock }} SP</td>
             <td class="pm__td pm__td--center">
               <span class="pm__badge"
-                [class.pm__badge--active]="product.status === 'active'"
-                [class.pm__badge--out]="product.status === 'out-of-stock'"
-                [class.pm__badge--draft]="product.status === 'draft'">
-                {{ product.status === 'active' ? 'HOẠT ĐỘNG' : product.status === 'out-of-stock' ? 'HẾT HÀNG' : 'NHÁP' }}
+                [class.pm__badge--active]="product.status === 'ACTIVE'"
+                [class.pm__badge--out]="product.status === 'OUT_OF_STOCK'"
+                [class.pm__badge--draft]="product.status === 'INACTIVE'">
+                {{ product.status === 'ACTIVE' ? 'HOẠT ĐỘNG' : product.status === 'OUT_OF_STOCK' ? 'HẾT HÀNG' : 'ĐÃ ẨN' }}
               </span>
             </td>
             <td class="pm__td pm__td--center">
               <div class="pm__actions">
                 <!-- Nút Sửa -->
-                <button class="pm__action-btn" type="button" aria-label="Chỉnh sửa" (click)="openEditModal(product)" [disabled]="product.isHidden">
+                <button class="pm__action-btn" type="button" aria-label="Chỉnh sửa" (click)="openEditModal(product)" [disabled]="product.status === 'INACTIVE'">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 </button>
-                
+
                 <!-- Nút Ẩn/Hiện -->
-                <button class="pm__action-btn" type="button" (click)="toggleVisibility(product)" [title]="product.isHidden ? 'Hiện sản phẩm' : 'Ẩn sản phẩm'">
-                  @if (product.isHidden) {
+                <button class="pm__action-btn" type="button" (click)="toggleVisibility(product)" [title]="product.status === 'INACTIVE' ? 'Hiện sản phẩm' : 'Ẩn sản phẩm'">
+                  @if (product.status === 'INACTIVE') {
                     <!-- Mắt bình thường -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   } @else {
@@ -144,7 +130,7 @@
   <!-- ── Pagination ── -->
   <div class="pm__pagination">
     <span class="pm__pagination-info">
-      Hiển thị {{ (currentPage() - 1) * 5 + 1 }} đến {{ currentPage() * 5 > totalItems ? totalItems : currentPage() * 5 }} trong tổng số {{ totalItems }} kết quả
+      Hiển thị {{ (currentPage() - 1) * 5 + 1 }} đến {{ currentPage() * 5 > totalItems() ? totalItems() : currentPage() * 5 }} trong tổng số {{ totalItems() }} kết quả
     </span>
     <div class="pm__pagination-pages">
       <button class="pm__page-btn pm__page-btn--nav" type="button" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" aria-label="Trang trước">
@@ -185,19 +171,11 @@
           <!-- Left column -->
           <div class="modal__col-left">
             <div class="modal__field">
-              <label class="modal__label">HÌNH ẢNH SẢN PHẨM</label>
-              
-              <input type="file" #fileInput style="display: none" accept="image/jpeg, image/png, image/webp" (change)="onFileSelected($event)">
-              
-              <div class="modal__upload-zone" (click)="fileInput.click()">
-                @if (uploadedImage()) {
-                  <img [src]="uploadedImage()" alt="Preview" style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px;">
-                } @else {
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c4607e" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" opacity="0.3"/><path d="M12 8v8M8 12h8" stroke-width="2"/></svg>
-                  <p class="modal__upload-text">Nhấn để tải ảnh lên</p>
-                  <p class="modal__upload-hint">ĐỊNH DẠNG: JPG, PNG (TỐI ĐA 10MB)</p>
-                }
-              </div>
+              <label class="modal__label">URL HÌNH ẢNH SẢN PHẨM</label>
+              <input class="modal__input" type="text" [value]="newImageUrl()" (input)="newImageUrl.set($any($event.target).value)" placeholder="https://...">
+              @if (newImageUrl()) {
+                <img [src]="newImageUrl()" alt="Preview" style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px; margin-top: 8px;">
+              }
             </div>
             
             <div class="modal__field">
@@ -217,11 +195,11 @@
               <div class="modal__field">
                 <label class="modal__label">DANH MỤC</label>
                 <div class="modal__select-wrap">
-                  <select class="modal__select" [value]="newCategory()" (change)="newCategory.set($any($event.target).value)">
-                    <option>Nhẫn</option>
-                    <option>Vòng cổ</option>
-                    <option>Bông tai</option>
-                    <option>Vòng tay</option>
+                  <select class="modal__select" [value]="newCategoryId()" (change)="newCategoryId.set($any($event.target).value)">
+                    <option value="">— Chọn danh mục —</option>
+                    @for (cat of categories(); track cat.category_id) {
+                      <option [value]="cat.category_id">{{ cat.category_name }}</option>
+                    }
                   </select>
                   <svg class="modal__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
@@ -360,9 +338,9 @@
       <!-- Modal footer -->
       <div class="modal__footer">
         @if (!editingProduct()) {
-          <button class="modal__btn modal__btn--outline" type="button" (click)="saveProduct('draft')">LƯU NHÁP</button>
+          <button class="modal__btn modal__btn--outline" type="button" (click)="saveProduct('INACTIVE')">LƯU NHÁP</button>
         }
-        <button class="modal__btn modal__btn--primary" type="button" (click)="saveProduct('active')">
+        <button class="modal__btn modal__btn--primary" type="button" (click)="saveProduct('ACTIVE')">
           {{ editingProduct() ? 'LƯU THAY ĐỔI' : 'LƯU CÔNG KHAI' }}
         </button>
       </div>

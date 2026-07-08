@@ -9,12 +9,13 @@ import { ModalService } from '../../core/services/modal.service';
 import { ReviewService, ProductReview } from '../../core/services/review.service';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { RingSizeGuideModalComponent } from '../../shared/components/modal/ring-size-guide-modal/ring-size-guide-modal.component';
+import { RingArTryonComponent } from '../../shared/components/ring-ar-tryon/ring-ar-tryon.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RingSizeGuideModalComponent],
+  imports: [RouterLink, RingSizeGuideModalComponent, RingArTryonComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
 })
@@ -173,11 +174,15 @@ export class ProductDetailComponent {
   readonly lightboxOpen = signal(false);
   readonly arPopupOpen = signal(false);
 
-  // "Test nhẫn": không có AR camera thật, nhưng DB đã có sẵn ảnh tham khảo
-  // ướm-trên-tay cho từng sản phẩm (product_image.image_type='TRYON') mà trước
-  // giờ chưa được hiển thị ở đâu cả — dùng ảnh thật này thay vì popup "sắp ra mắt".
-  readonly tryonImageUrl = computed(() =>
-    this.product().images.find(i => i.image_type === 'TRYON')?.image_url ?? null
+  // Nhãn image_type='TRYON' trong DB không đáng tin (crawl bị gán sai khá nhiều —
+  // có sản phẩm TRYON lại trỏ vào ảnh chụp tay .jpg không hề cắt nền). Tín hiệu
+  // đáng tin hơn: file dạng "sp-*.png" luôn là ảnh nhẫn nền trong suốt sạch (dù
+  // gắn nhãn TRYON hay GALLERY) — gom hết ứng viên này, để RingArTryonComponent
+  // tự tải và chọn đúng ảnh "băng ngang" phù hợp nhất trong số đó.
+  readonly tryonCandidateUrls = computed(() =>
+    this.product().images
+      .map(i => i.image_url)
+      .filter(url => /\/sp-[^/]+\.png$/i.test(url))
   );
 
   openLightbox(): void { this.lightboxOpen.set(true); }

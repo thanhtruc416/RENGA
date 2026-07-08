@@ -6,6 +6,12 @@ const router = Router();
 router.use(authenticate as any);
 
 router.get('/', async (req, res) => {
+  // Token nhân viên/admin không có clientId (không phải khách hàng) — trả giỏ rỗng
+  // thay vì lỗi, vì header dùng chung component hiện cả cho trang admin.
+  if (!req.user!.clientId) {
+    res.json({ success: true, data: { cart_id: null, items: [] } });
+    return;
+  }
   const data = await getCart(req.user!.clientId);
   res.json({ success: true, data });
 });

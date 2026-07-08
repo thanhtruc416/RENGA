@@ -6,6 +6,7 @@ import { map, switchMap, catchError } from 'rxjs';
 import { of } from 'rxjs';
 import { ProductsService, Product } from '../../products/products.service';
 import { formatPrice } from '../../shared/utils/currency.util';
+import { NotificationService } from '../../core/services/notification.service';
 
 interface CollectionDetail {
   slug: string;
@@ -35,7 +36,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Đường cắt gọn gàng, ánh phản chiếu đồng đều tạo nên sự sang trọng không phô trương. Đây là bộ sưu tập dành cho người phụ nữ hiện đại — tự tin, tinh tế và luôn hoàn chỉnh trong từng khoảnh khắc.',
     storyQuote: 'Vẻ đẹp thực sự nằm trong sự hài hòa tổng thể, không phải trong từng chi tiết đơn lẻ',
-    storyImageUrl: 'assets/images/collection-dong-bo.png',
+    storyImageUrl: 'assets/Collection/z8022262886330_e7c283ded250695a7e71dd8ce3ec856b.jpg',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ bộ sưu tập Đồng Bộ',
     productCategory: 'day-chuyen',
@@ -53,7 +54,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Sự tinh xảo trong từng đường nét cắt gọt và sự đồng nhất trong độ sáng của kim cương tạo nên một vòng tròn khép kín, không điểm bắt đầu, không điểm kết thúc — giống như chính tình yêu của bạn.',
     storyQuote: 'Được đính đá thủ công đầy tỉ mỉ, mang lại vẻ rạng rỡ bền lâu suốt đời.',
-    storyImageUrl: 'assets/images/collection-story-cap-doi.png',
+    storyImageUrl: 'assets/Collection/z8022262886332_43a69c6971898f0d9aed90d36a42db0e.jpg',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những tác phẩm được tuyển chọn từ vũ trụ Eternity.',
     productCategory: 'nhan',
@@ -71,7 +72,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
     storyBody2:
       'Những viên đá quý được tuyển chọn khắt khe từ các mỏ danh tiếng thế giới, mỗi viên đều mang trong mình câu chuyện của đất trời. Đây không chỉ là trang sức — đây là di sản được truyền từ thế hệ này sang thế hệ khác.',
     storyQuote: 'Mỗi kiệt tác là lời nhắc nhở rằng vẻ đẹp chân thực vượt qua mọi giới hạn của thời gian.',
-    storyImageUrl: 'assets/images/collection-hoang-gia.png',
+    storyImageUrl: 'assets/Collection/z8022262886331_0d3c0df4e22204c7e0f558214743aea0.jpg',
     productsTitle: 'Sự tuyển chọn',
     productsSubtitle: 'Khám phá những kiệt tác được chọn lọc từ bộ sưu tập Hoàng Gia.',
     productCategory: 'nhan',
@@ -89,6 +90,7 @@ const COLLECTIONS: Record<string, CollectionDetail> = {
 export class CollectionDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly productsService = inject(ProductsService);
+  private readonly notify = inject(NotificationService);
 
   readonly formatPrice = formatPrice;
 
@@ -105,7 +107,10 @@ export class CollectionDetailComponent {
     toObservable(this.collection).pipe(
       switchMap(col =>
         this.productsService.getProducts(col.productCategory, 1, 4).pipe(
-          catchError(() => of([] as Product[]))
+          catchError(() => {
+            this.notify.error('Không tải được sản phẩm của bộ sưu tập này.');
+            return of([] as Product[]);
+          })
         )
       )
     ),

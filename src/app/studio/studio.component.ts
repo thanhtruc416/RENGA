@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../core/services/cart.service';
+import { NotificationService } from '../core/services/notification.service';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { formatVnd } from '../shared/utils/currency.util';
@@ -858,9 +859,10 @@ export class StudioComponent implements OnInit {
             this.showAddressPicker.set(true);
           },
           error: () => {
-            this.addressesLoaded.set(true);
+            // Không đánh dấu addressesLoaded=true khi lỗi — để lần bấm sau còn thử tải lại,
+            // và không mở picker giả vờ như tải được 0 địa chỉ.
             this.addressesLoading.set(false);
-            this.showAddressPicker.set(true);
+            this.notify.error('Không tải được danh sách địa chỉ đã lưu. Vui lòng thử lại.');
           },
         });
     } else {
@@ -915,6 +917,7 @@ export class StudioComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cartService = inject(CartService);
+  private readonly notify = inject(NotificationService);
   private readonly http = inject(HttpClient);
 
   readonly finalTotal = computed(() => Math.max(this.totalPrice() - this.voucherDiscount(), 0));

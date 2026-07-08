@@ -6,6 +6,7 @@ import { formatVnd } from '../shared/utils/currency.util';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { AccountService } from '../account/account.service';
+import { NotificationService } from '../core/services/notification.service';
 import { environment } from '../../environments/environment';
 
 interface Designer {
@@ -46,6 +47,7 @@ export class DesignComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
   private readonly accountService = inject(AccountService);
+  private readonly notify = inject(NotificationService);
 
   readonly memberName = signal('');
   readonly memberTier = signal('');
@@ -298,18 +300,21 @@ export class DesignComponent {
             })));
           }
         },
+        error: () => this.notify.error('Không tải được danh sách nhà thiết kế. Vui lòng tải lại trang.'),
       });
 
     this.accountService.getProfile()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => { if (res.success) this.memberName.set(res.data.fullName || ''); },
+        error: (err) => console.error('[design] Không tải được tên thành viên:', err),
       });
 
     this.accountService.getLoyaltyPoints()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => { if (res.success) this.memberTier.set(res.data.tierName ?? ''); },
+        error: (err) => console.error('[design] Không tải được hạng thành viên:', err),
       });
   }
 
@@ -372,7 +377,10 @@ export class DesignComponent {
           }
           this.slotsLoading.set(false);
         },
-        error: () => this.slotsLoading.set(false),
+        error: () => {
+          this.slotsLoading.set(false);
+          this.notify.error('Không tải được khung giờ trống. Vui lòng thử lại.');
+        },
       });
     }
   }
@@ -408,7 +416,9 @@ export class DesignComponent {
     const time     = this.selectedTime();
     const slotId   = time ? (this.slotIdByTime[time] ?? null) : null;
     if (!slotId) {
-      this.bookingError.set('Vui lòng chọn lại ngày & giờ tư vấn.');
+      const msg = 'Vui lòng chọn lại ngày & giờ tư vấn.';
+      this.bookingError.set(msg);
+      this.notify.error(msg);
       return;
     }
 
@@ -423,7 +433,9 @@ export class DesignComponent {
           this.placedAppointmentId.set(res.data.appointment_id);
           this.showSuccessModal.set(true);
         } else {
-          this.bookingError.set(res.message ?? 'Đặt lịch không thành công.');
+          const msg = res.message ?? 'Đặt lịch không thành công.';
+          this.bookingError.set(msg);
+          this.notify.error(msg);
         }
         this.isSubmitting.set(false);
       },
@@ -433,6 +445,7 @@ export class DesignComponent {
         const backendMessage: string | undefined = err?.error?.message;
         if (backendMessage) {
           this.bookingError.set(backendMessage);
+          this.notify.error(backendMessage);
         } else {
           this.showFailModal.set(true);
         }

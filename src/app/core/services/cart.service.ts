@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, EMPTY } from 'rxjs';
 import { AuthService } from './auth.service';
+import { NotificationService } from './notification.service';
 import { environment } from '../../../environments/environment';
 
 export interface CartItem {
@@ -21,6 +22,7 @@ export interface CartItem {
 export class CartService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
+  private readonly notify = inject(NotificationService);
   private readonly _items = signal<CartItem[]>([]);
 
   readonly items = this._items.asReadonly();
@@ -105,7 +107,10 @@ export class CartService {
         variant_id: item.variantId,
         quantity: item.quantity ?? 1,
         unit_price: item.price,
-      }).subscribe({ next: () => this._reload() });
+      }).subscribe({
+        next: () => this._reload(),
+        error: () => this.notify.error('Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.'),
+      });
       return;
     }
     // Guest hoặc studio: lưu local
@@ -122,7 +127,10 @@ export class CartService {
   removeItem(id: string): void {
     if (this.auth.isLoggedIn() && !id.startsWith('local-')) {
       this.http.delete<any>(`${environment.apiUrl}/cart/items/${id}`)
-        .subscribe({ next: () => this._reload() });
+        .subscribe({
+          next: () => this._reload(),
+          error: () => this.notify.error('Không thể xóa sản phẩm khỏi giỏ hàng. Vui lòng thử lại.'),
+        });
       return;
     }
     this._items.update(items => items.filter(i => i.id !== id));
@@ -146,7 +154,10 @@ export class CartService {
 
     if (this.auth.isLoggedIn() && !id.startsWith('local-')) {
       this.http.patch<any>(`${environment.apiUrl}/cart/items/${id}`, { quantity: newQty })
-        .subscribe({ next: () => this._reload() });
+        .subscribe({
+          next: () => this._reload(),
+          error: () => this.notify.error('Không thể cập nhật số lượng. Vui lòng thử lại.'),
+        });
       return;
     }
     this._items.update(items =>

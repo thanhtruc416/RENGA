@@ -1,21 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
 import { formatPrice } from '../../shared/utils/currency.util';
+import { AdminService, AdminOrder } from '../admin.service';
 
-type OrderStatus = 'waiting-payment' | 'crafting' | 'paid' | 'cancelled' | 'completed';
-type OrderType = 'available' | 'bespoke' | 'design';
+type OrderStatus = AdminOrder['order_status'];
+type OrderType = AdminOrder['order_type'];
 
-interface Order {
-  id: string;
-  customer: string;
-  product: string;
-  date: string;
-  type: OrderType;
-  total: number;
-  status: OrderStatus;
-}
+// Trạng thái kế tiếp hợp lệ cho mỗi trạng thái hiện tại — phải khớp với
+// ALLOWED_TRANSITIONS ở server/services/admin-order.service.ts.
+const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
+  PENDING:           'PAYMENT_CONFIRMED',
+  PAYMENT_CONFIRMED: 'PACKED',
+  PACKED:            'SHIPPED',
+  SHIPPED:           'COMPLETED',
+};
 
 @Component({
   selector: 'app-order-management',
@@ -25,96 +25,104 @@ interface Order {
   templateUrl: './order-management.component.html',
   styleUrl: './order-management.component.css',
 })
-export class OrderManagementComponent {
+export class OrderManagementComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly adminService = inject(AdminService);
+
   filterType   = signal('');
   filterStatus = signal('');
   filterApplied = signal(false);
+  searchTerm   = signal('');
   currentPage  = signal(1);
+  totalItems   = signal(0);
+  readonly itemsPerPage = 5;
 
-  activeType   = signal('');
-  activeStatus = signal('');
+  private activeType   = '';
+  private activeStatus = '';
 
-  orders = signal<Order[]>([
-    { id: '#JM-88201', customer: 'Eleanor Sterling', product: 'Dây chuyền Sapphire L\'Amour', date: '24/10/2023', type: 'available', total: 4250000, status: 'waiting-payment' },
-    { id: '#JM-88202', customer: 'Eleanor Sterling', product: 'Tiara Kim cương Marquise',    date: '24/10/2023', type: 'bespoke',   total: 4000000, status: 'crafting' },
-    { id: '#JM-88204', customer: 'Minh Anh',         product: 'Dây chuyền Sapphire L\'Amour', date: '21/10/2023', type: 'available', total: 3500000, status: 'paid' },
-    { id: '#JM-88207', customer: 'Julian Vane',      product: 'Nhẫn Sapphire L\'Amour',      date: '21/10/2023', type: 'available', total: 950000,  status: 'cancelled' },
-    { id: '#JM-88209', customer: 'Julian Vane',      product: 'Tiara Kim cương Marquise',    date: '14/10/2023', type: 'design',    total: 32000000, status: 'completed' },
-  ]);
+  orders = signal<AdminOrder[]>([]);
+  isLoading = signal(false);
 
-  readonly filteredOrders = computed(() => {
-    const type   = this.activeType();
-    const status = this.activeStatus();
-    if (!type && !status) return this.orders();
-    return this.orders().filter(o => {
-      if (type   && o.type   !== type)   return false;
-      if (status && o.status !== status) return false;
-      return true;
+  ngOnInit(): void {
+    this.loadOrders();
+  }
+
+  loadOrders(): void {
+    this.isLoading.set(true);
+    this.adminService.getOrders({
+      page: this.currentPage(),
+      limit: this.itemsPerPage,
+      type: this.activeType || undefined,
+      status: this.activeStatus || undefined,
+      search: this.searchTerm() || undefined,
+    }).subscribe({
+      next: (res) => {
+        this.orders.set(res.orders);
+        this.totalItems.set(res.total);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.triggerToast('Không tải được danh sách đơn hàng.', 'error');
+      },
     });
-  });
+  }
+
+  onSearch(): void {
+    this.currentPage.set(1);
+    this.loadOrders();
+  }
 
   goToDetail(orderId: string): void {
-    // Bỏ dấu '#' ở đầu ID nếu có (vì URL thường không chứa '#')
-    // Ví dụ: '#JM-88201' -> 'JM-88201'
-    const cleanId = orderId.replace('#', ''); 
-    
-    this.router.navigate(['/admin/don-hang', cleanId]); 
+    this.router.navigate(['/admin/don-hang', orderId]);
   }
 
   statusLabel(s: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
-      'waiting-payment': 'CHỜ THANH TOÁN',
-      crafting:          'ĐANG CHẾ TÁC',
-      paid:              'ĐÃ THANH TOÁN',
-      cancelled:         'ĐÃ HỦY',
-      completed:         'HOÀN TẤT',
+      PENDING:            'CHỜ THANH TOÁN',
+      PAYMENT_CONFIRMED:  'ĐÃ THANH TOÁN',
+      PACKED:             'ĐANG ĐÓNG GÓI',
+      SHIPPED:            'ĐANG GIAO',
+      CANCELLED:          'ĐÃ HỦY',
+      COMPLETED:          'HOÀN TẤT',
     };
     return map[s];
   }
 
   typeLabel(t: OrderType): string {
     const map: Record<OrderType, string> = {
-      available: 'CÓ SẴN',
-      bespoke:   'TUỲ BIẾN',
-      design:    'THIẾT KẾ',
+      STANDARD: 'CÓ SẴN',
+      STUDIO:   'TUỲ BIẾN',
+      DESIGN:   'THIẾT KẾ',
     };
     return map[t];
   }
 
   applyFilters() {
-    this.activeType.set(this.filterType());
-    this.activeStatus.set(this.filterStatus());
+    this.activeType = this.filterType();
+    this.activeStatus = this.filterStatus();
     this.filterApplied.set(true);
     this.currentPage.set(1);
+    this.loadOrders();
   }
 
   clearFilters() {
     this.filterType.set('');
     this.filterStatus.set('');
-    this.activeType.set('');
-    this.activeStatus.set('');
+    this.searchTerm.set('');
+    this.activeType = '';
+    this.activeStatus = '';
     this.filterApplied.set(false);
     this.currentPage.set(1);
+    this.loadOrders();
   }
 
   // ==========================================
-  // STATE MODAL VÀ TOAST MESSAGE
+  // TOAST MESSAGE
   // ==========================================
   showToast = signal(false);
   toastMessage = signal('');
   toastType = signal<'success' | 'error'>('success');
-
-  showProgressModal = signal(false);
-  progressStatus = signal('crafting');
-  notifyCustomer = signal(true);
-  
-  progressStatuses = [
-    { value: 'confirmed', label: 'Đã xác nhận' },
-    { value: 'crafting', label: 'Đang chế tác' },
-    { value: 'finishing', label: 'Đang hoàn thiện' },
-    { value: 'ready', label: 'Sẵn sàng giao' }
-  ];
 
   private triggerToast(message: string, type: 'success' | 'error') {
     this.toastMessage.set(message);
@@ -123,60 +131,47 @@ export class OrderManagementComponent {
     setTimeout(() => this.showToast.set(false), 3000);
   }
 
-  openProgressModal() {
-    this.showProgressModal.set(true);
-  }
+  // Hàm xử lý nút Thao Tác trên bảng — cập nhật trạng thái thật qua API
+  handleAction(order: AdminOrder, event: Event) {
+    event.stopPropagation();
 
-  closeProgressModal() {
-    this.showProgressModal.set(false);
-  }
-
-  saveProgressUpdate() {
-    this.closeProgressModal(); // Tắt modal
-    this.triggerToast('Cập nhật tiến độ đơn hàng thành công!', 'success'); // Bật toast
-  }
-
-  // Hàm xử lý nút Thao Tác trên bảng
-  handleAction(order: Order, event: Event) {
-    event.stopPropagation(); // Ngăn sự kiện click lan ra hàng (table row)
-    const cleanId = order.id.replace('#', '');
-
-    if (order.status === 'waiting-payment') {
-      // Nhấn XÁC NHẬN
-      this.triggerToast('Xác nhận đơn hàng thành công!', 'success');
-      setTimeout(() => this.router.navigate(['/admin/don-hang', cleanId]), 1000); // Đợi 1s để kịp nhìn thấy toast rồi mới chuyển trang
-    } 
-    else if (order.status === 'cancelled') {
-      // Nhấn KHÔI PHỤC
-      this.triggerToast('Khôi phục đơn hàng thành công!', 'success');
-      setTimeout(() => this.router.navigate(['/admin/don-hang', cleanId]), 1000);
-    } 
-    else if (order.status === 'crafting' || order.status === 'paid') {
-      // Nhấn CẬP NHẬT -> Mở modal
-      this.openProgressModal();
-    } 
-    else {
-      // Mặc định (CHI TIẾT)
-      this.router.navigate(['/admin/don-hang', cleanId]);
+    const next = NEXT_STATUS[order.order_status];
+    if (!next) {
+      this.router.navigate(['/admin/don-hang', order.order_id]);
+      return;
     }
+
+    this.adminService.updateOrderStatus(order.order_id, next).subscribe({
+      next: () => {
+        this.triggerToast(`Cập nhật đơn hàng sang "${this.statusLabel(next)}" thành công!`, 'success');
+        this.loadOrders();
+      },
+      error: (err) => this.triggerToast(err?.error?.message ?? 'Không thể cập nhật đơn hàng.', 'error'),
+    });
   }
+
   readonly formatPrice = formatPrice;
 
-  get totalItems() { return this.filteredOrders().length; }
-  get totalPages() { return Math.max(1, Math.ceil(this.totalItems / 5)); }
+  get totalPages() { return Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)); }
   get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
-  goToPage(page: number) { if (page >= 1 && page <= this.totalPages) this.currentPage.set(page); }
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage.set(page);
+      this.loadOrders();
+    }
+  }
 
   actionLabel(s: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
-      'waiting-payment': 'XÁC NHẬN',
-      crafting:          'CẬP NHẬT',
-      paid:              'CẬP NHẬT',
-      cancelled:         'KHÔI PHỤC',
-      completed:         'CHI TIẾT',
+      PENDING:            'XÁC NHẬN',
+      PAYMENT_CONFIRMED:  'ĐÓNG GÓI',
+      PACKED:             'GIAO HÀNG',
+      SHIPPED:            'HOÀN TẤT',
+      CANCELLED:          'CHI TIẾT',
+      COMPLETED:          'CHI TIẾT',
     };
     return map[s];
   }
 
-  isPrimaryAction(s: OrderStatus): boolean { return s === 'waiting-payment'; }
+  isPrimaryAction(s: OrderStatus): boolean { return !!NEXT_STATUS[s]; }
 }

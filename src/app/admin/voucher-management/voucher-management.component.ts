@@ -1,284 +1,200 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AdminService, AdminVoucher, AdminVoucherInput, VoucherStatus } from '../admin.service';
+import { NotificationService } from '../../core/services/notification.service';
 
-// --- INTERFACES ---
-export interface Voucher {
-  readonly id: string;
-  readonly code: string;
-  readonly campaign: string;
-  readonly type: 'percent' | 'fixed' | 'freeship';
-  readonly typeLabel: string;
-  readonly used: number;
-  readonly limit: number;
-  readonly expiryDate: string;
-  readonly status: 'active' | 'expired';
-  isHidden?: boolean; 
-}
-
-// --- TYPED FORM ---
 interface VoucherForm {
-  campaignName: FormControl<string>;
   voucherCode: FormControl<string>;
-  discountType: FormControl<string>;
+  discountType: FormControl<'PERCENTAGE' | 'FIXED_AMOUNT'>;
   discountValue: FormControl<number | null>;
-  minOrder: FormControl<number | null>;
-  maxDiscount: FormControl<number | null>;
+  minOrderValue: FormControl<number | null>;
+  maxDiscountAmount: FormControl<number | null>;
   usageLimit: FormControl<number | null>;
-  startDate: FormControl<string>;
-  endDate: FormControl<string>;
+  validFrom: FormControl<string>;
+  validTo: FormControl<string>;
   isActive: FormControl<boolean>;
 }
+
+const STATUS_LABEL: Record<VoucherStatus, string> = { ACTIVE: 'ACTIVE', INACTIVE: 'ẨN', EXPIRED: 'EXPIRED' };
 
 @Component({
   selector: 'app-voucher-management',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './voucher-management.component.html',
   styleUrl: './voucher-management.component.css'
 })
-export class VoucherManagementComponent {
-  // --- STATE (SIGNALS) ---
-  readonly isModalOpen = signal<boolean>(false);
+export class VoucherManagementComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
+  private readonly notify = inject(NotificationService);
 
-  readonly showToast = signal<boolean>(false);
-  readonly toastType = signal<'success' | 'error'>('success');
-  readonly toastMessage = signal<string>('');
+  readonly statusLabel = STATUS_LABEL;
 
-  readonly currentPage = signal<number>(1);
-  readonly itemsPerPage = 5; 
+  filterStatus  = signal('');
+  filterSearch  = signal('');
+  filterApplied = signal(false);
+  private activeStatus = '';
+  private activeSearch = '';
 
-   readonly totalItems = computed(() => this.filteredVouchers().length);
-  
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)));
-  
+  readonly isLoading = signal(true);
+  readonly vouchers = signal<AdminVoucher[]>([]);
+  readonly total = signal(0);
+  currentPage = signal(1);
+  readonly itemsPerPage = 5;
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
   readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
-  readonly paginatedVouchers = computed(() => {
-    const startIndex = (this.currentPage() - 1) * this.itemsPerPage;
-    return this.filteredVouchers().slice(startIndex, startIndex + this.itemsPerPage);
-  });
+  readonly isModalOpen = signal(false);
+  readonly editingVoucherId = signal<string | null>(null);
+  readonly isSubmitting = signal(false);
 
-  private editingVoucherId: string | null = null;
-
-  filterStatus    = signal('');
-  filterType      = signal('');
-  filterDateFrom  = signal('');
-  filterDateTo    = signal('');
-  filterApplied   = signal(false);
-  activeStatus    = signal('');
-  activeType      = signal('');
-  activeDateFrom  = signal('');
-  activeDateTo    = signal('');
-
-  // Mock data theo đúng thiết kế Figma
-  readonly vouchers = signal<Voucher[]>([
-    {
-      id: 'v1', code: 'SUMMER_VIBE_24', campaign: 'Seasonal Solstice Sale',
-      type: 'percent', typeLabel: '15% OFF', used: 428, limit: 1000,
-      expiryDate: '12/2/2027', status: 'active'
-    },
-    {
-      id: 'v2', code: 'FIRST_JEWEL_50', campaign: 'New Customer',
-      type: 'fixed', typeLabel: '50K FIXED', used: 410, limit: 500,
-      expiryDate: '25/5/2026', status: 'active'
-    },
-    {
-      id: 'v3', code: 'FIRST_JEWEL_50', campaign: 'New Customer',
-      type: 'fixed', typeLabel: '50K FIXED', used: 410, limit: 500,
-      expiryDate: '25/5/2026', status: 'active'
-    },
-    {
-      id: 'v4', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v5', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v6', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v7', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v8', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v9', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    },
-    {
-      id: 'v10', code: 'SHIP_FREE_LUXE', campaign: 'VIP Flash Weekend',
-      type: 'freeship', typeLabel: 'FREESHIP', used: 150, limit: 150,
-      expiryDate: '10/10/2024', status: 'expired'
-    }
-  ]);
-
-  // Khởi tạo Form typed rõ ràng
   readonly voucherForm = new FormGroup<VoucherForm>({
-    campaignName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     voucherCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    discountType: new FormControl('percent', { nonNullable: true }),
-    discountValue: new FormControl(null),
-    minOrder: new FormControl(null),
-    maxDiscount: new FormControl(null),
-    usageLimit: new FormControl(null),
-    startDate: new FormControl('', { nonNullable: true }),
-    endDate: new FormControl('', { nonNullable: true }),
-    isActive: new FormControl(true, { nonNullable: true })
+    discountType: new FormControl('PERCENTAGE', { nonNullable: true }),
+    discountValue: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(1)] }),
+    minOrderValue: new FormControl<number | null>(0),
+    maxDiscountAmount: new FormControl<number | null>(null),
+    usageLimit: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(1)] }),
+    validFrom: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    validTo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    isActive: new FormControl(true, { nonNullable: true }),
   });
 
-  readonly filteredVouchers = computed(() => {
-    const status   = this.activeStatus();
-    const type     = this.activeType();
-    const dateFrom = this.activeDateFrom();
-    const dateTo   = this.activeDateTo();
-    if (!status && !type && !dateFrom && !dateTo) return this.vouchers();
-    return this.vouchers().filter(v => {
-      if (status && v.status !== status) return false;
-      if (type   && v.type   !== type)   return false;
-      if (dateFrom || dateTo) {
-        const expiry = this._parseDate(v.expiryDate);
-        if (!expiry) return false;
-        if (dateFrom && expiry < new Date(dateFrom)) return false;
-        if (dateTo   && expiry > new Date(dateTo))   return false;
-      }
-      return true;
+  readonly toastConfig = signal<{ show: boolean; message: string; type: 'success' | 'error' }>({ show: false, message: '', type: 'success' });
+
+  ngOnInit(): void { this.loadVouchers(); }
+
+  loadVouchers(): void {
+    this.isLoading.set(true);
+    this.adminService.getVouchers({
+      page: this.currentPage(), limit: this.itemsPerPage,
+      status: this.activeStatus || undefined, search: this.activeSearch || undefined,
+    }).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (res.success) { this.vouchers.set(res.vouchers); this.total.set(res.total); }
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.notify.error('Không tải được danh sách voucher.');
+      },
     });
-  });
-
-  private _parseDate(s: string): Date | null {
-    const parts = s.split('/').map(Number);
-    if (parts.length !== 3) return null;
-    const [d, m, y] = parts;
-    return new Date(y, m - 1, d);
   }
 
-  // --- METHODS ---
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadVouchers();
+  }
+
   applyFilters(): void {
-    this.activeStatus.set(this.filterStatus());
-    this.activeType.set(this.filterType());
-    this.activeDateFrom.set(this.filterDateFrom());
-    this.activeDateTo.set(this.filterDateTo());
-    this.filterApplied.set(true);
+    this.activeStatus = this.filterStatus();
+    this.activeSearch = this.filterSearch();
     this.filterApplied.set(true);
     this.currentPage.set(1);
+    this.loadVouchers();
   }
 
   clearFilters(): void {
     this.filterStatus.set('');
-    this.filterType.set('');
-    this.filterDateFrom.set('');
-    this.filterDateTo.set('');
-    this.activeStatus.set('');
-    this.activeType.set('');
-    this.activeDateFrom.set('');
-    this.activeDateTo.set('');
-    this.filterApplied.set(false);
+    this.filterSearch.set('');
+    this.activeStatus = '';
+    this.activeSearch = '';
     this.filterApplied.set(false);
     this.currentPage.set(1);
+    this.loadVouchers();
   }
 
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage.set(page);
-    }
-  }
   openModal(): void {
-    this.voucherForm.reset({ discountType: 'percent', isActive: true });
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.isModalOpen.set(false);
-  }
-
-  editVoucher(voucher: Voucher): void {
-    if (voucher.isHidden) return;
-    this.editingVoucherId = voucher.id;
-    
-    // Điền dữ liệu vào form. 
-    // Lưu ý: Vì mock data của bạn chưa có đủ các trường như minOrder, maxDiscount... 
-    // nên tôi sẽ map tạm các trường có sẵn. Trong thực tế, bạn sẽ gọi API lấy chi tiết voucher.
-    this.voucherForm.patchValue({
-      campaignName: voucher.campaign,
-      voucherCode: voucher.code,
-      discountType: voucher.type,
-      // Giả lập tách số từ chuỗi '15% OFF' hoặc '50K FIXED'
-      discountValue: parseInt(voucher.typeLabel.replace(/\D/g, '')) || 0, 
-      usageLimit: voucher.limit,
-      startDate: '01/01/2024', // Mock data
-      endDate: voucher.expiryDate,
-      isActive: voucher.status === 'active'
+    this.editingVoucherId.set(null);
+    this.voucherForm.reset({
+      voucherCode: '', discountType: 'PERCENTAGE', discountValue: null, minOrderValue: 0,
+      maxDiscountAmount: null, usageLimit: null, validFrom: '', validTo: '', isActive: true,
     });
-
     this.isModalOpen.set(true);
   }
 
-  
-
+  closeModal(): void { this.isModalOpen.set(false); }
 
   generateCode(): void {
-    const randomCode = 'RENGA_' + Math.random().toString(36).substring(2, 8).toUpperCase();
-    this.voucherForm.controls.voucherCode.setValue(randomCode);
+    const code = 'RENGA_' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    this.voucherForm.controls.voucherCode.setValue(code);
+  }
+
+  editVoucher(voucher: AdminVoucher): void {
+    this.adminService.getVoucher(voucher.voucher_id).subscribe({
+      next: (res) => {
+        if (!res.success) return;
+        const v = res.data;
+        this.editingVoucherId.set(v.voucher_id);
+        this.voucherForm.reset({
+          voucherCode: v.voucher_code,
+          discountType: v.discount_type,
+          discountValue: Number(v.discount_value),
+          minOrderValue: Number(v.min_order_value),
+          maxDiscountAmount: v.max_discount_amount !== null ? Number(v.max_discount_amount) : null,
+          usageLimit: v.usage_limit,
+          validFrom: v.valid_from.slice(0, 10),
+          validTo: v.valid_to.slice(0, 10),
+          isActive: v.effective_status !== 'INACTIVE',
+        });
+        this.isModalOpen.set(true);
+      },
+      error: () => this.notify.error('Không tải được chi tiết voucher.'),
+    });
   }
 
   saveVoucher(): void {
     if (this.voucherForm.invalid) {
-      this.displayToast('Vui lòng điền đầy đủ các trường bắt buộc!','error');
-      return; 
+      this.displayToast('Vui lòng điền đầy đủ các trường bắt buộc!', 'error');
+      return;
     }
+    const f = this.voucherForm.getRawValue();
+    const payload: AdminVoucherInput = {
+      voucherCode: f.voucherCode,
+      discountType: f.discountType,
+      discountValue: f.discountValue!,
+      minOrderValue: f.minOrderValue ?? 0,
+      maxDiscountAmount: f.maxDiscountAmount,
+      usageLimit: f.usageLimit!,
+      validFrom: f.validFrom,
+      validTo: f.validTo,
+      status: f.isActive ? 'ACTIVE' : 'INACTIVE',
+    };
 
-    const formData = this.voucherForm.value;
-    
-    if (this.editingVoucherId) {
-      console.log(`Cập nhật Voucher ID ${this.editingVoucherId}:`, formData);
-      this.displayToast('Cập nhật voucher thành công!', 'success');
-      // TODO: Gọi API PUT /vouchers/:id
-    } else {
-      console.log('Tạo Voucher mới:', formData);
-      this.displayToast('Tạo voucher mới thành công!', 'success');
-      // TODO: Gọi API POST /vouchers
-    }
-
-    this.closeModal();
+    this.isSubmitting.set(true);
+    const editingId = this.editingVoucherId();
+    const req$ = editingId ? this.adminService.updateVoucher(editingId, payload) : this.adminService.createVoucher(payload);
+    req$.subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.displayToast(editingId ? 'Cập nhật voucher thành công!' : 'Tạo voucher mới thành công!', 'success');
+        this.closeModal();
+        this.loadVouchers();
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.displayToast(err?.error?.message ?? 'Lưu voucher thất bại.', 'error');
+      },
+    });
   }
 
-  // Thêm hàm xử lý Ẩn/Hiện Voucher
-  toggleVisibility(voucher: Voucher): void {
-    // 1. Cập nhật mảng vouchers trong Signal để Angular render lại giao diện
-    this.vouchers.update(currentVouchers => 
-      currentVouchers.map(v => 
-        v.id === voucher.id ? { ...v, isHidden: !v.isHidden } : v
-      )
-    );
-
-    // 2. Lấy trạng thái mới để hiện Toast
-    const isNowHidden = !voucher.isHidden; 
-    const actionName = isNowHidden ? 'Ẩn' : 'Hiện';
-    
-    // 3. Gọi hàm displayToast có sẵn của bạn
-    this.displayToast(`${actionName} voucher thành công!`, 'success');
+  toggleVisibility(voucher: AdminVoucher): void {
+    const newStatus: VoucherStatus = voucher.effective_status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    this.adminService.updateVoucher(voucher.voucher_id, { status: newStatus }).subscribe({
+      next: () => { this.displayToast(newStatus === 'ACTIVE' ? 'Hiện voucher thành công!' : 'Ẩn voucher thành công!', 'success'); this.loadVouchers(); },
+      error: () => this.displayToast('Cập nhật trạng thái thất bại.', 'error'),
+    });
   }
 
-  private displayToast(message: string, type: 'success' | 'error' = 'success'): void {
-    this.toastMessage.set(message);
-    this.toastType.set(type); // Set loại màu sắc
-    this.showToast.set(true);
+  private displayToast(message: string, type: 'success' | 'error'): void {
+    this.toastConfig.set({ show: true, message, type });
+    setTimeout(() => this.toastConfig.update(p => ({ ...p, show: false })), 3000);
+  }
 
-    setTimeout(() => {
-      this.showToast.set(false);
-    }, 3000);
+  discountLabel(v: AdminVoucher): string {
+    return v.discount_type === 'PERCENTAGE' ? `${v.discount_value}%` : `${Number(v.discount_value).toLocaleString('vi-VN')}đ`;
   }
 }

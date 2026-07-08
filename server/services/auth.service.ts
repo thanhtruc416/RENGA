@@ -512,11 +512,11 @@ export async function verifyLoginLockOtp(data: {
 export async function loginEmployee(
   data:  { email: string; password: string },
   meta?: { device?: string; ip?: string },
-): Promise<{ accessToken: string; refreshToken: string; employeeId: string; employeeType: string }> {
+): Promise<{ accessToken: string; refreshToken: string; employeeId: string; employeeType: string; fullName: string }> {
   const { email, password } = data;
 
   const [rows] = await db.query(
-    `SELECT e.employee_id, e.password_hash, e.status, e.employee_type,
+    `SELECT e.employee_id, e.password_hash, e.status, e.employee_type, e.full_name,
             a.role AS admin_role
      FROM employee e
      LEFT JOIN admin a ON a.employee_id = e.employee_id
@@ -544,7 +544,7 @@ export async function loginEmployee(
   const accessToken  = signAccessToken(payload);
   const refreshToken = await createRefreshToken(emp.employee_id, meta?.device, meta?.ip);
 
-  return { accessToken, refreshToken, employeeId: emp.employee_id, employeeType: emp.employee_type };
+  return { accessToken, refreshToken, employeeId: emp.employee_id, employeeType: emp.employee_type, fullName: emp.full_name };
 }
 
 // ─── Refresh access token ─────────────────────────────────────────────────────

@@ -30,7 +30,7 @@ export class CollectionsComponent {
       titleLine2: 'ĐỒNG BỘ',
       description:
         'Sự kết hợp hoàn mỹ giữa dây chuyền, nhẫn và hoa tai, tạo nên một bản giao hưởng ánh sáng và phong cách đồng nhất cho những dịp quan trọng nhất.',
-      imageUrl: 'assets/images/collection-dong-bo.png',
+      imageUrl: 'assets/Collection/z8022262886330_e7c283ded250695a7e71dd8ce3ec856b.jpg',
       slug: 'bo-trang-suc-dong-bo',
       reversed: false,
     },
@@ -41,7 +41,7 @@ export class CollectionsComponent {
       titleLine2: 'CẶP ĐÔI',
       description:
         'Biểu tượng của sự gắn kết vĩnh cửu. Những thiết kế song hành mang đậm dấu ấn cá nhân, dành riêng cho những tâm hồn đồng điệu.',
-      imageUrl: 'assets/images/collection-cap-doi.png',
+      imageUrl: 'assets/Collection/z8022262886332_43a69c6971898f0d9aed90d36a42db0e.jpg',
       slug: 'bo-trang-suc-cap-doi',
       reversed: true,
     },
@@ -52,7 +52,7 @@ export class CollectionsComponent {
       titleLine2: 'HOÀNG GIA',
       description:
         'Đỉnh cao của nghệ thuật chế tác thủ công. Những kiệt tác mang hơi thở quý tộc, được khảm bởi những viên đá quý hiếm nhất thế gian.',
-      imageUrl: 'assets/images/collection-hoang-gia.png',
+      imageUrl: 'assets/Collection/z8022262886331_0d3c0df4e22204c7e0f558214743aea0.jpg',
       slug: 'hoang-gia',
       reversed: false,
     },

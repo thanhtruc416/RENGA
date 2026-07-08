@@ -1,45 +1,39 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AdminService, DashboardStats } from '../admin.service';
+import { formatPrice } from '../../shared/utils/currency.util';
+import { NotificationService } from '../../core/services/notification.service';
 
-interface KpiCard {
+interface OrderStatusBar {
+  readonly status: string;
   readonly label: string;
-  readonly value: string;
-  readonly subVariant: 'positive' | 'neutral' | 'tags';
-  readonly sub?: string;
-  readonly tags?: ReadonlyArray<{ text: string; variant: 'platinum' | 'gold' }>;
-}
-
-interface OrderStatus {
   readonly count: number;
-  readonly label: string;
   readonly barColor: string;
   readonly barWidthPct: number;
 }
 
-interface TopProduct {
+interface TopProductBar {
   readonly name: string;
-  readonly line2: string;
+  readonly totalSold: number;
   readonly heightPx: number;
   readonly color: string;
 }
 
-interface PendingPayment {
-  readonly id: string;
-  readonly time: string;
-  readonly description: string;
-}
+const STATUS_LABEL: Record<string, string> = {
+  PENDING:            'CHỜ THANH TOÁN',
+  PAYMENT_CONFIRMED:  'ĐÃ THANH TOÁN',
+  PACKED:             'ĐANG ĐÓNG GÓI',
+  SHIPPED:            'ĐANG GIAO',
+  COMPLETED:          'HOÀN TẤT',
+  CANCELLED:          'ĐÃ HỦY',
+};
 
-interface PendingAppointment {
-  readonly customer: string;
-  readonly time: string;
-  readonly description: string;
-}
+const STATUS_COLOR: Record<string, string> = {
+  PENDING:            '#c4607e',
+  CANCELLED:          '#e05070',
+};
 
-interface PendingWarranty {
-  readonly id: string;
-  readonly time: string;
-  readonly description: string;
-}
+const BAR_COLORS = ['#c4607e', '#c4607e', '#d98098', '#e8a8b8', '#f2cdd6'];
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -49,69 +43,60 @@ interface PendingWarranty {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
-  activeTab = signal<'day' | 'week' | 'month'>('day');
+export class DashboardComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
+  private readonly notify = inject(NotificationService);
 
-  readonly kpiCards: ReadonlyArray<KpiCard> = [
-    { label: 'TỔNG DOANH THU', value: '124.850.000 VNĐ', subVariant: 'positive', sub: '+12.5%' },
-    {
-      label: 'KHÁCH HÀNG MỚI',
-      value: '48',
-      subVariant: 'neutral',
-      sub: '12 Khách hàng tiềm năng',
-    },
-    {
-      label: 'THĂNG HẠNG MỚI',
-      value: '15',
-      subVariant: 'tags',
-      tags: [
-        { text: '8 Bạch Kim', variant: 'platinum' },
-        { text: '7 Vàng', variant: 'gold' },
-      ],
-    },
-    {
-      label: 'GIÁ TRỊ ĐƠN HÀNG TB',
-      value: '2.600.000 VNĐ',
-      subVariant: 'neutral',
-      sub: 'Hiệu suất ổn định',
-    },
-  ];
+  readonly stats = signal<DashboardStats | null>(null);
+  readonly isLoading = signal(true);
 
-  readonly orderStatuses: ReadonlyArray<OrderStatus> = [
-    { count: 12, label: 'PENDING', barColor: '#c4607e', barWidthPct: 8 },
-    { count: 24, label: 'PROCESSING', barColor: '#1a1a1a', barWidthPct: 15 },
-    { count: 156, label: 'COMPLETED', barColor: '#1a1a1a', barWidthPct: 100 },
-    { count: 3, label: 'CANCELLED', barColor: '#e05070', barWidthPct: 2 },
-  ];
+  readonly formatPrice = formatPrice;
 
-  readonly topProducts: ReadonlyArray<TopProduct> = [
-    { name: 'DIAMOND', line2: 'TIARA', heightPx: 110, color: '#c4607e' },
-    { name: 'GOLD', line2: 'BANGLE', heightPx: 98, color: '#c4607e' },
-    { name: 'ROSE', line2: 'EARRING', heightPx: 78, color: '#d98098' },
-    { name: 'PEARL', line2: 'CHOKER', heightPx: 62, color: '#e8a8b8' },
-    { name: 'OPAL', line2: 'BROOCH', heightPx: 50, color: '#f2cdd6' },
-  ];
+  readonly completedCount = computed(() => {
+    return this.stats()?.orderStatusCounts.find(s => s.status === 'COMPLETED')?.count ?? 0;
+  });
 
-  readonly pendingPayments: ReadonlyArray<PendingPayment> = [
-    {
-      id: 'Order #8842',
-      time: '2h trước',
-      description: 'Cần xác minh thanh toán cho đơn hàng có sẵn.',
-    },
-    {
-      id: 'Order #8839',
-      time: '5h trước',
-      description: 'Xác minh thanh toán tiền đặt cọc cho chiếc nhẫn ngọc lục bảo thiết kế riêng.',
-    },
-  ];
+  readonly avgOrderValue = computed(() => {
+    const s = this.stats();
+    if (!s || this.completedCount() === 0) return 0;
+    return Math.round(s.totalRevenue / this.completedCount());
+  });
 
-  readonly pendingAppointments: ReadonlyArray<PendingAppointment> = [
-    { customer: 'Sarah Jenkins', time: '1 ngày trước', description: 'Tư vấn thiết kế dây chuyền' },
-    { customer: 'Mark Thompson', time: '2 ngày trước', description: 'Tư vấn thiết kế nhẫn' },
-  ];
+  readonly orderStatusBars = computed<OrderStatusBar[]>(() => {
+    const s = this.stats();
+    if (!s) return [];
+    const max = Math.max(...s.orderStatusCounts.map(o => o.count), 1);
+    return s.orderStatusCounts.map(o => ({
+      status: o.status,
+      label: STATUS_LABEL[o.status] ?? o.status,
+      count: o.count,
+      barColor: STATUS_COLOR[o.status] ?? '#1a1a1a',
+      barWidthPct: Math.max((o.count / max) * 100, o.count > 0 ? 4 : 0),
+    }));
+  });
 
-  readonly pendingWarranties: ReadonlyArray<PendingWarranty> = [
-    { id: '#REP-402', time: 'Bây giờ', description: 'Rớt đã quý nhẫn.' },
-    { id: '#W-99', time: 'Hôm qua', description: 'Đánh bóng dây chuyền' },
-  ];
+  readonly topProductBars = computed<TopProductBar[]>(() => {
+    const s = this.stats();
+    if (!s || !s.topProducts.length) return [];
+    const max = Math.max(...s.topProducts.map(p => p.totalSold), 1);
+    return s.topProducts.map((p, i) => ({
+      name: p.name,
+      totalSold: p.totalSold,
+      heightPx: Math.max((p.totalSold / max) * 110, 20),
+      color: BAR_COLORS[i] ?? '#c4607e',
+    }));
+  });
+
+  ngOnInit(): void {
+    this.adminService.getDashboard().subscribe({
+      next: (res) => {
+        this.stats.set(res.data);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.notify.error('Không tải được số liệu dashboard. Vui lòng tải lại trang.');
+      },
+    });
+  }
 }

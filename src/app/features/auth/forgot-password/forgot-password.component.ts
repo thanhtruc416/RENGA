@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 type Step = 'phone' | 'otp' | 'password' | 'success';
 
@@ -20,6 +21,7 @@ type Step = 'phone' | 'otp' | 'password' | 'success';
 })
 export class ForgotPasswordComponent {
   private readonly authService = inject(AuthService);
+  private readonly notify      = inject(NotificationService);
   private readonly destroyRef  = inject(DestroyRef);
   private readonly router      = inject(Router);
 
@@ -82,7 +84,9 @@ export class ForgotPasswordComponent {
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
-          this.phoneServerError.set(err.error?.message ?? 'Không thể gửi mã. Vui lòng thử lại.');
+          const msg = err.error?.message ?? 'Không thể gửi mã. Vui lòng thử lại.';
+          this.phoneServerError.set(msg);
+          this.notify.error(msg);
         },
       });
   }
@@ -101,7 +105,9 @@ export class ForgotPasswordComponent {
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
-          this.otpError.set(err.error?.message ?? 'Không thể gửi lại mã.');
+          const msg = err.error?.message ?? 'Không thể gửi lại mã.';
+          this.otpError.set(msg);
+          this.notify.error(msg);
         },
       });
   }
@@ -125,7 +131,9 @@ export class ForgotPasswordComponent {
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
           this._clearOtp();
-          this.otpError.set(err.error?.message ?? 'Mã OTP không hợp lệ.');
+          const msg = err.error?.message ?? 'Mã OTP không hợp lệ.';
+          this.otpError.set(msg);
+          this.notify.error(msg);
         },
       });
   }
@@ -211,7 +219,9 @@ export class ForgotPasswordComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        this.passwordError.set(err.error?.message ?? 'Đã xảy ra lỗi. Vui lòng thử lại.');
+        const msg = err.error?.message ?? 'Đã xảy ra lỗi. Vui lòng thử lại.';
+        this.passwordError.set(msg);
+        this.notify.error(msg);
       },
     });
   }

@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AccountService, LoyaltyTransaction } from '../account.service';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 interface VoucherCard {
   id: string;
@@ -33,6 +34,7 @@ interface PointHistoryRow {
 export class ProfileLoyaltyComponent implements OnInit {
   private readonly accountService = inject(AccountService);
   private readonly authService    = inject(AuthService);
+  private readonly notify         = inject(NotificationService);
   private readonly destroyRef     = inject(DestroyRef);
 
   // ── User ─────────────────────────────────────────────────────────────────────
@@ -153,7 +155,10 @@ export class ProfileLoyaltyComponent implements OnInit {
             }
           }
         },
-        error: () => this.isLoadingLoyalty.set(false),
+        error: () => {
+          this.isLoadingLoyalty.set(false);
+          this.notify.error('Không tải được điểm thưởng thành viên. Vui lòng tải lại trang.');
+        },
       });
   }
 }

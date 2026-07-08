@@ -1,5 +1,17 @@
 ﻿<div class="order-detail-page">
 
+@if (isLoading()) {
+  <div class="order-detail-state">
+    <p>Đang tải đơn hàng...</p>
+  </div>
+} @else if (loadError()) {
+  <div class="order-detail-state">
+    <h2>Không tìm thấy đơn hàng</h2>
+    <p>Đơn hàng không tồn tại hoặc bạn không có quyền xem đơn này. Vui lòng kiểm tra lại mã đơn hàng.</p>
+    <a routerLink="/orders/lookup" class="order-detail-state__link">Tra cứu lại đơn hàng</a>
+  </div>
+} @else {
+
   <div class="order-detail-top">
     <div class="order-detail-top__inner">
 
@@ -202,6 +214,7 @@
     </div>
   </div>
 
+}
 </div>
 
 @if (showWarrantyModal()) {

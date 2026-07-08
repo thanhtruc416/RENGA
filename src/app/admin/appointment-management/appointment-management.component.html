@@ -14,7 +14,7 @@
           <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           <input type="text" class="filter-input filter-input--date" readonly
             [value]="filterDateDisplay()"
-            placeholder="Oct 24 - Oct 30"
+            placeholder="Chọn khoảng ngày"
             (click)="showDatePicker.set(!showDatePicker())">
           @if (showDatePicker()) {
             <div class="date-picker-panel">
@@ -37,16 +37,18 @@
         <label class="filter-label">NHÀ THIẾT KẾ</label>
         <select class="filter-select" [value]="filterDesigner()" (change)="filterDesigner.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="Sofia Laurent">Sofia Laurent</option>
-          <option value="Isabella Vance">Isabella Vance</option>
+          @for (d of designersList(); track d.employee_id) {
+            <option [value]="d.employee_id">{{ d.full_name }}</option>
+          }
         </select>
       </div>
       <div class="filter-group">
         <label class="filter-label">TRẠNG THÁI</label>
         <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
           <option value="">Tất cả</option>
-          <option value="booked">Đã đặt lịch</option>
-          <option value="completed">Đã hoàn tất</option>
+          @for (s of statusOptions; track s) {
+            <option [value]="s">{{ statusLabel[s] }}</option>
+          }
         </select>
       </div>
       <div class="filter-group" style="justify-content:flex-end">
@@ -56,11 +58,6 @@
           <button class="appt-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
         }
       </div>
-    </div>
-
-    <div class="search-box">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" class="search-input" placeholder="Tìm kiếm...">
     </div>
   </div>
 
@@ -75,63 +72,58 @@
     </div>
 
     <div class="appt-table__body">
-      @for (appt of paginatedAppointments(); track appt.id) {
-        <div class="appt-table__row" [class.appt-table__row--hidden]="appt.isHidden">
-          
-          <div class="table-cell table-cell--customer">
-            <div class="customer-avatar" [style.background-color]="appt.customer.bgColor">
-              {{ appt.customer.initials }}
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (appointments().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Không có lịch hẹn nào.</p>
+      } @else {
+        @for (appt of appointments(); track appt.appointment_id) {
+          <div class="appt-table__row">
+
+            <div class="table-cell table-cell--customer">
+              <div class="customer-avatar" style="background-color:#f6d6d6">
+                {{ appt.customer_name.slice(0,2).toUpperCase() }}
+              </div>
+              <div>
+                <p class="table-cell__title">{{ appt.customer_name }}</p>
+                <p class="table-cell__sub">{{ appt.customer_tier || '' }} · {{ appt.customer_phone }}</p>
+              </div>
             </div>
-            <div>
-              <p class="table-cell__title">{{ appt.customer.name }}</p>
-              <p class="table-cell__sub">{{ appt.customer.tier }}</p>
+
+            <div class="table-cell table-cell--designer">
+              <img class="designer-avatar" [src]="appt.designer_avatar || 'https://i.pravatar.cc/150'" [alt]="appt.designer_name">
+              <p class="table-cell__text">{{ appt.designer_name }}</p>
             </div>
-          </div>
 
-          <div class="table-cell table-cell--designer">
-            <img class="designer-avatar" [src]="appt.designer.avatarUrl" [alt]="appt.designer.name">
-            <p class="table-cell__text">{{ appt.designer.name }}</p>
-          </div>
+            <div class="table-cell">
+              <p class="table-cell__text">{{ formatDate(appt.slot_date) }}</p>
+              <p class="table-cell__sub">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</p>
+            </div>
 
-          <div class="table-cell">
-            <p class="table-cell__text">{{ appt.date }}</p>
-            <p class="table-cell__sub">{{ appt.time }}</p>
-          </div>
+            <div class="table-cell text-center">
+              <span class="badge" [class.badge--booked]="appt.appointment_status === 'PENDING' || appt.appointment_status === 'CONFIRMED'"
+                    [class.badge--completed]="appt.appointment_status === 'COMPLETED'">
+                {{ statusLabel[appt.appointment_status] }}
+              </span>
+            </div>
 
-          <div class="table-cell text-center">
-            @if (appt.status === 'booked') {
-              <span class="badge badge--booked">ĐÃ ĐẶT LỊCH</span>
-            } @else {
-              <span class="badge badge--completed">ĐÃ HOÀN TẤT</span>
-            }
-          </div>
-
-          <div class="table-cell table-cell--actions text-right">
-            @if (appt.status === 'booked') {
-              <!-- Cập nhật kết quả -->
-              <button class="action-btn" aria-label="Cập nhật kết quả" title="Cập nhật kết quả" (click)="openUpdateResultModal(appt)" [disabled]="appt.isHidden">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-              </button>
-              
-              <!-- Thay đổi thông tin lịch hẹn -->
-              <button class="action-btn" aria-label="Thay đổi thông tin lịch hẹn" title="Thay đổi thông tin lịch hẹn" (click)="openChangeInfoModal(appt)" [disabled]="appt.isHidden">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
-              </button>
-            
-              <!-- Mắt Xem (Ẩn/Hiện) -->
-              <button class="action-btn" [title]="appt.isHidden ? 'Hiện lịch hẹn' : 'Ẩn lịch hẹn'" (click)="toggleVisibility(appt)">
-                @if (appt.isHidden) {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                } @else {
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            <div class="table-cell table-cell--actions text-right">
+              @if (nextActions[appt.appointment_status].length) {
+                @for (action of nextActions[appt.appointment_status]; track action.status) {
+                  <button class="btn-action btn-action--outline" (click)="changeStatus(appt, action.status)">{{ action.label }}</button>
                 }
-              </button>
-            } @else {
-              <span class="text-completed">✓ Lịch sử tư vấn</span>
-            }
-          </div>
+                @if (appt.appointment_status === 'PENDING' || appt.appointment_status === 'CONFIRMED') {
+                  <button class="action-btn" aria-label="Đổi nhà thiết kế / khung giờ" title="Đổi nhà thiết kế / khung giờ" (click)="openReassignModal(appt)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                  </button>
+                }
+              } @else {
+                <span class="text-completed">—</span>
+              }
+            </div>
 
-        </div>
+          </div>
+        }
       }
     </div>
   </div>
@@ -139,162 +131,70 @@
   <!-- Pagination -->
   <footer class="appt-page__pagination">
     <p class="appt-page__pagination-info">
-      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > totalItems ? totalItems : currentPage() * itemsPerPage }} TRÊN {{ totalItems }} LỊCH HẸN
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} LỊCH HẸN
     </p>
     <div class="appt-page__pagination-controls">
       <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
-      @for (page of pageNumbers; track page) {
+      @for (page of pageNumbers(); track page) {
         <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
       }
-      <button class="pagination-btn" [disabled]="currentPage() === totalPages" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
     </div>
   </footer>
 </div>
 
 
-<!-- ================= MODAL 1: THAY ĐỔI THÔNG TIN LỊCH HẸN ================= -->
-@if (activeModal() === 'change-info') {
+<!-- ================= MODAL: ĐỔI NHÀ THIẾT KẾ / KHUNG GIỜ ================= -->
+@if (activeModal() === 'reassign' && selectedAppointment(); as appt) {
   <div class="modal-overlay" (click)="closeModal()">
     <div class="modal-container modal-container--sm" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <div>
-          <h2 class="modal-title">Thay đổi thông tin lịch hẹn</h2>
-          <p class="modal-subtitle">Thay đổi thông tin lịch hẹn và nhà thiết kế</p>
+          <h2 class="modal-title">Đổi nhà thiết kế / khung giờ</h2>
+          <p class="modal-subtitle">Lịch hẹn của {{ appt.customer_name }}</p>
         </div>
         <button class="modal-close" (click)="closeModal()">✕</button>
-      </div>
-
-      <!-- Tabs -->
-      <div class="modal-tabs">
-        <button class="modal-tab-btn" [class.modal-tab-btn--active]="changeApptTab() === 'designer'" (click)="changeApptTab.set('designer')">Đổi Designer phụ trách</button>
-        <button class="modal-tab-btn" [class.modal-tab-btn--active]="changeApptTab() === 'datetime'" (click)="changeApptTab.set('datetime')">Thay đổi lịch hẹn</button>
       </div>
 
       <div class="modal-body modal-body--no-pad-bottom">
-        
-        <!-- Tab 1: Đổi Designer -->
-        @if (changeApptTab() === 'designer') {
-          <div class="search-box search-box--full">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            <input type="text" class="search-input" placeholder="Tìm tên hoặc chuyên môn...">
-          </div>
-
-          <div class="designer-list">
-            @for (ds of designersList(); track ds.id) {
-              <div class="designer-item">
-                <img class="designer-item__avatar" [src]="ds.avatarUrl" [alt]="ds.name" [class.is-grayscale]="ds.isCurrent">
-                <div class="designer-item__info">
-                  <p class="designer-item__name" [class.text-muted]="ds.isCurrent">{{ ds.name }}</p>
-                  <p class="designer-item__role">{{ ds.role }}</p>
-                </div>
-                
-                @if (ds.isCurrent) {
-                  <span class="designer-item__status">ĐANG PHỤ TRÁCH</span>
-                } @else {
-                  <button class="btn btn--outline" (click)="selectNewDesigner(ds.id)">CHỌN</button>
-                }
-              </div>
-            }
-          </div>
-        }
-
-        <!-- Tab 2: Thay đổi lịch hẹn -->
-        @if (changeApptTab() === 'datetime') {
-          <div class="form-group form-group--full" style="margin-bottom: 16px;">
-            <label class="form-label">Chọn ngày mới</label>
-            <div class="form-input-wrap">
-              <input type="date" class="form-input" placeholder="mm/dd/yyyy">
-            </div>
-          </div>
-          
-          <div class="form-group form-group--full" style="margin-bottom: 16px;">
-            <label class="form-label">Chọn khung giờ</label>
-            <div class="form-input-wrap">
-              <select class="form-input">
-                <option value="09">09:00 - 10:00</option>
-                <option value="10">10:00 - 11:00</option>
-                <option value="14">14:00 - 15:00</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group form-group--full" style="margin-bottom: 16px;">
-            <label class="form-label">Lý do thay đổi / Ghi chú cho khách hàng</label>
-            <textarea class="form-textarea" style="border: 1px solid var(--color-border);" placeholder="Nhập lý do dời lịch hoặc lời nhắn gửi đến khách hàng..."></textarea>
-          </div>
-        }
-      </div>
-
-      <div class="modal-footer" [style.border-top]="changeApptTab() === 'datetime' ? 'none' : ''">
-        <button class="btn btn--black" (click)="closeModal()">HỦY BỎ</button>
-        <button class="btn btn--primary" (click)="submitChangeAppointment()">CẬP NHẬT</button>
-      </div>
-    </div>
-  </div>
-}
-
-
-<!-- ================= MODAL 2: CẬP NHẬT KẾT QUẢ TƯ VẤN ================= -->
-@if (activeModal() === 'update-result') {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal-container" [formGroup]="updateForm" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <div>
-          <h2 class="modal-title">Cập nhật kết quả tư vấn</h2>
-          <p class="modal-subtitle">Cập nhật kết quả sau buổi tư vấn cho khách hàng</p>
-        </div>
-        <button class="modal-close" (click)="closeModal()">✕</button>
-      </div>
-
-      <div class="modal-body">
-        
-        <div class="form-group form-group--full">
-          <label class="form-label">GHI CHÚ TƯ VẤN</label>
-          <div class="rich-textarea-wrap">
-            <textarea class="form-textarea" formControlName="notes" placeholder="Nhập tóm tắt yêu cầu và phản hồi của khách hàng..."></textarea>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">HƯỚNG THIẾT KẾ</label>
-            <select class="form-input" formControlName="designStyle">
-              <option value="">Chọn phong cách</option>
-              <option value="modern">Hiện đại</option>
-              <option value="classic">Cổ điển</option>
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Nhà thiết kế</label>
+          <div class="form-input-wrap">
+            <select class="form-input" [value]="reassignDesignerId()" (change)="onReassignDesignerChange($any($event.target).value)">
+              <option value="">Chọn nhà thiết kế</option>
+              @for (d of designersList(); track d.employee_id) {
+                <option [value]="d.employee_id">{{ d.full_name }}</option>
+              }
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">NGÂN SÁCH DỰ KIẾN (VND)</label>
-            <input type="text" class="form-input" formControlName="estimatedBudget" placeholder="Ví dụ: 50.000.000">
-          </div>
         </div>
 
-        <div class="form-group form-group--full">
-          <label class="form-label">NGÀY HẸN TIẾP THEO</label>
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Ngày hẹn mới</label>
           <div class="form-input-wrap">
-            <input type="date" class="form-input" formControlName="nextAppointment" placeholder="mm/dd/yyyy">
+            <input type="date" class="form-input" [value]="reassignDate()" (change)="onReassignDateChange($any($event.target).value)">
           </div>
         </div>
 
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Khung giờ trống</label>
+          <div class="form-input-wrap">
+            <select class="form-input" [value]="reassignSlotId()" (change)="reassignSlotId.set($any($event.target).value)">
+              <option value="">Chọn khung giờ</option>
+              @for (s of reassignSlots(); track s.slot_id) {
+                <option [value]="s.slot_id">{{ formatTime(s.start_time) }} - {{ formatTime(s.end_time) }}</option>
+              } @empty {
+                <option value="" disabled>Không có khung giờ trống</option>
+              }
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="modal-footer modal-footer--gray">
+      <div class="modal-footer">
         <button class="btn btn--black" (click)="closeModal()">HỦY BỎ</button>
-        <button class="btn btn--primary" (click)="submitUpdateResult()">LƯU KẾT QUẢ</button>
+        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitReassign()">CẬP NHẬT</button>
       </div>
     </div>
-  </div>
-}
-
-<!-- TOAST MESSAGE -->
-@if (showToast()) {
-  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
-    @if (toastType() === 'success') {
-      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-    } @else {
-      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-    }
-    <span>{{ toastMessage() }}</span>
   </div>
 }

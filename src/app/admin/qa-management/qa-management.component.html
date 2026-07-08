@@ -6,124 +6,117 @@
   </header>
 
   <!-- Statistics Section -->
-  <div class="qa-page__stats">
-    @for (stat of stats(); track stat.id) {
-      <div class="stat-card" [class.stat-card--warning]="stat.isWarning">
-        <p class="stat-card__label">{{ stat.label }}</p>
+  @if (stats(); as s) {
+    <div class="qa-page__stats">
+      <div class="stat-card">
+        <p class="stat-card__label">Tỷ lệ phản hồi</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.replyRatePct }}%</span></div>
+      </div>
+      <div class="stat-card" [class.stat-card--warning]="s.newLast24h > 0">
+        <p class="stat-card__label">Câu hỏi mới (24h)</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.newLast24h }}</span></div>
+      </div>
+      <div class="stat-card">
+        <p class="stat-card__label">Thời gian phản hồi TB</p>
         <div class="stat-card__value-group">
-          <span class="stat-card__value">{{ stat.value }}</span>
-          @if (stat.subtext) {
-            <span class="stat-card__subtext">{{ stat.subtext }}</span>
-          }
+          <span class="stat-card__value">{{ s.avgReplyHours !== null ? (s.avgReplyHours | number:'1.1-1') + 'h' : '—' }}</span>
         </div>
       </div>
-    }
-  </div>
+      <div class="stat-card" [class.stat-card--warning]="s.pendingCount > 0">
+        <p class="stat-card__label">Chờ trả lời</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.pendingCount }}</span></div>
+      </div>
+    </div>
+  }
 
   <!-- Tabs -->
   <nav class="qa-page__tabs">
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'pending'" (click)="changeTab('pending')">
-      Câu hỏi chờ trả lời ({{ pendingCount() }})
+      Câu hỏi chờ trả lời @if (stats()) { ({{ stats()!.pendingCount }}) }
     </button>
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'replied'" (click)="changeTab('replied')">
-      Đã phản hồi ({{ repliedCount() }})
+      Đã phản hồi @if (stats()) { ({{ stats()!.repliedCount }}) }
     </button>
     <button class="qa-page__tab-btn" [class.qa-page__tab-btn--active]="currentTab() === 'hidden'" (click)="changeTab('hidden')">
-      Câu hỏi bị ẩn ({{ hiddenCount() }})
+      Câu hỏi bị ẩn @if (stats()) { ({{ stats()!.hiddenCount }}) }
     </button>
   </nav>
 
-  <!-- Questions List (Gắn FormGroup tổng ở đây) -->
+  <!-- Questions List -->
   <div class="qa-page__list" [formGroup]="replyForm">
-    @for (question of paginatedQuestions(); track question.id) {
-      <article class="question-card">
-        
-        <!-- Cột Trái: Thông tin khách hàng -->
-        <div class="question-card__customer">
-          <img class="question-card__avatar" [src]="question.customer.avatarUrl" [alt]="question.customer.name" loading="lazy" />
-          <div class="question-card__customer-info">
-            <p class="question-card__customer-name">{{ question.customer.name }}</p>
-            <p class="question-card__customer-type">{{ question.customer.type }}</p>
-          </div>
-          <!-- Dùng DatePipe format trực tiếp trên template -->
-          <p class="question-card__date">{{ question.date | date:'dd/MM/yyyy - HH:mm' }}</p>
-        </div>
+    @if (isLoading()) {
+      <p class="qa-page__empty">Đang tải...</p>
+    } @else {
+      @for (question of questions(); track question.question_id) {
+        <article class="question-card">
 
-        <!-- Cột Giữa: Sản phẩm & Nội dung câu hỏi -->
-        <div class="question-card__content">
-          <div class="question-card__product">
-            <img class="question-card__product-img" [src]="question.product.imageUrl" [alt]="question.product.name" loading="lazy" />
-            <div class="question-card__product-detail">
-              <span class="question-card__tag">SẢN PHẨM</span>
-              <p class="question-card__product-name">{{ question.product.name }}</p>
+          <div class="question-card__customer">
+            <img class="question-card__avatar" src="https://i.pravatar.cc/150" [alt]="question.customer_name" loading="lazy" />
+            <div class="question-card__customer-info">
+              <p class="question-card__customer-name">{{ question.customer_name }}</p>
+              <p class="question-card__customer-type">{{ question.customer_tier || '' }}</p>
+            </div>
+            <p class="question-card__date">{{ question.created_at | date:'dd/MM/yyyy - HH:mm' }}</p>
+          </div>
+
+          <div class="question-card__content">
+            <div class="question-card__product">
+              <img class="question-card__product-img" [src]="question.product_image || 'assets/images/collection-prod-diamond-ring.png'" [alt]="question.product_name" loading="lazy" />
+              <div class="question-card__product-detail">
+                <span class="question-card__tag">SẢN PHẨM</span>
+                <p class="question-card__product-name">{{ question.product_name }}</p>
+              </div>
+            </div>
+
+            <div class="question-card__qna">
+              <span class="question-card__tag">CÂU HỎI</span>
+              <p class="question-card__text">{{ question.question_content }}</p>
+              @if (currentTab() === 'pending') {
+                <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
+                <textarea
+                  class="question-card__textarea"
+                  [formControlName]="question.question_id"
+                  placeholder="Nhập câu trả lời...">
+                </textarea>
+              } @else if (question.reply_content) {
+                <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
+                <p class="question-card__text">{{ question.reply_content }}</p>
+              }
             </div>
           </div>
 
-          <div class="question-card__qna">
-            <span class="question-card__tag">CÂU HỎI</span>
-            <p class="question-card__text">{{ question.questionText }}</p>
-              @if (currentTab() === 'pending') {
-            <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
-            <!-- Gắn formControlName bằng ID của câu hỏi -->
-            <textarea 
-              class="question-card__textarea" 
-              [formControlName]="question.id"
-              placeholder="Nhập câu trả lời...">
-            </textarea>
-          }
+          <div class="question-card__actions">
+            @if (currentTab() === 'pending') {
+              <button class="btn btn--primary" (click)="submitReply(question.question_id)">GỬI PHẢN HỒI</button>
+              <button class="btn btn--outline" (click)="hideQuestion(question.question_id)">ẨN CÂU HỎI</button>
+            } @else if (currentTab() === 'hidden') {
+              <button class="btn btn--outline" (click)="unhideQuestion(question.question_id)">BỎ ẨN</button>
+            } @else {
+              <button class="btn btn--outline" (click)="hideQuestion(question.question_id)">ẨN CÂU HỎI</button>
+            }
           </div>
-        </div>
-
-        <!-- Cột Phải: Các nút thao tác -->
-        <div class="question-card__actions">
-           @if (currentTab() === 'pending') {
-          <button class="btn btn--primary" (click)="submitReply(question.id)">GỬI PHẢN HỒI</button>
-          <button class="btn btn--outline" (click)="hideQuestion(question.id)">ẨN CÂU HỎI</button>
-           } @else if (currentTab() === 'hidden') {
-            <button class="btn btn--outline" (click)="changeTab('pending')">BỎ ẨN</button>
-          }
-        </div>
-      </article>
-    } @empty {
-      <!-- Fallback giao diện khi mảng questions rỗng -->
-      <p class="qa-page__empty">Không có câu hỏi nào trong mục này.</p>
+        </article>
+      } @empty {
+        <p class="qa-page__empty">Không có câu hỏi nào trong mục này.</p>
+      }
     }
   </div>
 
   <!-- Pagination -->
   <footer class="qa-page__pagination">
     <p class="qa-page__pagination-info">
-      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > totalItems() ? totalItems() : currentPage() * itemsPerPage }} TRÊN {{ totalItems() }} CÂU HỎI
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} CÂU HỎI
     </p>
     <div class="qa-page__pagination-controls">
       <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
-      
+
       @for (page of pageNumbers(); track page) {
         <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">
           {{ page }}
         </button>
       }
-      
+
       <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
     </div>
   </footer>
 </div>
-
-<!-- Toast Message -->
-@if (showToast()) {
-  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
-    @if (toastType() === 'success') {
-      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
-    } @else {
-      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="8" x2="12" y2="12"></line>
-        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-      </svg>
-    }
-    <span>{{ toastMessage() }}</span>
-  </div>
-}

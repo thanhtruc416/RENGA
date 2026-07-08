@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReviewService, ReviewableItem } from '../core/services/review.service';
 import { formatPrice } from '../shared/utils/currency.util';
+import { NotificationService } from '../core/services/notification.service';
 
 interface ReviewSpec { label: string; value: string; }
 
@@ -29,6 +30,7 @@ const ORDER_TYPE_LABEL: Record<string, string> = {
 export class ReviewsComponent implements OnInit {
   private readonly route          = inject(ActivatedRoute);
   private readonly reviewService  = inject(ReviewService);
+  private readonly notify         = inject(NotificationService);
 
   readonly orderItemId = signal('');
   readonly item         = signal<ReviewableItem | null>(null);
@@ -127,12 +129,16 @@ export class ReviewsComponent implements OnInit {
         if (res.success) {
           this.isSubmitted.set(true);
         } else {
-          this.submitError.set(res.message ?? 'Gửi đánh giá thất bại.');
+          const msg = res.message ?? 'Gửi đánh giá thất bại.';
+          this.submitError.set(msg);
+          this.notify.error(msg);
         }
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.submitError.set(err?.error?.message ?? 'Gửi đánh giá thất bại. Vui lòng thử lại.');
+        const msg = err?.error?.message ?? 'Gửi đánh giá thất bại. Vui lòng thử lại.';
+        this.submitError.set(msg);
+        this.notify.error(msg);
       },
     });
   }

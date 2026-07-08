@@ -87,6 +87,20 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
+// POST /api/auth/employee/login
+router.post('/employee/login', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const result = await authService.loginEmployee(
+      { email, password },
+      { device: req.headers['user-agent'], ip: req.ip },
+    );
+    res.json({ success: true, ...result });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
 // ── Quên mật khẩu ──────────────────────────────────────────────────────────
 
 // POST /api/auth/forgot-password/send-otp

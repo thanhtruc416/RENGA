@@ -62,7 +62,7 @@ export async function createWarrantyRequest(payload: CreateWarrantyRequestPayloa
       }
     }
 
-    const warrantyId = await nextId('WAR', 'warranty_request', 'warranty_id');
+    const warrantyId = await nextId('WRT', 'warranty_request', 'warranty_id');
     await conn.execute(
       `INSERT INTO warranty_request
          (warranty_id, order_id, request_type, issue_description, evidence_images, warranty_status, created_at)
@@ -149,7 +149,7 @@ export async function createReturnRequest(payload: CreateReturnRequestPayload): 
       throw err;
     }
 
-    const warrantyId = await nextId('WAR', 'warranty_request', 'warranty_id');
+    const warrantyId = await nextId('WRT', 'warranty_request', 'warranty_id');
     await conn.execute(
       `INSERT INTO warranty_request
          (warranty_id, order_id, request_type, issue_description, evidence_images, warranty_status, created_at)

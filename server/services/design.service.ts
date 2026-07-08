@@ -31,6 +31,54 @@ async function nextId(prefix: string, table: string, col: string): Promise<strin
   return `${prefix}${String((max || 0) + 1).padStart(6, '0')}`;
 }
 
+function timeToMinutes(t: string): number {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+// Khoảng cách (phút) giữa 2 khung giờ; số âm nghĩa là chồng lấn nhau.
+function gapMinutes(aStart: string, aEnd: string, bStart: string, bEnd: string): number {
+  const as = timeToMinutes(aStart), ae = timeToMinutes(aEnd);
+  const bs = timeToMinutes(bStart), be = timeToMinutes(bEnd);
+  if (ae <= bs) return bs - ae;
+  if (be <= as) return as - be;
+  return -1;
+}
+
+// BR-35: 1 nghệ nhân không nhận 2 lịch trùng giờ, cách nhau tối thiểu 1 tiếng.
+export async function assertNoScheduleConflict(
+  conn: any,
+  employeeId: string,
+  slotDate: unknown,
+  startTime: string,
+  endTime: string,
+  excludeAppointmentId?: string,
+): Promise<void> {
+  const params: any[] = [employeeId, slotDate];
+  let excludeClause = '';
+  if (excludeAppointmentId) {
+    excludeClause = ' AND a2.appointment_id != ?';
+    params.push(excludeAppointmentId);
+  }
+  const [conflicts]: [any[], any] = await conn.execute(
+    `SELECT s2.start_time, s2.end_time
+     FROM appointment a2
+     JOIN appointment_slot s2 ON s2.slot_id = a2.slot_id
+     JOIN designer_schedule sch2 ON sch2.schedule_id = s2.schedule_id
+     WHERE sch2.employee_id = ? AND s2.slot_date = ?
+       AND a2.appointment_status IN ('PENDING','CONFIRMED')
+       ${excludeClause}`,
+    params,
+  );
+  for (const c of conflicts as any[]) {
+    if (gapMinutes(startTime, endTime, c.start_time, c.end_time) < 60) {
+      const err: any = new Error('Nghệ nhân đã có lịch hẹn gần khung giờ này. Vui lòng chọn khung giờ khác (cách nhau tối thiểu 1 tiếng).');
+      err.status = 409;
+      throw err;
+    }
+  }
+}
+
 export interface CreateAppointmentPayload {
   clientId: string;
   slotId: string;
@@ -44,7 +92,10 @@ export async function createAppointment(payload: CreateAppointmentPayload) {
     await conn.beginTransaction();
 
     const [[slot]] = await conn.execute<any[]>(
-      'SELECT is_available, slot_date, start_time FROM appointment_slot WHERE slot_id = ? FOR UPDATE',
+      `SELECT s.is_available, s.slot_date, s.start_time, s.end_time, sch.employee_id
+       FROM appointment_slot s
+       JOIN designer_schedule sch ON sch.schedule_id = s.schedule_id
+       WHERE s.slot_id = ? FOR UPDATE`,
       [payload.slotId]
     );
     if (!slot || !slot.is_available) {
@@ -57,6 +108,8 @@ export async function createAppointment(payload: CreateAppointmentPayload) {
     if (slotDate.getTime() < Date.now() + 24 * 60 * 60 * 1000) {
       throw new Error('Chỉ được đặt lịch trước ít nhất 24 giờ');
     }
+
+    await assertNoScheduleConflict(conn, slot.employee_id, slot.slot_date, slot.start_time, slot.end_time);
 
     // BR-18: The Designer phải thanh toán 100% phí tư vấn ngay khi đặt lịch —
     // submit ở bước 4 đã đại diện cho hành động thanh toán, nên ghi nhận payment_status='PAID' ngay.

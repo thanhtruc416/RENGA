@@ -192,6 +192,7 @@
 .status-badge--pending { color: var(--color-primary); }
 .status-badge--processing { color: var(--color-muted); }
 .status-badge--completed { color: var(--color-dark); }
+.status-badge--rejected { color: #c0392b; }
 
 .text-delivered { font-size: 11px; color: var(--color-muted); }
 

@@ -6,13 +6,14 @@ import { HeaderComponent } from './shared/components/header/header';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
 import { LoginRequiredModalComponent } from './shared/components/modal/login-required-modal/login-required-modal.component';
+import { GlobalToastComponent } from './shared/components/global-toast/global-toast.component';
 import { ModalService } from './core/services/modal.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, LoginRequiredModalComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, LoginRequiredModalComponent, GlobalToastComponent],
   templateUrl: './app.html',
 })
 export class App {
