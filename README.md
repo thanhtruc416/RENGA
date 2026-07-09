@@ -1,142 +1,233 @@
 # RENGA — Nền tảng thương mại trang sức cao cấp
 
-> **Framework:** Angular 22 (Standalone API) · **Ngôn ngữ:** TypeScript · **Style:** CSS thuần + CSS Custom Properties
+> Đồ án nhóm — website thương mại điện tử trang sức với thiết kế tuỳ biến (The Studio), đặt lịch tư vấn nghệ nhân (The Designer), thử trang sức bằng AR, và một hệ thống quản trị (Admin) đầy đủ.
+
+**Stack:** Angular 21+ (Standalone + Signals) · Express 5 + TypeScript · MySQL · JWT Auth
 
 ---
 
 ## Mục lục
 
-1. [Tổng quan dự án](#1-tổng-quan-dự-án)
-2. [Cài đặt & Chạy dự án](#2-cài-đặt--chạy-dự-án)
-3. [Cấu trúc thư mục](#3-cấu-trúc-thư-mục)
-4. [Routing](#4-routing)
-5. [CSS Token System](#5-css-token-system)
-6. [Shared Components](#6-shared-components)
-7. [Core — Services, Guards, Interceptors](#7-core--services-guards-interceptors)
-8. [Models — TypeScript Interfaces](#8-models--typescript-interfaces)
-9. [Admin Module](#9-admin-module)
-10. [Quy tắc code & Convention](#10-quy-tắc-code--convention)
-11. [Quy trình Git & Merge](#11-quy-trình-git--merge)
-12. [Các lỗi thường gặp sau merge](#12-các-lỗi-thường-gặp-sau-merge)
+1. [Giới thiệu](#1-giới-thiệu)
+2. [Tính năng](#2-tính-năng)
+3. [Tech Stack](#3-tech-stack)
+4. [Bắt đầu nhanh](#4-bắt-đầu-nhanh)
+5. [Cấu trúc thư mục](#5-cấu-trúc-thư-mục)
+6. [Routing (Frontend)](#6-routing-frontend)
+7. [Tổng quan Backend & API](#7-tổng-quan-backend--api)
+8. [CSS Token System](#8-css-token-system)
+9. [Shared Components](#9-shared-components)
+10. [Core — Services, Guards, Interceptors](#10-core--services-guards-interceptors)
+11. [Models — TypeScript Interfaces](#11-models--typescript-interfaces)
+12. [Admin Module](#12-admin-module)
+13. [Quy tắc code & Convention](#13-quy-tắc-code--convention)
+14. [Quy trình Git & Merge](#14-quy-trình-git--merge)
+15. [Các lỗi thường gặp sau merge](#15-các-lỗi-thường-gặp-sau-merge)
 
 ---
 
-## 1. Tổng quan dự án
+## 1. Giới thiệu
 
-RENGA là nền tảng thương mại điện tử trang sức cao cấp, gồm 2 luồng chính:
+RENGA là nền tảng thương mại điện tử trang sức cao cấp, xoay quanh 3 luồng chính:
 
 | Luồng | Mô tả |
 |-------|-------|
-| **Customer** | Xem sản phẩm, thiết kế nhẫn tuỳ chỉnh (The Studio), đặt lịch với chuyên gia (The Designer), thanh toán, quản lý đơn hàng |
-| **Admin** | Quản lý sản phẩm, đơn hàng, lịch hẹn, voucher, bảo hành, Q&A |
+| **Khách hàng (Customer)** | Duyệt/tìm sản phẩm, thiết kế nhẫn tuỳ chỉnh (The Studio), đặt lịch tư vấn với nghệ nhân (The Designer), thử trang sức qua camera (AR), giỏ hàng & thanh toán, theo dõi đơn hàng, tích điểm thành viên |
+| **Khách vãng lai (Guest)** | Xem sản phẩm, đặt mua sản phẩm có sẵn không cần tài khoản |
+| **Quản trị viên (Admin)** | Quản lý sản phẩm, đơn hàng, lịch hẹn, bảo hành, voucher, hỏi-đáp sản phẩm — có dashboard số liệu thời gian thực |
 
-**Tech Stack:**
+Dự án gồm 2 phần triển khai riêng biệt trong cùng repo:
+
+- **Frontend** — Angular 21+ SPA (`src/`), gọi API qua `HttpClient`
+- **Backend** — Express 5 + TypeScript (`server/`, entry point `server.ts`), kết nối MySQL qua `mysql2/promise`
+
+---
+
+## 2. Tính năng
+
+### Khách hàng
+
+- Duyệt sản phẩm theo danh mục, lọc chất liệu/khoảng giá/loại đá, tìm kiếm gợi ý theo thời gian thực
+- **The Studio** — thiết kế nhẫn/dây chuyền/vòng tay 5 bước (phôi → chất liệu → đá → khắc chữ → xem giá), giá tính lại tức thời khi đổi lựa chọn
+- **The Designer** — đặt lịch tư vấn với nghệ nhân thật: chọn nghệ nhân, chọn khung giờ trống, thanh toán phí tư vấn; hệ thống tự chặn trùng lịch và đảm bảo khoảng cách tối thiểu 1 tiếng giữa 2 lịch hẹn của cùng một nghệ nhân
+- **Thử trang sức AR** — thử nhẫn trực tiếp qua camera (MediaPipe Hands nhận diện bàn tay theo thời gian thực, overlay nhẫn theo đúng ngón đã chọn)
+- Giỏ hàng & thanh toán (COD, chuyển khoản, ví điện tử, thẻ), áp voucher
+- Theo dõi đơn hàng, huỷ đơn, yêu cầu bảo hành/trả hàng
+- Đánh giá sản phẩm (1–5 sao), hỏi-đáp công khai dưới mỗi sản phẩm
+- Tích điểm thưởng & thăng hạng thành viên (Bạc / Vàng / Bạch kim / Kim cương)
+- Đăng ký/đăng nhập qua OTP, quên mật khẩu, khoá tài khoản sau 5 lần đăng nhập sai (mở khoá bằng OTP)
+- Trợ lý ảo Chatbot (LLM thật, trả lời câu hỏi về đá quý, size nhẫn, bảo quản trang sức)
+- **1 link đăng nhập duy nhất** (`/dang-nhap`) — nhận số điện thoại (khách hàng) hoặc email (nhân viên/admin), tự điều hướng đúng vai trò
+
+### Quản trị viên (`/admin`)
+
+- Dashboard: tổng doanh thu, đơn theo trạng thái, top sản phẩm bán chạy
+- Quản lý sản phẩm (CRUD), quản lý đơn hàng (cập nhật trạng thái theo quy trình)
+- Quản lý lịch hẹn tư vấn (xác nhận/huỷ/hoàn tất, đổi nghệ nhân hoặc khung giờ)
+- Quản lý yêu cầu bảo hành (chấp nhận/từ chối kèm lý do, theo dõi tiến độ sửa chữa)
+- Quản lý voucher (tạo/sửa, tự tính hết hạn theo ngày)
+- Kiểm duyệt hỏi-đáp sản phẩm (trả lời, ẩn/hiện câu hỏi)
+
+---
+
+## 3. Tech Stack
 
 | Thành phần | Công nghệ |
 |---|---|
-| Framework | Angular 22 Standalone |
-| State | Angular Signals (`signal`, `computed`) |
+| Frontend framework | Angular 21+ (Standalone API, Signals) |
+| Ngôn ngữ | TypeScript |
 | HTTP | Angular HttpClient + Interceptors |
 | Style | CSS thuần + CSS Custom Properties |
-| Locale | `vi` (Vietnamese — `LOCALE_ID` đăng ký trong `app.config.ts`) |
-| Test | Vitest |
+| Backend | Node.js + Express 5 + TypeScript (chạy qua `tsx`) |
+| Database | MySQL (`mysql2/promise`, connection pool + transaction) |
+| Xác thực | JWT (access + refresh token), `bcrypt` |
+| Email | Nodemailer (OTP, xác nhận đơn hàng/lịch hẹn) |
+| AI Chatbot | Groq (tương thích chuẩn OpenAI SDK), model `llama-3.3-70b-versatile` |
+| AR thử trang sức | MediaPipe Hands (nhận diện bàn tay qua camera trình duyệt) |
+| Locale | `vi` (Vietnamese) |
+| Test | Vitest (unit), Playwright (kiểm thử thủ công trong quá trình phát triển) |
 | Package Manager | npm |
+
+---
+
+## 4. Bắt đầu nhanh
+
+### Yêu cầu hệ thống
+
+- Node.js ≥ 20
+- MySQL ≥ 8.0
+- npm
+
+### 4.1. Cài đặt
+
+```bash
+git clone https://github.com/thanhtruc416/RENGA.git
+cd RENGA
+npm install
+```
+
+### 4.2. Thiết lập cơ sở dữ liệu
+
+Tạo database rồi import schema có sẵn:
+
+```bash
+mysql -u root -p -e "CREATE DATABASE renga"
+mysql -u root -p renga < renga_schema.sql
+```
+
+> `renga_schema.sql` đã có sẵn `CREATE DATABASE IF NOT EXISTS renga; USE renga;` ở đầu file, nên cũng có thể import thẳng mà không cần tạo database thủ công trước.
+
+### 4.3. Thiết lập biến môi trường
+
+Sao chép file mẫu rồi điền giá trị thật:
+
+```bash
+cp .env.example .env
+```
+
+| Biến | Mô tả |
+|---|---|
+| `PORT` | Cổng chạy backend (mặc định `3000`) |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | Thông tin kết nối MySQL |
+| `JWT_SECRET`, `JWT_EXPIRES_IN` | Khoá ký JWT và thời hạn access token |
+| `API_KEY`, `BASE_URL`, `MODEL_NAME` | Cấu hình chatbot AI (mặc định dùng Groq — có thể đổi sang bất kỳ endpoint tương thích OpenAI nào) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Tài khoản SMTP để gửi email OTP/xác nhận đơn hàng (không có trong `.env.example`, cần thêm thủ công nếu muốn tính năng email hoạt động) |
+
+### 4.4. Chạy dự án
+
+Backend và frontend chạy độc lập, cần 2 terminal:
+
+```bash
+# Terminal 1 — Backend API (http://localhost:3000)
+npm run server
+
+# Terminal 2 — Frontend (http://localhost:4200)
+npm start
+```
+
+Các lệnh khác:
+
+```bash
+npm run build    # Build production frontend → dist/
+npm test         # Chạy unit test (Vitest)
+npm run watch    # Build frontend ở chế độ watch
+npm run server:run   # Chạy backend 1 lần, không watch (dùng cho production)
+```
 
 **API Base URL:**
 - Development: `http://localhost:3000/api`
-- Production: `https://api.renga.vn/api`
+- Production: cấu hình trong `src/environments/environment.prod.ts`
 
 ---
 
-## 2. Cài đặt & Chạy dự án
-
-```bash
-npm install
-npm start        # Dev server → http://localhost:4200
-npm run build    # Build production → dist/
-npm test         # Chạy unit tests
-npm run watch    # Build watch mode
-```
-
----
-
-## 3. Cấu trúc thư mục
+## 5. Cấu trúc thư mục
 
 ```
-src/
-├── app/
-│   ├── app.ts                        # Root component
-│   ├── app.html                      # Root template
-│   ├── app.css                       # Root styles
-│   ├── app.routes.ts                 # ← Tất cả routes customer định nghĩa ở đây
-│   ├── app.config.ts                 # Providers: Router, HttpClient, Interceptors, LOCALE_ID
-│   │
-│   ├── home/                         # Trang chủ (/)
-│   ├── products/                     # Danh sách & chi tiết sản phẩm
-│   │   ├── product-list/             # /products
-│   │   └── product-detail/           # /products/:id
-│   ├── studio/                       # The Studio — thiết kế nhẫn tuỳ chỉnh (/studio)
-│   ├── design/                       # The Designer — đặt lịch chuyên gia (/the-designer)
-│   ├── categories/                   # Danh mục sản phẩm (/danh-muc)
-│   ├── cart/                         # Giỏ hàng (/cart)
-│   ├── checkout/                     # Thanh toán (/checkout)
-│   ├── orders/
-│   │   ├── order-detail/             # /orders/:id
-│   │   ├── order-detail-custom/      # /orders/custom/:id
-│   │   ├── order-lookup/             # /orders/lookup
-│   │   └── order-tracking/           # /orders/tracking
-│   ├── appointment-history/          # Lịch sử lịch hẹn (/appointment-history)
-│   ├── profile/                      # Hồ sơ cá nhân (/profile, /profile/rewards)
-│   ├── admin-login/                  # Trang đăng nhập admin (/quan-tri-vien)
-│   ├── not-found/                    # Trang 404 (**)
-│   │
-│   ├── features/
-│   │   └── auth/                     # Authentication
-│   │       ├── login/                # /dang-nhap
-│   │       ├── register/             # /dang-ki
-│   │       ├── forgot-password/      # /quen-mat-khau
-│   │       └── reset-password/       # /mat-khau-moi
-│   │
-│   ├── admin/                        # Admin Dashboard (/admin — xem mục 9)
-│   │   ├── admin-layout/             # Shell layout (header + sidebar)
-│   │   ├── admin.routes.ts           # ← Admin child routes
-│   │   ├── dashboard/
-│   │   ├── product-management/       # /admin/san-pham
-│   │   ├── order-management/         # /admin/don-hang
-│   │   ├── order-detail/             # /admin/don-hang/:id
-│   │   ├── design-order-create/      # /admin/don-thiet-ke/tao
-│   │   ├── appointment-management/   # /admin/lich-hen
-│   │   ├── voucher-management/       # /admin/voucher
-│   │   ├── warranty-management/      # /admin/bao-hanh
-│   │   └── qa-management/            # /admin/hoi-dap
-│   │
-│   ├── shared/
-│   │   ├── components/               # Components tái sử dụng (xem mục 6)
-│   │   ├── data/                     # Data tĩnh (chatbot-faq.data.ts)
-│   │   ├── modal-found-orders/
-│   │   └── modal-login-required/
-│   │
-│   ├── core/
-│   │   ├── services/                 # AuthService, ModalService
-│   │   ├── guards/                   # authGuard, adminGuard
-│   │   └── interceptors/             # authInterceptor, errorInterceptor
-│   │
-│   └── models/
-│       ├── user.model.ts
-│       └── api-response.model.ts
+RENGA/
+├── server.ts                         # Entry point backend Express
+├── renga_schema.sql                  # Schema + seed data MySQL
+├── .env.example                      # Mẫu biến môi trường
 │
-├── styles/
-│   └── _token.css                    # ← CSS Design Tokens (màu sắc, font, spacing)
-├── styles.css                        # ← Global styles + biến bổ sung cho :root
-├── main.ts                           # Bootstrap Angular app
-└── environments/
-    ├── environment.ts                # Dev config
-    └── environment.prod.ts           # Prod config
+├── server/
+│   ├── routes/                       # Express routers — xem bảng đầy đủ ở mục 7
+│   ├── services/                     # Business logic + truy vấn DB (1 service / domain)
+│   ├── middlewares/                  # auth.middleware (JWT), role.middleware, error.middleware
+│   ├── jobs/                         # Job nền (huỷ lịch hẹn quá hạn chưa thanh toán, xét hạng thành viên)
+│   └── db.ts                         # MySQL connection pool + helper transaction
+│
+├── src/
+│   ├── app/
+│   │   ├── app.ts / app.html / app.css   # Root component
+│   │   ├── app.routes.ts             # ← Tất cả routes customer định nghĩa ở đây
+│   │   ├── app.config.ts             # Providers: Router, HttpClient, Interceptors, LOCALE_ID
+│   │   │
+│   │   ├── home/                     # Trang chủ (/)
+│   │   ├── products/                 # product-list/ (/products), product-detail/ (/products/:id)
+│   │   ├── studio/                   # The Studio — thiết kế nhẫn tuỳ chỉnh (/studio)
+│   │   ├── design/                   # The Designer — đặt lịch chuyên gia (/the-designer)
+│   │   ├── categories/               # Danh mục sản phẩm (/danh-muc)
+│   │   ├── collections/              # Bộ sưu tập (/bo-suu-tap, /bo-suu-tap/:slug)
+│   │   ├── cart/ · checkout/         # Giỏ hàng, thanh toán
+│   │   ├── orders/                   # order-tracking/, order-lookup/, order-detail/,
+│   │   │                             #   order-detail-custom/ (theo dõi/tra cứu/chi tiết đơn hàng)
+│   │   ├── reviews/                  # review-list/ (/orders/reviews), viết đánh giá (/orders/reviews/write)
+│   │   ├── appointment-history/      # Lịch sử lịch hẹn
+│   │   ├── account/                  # profile-info/ (/account/thong-tin),
+│   │   │                             #   profile-loyalty/ (/account/diem-tich-luy)
+│   │   ├── brand-story/              # Câu chuyện thương hiệu (/cau-chuyen-thuong-hieu)
+│   │   ├── sustainable-materials/    # Vật liệu bền vững (/vat-lieu-ben-vung)
+│   │   ├── policies/                 # warranty-policy/ (/chinh-sach-bao-hanh),
+│   │   │                             #   returns-policy/ (/doi-tra-hoan-tien)
+│   │   ├── admin-login/              # Trang đăng nhập admin dự phòng (/quan-tri-vien)
+│   │   │
+│   │   ├── features/auth/            # login/, register/, forgot-password/, reset-password/
+│   │   │
+│   │   ├── admin/                    # Admin Dashboard (/admin — xem mục 12)
+│   │   │   └── admin-layout/         # Shell layout (header + sidebar) bọc quanh mọi trang admin
+│   │   │
+│   │   ├── shared/
+│   │   │   ├── components/           # header/, footer/, button/, product-card/, chatbot/,
+│   │   │   │                         #   ring-ar-tryon/, global-toast/, cta-section/, modal/
+│   │   │   ├── data/                 # Dữ liệu tĩnh (FAQ chatbot...)
+│   │   │   └── utils/                # Hàm tiện ích dùng chung (định dạng tiền tệ...)
+│   │   │
+│   │   ├── core/
+│   │   │   ├── services/             # AuthService, CartService, NotificationService...
+│   │   │   ├── guards/                # authGuard, adminGuard
+│   │   │   └── interceptors/          # authInterceptor, errorInterceptor
+│   │   │
+│   │   └── models/                   # user.model.ts, api-response.model.ts
+│   │
+│   ├── assets/                       # Ảnh sản phẩm, bộ sưu tập, nghệ nhân...
+│   ├── styles/_token.css             # ← CSS Design Tokens (màu sắc, font, spacing)
+│   ├── styles.css                    # ← Global styles + biến bổ sung cho :root
+│   ├── main.ts                       # Bootstrap Angular app
+│   └── environments/                 # environment.ts (dev), environment.prod.ts
 ```
 
 ---
 
-## 4. Routing
+## 6. Routing (Frontend)
 
 ### Customer Routes — `src/app/app.routes.ts`
 
@@ -145,26 +236,27 @@ Tất cả routes dùng **lazy loading** (`loadComponent` / `loadChildren`):
 | URL | Component | Ghi chú |
 |-----|-----------|---------|
 | `/` | `HomeComponent` | Trang chủ |
-| `/products` | `ProductListComponent` | Danh sách sản phẩm (lazy children) |
-| `/products/:id` | `ProductDetailComponent` | Chi tiết sản phẩm |
+| `/products`, `/products/:id` | `ProductListComponent`, `ProductDetailComponent` | Danh sách & chi tiết sản phẩm |
 | `/studio` | `StudioComponent` | Thiết kế nhẫn tuỳ chỉnh |
 | `/the-designer` | `DesignComponent` | Đặt lịch với chuyên gia |
 | `/danh-muc` | `CategoriesComponent` | Danh mục sản phẩm |
-| `/cart` | `CartComponent` | Giỏ hàng |
-| `/checkout` | `CheckoutComponent` | Thanh toán |
-| `/orders/tracking` | `OrderTrackingComponent` | Theo dõi đơn hàng (member) |
-| `/orders/lookup` | `OrderLookupComponent` | Tra cứu đơn hàng (guest) |
-| `/orders/custom/:id` | `OrderDetailCustomComponent` | Chi tiết đơn thiết kế tuỳ chỉnh |
-| `/orders/:id` | `OrderDetailComponent` | Chi tiết đơn hàng thường |
+| `/bo-suu-tap`, `/bo-suu-tap/:slug` | `CollectionsComponent`, `CollectionDetailComponent` | Bộ sưu tập |
+| `/cart`, `/checkout` | `CartComponent`, `CheckoutComponent` | Giỏ hàng, thanh toán |
+| `/orders/tracking`, `/orders/lookup`, `/orders/:id`, `/orders/custom/:id` | — | Theo dõi/tra cứu/chi tiết đơn hàng |
+| `/orders/reviews`, `/orders/reviews/write` | `ReviewListComponent`, `ReviewsComponent` | Danh sách đơn cần đánh giá, viết đánh giá |
 | `/appointment-history` | `AppointmentHistoryComponent` | Lịch sử lịch hẹn |
-| `/profile` | `ProfileComponent` | Hồ sơ cá nhân |
-| `/profile/rewards` | `ProfileRewardsComponent` | Điểm thưởng |
-| `/dang-nhap` | `LoginComponent` | Đăng nhập |
+| `/account/thong-tin`, `/account/diem-tich-luy` | `ProfileInfoComponent`, `ProfileLoyaltyComponent` | Hồ sơ cá nhân, điểm thưởng |
+| `/chinh-sach-bao-hanh` | `WarrantyPolicyComponent` | Chính sách bảo hành |
+| `/doi-tra-hoan-tien` (alias `/cau-hoi-thuong-gap`) | `ReturnsPolicyComponent` | Đổi trả & hoàn tiền |
+| `/vat-lieu-ben-vung` | `SustainableMaterialsComponent` | Vật liệu bền vững |
+| `/cau-chuyen-thuong-hieu` | `BrandStoryComponent` | Câu chuyện thương hiệu |
+| `/dang-nhap` | `LoginComponent` | Đăng nhập chung (SĐT → khách hàng, email → admin/nhân viên) |
 | `/dang-ki` | `RegisterComponent` | Đăng ký |
-| `/quen-mat-khau` | `ForgotPasswordComponent` | Quên mật khẩu |
-| `/mat-khau-moi` | `ResetPasswordComponent` | Đặt mật khẩu mới |
-| `/quan-tri-vien` | `AdminLoginComponent` | Trang đăng nhập admin riêng |
+| `/quen-mat-khau`, `/mat-khau-moi` | — | Quên mật khẩu / đặt mật khẩu mới |
+| `/quan-tri-vien` | `AdminLoginComponent` | Trang đăng nhập admin riêng (dự phòng) |
 | `/**` | `NotFoundComponent` | 404 |
+
+> `/studio`, `/the-designer`, `/appointment-history`, `/account/**`, `/orders/reviews`, `/orders/reviews/write` đều được bảo vệ bởi `authGuard`. `/consultation` redirect sang `/the-designer`.
 
 ### Admin Routes — `src/app/admin/admin.routes.ts`
 
@@ -175,8 +267,7 @@ Route cha `/admin` được bảo vệ bởi `adminGuard`. Tất cả children r
 | `/admin` | redirect → `/admin/dashboard` |
 | `/admin/dashboard` | `DashboardComponent` |
 | `/admin/san-pham` | `ProductManagementComponent` |
-| `/admin/don-hang` | `OrderManagementComponent` |
-| `/admin/don-hang/:id` | `AdminOrderDetailComponent` |
+| `/admin/don-hang`, `/admin/don-hang/:id` | `OrderManagementComponent`, `AdminOrderDetailComponent` |
 | `/admin/don-thiet-ke/tao` | `DesignOrderCreateComponent` |
 | `/admin/lich-hen` | `AppointmentManagementComponent` |
 | `/admin/bao-hanh` | `WarrantyManagementComponent` |
@@ -185,7 +276,36 @@ Route cha `/admin` được bảo vệ bởi `adminGuard`. Tất cả children r
 
 ---
 
-## 5. CSS Token System
+## 7. Tổng quan Backend & API
+
+Entry point: `server.ts` — khởi tạo Express app, đăng ký middleware `cors()`/`express.json()`, mount các router dưới `/api/*`.
+
+| Router (`server/routes/`) | Base path | Mô tả |
+|---|---|---|
+| `auth.ts` | `/api/auth` | Đăng ký/đăng nhập khách hàng (`/login`) và nhân viên (`/employee/login`), OTP, quên mật khẩu, refresh/logout, mở khoá tài khoản |
+| `product.ts` | `/api/products` | Danh sách/chi tiết sản phẩm, tìm kiếm, proxy ảnh CORS |
+| `cart.ts` | `/api/cart` | Giỏ hàng |
+| `order.ts` | `/api/orders` | Tạo đơn, theo dõi, huỷ đơn |
+| `voucher.ts` | `/api/vouchers` | Kiểm tra hợp lệ voucher khi checkout |
+| `design.ts` | `/api/design` | Danh sách nghệ nhân, khung giờ trống, đặt/huỷ lịch tư vấn |
+| `studio.ts` | `/api/studio` | Tính giá & tạo đơn tuỳ biến (The Studio) |
+| `warranty.ts` | `/api/warranty` | Yêu cầu bảo hành/trả hàng |
+| `review.ts` | `/api/reviews` | Đánh giá sản phẩm |
+| `account.ts` | `/api/account` | Hồ sơ cá nhân, điểm thưởng |
+| `chatbot.ts` | `/api/chatbot` | Trợ lý ảo AI |
+| `admin.ts` | `/api/admin` | Toàn bộ API quản trị — bảo vệ bởi `authenticate` + `requireRole('ADMIN')` |
+
+> `server/routes/` còn 3 file **chưa được mount** trong `server.ts` (`appointment.ts`, `checkout.ts`, `loyalty.ts`) — logic tương ứng hiện nằm trong `design.service.ts`/`order.service.ts` và được gọi trực tiếp từ service khác, không qua route riêng. `loyalty.service.ts` (tích điểm, xét hạng thành viên) cũng hoạt động theo cách này — không có router riêng, được gọi từ `order.service.ts`/`studio.service.ts` khi đơn hàng hoàn tất.
+
+**Xác thực:** JWT access token (gửi qua header `Authorization: Bearer <token>`) + refresh token lưu riêng để cấp lại access token khi hết hạn. Payload token phân biệt `role` (`CUSTOMER` / `GUEST` / `ADMIN` / `DESIGNER`) — middleware `requireRole()` dùng để giới hạn route admin.
+
+**Database:** một connection pool `mysql2/promise` dùng chung (`server/db.ts`), có helper `withTransaction()` cho các thao tác ghi nhiều bảng cùng lúc (vd. tạo đơn hàng + trừ điểm + cập nhật voucher). Toàn bộ schema + dữ liệu mẫu nằm trong `renga_schema.sql` ở thư mục gốc.
+
+**Job nền** (`server/jobs/`): tự động huỷ lịch hẹn chưa thanh toán sau 10 phút.
+
+---
+
+## 8. CSS Token System
 
 ### Quy tắc quan trọng
 
@@ -270,17 +390,20 @@ Toàn bộ project dùng ký hiệu `₫` (U+20AB — Vietnamese Dong có gạch
 
 ---
 
-## 6. Shared Components
+## 9. Shared Components
 
 Thư mục: [src/app/shared/components/](src/app/shared/components/)
 
 | Component | Selector | Mô tả |
 |-----------|---------|-------|
-| `HeaderComponent` | `app-header` | Navigation bar chính |
+| `HeaderComponent` | `app-header` | Navigation bar chính, có tìm kiếm gợi ý theo thời gian thực |
 | `FooterComponent` | `app-footer` | Footer |
 | `ButtonComponent` | `app-button` | Button tái sử dụng |
 | `ProductCardComponent` | `app-product-card` | Card sản phẩm |
-| `ChatbotComponent` | `app-chatbot` | Chatbot FAQ |
+| `ChatbotComponent` | `app-chatbot` | Trợ lý ảo AI |
+| `RingArTryonComponent` | `app-ring-ar-tryon` | Thử nhẫn qua camera (MediaPipe Hands) |
+| `GlobalToastComponent` | `app-global-toast` | Thông báo lỗi/thành công dùng chung toàn app |
+| `CtaSectionComponent` | `app-cta-section` | Khối kêu gọi hành động dùng lại ở nhiều trang |
 | `ModalComponent` | `app-modal` | Base modal wrapper |
 
 **Modal con** — `shared/components/modal/`:
@@ -300,11 +423,11 @@ Thư mục: [src/app/shared/components/](src/app/shared/components/)
 
 ---
 
-## 7. Core — Services, Guards, Interceptors
+## 10. Core — Services, Guards, Interceptors
 
 ### AuthService — `src/app/core/services/auth.service.ts`
 
-Dùng **Angular Signals** để quản lý state:
+Dùng **Angular Signals** để quản lý state, lưu token/role vào `localStorage`:
 
 ```typescript
 // Đọc state (trong component/template)
@@ -313,20 +436,16 @@ authService.isAdmin()      // boolean
 authService.currentUser()  // User | null
 
 // Methods
-authService.login(phone, password)   // POST /auth/login
-authService.register(...)            // POST /auth/register
-authService.logout()                 // Xoá session + navigate /dang-nhap
-authService.mockLogin()              // Dev helper — login không cần backend
-authService.getToken()               // Lấy token từ localStorage
+authService.login({ phone, password })          // POST /auth/login (khách hàng)
+authService.adminLogin({ email, password })      // POST /auth/employee/login (admin/nhân viên)
+authService.registerSendOtp(...) / registerVerifyOtp(...)   // Đăng ký qua OTP
+authService.forgotPasswordSendOtp(...) / forgotPasswordVerifyOtp(...) / resetPassword(...)
+authService.refreshToken()   // Cấp lại access token bằng refresh token
+authService.logout()         // Xoá session + navigate /dang-nhap
+authService.getToken()       // Lấy access token từ localStorage
 ```
 
-### ModalService — `src/app/core/services/modal.service.ts`
-
-```typescript
-modalService.showLoginRequired()   // signal: boolean
-modalService.openLoginRequired()
-modalService.closeLoginRequired()
-```
+> Trang `/dang-nhap` dùng chung 1 form cho cả khách hàng và admin/nhân viên — tự nhận diện input là số điện thoại hay email rồi gọi đúng phương thức tương ứng ở trên.
 
 ### Guards
 
@@ -342,11 +461,11 @@ modalService.closeLoginRequired()
 | Interceptor | Chức năng |
 |-------------|-----------|
 | `authInterceptor` | Tự động thêm `Authorization: Bearer {token}` vào mọi request |
-| `errorInterceptor` | 401 → logout, 403 → về home, 500 → log lỗi |
+| `errorInterceptor` | 401 → thử refresh token / logout, 403 → về home, 500 → log lỗi |
 
 ---
 
-## 8. Models — TypeScript Interfaces
+## 11. Models — TypeScript Interfaces
 
 File: [src/app/models/](src/app/models/)
 
@@ -363,9 +482,6 @@ interface User {
   avatarUrl?: string
   createdAt?: string
 }
-
-interface Customer extends User { role: 'customer'; phone?; address? }
-interface Employee extends User { role: 'employee' | 'admin'; position?; department? }
 ```
 
 ### API Response (`api-response.model.ts`)
@@ -389,31 +505,30 @@ interface PaginatedResponse<T> {
 
 ---
 
-## 9. Admin Module
+## 12. Admin Module
 
 Thư mục: [src/app/admin/](src/app/admin/)
 
 Tất cả trang admin có cơ chế **bộ lọc 2 tầng**:
 - **Pending signals** (`filterX`) — giá trị đang chọn trong dropdown
-- **Active signals** (`activeX`) — giá trị đang thực sự lọc bảng
-- `applyFilters()` sao chép pending → active; `clearFilters()` reset cả hai
-- `filteredItems = computed(...)` đọc từ active signals
+- **Active signals** (`activeX`) — giá trị đang thực sự lọc bảng (đã gửi lên server)
+- `applyFilters()` sao chép pending → active rồi gọi lại API; `clearFilters()` reset cả hai
 
 | Component | Route | Chức năng |
 |-----------|-------|----------|
-| `DashboardComponent` | `/admin/dashboard` | Tổng quan số liệu |
-| `ProductManagementComponent` | `/admin/san-pham` | CRUD sản phẩm + bộ lọc (danh mục, chất liệu, trạng thái) |
-| `OrderManagementComponent` | `/admin/don-hang` | Quản lý đơn hàng + bộ lọc (loại, trạng thái) |
-| `AdminOrderDetailComponent` | `/admin/don-hang/:id` | Chi tiết đơn hàng — hóa đơn, spec sản phẩm |
-| `DesignOrderCreateComponent` | `/admin/don-thiet-ke/tao` | Tạo đơn thiết kế thủ công — nhập giá có dấu chấm tự động, validate SĐT/email |
-| `AppointmentManagementComponent` | `/admin/lich-hen` | Quản lý lịch hẹn + bộ lọc + date range picker |
-| `WarrantyManagementComponent` | `/admin/bao-hanh` | Quản lý bảo hành + bộ lọc + modal xử lý |
-| `VoucherManagementComponent` | `/admin/voucher` | Quản lý voucher + bộ lọc + tạo mới |
-| `QaManagementComponent` | `/admin/hoi-dap` | Kiểm duyệt Q&A — trả lời, ẩn câu hỏi |
+| `DashboardComponent` | `/admin/dashboard` | Tổng quan số liệu thật từ DB (doanh thu, đơn theo trạng thái, top sản phẩm) |
+| `ProductManagementComponent` | `/admin/san-pham` | CRUD sản phẩm + bộ lọc |
+| `OrderManagementComponent` | `/admin/don-hang` | Quản lý đơn hàng + cập nhật trạng thái theo quy trình |
+| `AdminOrderDetailComponent` | `/admin/don-hang/:id` | Chi tiết đơn hàng |
+| `DesignOrderCreateComponent` | `/admin/don-thiet-ke/tao` | Tạo đơn thiết kế thủ công |
+| `AppointmentManagementComponent` | `/admin/lich-hen` | Quản lý lịch hẹn — đổi nghệ nhân/khung giờ (tự chặn trùng lịch, tối thiểu cách nhau 1 tiếng) |
+| `WarrantyManagementComponent` | `/admin/bao-hanh` | Chấp nhận/từ chối yêu cầu bảo hành kèm lý do |
+| `VoucherManagementComponent` | `/admin/voucher` | Quản lý voucher |
+| `QaManagementComponent` | `/admin/hoi-dap` | Kiểm duyệt Q&A — trả lời, ẩn/hiện câu hỏi |
 
 ---
 
-## 10. Quy tắc code & Convention
+## 13. Quy tắc code & Convention
 
 ### Angular
 
@@ -436,9 +551,16 @@ Tất cả trang admin có cơ chế **bộ lọc 2 tầng**:
 - Dùng `interface` cho data shapes, `type` cho unions/aliases
 - Khai báo signal sau các dependency của nó (field initializer chạy theo thứ tự — signal dùng `this.formGroup` phải đặt sau `formGroup`)
 
+### Backend
+
+- Mỗi domain có 1 `*.service.ts` (business logic + SQL) và 1 router tương ứng trong `server/routes/`
+- Luôn dùng câu lệnh SQL tham số hoá (`?`), không nối chuỗi trực tiếp giá trị vào query
+- Route admin bắt buộc đi qua `authenticate` + `requireRole('ADMIN')`
+- Lỗi nghiệp vụ ném ra dạng `{ status, message }` (hoặc `Error` có gắn `.status`), route bắt và trả `res.status(status).json({ success: false, message })`
+
 ---
 
-## 11. Quy trình Git & Merge
+## 14. Quy trình Git & Merge
 
 ### Branch naming
 
@@ -475,7 +597,7 @@ chore/[mô-tả]                   # Maintenance
 
 ---
 
-## 12. Các lỗi thường gặp sau merge
+## 15. Các lỗi thường gặp sau merge
 
 ### Lỗi 1: UI hỏng nhiều trang cùng lúc (màu sắc, shadow biến mất)
 
@@ -527,4 +649,12 @@ chore/[mô-tả]                   # Maintenance
 
 ---
 
-*Cập nhật lần cuối: 2026-06-18*
+### Lỗi 6: Không kết nối được backend / API trả lỗi 500 hàng loạt
+
+**Nguyên nhân thường gặp:** thiếu file `.env`, sai thông tin kết nối MySQL, hoặc chưa import `renga_schema.sql`.
+
+**Fix:** Kiểm tra lại mục [4.3](#43-thiết-lập-biến-môi-trường) và [4.2](#42-thiết-lập-cơ-sở-dữ-liệu), xem log terminal chạy `npm run server` để biết lỗi cụ thể.
+
+---
+
+*README được cập nhật lần gần nhất dựa trên trạng thái source code hiện tại — có thể lệch nhẹ so với code mới nhất nếu repo đã thay đổi sau đó.*
