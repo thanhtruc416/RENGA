@@ -121,7 +121,12 @@
               @if (item.type === 'available') {
                 <span class="cart-item__status">Có sẵn</span>
               } @else {
-                <a routerLink="/studio" class="cart-item__continue-btn" (click)="$event.stopPropagation()">
+                <a
+                  routerLink="/studio"
+                  [queryParams]="item.customId ? { resume: item.customId } : {}"
+                  class="cart-item__continue-btn"
+                  (click)="$event.stopPropagation()"
+                >
                   Tiếp tục thiết kế
                 </a>
               }

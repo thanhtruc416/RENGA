@@ -68,9 +68,13 @@ app.use('/api/chatbot',  chatbotRouter);
 app.use('/api/admin',    adminRouter);
 
 // Error handler — phải ở cuối cùng
+// Nhiều route/service trong codebase throw { status, message } (không dùng try/catch
+// riêng, dựa vào chỗ này bắt) — trước đây luôn trả 500 chung chung bất kể status/message
+// thật là gì, khiến lỗi rõ ràng (vd 409 hết tồn kho) hiển thị sai thành lỗi server.
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('[GLOBAL ERROR]', err);
-  res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
+  const status = typeof err?.status === 'number' ? err.status : 500;
+  if (status === 500) console.error('[GLOBAL ERROR]', err);
+  res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });
 });
 
 const PORT = process.env.PORT || 4200;

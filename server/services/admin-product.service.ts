@@ -15,7 +15,7 @@ export async function getCategories() {
   return rows;
 }
 
-export async function getAdminProducts(page = 1, limit = 20, search?: string, status?: string) {
+export async function getAdminProducts(page = 1, limit = 20, search?: string, status?: string, categoryId?: string) {
   const offset = (page - 1) * limit;
   const params: any[] = [];
   let where = 'WHERE 1=1';
@@ -26,6 +26,10 @@ export async function getAdminProducts(page = 1, limit = 20, search?: string, st
   if (status) {
     where += ' AND p.status = ?';
     params.push(status);
+  }
+  if (categoryId) {
+    where += ' AND p.category_id = ?';
+    params.push(categoryId);
   }
 
   const [rows] = await pool.execute<any[]>(

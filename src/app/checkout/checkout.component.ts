@@ -1,13 +1,15 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, computed, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AbstractControl, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PaymentFailModalComponent } from '../shared/components/modal/payment-fail-modal/payment-fail-modal.component';
 import { PaymentSuccessModalComponent } from '../shared/components/modal/payment-success-modal/payment-success-modal.component';
 import { CartService } from '../core/services/cart.service';
 import { AuthService } from '../core/services/auth.service';
 import { GuestOrderService } from '../core/services/guest-order.service';
+import { NotificationService } from '../core/services/notification.service';
 import { environment } from '../../environments/environment';
 
 interface OrderItem {
@@ -50,11 +52,13 @@ export class CheckoutComponent {
   private readonly http        = inject(HttpClient);
   private readonly router      = inject(Router);
   private readonly guestOrderService = inject(GuestOrderService);
+  private readonly notify = inject(NotificationService);
 
   readonly showSuccessModal      = signal(false);
   readonly showFailModal         = signal(false);
   readonly showSuccessGuestModal = signal(false);
   readonly placedOrderId         = signal('');
+  readonly placedPaymentConfirmed = signal(true);
 
   readonly orderItems = computed<OrderItem[]>(() => {
     const buyNow = this.cartService.buyNowItem();
@@ -125,6 +129,17 @@ export class CheckoutComponent {
     // Bắt đầu đếm ngược 60 phút ngay khi vào trang (đồng bộ lại với server sau khi đặt hàng)
     this.startCountdown(new Date(Date.now() + 60 * 60 * 1000).toISOString());
     this.destroyRef.onDestroy(() => { if (this._countdownId) clearInterval(this._countdownId); });
+
+    // Chặn vào trang thanh toán khi giỏ hàng rỗng (vd gõ thẳng URL /checkout) — chỉ
+    // xét sau khi giỏ hàng đã tải xong (cartService.loaded()) để không đá nhầm lúc
+    // dữ liệu còn đang tải, và bỏ qua nếu đơn vừa đặt thành công (giỏ tự rỗng sau đó).
+    effect(() => {
+      if (!this.cartService.loaded()) return;
+      if (this.placedOrderId()) return;
+      if (this.orderItems().length === 0) {
+        this.router.navigate(['/cart']);
+      }
+    });
   }
 
   private startCountdown(expiresAt: string): void {
@@ -467,6 +482,55 @@ export class CheckoutComponent {
     address:  new FormControl('',                           { nonNullable: true, validators: [Validators.required] }),
   });
 
+  // ORD-01: trước đây checkout SP có sẵn không có cách nào chọn nhanh 1 địa chỉ đã
+  // lưu — khách luôn phải gõ tay lại từ đầu, khác với Studio đã có sẵn picker này.
+  readonly savedAddresses    = signal<any[]>([]);
+  readonly addressesLoaded   = signal(false);
+  readonly addressesLoading  = signal(false);
+  readonly showAddressPicker = signal(false);
+
+  loadAndShowAddresses(): void {
+    if (!this.addressesLoaded()) {
+      this.addressesLoading.set(true);
+      this.http.get<any>(`${environment.apiUrl}/orders/addresses`)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (res) => {
+            this.savedAddresses.set(res.data ?? []);
+            this.addressesLoaded.set(true);
+            this.addressesLoading.set(false);
+            this.showAddressPicker.set(true);
+          },
+          error: () => {
+            this.addressesLoading.set(false);
+            this.notify.error('Không tải được danh sách địa chỉ đã lưu. Vui lòng thử lại.');
+          },
+        });
+    } else {
+      this.showAddressPicker.update(v => !v);
+    }
+  }
+
+  @HostListener('document:click')
+  closeAddressPicker(): void {
+    this.showAddressPicker.set(false);
+  }
+
+  applyAddress(addr: any): void {
+    const provinceEntry = this.PROVINCES.find(p => p.value === addr.province || p.label === addr.province);
+    const provinceKey = provinceEntry?.value ?? '';
+    this.selectedProvince.set(provinceKey);
+    const districtEntry = (this.DISTRICTS[provinceKey] ?? []).find(d => d.value === addr.ward || d.label === addr.ward);
+    this.shippingForm.patchValue({
+      fullName: addr.recipient_name,
+      phone:    addr.recipient_phone,
+      address:  addr.address_line,
+      province: provinceEntry?.label ?? addr.province,
+      district: districtEntry?.label ?? addr.ward,
+    });
+    this.showAddressPicker.set(false);
+  }
+
   readonly isSubmitting = signal(false);
 
   onSubmit(): void {
@@ -474,6 +538,13 @@ export class CheckoutComponent {
     if (this.shippingForm.invalid) {
       this.shippingForm.markAllAsTouched();
       document.querySelector('.checkout-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    // App chưa tích hợp cổng thanh toán thật — cho chọn thử nhưng chặn submit để
+    // tránh khách tưởng đã đặt hàng thành công trong khi đơn chỉ nằm chờ vô thời hạn.
+    if (this.selectedPayment() !== 'cod') {
+      this.notify.error('Phương thức thanh toán này đang được phát triển. Vui lòng chọn "Thanh toán khi nhận hàng (COD)".');
       return;
     }
 
@@ -496,9 +567,17 @@ export class CheckoutComponent {
       address: {
         recipient_name: form.fullName,
         recipient_phone: form.phone,
-        address_line: `${form.address}, ${districtLabel}`,
+        // Trước đây dồn phường/khu vực vào chung address_line, cột "ward" luôn để
+        // trống — khi lấy lại địa chỉ đã lưu ở nơi khác (vd Studio) để tự điền lại
+        // form thì phường bị nhảy nhầm vào ô "Số nhà, tên đường" vì ward rỗng.
+        address_line: form.address,
+        ward: districtLabel,
         province: provinceLabel,
       },
+      // Trước đây field email (tuỳ chọn) chỉ dùng cho khách vãng lai — khách đã đăng
+      // nhập nhưng tài khoản chưa có email thì gõ vào đây cũng bị bỏ qua, không mail
+      // xác nhận nào gửi được. Giờ gửi luôn lên server để lưu/dùng cho đơn này.
+      email: form.email || undefined,
       discount_amount: this.voucherDiscount(),
       customer_voucher_id: this._appliedCustomerVoucherId(),
       payment_method: this.selectedPayment(),
@@ -513,6 +592,9 @@ export class CheckoutComponent {
           this.isSubmitting.set(false);
           const orderId = res.data?.order_id ?? '';
           this.placedOrderId.set(orderId);
+          // Chuyển khoản/thẻ/ví còn PENDING chờ xác nhận (có payment_expires_at) —
+          // popup không được nói "Thanh toán thành công" trong trường hợp này.
+          this.placedPaymentConfirmed.set(!res.data?.payment_expires_at);
           if (res.data?.payment_expires_at) this.startCountdown(res.data.payment_expires_at);
           this.cartService.clearBuyNowItem();
           this.cartService.removeItems(new Set(itemsWithVariant.map(i => i.id)));

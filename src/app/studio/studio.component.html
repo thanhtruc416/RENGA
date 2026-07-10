@@ -54,13 +54,12 @@
           @for (blank of allBlanks(); track blank.id) {
             <button class="blank-card" (click)="selectBlank(blank)" type="button">
               <div class="blank-card__img-wrap">
-                <img class="blank-card__img" [src]="blank.image" [alt]="blank.name"
+                <img class="blank-card__img" [src]="thumbUrl(blank.image, 500)" [alt]="blank.name"
                      loading="lazy" (error)="onBlankImgError($event)" />
               </div>
               <div class="blank-card__body">
                 <span class="blank-card__eyebrow">BY RENGA</span>
                 <p class="blank-card__name">{{ blank.name }}</p>
-                <p class="blank-card__price">{{ formatVnd(blank.basePrice) }}<u>đ</u></p>
               </div>
             </button>
           }
@@ -77,7 +76,7 @@
 
       <div class="studio-card__preview">
         <img
-          [src]="step2PreviewImage()"
+          [src]="thumbUrl(step2PreviewImage(), 800)"
           [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
@@ -147,7 +146,7 @@
 
       <div class="studio-card__preview">
         <img
-          [src]="step2PreviewImage()"
+          [src]="thumbUrl(step2PreviewImage(), 800)"
           [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
@@ -255,7 +254,7 @@
             </div>
             <div class="price-breakdown__row">
               <span>Công chế tác thủ công</span>
-              <span>{{ formatVnd(CRAFT_FEE) }}<u>đ</u></span>
+              <span>{{ formatVnd(craftFee()) }}<u>đ</u></span>
             </div>
             @if (engraveFee() > 0) {
               <div class="price-breakdown__row">
@@ -288,7 +287,7 @@
       <div class="engrave-gallery">
         <div class="engrave-gallery__main">
           <img
-            [src]="step2PreviewImage()"
+            [src]="thumbUrl(step2PreviewImage(), 800)"
             [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
             class="engrave-gallery__main-img"
             loading="eager"
@@ -396,7 +395,7 @@
 
         <div class="studio-card__preview">
           <img
-            [src]="step2PreviewImage()"
+            [src]="thumbUrl(step2PreviewImage(), 800)"
             [alt]="selectedBlank()?.name || 'Trang sức tùy chỉnh'"
             class="studio-card__preview-img"
             loading="eager"
@@ -591,7 +590,7 @@
 
               <div class="checkout-summary__product">
                 <img
-                  [src]="step2PreviewImage()"
+                  [src]="thumbUrl(step2PreviewImage(), 800)"
                   [alt]="selectedBlank()?.name || 'Sản phẩm tùy chỉnh'"
                   class="checkout-summary__product-img"
                   loading="lazy"
@@ -704,15 +703,6 @@
   [total]="depositAmount()"
   (closed)="showFailModal.set(false)"
 />
-<!-- Floating price summary (steps 2–5) -->
-@if (priceSummaryVisible()) {
-  <div class="studio-price-summary" aria-live="polite">
-    <p class="studio-price-summary__label">Tổng giá trị hiện tại</p>
-    <p class="studio-price-summary__amount">{{ priceSummaryAmount() }}<u>đ</u></p>
-    <p class="studio-price-summary__detail">{{ priceSummaryDetail() }}</p>
-  </div>
-}
-
 @if (savedToast()) {
   <div class="studio-save-backdrop" (click)="savedToast.set(false)">
     <div class="studio-save-popup" (click)="$event.stopPropagation()">

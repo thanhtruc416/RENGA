@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
-type Step = 'phone' | 'otp' | 'password' | 'success';
+type Step = 'email' | 'otp' | 'password' | 'success';
 
 @Component({
   selector: 'app-forgot-password',
@@ -28,20 +28,20 @@ export class ForgotPasswordComponent {
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   // ── State ───────────────────────────────────────────────────────────────────
-  readonly step         = signal<Step>('phone');
+  readonly step         = signal<Step>('email');
   readonly isSubmitting = signal(false);
 
-  // Phone step
-  readonly phone          = signal('');
-  readonly phoneAttempted = signal(false);
-  readonly phoneError     = computed(() => {
-    if (!this.phoneAttempted()) return '';
-    const v = this.phone().trim();
-    if (!v) return 'Vui lòng nhập số điện thoại.';
-    if (!/^[0-9]{10}$/.test(v)) return 'Số điện thoại phải có đúng 10 chữ số.';
+  // Email step
+  readonly email          = signal('');
+  readonly emailAttempted = signal(false);
+  readonly emailError     = computed(() => {
+    if (!this.emailAttempted()) return '';
+    const v = this.email().trim();
+    if (!v) return 'Vui lòng nhập email.';
+    if (!/^[a-zA-Z0-9][a-zA-Z0-9._+\-]{1,}@[a-zA-Z0-9][a-zA-Z0-9.\-]*\.[a-zA-Z]{2,}$/.test(v)) return 'Email không đúng định dạng.';
     return '';
   });
-  readonly phoneServerError = signal('');
+  readonly emailServerError = signal('');
 
   // OTP step
   readonly otpDigits  = signal(['', '', '', '', '', '']);
@@ -66,15 +66,15 @@ export class ForgotPasswordComponent {
   );
 
   // ── Bước 1: gửi OTP ─────────────────────────────────────────────────────────
-  setPhone(value: string): void { this.phone.set(value.replace(/\D/g, '')); }
+  setEmail(value: string): void { this.email.set(value.trim()); }
 
   sendCode(): void {
-    this.phoneAttempted.set(true);
-    if (this.phoneError() || this.isSubmitting()) return;
+    this.emailAttempted.set(true);
+    if (this.emailError() || this.isSubmitting()) return;
     this.isSubmitting.set(true);
-    this.phoneServerError.set('');
+    this.emailServerError.set('');
 
-    this.authService.forgotPasswordSendOtp(this.phone())
+    this.authService.forgotPasswordSendOtp(this.email())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -85,7 +85,7 @@ export class ForgotPasswordComponent {
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
           const msg = err.error?.message ?? 'Không thể gửi mã. Vui lòng thử lại.';
-          this.phoneServerError.set(msg);
+          this.emailServerError.set(msg);
           this.notify.error(msg);
         },
       });
@@ -95,7 +95,7 @@ export class ForgotPasswordComponent {
     if (this.countdown() > 0 || this.isSubmitting()) return;
     this.isSubmitting.set(true);
 
-    this.authService.forgotPasswordSendOtp(this.phone())
+    this.authService.forgotPasswordSendOtp(this.email())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -119,7 +119,7 @@ export class ForgotPasswordComponent {
     this.otpError.set('');
     this.isSubmitting.set(true);
 
-    this.authService.forgotPasswordVerifyOtp(this.phone(), otp)
+    this.authService.forgotPasswordVerifyOtp(this.email(), otp)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {

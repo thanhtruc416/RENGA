@@ -1,5 +1,6 @@
 import pool from '../db';
 import { shortenName } from './product.service';
+import { logOrderStatusChange } from './order.service';
 
 const ORDER_STATUSES = ['PENDING', 'PAYMENT_CONFIRMED', 'PACKED', 'SHIPPED', 'COMPLETED', 'CANCELLED'] as const;
 type OrderStatus = typeof ORDER_STATUSES[number];
@@ -81,7 +82,7 @@ export async function getAdminOrderDetail(orderId: string) {
   };
 }
 
-export async function updateAdminOrderStatus(orderId: string, newStatus: string) {
+export async function updateAdminOrderStatus(orderId: string, newStatus: string, adminEmployeeId?: string) {
   if (!ORDER_STATUSES.includes(newStatus as OrderStatus)) {
     throw { status: 400, message: 'Trạng thái không hợp lệ.' };
   }
@@ -101,4 +102,17 @@ export async function updateAdminOrderStatus(orderId: string, newStatus: string)
     `UPDATE \`order\` SET order_status = ?, updated_at = NOW() WHERE order_id = ?`,
     [newStatus, orderId],
   );
+  await logOrderStatusChange(pool, orderId, current, newStatus, adminEmployeeId ?? null);
+
+  // ORD-04: order.service.ts trừ tồn kho ngay lúc đặt — admin huỷ qua đây cũng
+  // phải hoàn lại, nếu không tồn kho sẽ bị mất vĩnh viễn mỗi lần huỷ đơn.
+  if (newStatus === 'CANCELLED') {
+    await pool.execute(
+      `UPDATE product_variant pv
+       JOIN order_item oi ON oi.variant_id = pv.variant_id
+       SET pv.stock_quantity = pv.stock_quantity + oi.quantity
+       WHERE oi.order_id = ? AND oi.item_type = 'PRODUCT'`,
+      [orderId],
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
-import { createOrder, getUserOrders, getOrderDetail, getUserAddresses, cancelOrder } from '../services/order.service';
+import { createOrder, getUserOrders, getOrderDetail, getUserAddresses, cancelOrder, requestOrderCancellation } from '../services/order.service';
 
 const router = Router();
 router.use(authenticate as any);
@@ -29,7 +29,7 @@ const PAYMENT_METHOD_MAP: Record<string, 'CASH' | 'BANK_TRANSFER' | 'CREDIT_CARD
 };
 
 router.post('/', async (req, res) => {
-  const { items, address, discount_amount, customer_voucher_id, note, payment_method } = req.body;
+  const { items, address, email, discount_amount, customer_voucher_id, note, payment_method } = req.body;
   if (!items?.length || !address) {
     res.status(400).json({ success: false, message: 'Thiếu items hoặc địa chỉ' });
     return;
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
   const { orderId, expiresAt } = await createOrder({
     clientId: req.user!.clientId,
     payment_method: dbMethod,
-    items, address, discount_amount, customer_voucher_id, note,
+    items, address, email, discount_amount, customer_voucher_id, note,
   });
   res.status(201).json({ success: true, data: { order_id: orderId, payment_expires_at: expiresAt } });
 });
@@ -48,6 +48,18 @@ router.patch('/:id/cancel', async (req, res) => {
     const reason = (req.body?.reason as string) ?? 'Khách yêu cầu hủy';
     const result = await cancelOrder(req.params['id'], req.user!.clientId, reason);
     res.json({ success: true, data: result });
+  } catch (err: any) {
+    const status = typeof err?.status === 'number' ? err.status : 500;
+    res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });
+  }
+});
+
+// ADM-05: đơn đã SHIPPED không tự hủy được — gửi yêu cầu, chờ Admin duyệt/từ chối.
+router.post('/:id/request-cancellation', async (req, res) => {
+  try {
+    const reason = (req.body?.reason as string) ?? 'Khách yêu cầu hủy';
+    const cancelId = await requestOrderCancellation(req.params['id'], req.user!.clientId, reason);
+    res.status(201).json({ success: true, data: { cancel_id: cancelId } });
   } catch (err: any) {
     const status = typeof err?.status === 'number' ? err.status : 500;
     res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });

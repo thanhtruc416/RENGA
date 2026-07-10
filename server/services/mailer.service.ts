@@ -34,3 +34,19 @@ export async function sendMail(to: string, subject: string, html: string): Promi
     response:  info.response,
   });
 }
+
+// MAIL-10: gửi mail trước đây thất bại là bỏ cuộc ngay (ghi FAILED, không thử lại).
+// Thử lại thêm 1 lần sau khoảng nghỉ ngắn trước khi báo thất bại thật sự — vẫn có
+// giới hạn số lần rõ ràng nên không bao giờ treo vô thời hạn.
+export async function sendMailWithRetry(to: string, subject: string, html: string, retries = 1): Promise<void> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      await sendMail(to, subject, html);
+      return;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      console.warn(`[mailer] Gửi mail tới ${to} thất bại (lần ${attempt + 1}/${retries + 1}), thử lại...`, err);
+      await new Promise(r => setTimeout(r, 1000));
+    }
+  }
+}

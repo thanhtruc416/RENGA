@@ -48,6 +48,7 @@ export class RegisterComponent {
   readonly otpError        = signal('');
   readonly serverError     = signal('');
   readonly showPhoneExists = signal(false);
+  readonly duplicateField  = signal<'phone' | 'email'>('phone');
   readonly showServerErrorPopup = signal(false);
 
   // Countdown gửi lại OTP
@@ -106,6 +107,7 @@ export class RegisterComponent {
           this.isSubmitting.set(false);
           // Lỗi validation (phone/email đã tồn tại) → hiện popup riêng
           if (err.status === 400 || err.status === 409) {
+            this.duplicateField.set(err.error?.field === 'email' ? 'email' : 'phone');
             this.showPhoneExists.set(true);
             return;
           }

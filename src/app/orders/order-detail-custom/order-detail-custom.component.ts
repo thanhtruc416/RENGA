@@ -236,7 +236,7 @@ export class OrderDetailCustomComponent implements OnInit {
       shipping: {
         name: raw.recipient_name,
         phone: raw.recipient_phone,
-        address: [raw.address_line, raw.province].filter(Boolean).join(', '),
+        address: [raw.address_line, raw.ward, raw.province].filter(Boolean).join(', '),
       },
       craftSteps: this.buildCraftSteps(status, raw.craft_status),
       timeline: this.buildTimeline(status, raw.created_at, raw.updated_at),

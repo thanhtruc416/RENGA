@@ -1,0 +1,395 @@
+/* ================= MAIN PAGE STYLES ================= */
+.voucher-page {
+  padding: var(--sp-lg) var(--sp-xl);
+  background-color: var(--color-white);
+  min-height: 100vh;
+}
+
+/* Header */
+.voucher-page__header {
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--sp-lg);
+  padding-bottom: var(--sp-md);
+}
+
+.voucher-page__title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--color-primary);
+  margin-bottom: var(--sp-xs);
+}
+
+.voucher-page__subtitle {
+  font-family: var(--font-sans);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Toolbars */
+.voucher-page__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-lg);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  padding: var(--sp-sm) var(--sp-md);
+  width: 400px;
+  background-color: var(--color-white);
+}
+
+.search-icon {
+  width: 16px; height: 16px;
+  color: var(--color-muted);
+  margin-right: var(--sp-sm);
+}
+
+.search-input {
+  border: none; outline: none;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+/* Filters Bar */
+.voucher-page__filters-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-lg);
+  padding: var(--sp-lg);
+  background-color: var(--color-bg-card); /* Nền xám nhạt */
+  border-radius: var(--sp-xs);
+  margin-bottom: var(--sp-xl);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+}
+
+.filter-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.filter-select, .filter-input-date {
+  padding: var(--sp-sm) var(--sp-md);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  background-color: var(--color-white);
+  height: 40px;
+}
+
+.filter-select { min-width: 180px; }
+.filter-input-date { width: 160px; }
+
+.filter-date-group { display: flex; align-items: center; gap: var(--sp-sm); }
+.filter-to { font-size: 14px; color: var(--color-muted); }
+
+/* Buttons */
+.btn {
+  padding: 0 var(--sp-lg);
+  height: 40px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--black { background-color: var(--color-black); color: var(--color-white); border: none; }
+.btn--primary-solid { background-color: var(--color-primary); color: var(--color-white); border: none; }
+.btn--outline { background-color: transparent; color: var(--color-dark); border: 1px solid var(--color-border); }
+
+.filter-clear-btn { padding: 0 var(--sp-xl); }
+
+.vm-apply-btn {
+  padding: 0 16px; height: 40px;
+  border: 1px solid var(--color-dark); border-radius: 2px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--color-white); background: var(--color-dark);
+  white-space: nowrap; cursor: pointer;
+}
+.vm-apply-btn:hover { background: #333; }
+
+.vm-clear-btn {
+  padding: 0 16px; height: 40px;
+  border: 1px solid var(--color-primary); border-radius: 2px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--color-primary); background: var(--color-white);
+  white-space: nowrap; cursor: pointer;
+}
+.vm-clear-btn:hover { background: #fdf2f5; }
+
+/* Table */
+.voucher-table {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+}
+
+.voucher-table__header {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+  padding: var(--sp-md) var(--sp-lg);
+  background-color: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.voucher-table__row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+  padding: var(--sp-lg);
+  border-bottom: 1px solid var(--color-border);
+  align-items: center;
+}
+.voucher-table__row:last-child { border-bottom: none; }
+
+.table-cell { font-size: 14px; color: var(--color-dark); }
+.table-cell__code { font-weight: 700; font-size: 15px; }
+.table-cell__campaign { color: var(--color-muted); }
+.table-cell__usage { font-weight: 600; }
+.table-cell__date { color: var(--color-muted); }
+
+/* Types Badges */
+.badge-type {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge-type--percent { background-color: #fce8eb; color: var(--color-primary); }
+.badge-type--fixed { background-color: #e6e8e8; color: var(--color-dark); }
+.badge-type--freeship { background-color: #fce8eb; color: var(--color-primary); }
+
+/* Status Badges */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge-status__dot { width: 6px; height: 6px; border-radius: 50%; }
+
+.badge-status--active { background-color: #eaf6ed; color: #2e7d32; border: 1px solid #c8e6c9; }
+.badge-status--active .badge-status__dot { background-color: #2e7d32; }
+
+.badge-status--expired { background-color: #f5f5f5; color: var(--color-muted); border: 1px solid var(--color-border); }
+.badge-status--expired .badge-status__dot { background-color: var(--color-muted); }
+
+/* Action Icons */
+.text-right { text-align: right; }
+
+.action-icon-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--color-muted);
+  padding: 4px;
+  margin-left: var(--sp-xs);
+}
+.action-icon-btn svg { width: 18px; height: 18px; }
+.action-icon-btn:hover { color: var(--color-dark); }
+
+/* Pagination */
+.voucher-page__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--sp-lg);
+}
+.voucher-page__pagination-info { font-size: 12px; color: var(--color-muted); text-transform: uppercase; }
+.voucher-page__pagination-controls { display: flex; gap: var(--sp-xs); }
+.pagination-btn {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid var(--color-border); border-radius: var(--sp-xs);
+  font-size: 14px; cursor: pointer; color: var(--color-dark);
+}
+.pagination-btn--active { background-color: var(--color-black); color: var(--color-white); border-color: var(--color-black); }
+
+
+/* ================= MODAL STYLES ================= */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+
+.modal-container {
+  background-color: var(--color-white);
+  width: 550px;
+  max-height: 95vh;
+  overflow-y: auto;
+  border-radius: var(--sp-sm);
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--sp-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-title { font-family: var(--font-serif); font-size: 32px; color: var(--color-primary); }
+.modal-close { font-size: 24px; color: var(--color-primary); background: none; border: none; cursor: pointer; }
+
+.modal-body {
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+}
+
+/* Form Styles */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-md); }
+.form-group { display: flex; flex-direction: column; gap: var(--sp-xs); }
+.form-group--full { width: 100%; }
+
+.form-label { font-size: 11px; font-weight: 600; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.form-input {
+  width: 100%;
+  padding: var(--sp-sm);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  background-color: var(--color-white);
+  line-height: 24px;
+}
+.form-input:focus { outline: 1px solid var(--color-dark); }
+
+.form-input-with-btn { display: flex; gap: var(--sp-sm); }
+.form-input-with-btn .form-input { flex: 1; }
+
+/* Toggle Switch (CSS Hack cho thẻ checkbox thành Switch UI) */
+.form-toggle-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--color-border);
+}
+.form-toggle-label { font-size: 14px; font-weight: 600; color: var(--color-dark); margin-bottom: 4px; }
+.form-toggle-sub { font-size: 12px; color: var(--color-muted); }
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px; height: 24px;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: .4s;
+}
+.toggle-slider:before {
+  position: absolute; content: "";
+  height: 18px; width: 18px; left: 3px; bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+.toggle-switch input:checked + .toggle-slider { background-color: var(--color-primary); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+/* Modal Footer */
+.modal-footer {
+  padding: var(--sp-lg) var(--sp-xl);
+  background-color: var(--color-bg-card);
+  border-top: 1px solid var(--color-border);
+  display: flex; justify-content: flex-end; gap: var(--sp-md);
+  border-bottom-left-radius: var(--sp-sm);
+  border-bottom-right-radius: var(--sp-sm);
+}
+
+/* --- TOAST MESSAGE --- */
+.toast-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary); /* Màu xanh lá báo thành công */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-black); /* Màu đỏ báo lỗi */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+/* ================= HIỆU ỨNG ẨN VOUCHER =====================
+.voucher-table__row--hidden {
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+/* 2. Làm mờ, tô xám và khóa click ở TẤT CẢ các cột NGOẠI TRỪ cột Thao tác */
+.voucher-table__row--hidden > div:not(.table-cell--actions) {
+  opacity: 0.4;
+  filter: grayscale(100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 3. Ở cột thao tác: Nút nào bị disable (như nút Sửa) thì cho mờ đi */
+.voucher-table__row--hidden .action-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+/* 4. Nút Mắt (không bị disable) lúc này sẽ hiển thị 100% rõ nét và sáng màu */
+.voucher-table__row--hidden .action-icon-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-primary); /* Đổi màu nút thành màu hồng để dụ user click mở lại */
+  transform: scale(1.1); /* Phóng to lên một xíu cho nổi bật */
+  transition: all 0.2s ease;
+}

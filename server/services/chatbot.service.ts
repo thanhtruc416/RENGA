@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
+import pool from '../db';
 
 // Port từ script Python CLI gốc (main.py) — RAG kiểu "nhét toàn bộ knowledge base
 // vào system prompt" dựa trên Data/chatbot/chatbot_training.json, gọi qua Groq
@@ -57,6 +58,21 @@ function loadRengaKnowledge(): string {
   return text;
 }
 
+// ADM-04: nội dung FAQ do admin quản lý trong bảng `faq` — nạp lại từ DB mỗi lần
+// (không cache) để admin sửa/thêm là chatbot dùng ngay, không cần restart server.
+async function loadAdminFaqKnowledge(): Promise<string> {
+  const [rows] = await pool.execute<any[]>(
+    `SELECT topic, question, answer FROM faq WHERE is_active = 1 ORDER BY topic`
+  );
+  if (!rows.length) return '';
+
+  let text = `\n📌 [CÂU HỎI THƯỜNG GẶP DO RENGA CẬP NHẬT]\n`;
+  for (const r of rows as any[]) {
+    text += `   - (${r.topic}) Hỏi: "${r.question}" → Đáp: "${r.answer}"\n`;
+  }
+  return text;
+}
+
 function buildSystemInstruction(knowledge: string): string {
   return `
 Bạn là Trợ lý ảo AI thông minh, đại diện cho thương hiệu trang sức cao cấp RENGA Jewelry (năm 2026).
@@ -76,7 +92,7 @@ ${knowledge}
 
 export async function generateChatbotReply(userQuestion: string): Promise<string> {
   const ai = initAiClient();
-  const knowledge = loadRengaKnowledge();
+  const knowledge = loadRengaKnowledge() + await loadAdminFaqKnowledge();
   const modelName = process.env.MODEL_NAME || 'llama-3.3-70b-versatile';
 
   const response = await ai.chat.completions.create({

@@ -3,6 +3,7 @@ import {
   AdminService, AdminAppointment, AdminDesigner, AdminSlot, AppointmentStatus,
 } from '../admin.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 const STATUS_LABEL: Record<AppointmentStatus, string> = {
   PENDING: 'CHỜ XÁC NHẬN',
@@ -42,7 +43,7 @@ export class AppointmentManagementComponent implements OnInit {
   readonly currentPage = signal(1);
   readonly itemsPerPage = 5;
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  readonly pageNumbers = computed(() => getPageWindow(this.currentPage(), this.totalPages()));
 
   readonly designersList = signal<AdminDesigner[]>([]);
 

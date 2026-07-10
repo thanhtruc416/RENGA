@@ -31,7 +31,10 @@ export async function getProducts(category?: string, page = 1, limit = 12, q?: s
   const offset = (page - 1) * limit;
 
   const params: any[] = [];
-  let where = "WHERE p.status = 'ACTIVE'";
+  // Sản phẩm còn ACTIVE nhưng tất cả variant đều hết hàng (stock_quantity=0) thì ẩn
+  // khỏi danh sách "sản phẩm có sẵn" — khách không nên thấy thứ không mua được.
+  let where = `WHERE p.status = 'ACTIVE'
+    AND EXISTS (SELECT 1 FROM product_variant pv WHERE pv.product_id = p.product_id AND pv.stock_quantity > 0)`;
   if (category) {
     where += ' AND c.slug = ?';
     params.push(category);
@@ -111,4 +114,51 @@ export async function getProductById(id: string) {
   );
 
   return { ...product, product_name: shortenName(product.product_name), images, variants };
+}
+
+// BR-38: khách đã đăng nhập gửi câu hỏi công khai dưới sản phẩm.
+async function nextQuestionId(): Promise<string> {
+  const [[{ max }]] = await pool.execute<any[]>(
+    `SELECT MAX(CAST(SUBSTRING(question_id, 4) AS UNSIGNED)) AS max FROM question`
+  );
+  return `QST${String((max || 0) + 1).padStart(6, '0')}`;
+}
+
+export async function getProductQuestions(productId: string) {
+  const [rows] = await pool.execute<any[]>(
+    `SELECT q.question_id, q.question_content, q.reply_content, q.created_at, q.replied_at,
+            cu.full_name AS author
+     FROM question q
+     JOIN customer cu ON cu.client_id = q.client_id
+     WHERE q.product_id = ? AND q.visibility_status = 'VISIBLE'
+     ORDER BY q.created_at DESC`,
+    [productId]
+  );
+  return (rows as any[]).map(r => ({
+    id: r.question_id,
+    question: r.question_content,
+    answer: r.reply_content,
+    author: r.author,
+    askedAt: r.created_at,
+    repliedAt: r.replied_at,
+  }));
+}
+
+export async function submitQuestion(productId: string, clientId: string, content: string) {
+  if (!content?.trim()) {
+    throw { status: 400, message: 'Vui lòng nhập nội dung câu hỏi.' };
+  }
+
+  const [[product]] = await pool.execute<any[]>(
+    `SELECT product_id FROM product WHERE product_id = ?`, [productId]
+  );
+  if (!product) throw { status: 404, message: 'Không tìm thấy sản phẩm.' };
+
+  const questionId = await nextQuestionId();
+  await pool.execute(
+    `INSERT INTO question (question_id, product_id, client_id, question_content, visibility_status, created_at)
+     VALUES (?,?,?,?,'VISIBLE',NOW())`,
+    [questionId, productId, clientId, content.trim()]
+  );
+  return { questionId };
 }

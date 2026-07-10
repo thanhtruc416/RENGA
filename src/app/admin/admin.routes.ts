@@ -66,6 +66,21 @@ export const adminRoutes: Routes = [
         loadComponent: () =>
           import('./qa-management/qa-management.component').then((m) => m.QaManagementComponent),
       },
+      {
+        path: 'danh-gia',
+        loadComponent: () =>
+          import('./review-management/review-management.component').then((m) => m.ReviewManagementComponent),
+      },
+      {
+        path: 'faq-chatbot',
+        loadComponent: () =>
+          import('./faq-management/faq-management.component').then((m) => m.FaqManagementComponent),
+      },
+      {
+        path: 'yeu-cau-huy',
+        loadComponent: () =>
+          import('./cancellation-management/cancellation-management.component').then((m) => m.CancellationManagementComponent),
+      },
     ],
   },
 ];

@@ -1,6 +1,6 @@
 import pool from '../db';
 import { awardPurchasePoints } from './loyalty.service';
-import { notifyOrderPlaced } from './notification.service';
+import { notifyOrderPlaced, notifyTierUpgrade } from './notification.service';
 
 export async function getBlanks() {
   const [rows] = await pool.execute<any[]>(
@@ -43,11 +43,22 @@ const STONE_PRICE_PER_CARAT: Record<string, number> = {
   none:     0,
 };
 
-const CRAFT_FEE = 5_000_000;
+// Công chế tác trước đây là phí cố định — giờ tính theo độ phức tạp: có gắn đá
+// thì cộng thêm phí gắn đá + phí theo carat. Phải khớp computeCraftFee() ở
+// src/app/studio/studio.component.ts.
+const CRAFT_FEE_BASE = 3_000_000;
+const STONE_SETTING_FEE = 2_000_000;
+const STONE_SETTING_FEE_PER_CARAT = 300_000;
+
+function computeCraftFee(stoneId?: string | null, carat?: number): number {
+  if (!stoneId || stoneId === 'none') return CRAFT_FEE_BASE;
+  return CRAFT_FEE_BASE + STONE_SETTING_FEE + Math.round(STONE_SETTING_FEE_PER_CARAT * (carat ?? 0));
+}
+
 const ENGRAVE_FEE_PER_CHAR = 50_000;
 const ENGRAVE_FREE_CHARS = 10;
 
-interface PriceInputs {
+export interface PriceInputs {
   blankId?: string | null;
   materialId?: string | null;
   stoneId?: string | null;
@@ -55,7 +66,13 @@ interface PriceInputs {
   engraveTextLength?: number;
 }
 
-async function computeStudioSubtotal(inputs: PriceInputs): Promise<number> {
+const MATERIAL_FRONTEND_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(MATERIAL_DB_MAP).map(([feId, dbId]) => [dbId, feId])
+);
+
+export { MATERIAL_DB_MAP, MATERIAL_FRONTEND_MAP };
+
+export async function computeStudioSubtotal(inputs: PriceInputs): Promise<number> {
   let blankPrice = 0;
   if (inputs.blankId) {
     const [[blank]] = await pool.execute<any[]>(
@@ -73,7 +90,9 @@ async function computeStudioSubtotal(inputs: PriceInputs): Promise<number> {
   const extraChars = Math.max(0, (inputs.engraveTextLength ?? 0) - ENGRAVE_FREE_CHARS);
   const engraveFee = extraChars * ENGRAVE_FEE_PER_CHAR;
 
-  return blankPrice + materialPrice + stonePrice + engraveFee + CRAFT_FEE;
+  const craftFee = computeCraftFee(inputs.stoneId, inputs.carat);
+
+  return blankPrice + materialPrice + stonePrice + engraveFee + craftFee;
 }
 
 async function computeVoucherDiscount(
@@ -116,6 +135,7 @@ export interface CreateStudioOrderPayload {
     province: string;
     ward?: string;
   };
+  email?: string;
   note?: string;
 }
 
@@ -124,12 +144,28 @@ export async function createStudioOrder(payload: CreateStudioOrderPayload) {
   try {
     await conn.beginTransaction();
 
+    // MAIL: lưu email gõ ở checkout Studio nếu tài khoản chưa có sẵn (tiện hồ sơ),
+    // và luôn lưu riêng vào address.contact_email của đơn này — cùng lý do với
+    // order.service.ts's createOrder() (không phụ thuộc việc lưu hồ sơ có trùng
+    // email với tài khoản khác hay không thì các thông báo của đơn này vẫn gửi được).
+    const contactEmail = payload.email?.trim().toLowerCase() || null;
+    if (contactEmail) {
+      try {
+        await conn.execute(
+          `UPDATE client SET email = ? WHERE client_id = ? AND email IS NULL`,
+          [contactEmail, payload.clientId]
+        );
+      } catch (err: any) {
+        if (err?.code !== 'ER_DUP_ENTRY') throw err;
+      }
+    }
+
     const addressId = await nextId('ADR', 'address', 'address_id');
     await conn.execute(
-      `INSERT INTO address (address_id, client_id, recipient_name, recipient_phone, address_line, ward, province, is_default, created_at)
-       VALUES (?,?,?,?,?,?,?,0,NOW())`,
+      `INSERT INTO address (address_id, client_id, recipient_name, recipient_phone, contact_email, address_line, ward, province, is_default, created_at)
+       VALUES (?,?,?,?,?,?,?,?,0,NOW())`,
       [addressId, payload.clientId,
-        payload.address.recipient_name, payload.address.recipient_phone,
+        payload.address.recipient_name, payload.address.recipient_phone, contactEmail,
         payload.address.address_line, payload.address.ward ?? '', payload.address.province]
     );
 
@@ -176,7 +212,7 @@ export async function createStudioOrder(payload: CreateStudioOrderPayload) {
     }
 
     // BR-40: cộng điểm tích lũy (bị hoàn lại nếu đơn bị hủy — xem cancelOrder/cancelExpiredOrders)
-    await awardPurchasePoints(conn, payload.clientId, orderId, finalTotal);
+    const tierResult = await awardPurchasePoints(conn, payload.clientId, orderId, finalTotal);
 
     await conn.commit();
 
@@ -184,6 +220,11 @@ export async function createStudioOrder(payload: CreateStudioOrderPayload) {
     // được làm hỏng đơn đã tạo thành công.
     notifyOrderPlaced(orderId, payload.clientId, finalTotal, 'Đơn hàng tùy biến Studio')
       .catch(err => console.error(`[notification] notifyOrderPlaced(${orderId}) lỗi:`, err));
+
+    if (tierResult.upgraded && tierResult.newTierName) {
+      notifyTierUpgrade(payload.clientId, tierResult.newTierName)
+        .catch(err => console.error(`[notification] notifyTierUpgrade(${payload.clientId}) lỗi:`, err));
+    }
 
     return orderId;
   } catch (err) {

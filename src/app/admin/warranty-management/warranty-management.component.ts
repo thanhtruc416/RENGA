@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService, AdminWarrantyRequest, WarrantyStats, WarrantyStatus } from '../admin.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 const STATUS_LABEL: Record<WarrantyStatus, string> = {
   PENDING: 'CHỜ XỬ LÝ',
+  QUOTED: 'CHỜ KHÁCH PHẢN HỒI',
   ACCEPTED: 'ĐÃ CHẤP NHẬN',
   REJECTED: 'ĐÃ TỪ CHỐI',
   IN_PROGRESS: 'ĐANG SỬA CHỮA',
@@ -14,6 +16,7 @@ const STATUS_LABEL: Record<WarrantyStatus, string> = {
 
 const STATUS_BADGE_CLASS: Record<WarrantyStatus, string> = {
   PENDING: 'status-badge--pending',
+  QUOTED: 'status-badge--quoted',
   ACCEPTED: 'status-badge--processing',
   REJECTED: 'status-badge--rejected',
   IN_PROGRESS: 'status-badge--processing',
@@ -34,7 +37,7 @@ export class WarrantyManagementComponent implements OnInit {
 
   readonly statusLabel = STATUS_LABEL;
   readonly statusBadgeClass = STATUS_BADGE_CLASS;
-  readonly statusOptions: WarrantyStatus[] = ['PENDING', 'ACCEPTED', 'IN_PROGRESS', 'REJECTED', 'COMPLETED'];
+  readonly statusOptions: WarrantyStatus[] = ['PENDING', 'QUOTED', 'ACCEPTED', 'IN_PROGRESS', 'REJECTED', 'COMPLETED'];
 
   filterStatus   = signal('');
   filterSearch   = signal('');
@@ -50,13 +53,15 @@ export class WarrantyManagementComponent implements OnInit {
   currentPage = signal(1);
   readonly itemsPerPage = 5;
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  readonly pageNumbers = computed(() => getPageWindow(this.currentPage(), this.totalPages()));
 
   // --- Modal xử lý ---
   readonly selectedRequest = signal<AdminWarrantyRequest | null>(null);
-  readonly modalTab = signal<'accept' | 'reject'>('accept');
+  readonly modalTab = signal<'accept' | 'reject' | 'quote'>('accept');
   readonly isSubmitting = signal(false);
   readonly rejectReasonCtrl = new FormControl('', { nonNullable: true, validators: [Validators.required] });
+  readonly quoteCostCtrl = new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(1)] });
+  readonly quoteTimeCtrl = new FormControl('', { nonNullable: true, validators: [Validators.required] });
 
   // --- Modal xem chi tiết ---
   readonly viewingRequest = signal<AdminWarrantyRequest | null>(null);
@@ -121,11 +126,13 @@ export class WarrantyManagementComponent implements OnInit {
     this.selectedRequest.set(request);
     this.modalTab.set('accept');
     this.rejectReasonCtrl.reset('');
+    this.quoteCostCtrl.reset(null);
+    this.quoteTimeCtrl.reset('');
   }
 
   closeModal(): void { this.selectedRequest.set(null); }
 
-  switchTab(tab: 'accept' | 'reject'): void { this.modalTab.set(tab); }
+  switchTab(tab: 'accept' | 'reject' | 'quote'): void { this.modalTab.set(tab); }
 
   submitProcess(): void {
     const req = this.selectedRequest();
@@ -136,8 +143,30 @@ export class WarrantyManagementComponent implements OnInit {
       this.notify.error('Vui lòng nhập lý do từ chối.');
       return;
     }
+    if (tab === 'quote' && (this.quoteCostCtrl.invalid || this.quoteTimeCtrl.invalid)) {
+      this.notify.error('Vui lòng nhập đầy đủ chi phí và thời gian dự kiến.');
+      return;
+    }
 
     this.isSubmitting.set(true);
+
+    if (tab === 'quote') {
+      this.adminService.sendWarrantyQuote(req.warranty_id, this.quoteCostCtrl.value!, this.quoteTimeCtrl.value).subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.notify.success('Đã gửi báo giá cho khách hàng!');
+          this.closeModal();
+          this.loadRequests();
+          this.loadStats();
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.notify.error(err?.error?.message ?? 'Gửi báo giá thất bại.');
+        },
+      });
+      return;
+    }
+
     const status: WarrantyStatus = tab === 'accept' ? 'ACCEPTED' : 'REJECTED';
     this.adminService.updateWarrantyStatus(req.warranty_id, status, tab === 'reject' ? this.rejectReasonCtrl.value : undefined).subscribe({
       next: () => {

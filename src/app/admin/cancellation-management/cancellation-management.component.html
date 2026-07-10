@@ -1,0 +1,164 @@
+<div class="warranty-page">
+  <header class="warranty-page__header">
+    <div class="warranty-page__title-group">
+      <h1 class="warranty-page__title">Xử lý yêu cầu hủy/hoàn đơn hàng</h1>
+      <p class="warranty-page__subtitle">Duyệt hoặc từ chối yêu cầu hủy cho các đơn đã giao (SHIPPED) không thể tự hủy trực tiếp</p>
+    </div>
+  </header>
+
+  <div class="warranty-page__toolbar">
+    <div class="warranty-page__filters">
+      <div class="filter-group">
+        <label class="filter-label">TÌM KIẾM</label>
+        <input type="text" class="filter-select" placeholder="Mã đơn, tên khách hàng..."
+          [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">TRẠNG THÁI</label>
+        <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          @for (s of statusOptions; track s) {
+            <option [value]="s">{{ statusLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      <div class="filter-group" style="justify-content:flex-end">
+        @if (filterApplied()) {
+          <button class="wm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+        } @else {
+          <button class="wm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="warranty-table">
+    <div class="warranty-table__header" style="grid-template-columns: 130px 1fr 1fr 120px 120px;">
+      <span>MÃ ĐƠN</span>
+      <span>KHÁCH HÀNG</span>
+      <span>LÝ DO HỦY</span>
+      <span class="text-center">TRẠNG THÁI</span>
+      <span class="text-center">THAO TÁC</span>
+    </div>
+
+    <div class="warranty-table__body">
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (requests().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Không có yêu cầu nào.</p>
+      } @else {
+        @for (req of requests(); track req.cancel_id) {
+          <div class="warranty-table__row" style="grid-template-columns: 130px 1fr 1fr 120px 120px;">
+
+            <div class="table-cell">
+              <p class="table-cell__text">{{ req.order_id }}</p>
+              <p class="table-cell__sub">{{ req.total_amount | number:'1.0-0' }}đ</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__title">{{ req.customer_name }}</p>
+              <p class="table-cell__sub">{{ req.customer_phone }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__text table-cell__text--truncate">{{ req.reason }}</p>
+            </div>
+
+            <div class="table-cell text-center">
+              <span class="status-badge" [ngClass]="statusBadgeClass[req.status]">{{ statusLabel[req.status] }}</span>
+            </div>
+
+            <div class="table-cell table-cell--actions text-center">
+              @if (req.status === 'PENDING') {
+                <button class="btn-action btn-action--primary" (click)="openModal(req)">XỬ LÝ</button>
+              } @else {
+                <span class="text-completed">{{ req.handled_at | date:'dd/MM/yyyy' }}</span>
+              }
+            </div>
+
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="warranty-page__pagination">
+    <p class="warranty-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} YÊU CẦU
+    </p>
+    <div class="warranty-page__pagination-controls">
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= MODAL XỬ LÝ ================= -->
+@if (selectedRequest(); as req) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Xử lý yêu cầu hủy đơn</h2>
+          <p class="modal-subtitle">Yêu cầu số {{ req.cancel_id }} — đơn {{ req.order_id }}</p>
+        </div>
+        <button class="modal-close" (click)="closeModal()" aria-label="Đóng">✕</button>
+      </div>
+
+      <div class="modal-info-card">
+        <div class="modal-info__details">
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">{{ req.customer_name }} — {{ req.customer_phone }}</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Giá trị đơn hàng</p>
+              <p class="modal-info__text">{{ req.total_amount | number:'1.0-0' }}đ</p>
+            </div>
+          </div>
+          <p class="modal-info__label">Lý do khách yêu cầu hủy</p>
+          <p class="modal-info__text">{{ req.reason }}</p>
+        </div>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'approve'" (click)="switchTab('approve')">
+          DUYỆT HỦY ĐƠN
+        </button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'reject'" (click)="switchTab('reject')">
+          TỪ CHỐI
+        </button>
+      </div>
+
+      @if (modalTab() === 'approve') {
+        <div class="modal-form">
+          <p class="modal-info__text">Đơn hàng sẽ chuyển sang <strong>Đã hủy</strong>, hoàn {{ req.total_amount | number:'1.0-0' }}đ và điểm thưởng đã tích (nếu có), khách sẽ nhận email xác nhận.</p>
+        </div>
+      }
+
+      @if (modalTab() === 'reject') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Lý do từ chối</label>
+            <textarea class="form-textarea" [formControl]="rejectReasonCtrl" placeholder="Ví dụ: Đơn hàng đang trên đường giao, không thể thu hồi..."></textarea>
+          </div>
+        </div>
+      }
+
+      <div class="modal-actions">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitProcess()">
+          {{ modalTab() === 'approve' ? 'XÁC NHẬN DUYỆT HỦY' : 'GỬI TỪ CHỐI CHO KHÁCH' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

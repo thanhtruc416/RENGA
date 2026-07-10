@@ -6,6 +6,14 @@ import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';
 import { environment } from '../../../environments/environment';
 
+export interface StudioConfig {
+  blankId: string;
+  materialId: string;
+  stoneId: string;
+  carat: number;
+  engraveText?: string;
+}
+
 export interface CartItem {
   readonly id: string;
   readonly type: 'available' | 'studio';
@@ -16,6 +24,9 @@ export interface CartItem {
   quantity?: number;
   readonly savedDate?: string;
   readonly variantId?: string;
+  readonly maxQuantity?: number;
+  readonly studioConfig?: StudioConfig;
+  readonly customId?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,8 +35,13 @@ export class CartService {
   private readonly auth = inject(AuthService);
   private readonly notify = inject(NotificationService);
   private readonly _items = signal<CartItem[]>([]);
+  // true khi đã có kết quả lần load đầu tiên (login xong fetch API xong, hoặc guest
+  // clear ngay) — dùng để phân biệt "giỏ hàng rỗng thật" với "chưa tải xong dữ liệu",
+  // tránh các trang như checkout redirect nhầm lúc dữ liệu còn đang tải dở.
+  private readonly _loaded = signal(false);
 
-  readonly items = this._items.asReadonly();
+  readonly items  = this._items.asReadonly();
+  readonly loaded = this._loaded.asReadonly();
 
   constructor() {
     // Khi login: load từ BE. Khi logout: clear hết.
@@ -33,20 +49,25 @@ export class CartService {
       switchMap(loggedIn => {
         if (!loggedIn) {
           this._items.set([]);
+          this._loaded.set(true);
           return EMPTY;
         }
         return this.http.get<any>(`${environment.apiUrl}/cart`);
       }),
       takeUntilDestroyed(),
-    ).subscribe(res => {
-      if (res?.success) {
-        this._items.set(this._mapItems(res.data?.items ?? []));
-      }
+    ).subscribe({
+      next: res => {
+        if (res?.success) {
+          this._items.set(this._mapItems(res.data));
+        }
+        this._loaded.set(true);
+      },
+      error: () => this._loaded.set(true),
     });
   }
 
-  private _mapItems(raw: any[]): CartItem[] {
-    return raw.map(i => ({
+  private _mapItems(data: any): CartItem[] {
+    const productItems: CartItem[] = (data?.items ?? []).map((i: any) => ({
       id: i.cart_item_id,
       type: 'available' as const,
       name: i.product_name ?? '',
@@ -55,13 +76,29 @@ export class CartService {
       image: i.image_url ?? '',
       quantity: i.quantity,
       variantId: i.variant_id,
+      maxQuantity: i.stock_quantity != null ? Number(i.stock_quantity) : undefined,
     }));
+
+    // CART-02: item Studio giờ lưu thật ở server (bảng customization), không còn
+    // chỉ nằm trong bộ nhớ tạm — sống sót qua F5.
+    const customItems: CartItem[] = (data?.customItems ?? []).map((i: any) => ({
+      id: i.cart_item_id,
+      type: 'studio' as const,
+      name: `${i.blank_name ?? 'Trang sức'} Studio`,
+      spec: [i.material_name, i.engraving_text ? `Khắc: "${i.engraving_text}"` : null].filter(Boolean).join(' • '),
+      price: Number(i.unit_price),
+      image: i.blank_image ?? 'assets/images/studio-ring.png',
+      quantity: i.quantity,
+      customId: i.custom_id,
+    }));
+
+    return [...productItems, ...customItems];
   }
 
   private _reload(): void {
     this.http.get<any>(`${environment.apiUrl}/cart`).subscribe({
       next: res => {
-        if (res?.success) this._items.set(this._mapItems(res.data?.items ?? []));
+        if (res?.success) this._items.set(this._mapItems(res.data));
       },
     });
   }
@@ -102,46 +139,73 @@ export class CartService {
   // ── Mutations ─────────────────────────────────────────────
 
   addItem(item: Omit<CartItem, 'id'>): void {
-    if (this.auth.isLoggedIn() && item.variantId) {
-      this.http.post<any>(`${environment.apiUrl}/cart/items`, {
-        variant_id: item.variantId,
-        quantity: item.quantity ?? 1,
-        unit_price: item.price,
+    // BR-05: Guest vẫn được thêm sản phẩm có sẵn vào giỏ (lưu local, không cần đăng nhập).
+    if (item.variantId) {
+      if (this.auth.isLoggedIn()) {
+        this.http.post<any>(`${environment.apiUrl}/cart/items`, {
+          variant_id: item.variantId,
+          quantity: item.quantity ?? 1,
+          unit_price: item.price,
+        }).subscribe({
+          next: () => this._reload(),
+          error: (err) => this.notify.error(err?.error?.message ?? 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.'),
+        });
+        return;
+      }
+      const existing = this._items().find(
+        i => i.variantId === item.variantId && i.type === 'available'
+      );
+      if (existing) { this.updateQty(existing.id, 1); return; }
+      this._items.update(items => [...items, { ...item, id: `local-${Date.now()}` }]);
+      return;
+    }
+
+    // Studio (/studio) luôn yêu cầu đăng nhập từ trước (authGuard) nên tới đây
+    // chắc chắn đã có tài khoản — lưu thật vào server thay vì bộ nhớ tạm.
+    if (item.type === 'studio' && item.studioConfig) {
+      const c = item.studioConfig;
+      this.http.post<any>(`${environment.apiUrl}/cart/studio-items`, {
+        blankId: c.blankId, materialId: c.materialId, stoneId: c.stoneId,
+        carat: c.carat, engraveTextLength: c.engraveText?.length ?? 0, engraveText: c.engraveText,
       }).subscribe({
         next: () => this._reload(),
-        error: () => this.notify.error('Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.'),
+        error: (err) => this.notify.error(err?.error?.message ?? 'Không thể lưu thiết kế vào giỏ hàng. Vui lòng thử lại.'),
       });
       return;
     }
-    // Guest hoặc studio: lưu local
-    const existing = this._items().find(
-      i => i.name === item.name && i.spec === item.spec && i.type === item.type
-    );
-    if (existing) {
-      this.updateQty(existing.id, 1);
-      return;
-    }
-    this._items.update(items => [...items, { ...item, id: `local-${Date.now()}` }]);
+
+    this.notify.error('Thiếu thông tin sản phẩm, không thể thêm vào giỏ hàng.');
   }
 
   removeItem(id: string): void {
-    if (this.auth.isLoggedIn() && !id.startsWith('local-')) {
-      this.http.delete<any>(`${environment.apiUrl}/cart/items/${id}`)
-        .subscribe({
-          next: () => this._reload(),
-          error: () => this.notify.error('Không thể xóa sản phẩm khỏi giỏ hàng. Vui lòng thử lại.'),
-        });
+    if (id.startsWith('local-') || id.startsWith('buynow-')) {
+      this._items.update(items => items.filter(i => i.id !== id));
       return;
     }
-    this._items.update(items => items.filter(i => i.id !== id));
+    this.http.delete<any>(`${environment.apiUrl}/cart/items/${id}`)
+      .subscribe({
+        next: () => this._reload(),
+        error: (err) => this.notify.error(err?.error?.message ?? 'Không thể xóa sản phẩm khỏi giỏ hàng. Vui lòng thử lại.'),
+      });
   }
 
+  // CART-05: xoá nhiều item đã chọn — trước đây khi đã đăng nhập chỉ reload mà
+  // không thật sự xoá (giả định sai là server đã tự dọn giỏ), nên "xoá nhiều" không
+  // có tác dụng gì. Giờ gọi đúng endpoint xoá hàng loạt (và vẫn xử lý local cho guest).
   removeItems(ids: Set<string>): void {
-    if (this.auth.isLoggedIn()) {
-      // Server đã clearCart sau khi tạo đơn hàng — reload là đủ
-      this._reload();
-    } else {
-      this._items.update(items => items.filter(i => !ids.has(i.id)));
+    if (!ids.size) return;
+    const localIds = [...ids].filter(id => id.startsWith('local-') || id.startsWith('buynow-'));
+    const serverIds = [...ids].filter(id => !localIds.includes(id));
+
+    if (localIds.length) {
+      this._items.update(items => items.filter(i => !localIds.includes(i.id)));
+    }
+    if (serverIds.length) {
+      this.http.post<any>(`${environment.apiUrl}/cart/items/bulk-delete`, { ids: serverIds })
+        .subscribe({
+          next: () => this._reload(),
+          error: (err) => this.notify.error(err?.error?.message ?? 'Không thể xóa các sản phẩm đã chọn. Vui lòng thử lại.'),
+        });
     }
   }
 
@@ -152,16 +216,19 @@ export class CartService {
     const newQty = (item.quantity ?? 1) + delta;
     if (newQty < 1) return;
 
-    if (this.auth.isLoggedIn() && !id.startsWith('local-')) {
-      this.http.patch<any>(`${environment.apiUrl}/cart/items/${id}`, { quantity: newQty })
-        .subscribe({
-          next: () => this._reload(),
-          error: () => this.notify.error('Không thể cập nhật số lượng. Vui lòng thử lại.'),
-        });
+    if (id.startsWith('local-')) {
+      if (item.maxQuantity != null && newQty > item.maxQuantity) {
+        this.notify.error(`Vượt số lượng còn hàng — chỉ còn ${item.maxQuantity} sản phẩm.`);
+        return;
+      }
+      this._items.update(items => items.map(i => i.id === id ? { ...i, quantity: newQty } : i));
       return;
     }
-    this._items.update(items =>
-      items.map(i => i.id === id ? { ...i, quantity: newQty } : i)
-    );
+
+    this.http.patch<any>(`${environment.apiUrl}/cart/items/${id}`, { quantity: newQty })
+      .subscribe({
+        next: () => this._reload(),
+        error: (err) => this.notify.error(err?.error?.message ?? 'Không thể cập nhật số lượng. Vui lòng thử lại.'),
+      });
   }
 }

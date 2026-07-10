@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { AdminService, AdminQuestion, QaStats } from '../admin.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 type ReplyFormGroup = FormGroup<Record<string, FormControl<string>>>;
 type Tab = 'pending' | 'replied' | 'hidden';
@@ -28,7 +29,7 @@ export class QaManagementComponent implements OnInit {
   readonly currentPage = signal(1);
   readonly itemsPerPage = 3;
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  readonly pageNumbers = computed(() => getPageWindow(this.currentPage(), this.totalPages()));
 
   readonly replyForm: ReplyFormGroup = new FormGroup({});
 

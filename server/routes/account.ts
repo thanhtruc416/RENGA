@@ -166,7 +166,9 @@ router.get('/loyalty', authenticate, async (req, res) => {
       history = (rows as any[]).map(h => ({
         id:          h.transaction_id,
         type:        Number(h.points_changed) >= 0 ? 'earn' : 'redeem',
-        points:      Math.abs(Number(h.points_changed)),
+        // Trước đây lấy Math.abs() nên mất dấu âm — lịch sử hoàn điểm (huỷ đơn)
+        // luôn hiện "+" dù thực chất là trừ điểm. Giữ nguyên dấu để FE hiển thị đúng.
+        points:      Number(h.points_changed),
         description: h.note ?? '',
         createdAt:   h.created_at,
       }));

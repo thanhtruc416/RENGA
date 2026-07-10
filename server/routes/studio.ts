@@ -14,7 +14,7 @@ router.get('/blanks', async (req, res) => {
 });
 
 router.post('/', authenticate as any, async (req, res) => {
-  const { customerVoucherId, blankId, materialId, stoneId, carat, engraveTextLength, address, note } = req.body;
+  const { customerVoucherId, blankId, materialId, stoneId, carat, engraveTextLength, address, email, note } = req.body;
   if (!address) {
     res.status(400).json({ success: false, message: 'Thiếu thông tin đơn hàng' });
     return;
@@ -22,7 +22,7 @@ router.post('/', authenticate as any, async (req, res) => {
   try {
     const orderId = await createStudioOrder({
       clientId: req.user!.clientId,
-      blankId, materialId, stoneId, carat, engraveTextLength, customerVoucherId, address, note,
+      blankId, materialId, stoneId, carat, engraveTextLength, customerVoucherId, address, email, note,
     });
     res.status(201).json({ success: true, data: { order_id: orderId } });
   } catch (err: any) {

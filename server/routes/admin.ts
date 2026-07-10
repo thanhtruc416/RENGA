@@ -13,7 +13,7 @@ import {
 } from '../services/admin-appointment.service';
 import { getDesigners, getAvailableSlots } from '../services/design.service';
 import {
-  getAdminWarrantyRequests, getAdminWarrantyDetail, getWarrantyStats, updateWarrantyStatus,
+  getAdminWarrantyRequests, getAdminWarrantyDetail, getWarrantyStats, updateWarrantyStatus, sendWarrantyQuote,
 } from '../services/admin-warranty.service';
 import {
   getAdminVouchers, getAdminVoucherDetail, createAdminVoucher, updateAdminVoucher,
@@ -21,6 +21,13 @@ import {
 import {
   getAdminQuestions, getQaStats, replyToQuestion, setQuestionVisibility,
 } from '../services/admin-qa.service';
+import {
+  getAdminReviews, setReviewVisibility, replyToReview,
+} from '../services/admin-review.service';
+import { getAdminFaqs, createFaq, updateFaq } from '../services/admin-faq.service';
+import {
+  getAdminCancellationRequests, approveCancellationRequest, rejectCancellationRequest,
+} from '../services/admin-cancellation.service';
 
 const router = Router();
 router.use(authenticate as any, requireRole('ADMIN'));
@@ -34,9 +41,16 @@ function handleError(err: any, res: Response): void {
 
 // ── Dashboard ────────────────────────────────────────────────────────────────
 
-router.get('/dashboard', async (_req: Request, res: Response) => {
+router.get('/dashboard', async (req: Request, res: Response) => {
   try {
     const data = await getDashboardStats();
+    // ADM-01: doanh số chỉ Super Admin mới được xem — nhân viên thường (STAFF) vẫn
+    // vào được dashboard bình thường nhưng không thấy tổng doanh thu.
+    if (req.user!.adminRole !== 'SUPER_ADMIN') {
+      const { totalRevenue, ...rest } = data;
+      res.json({ success: true, data: rest });
+      return;
+    }
     res.json({ success: true, data });
   } catch (err) {
     handleError(err, res);
@@ -58,9 +72,10 @@ router.get('/products', async (req: Request, res: Response) => {
   try {
     const page   = Number(req.query['page'])  || 1;
     const limit  = Number(req.query['limit']) || 20;
-    const search = req.query['search'] as string | undefined;
-    const status = req.query['status'] as string | undefined;
-    const data = await getAdminProducts(page, limit, search, status);
+    const search   = req.query['search'] as string | undefined;
+    const status   = req.query['status'] as string | undefined;
+    const category = req.query['category'] as string | undefined;
+    const data = await getAdminProducts(page, limit, search, status, category);
     res.json({ success: true, ...data });
   } catch (err) {
     handleError(err, res);
@@ -133,7 +148,7 @@ router.get('/orders/:id', async (req: Request, res: Response) => {
 
 router.patch('/orders/:id/status', async (req: Request, res: Response) => {
   try {
-    await updateAdminOrderStatus(req.params['id'] as string, req.body?.status);
+    await updateAdminOrderStatus(req.params['id'] as string, req.body?.status, req.user!.employeeId);
     res.json({ success: true });
   } catch (err) {
     handleError(err, res);
@@ -251,6 +266,17 @@ router.patch('/warranty-requests/:id/status', async (req: Request, res: Response
   }
 });
 
+router.patch('/warranty-requests/:id/quote', async (req: Request, res: Response) => {
+  try {
+    const employeeId = req.user!.employeeId!;
+    const estimatedCost = Number(req.body?.estimatedCost);
+    await sendWarrantyQuote(req.params['id'] as string, employeeId, estimatedCost, req.body?.estimatedTime);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
 // ── Voucher ──────────────────────────────────────────────────────────────────
 
 router.get('/vouchers', async (req: Request, res: Response) => {
@@ -332,6 +358,109 @@ router.patch('/questions/:id/reply', async (req: Request, res: Response) => {
 router.patch('/questions/:id/visibility', async (req: Request, res: Response) => {
   try {
     await setQuestionVisibility(req.params['id'] as string, req.body?.visibility);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Đánh giá sản phẩm ────────────────────────────────────────────────────────
+
+router.get('/reviews', async (req: Request, res: Response) => {
+  try {
+    const page       = Number(req.query['page'])  || 1;
+    const limit      = Number(req.query['limit']) || 20;
+    const visibility = req.query['visibility'] as string | undefined;
+    const search     = req.query['search'] as string | undefined;
+    const data = await getAdminReviews(page, limit, visibility, search);
+    res.json({ success: true, ...data });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.patch('/reviews/:id/visibility', async (req: Request, res: Response) => {
+  try {
+    await setReviewVisibility(req.params['id'] as string, req.body?.visibility);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.patch('/reviews/:id/reply', async (req: Request, res: Response) => {
+  try {
+    await replyToReview(req.params['id'] as string, req.body?.replyContent);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── FAQ chatbot ──────────────────────────────────────────────────────────────
+
+router.get('/faqs', async (req: Request, res: Response) => {
+  try {
+    const page   = Number(req.query['page'])  || 1;
+    const limit  = Number(req.query['limit']) || 20;
+    const topic  = req.query['topic'] as string | undefined;
+    const search = req.query['search'] as string | undefined;
+    const data = await getAdminFaqs(page, limit, topic, search);
+    res.json({ success: true, ...data });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.post('/faqs', async (req: Request, res: Response) => {
+  try {
+    const employeeId = req.user!.employeeId!;
+    const faqId = await createFaq(req.body, employeeId);
+    res.status(201).json({ success: true, data: { faqId } });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.patch('/faqs/:id', async (req: Request, res: Response) => {
+  try {
+    const employeeId = req.user!.employeeId!;
+    await updateFaq(req.params['id'] as string, req.body, employeeId);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+// ── Yêu cầu hủy/hoàn đơn hàng ────────────────────────────────────────────────
+
+router.get('/cancellation-requests', async (req: Request, res: Response) => {
+  try {
+    const page   = Number(req.query['page'])  || 1;
+    const limit  = Number(req.query['limit']) || 20;
+    const status = req.query['status'] as string | undefined;
+    const search = req.query['search'] as string | undefined;
+    const data = await getAdminCancellationRequests(page, limit, status, search);
+    res.json({ success: true, ...data });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.patch('/cancellation-requests/:id/approve', async (req: Request, res: Response) => {
+  try {
+    const employeeId = req.user!.employeeId!;
+    await approveCancellationRequest(req.params['id'] as string, employeeId);
+    res.json({ success: true });
+  } catch (err) {
+    handleError(err, res);
+  }
+});
+
+router.patch('/cancellation-requests/:id/reject', async (req: Request, res: Response) => {
+  try {
+    const employeeId = req.user!.employeeId!;
+    await rejectCancellationRequest(req.params['id'] as string, employeeId, req.body?.reason);
     res.json({ success: true });
   } catch (err) {
     handleError(err, res);

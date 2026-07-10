@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, inject, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, afterNextRender, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, map, filter } from 'rxjs';
@@ -7,9 +7,21 @@ import { CartService, CartItem } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ReviewService, ProductReview } from '../../core/services/review.service';
+import { QuestionService } from '../../core/services/question.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { RingSizeGuideModalComponent } from '../../shared/components/modal/ring-size-guide-modal/ring-size-guide-modal.component';
 import { RingArTryonComponent } from '../../shared/components/ring-ar-tryon/ring-ar-tryon.component';
+
+interface QaMessage {
+  id: string;
+  author: string;
+  authorInitial: string;
+  time: string;
+  text: string;
+  reply: string;
+  replyTime: string;
+}
 
 @Component({
   selector: 'app-product-detail',
@@ -27,6 +39,8 @@ export class ProductDetailComponent {
   private readonly authService = inject(AuthService);
   private readonly modalService = inject(ModalService);
   private readonly reviewService = inject(ReviewService);
+  private readonly questionService = inject(QuestionService);
+  private readonly notify = inject(NotificationService);
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
@@ -93,35 +107,16 @@ export class ProductDetailComponent {
   }
 
   // ── Q&A ──────────────────────────────────────────────────
-  readonly qaMessages = signal([
-    {
-      id: 1,
-      author: 'Huỳnh Ngọc Thảo',
-      authorInitial: 'H',
-      time: '18 tháng trước',
-      text: 'cho hỏi 18 tuổi mua trang sức góp 0% lãi suất có góp thẩm định ng thân k a',
-      reply: 'Chào Chị Thảo! Dạ nếu gọi qua Công ty tài chính sẽ có gọi người thân. Sản phẩm đang có ưu đãi trả góp 0% lãi suất qua công ty tài chính HomeCredit trả trước 30% · 11.097.000đ · góp mỗi tháng dự kiến: 4.326.500đ (6 tháng). Chị có thể tham khảo thêm tại cửa hàng nhé.',
-      replyTime: '18 tháng trước',
-    },
-    {
-      id: 2,
-      author: 'Trần Minh Khoa',
-      authorInitial: 'T',
-      time: '5 tháng trước',
-      text: 'Nhẫn có thể điều chỉnh size sau khi mua không ạ?',
-      reply: 'Chào anh! Dạ có, RENGA hỗ trợ điều chỉnh size miễn phí trong vòng 30 ngày kể từ ngày nhận hàng. Anh mang nhẫn đến cửa hàng gần nhất là được nhé!',
-      replyTime: '5 tháng trước',
-    },
-  ]);
-
+  readonly qaMessages = signal<QaMessage[]>([]);
   readonly qaInput = signal('');
-  readonly expandedReplies = signal(new Set([1, 2]));
+  readonly expandedReplies = signal(new Set<string>());
+  readonly isSendingQa = signal(false);
 
   onQaInput(e: Event): void {
     this.qaInput.set((e.target as HTMLInputElement).value);
   }
 
-  toggleReply(id: number): void {
+  toggleReply(id: string): void {
     this.expandedReplies.update(s => {
       const next = new Set(s);
       next.has(id) ? next.delete(id) : next.add(id);
@@ -129,27 +124,55 @@ export class ProductDetailComponent {
     });
   }
 
+  private loadQuestions(productId: string): void {
+    this.questionService.getProductQuestions(productId).subscribe({
+      next: (res) => {
+        if (!res.success) return;
+        this.qaMessages.set(res.data.map(q => ({
+          id: q.id,
+          author: q.author,
+          authorInitial: q.author.charAt(0).toUpperCase(),
+          time: this.formatReviewDate(q.askedAt),
+          text: q.question,
+          reply: q.answer ?? '',
+          replyTime: q.repliedAt ? this.formatReviewDate(q.repliedAt) : '',
+        })));
+      },
+      error: () => this.notify.error('Không tải được câu hỏi cho sản phẩm này.'),
+    });
+  }
+
   sendQa(): void {
     if (this.isGuest()) { this.modalService.openLoginRequired(); return; }
     const text = this.qaInput().trim();
-    if (!text) return;
-    this.qaMessages.update(msgs => [
-      ...msgs,
-      {
-        id: msgs.length + 1,
-        author: 'Bạn',
-        authorInitial: 'B',
-        time: 'Vừa xong',
-        text,
-        reply: '',
-        replyTime: '',
+    const productId = this.product().id;
+    if (!text || !productId || this.isSendingQa()) return;
+
+    this.isSendingQa.set(true);
+    this.questionService.submitQuestion(productId, text).subscribe({
+      next: (res) => {
+        this.isSendingQa.set(false);
+        if (res.success) {
+          this.qaInput.set('');
+          this.loadQuestions(productId);
+          this.notify.success('Gửi câu hỏi thành công! RENGA sẽ phản hồi sớm nhất.');
+        } else {
+          this.notify.error(res.message ?? 'Gửi câu hỏi thất bại.');
+        }
       },
-    ]);
-    this.qaInput.set('');
+      error: (err) => {
+        this.isSendingQa.set(false);
+        this.notify.error(err?.error?.message ?? 'Gửi câu hỏi thất bại.');
+      },
+    });
   }
 
   constructor() {
     afterNextRender(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    effect(() => {
+      const id = this.product().id;
+      if (id) this.loadQuestions(id);
+    });
   }
 
   starsArray(rating: number): number[] {
@@ -188,7 +211,13 @@ export class ProductDetailComponent {
   openLightbox(): void { this.lightboxOpen.set(true); }
   closeLightbox(): void { this.lightboxOpen.set(false); }
 
-  openArPopup(): void { this.arPopupOpen.set(true); }
+  openArPopup(): void {
+    // AR try-on hiện chỉ dựng cho nhẫn (theo dõi khớp ngón tay) — bấm nhầm ở sản
+    // phẩm khác (vòng tay, dây chuyền...) sẽ ướm sai hoàn toàn vì logic đo/định vị
+    // hoàn toàn khác (cổ tay/cổ, không phải ngón tay).
+    if (this.product().category !== 'nhan') return;
+    this.arPopupOpen.set(true);
+  }
   closeArPopup(): void { this.arPopupOpen.set(false); }
 
   lightboxPrev(): void {
@@ -206,7 +235,7 @@ export class ProductDetailComponent {
     this.lightboxOpen.set(false);
     this.arPopupOpen.set(false);
   }
-  readonly selectedSize    = signal<number | null>(10);
+  readonly selectedSize    = signal<number | null>(null);
   readonly showSizeGuide   = signal(false);
 
   readonly displayPrice = computed(() => {
@@ -215,6 +244,17 @@ export class ProductDetailComponent {
     const variant = p.variants.find(v => Number(v.size_value) === size)
       ?? p.variants[0];
     return Number(variant?.price ?? p.price);
+  });
+
+  // Số lượng còn lại của size đang chọn — null khi chưa chọn size (sản phẩm có
+  // nhiều size) để không hiện nhầm tồn kho của size khác.
+  readonly selectedVariantStock = computed((): number | null => {
+    const p = this.product();
+    const size = this.selectedSize();
+    const variant = size != null
+      ? p.variants.find(v => Number(v.size_value) === size)
+      : p.variants[0];
+    return variant ? Number(variant.stock_quantity) : null;
   });
   openSizeGuide(): void { this.showSizeGuide.set(true); }
   closeSizeGuide(): void { this.showSizeGuide.set(false); }
@@ -232,14 +272,29 @@ export class ProductDetailComponent {
   }
 
   selectSize(size: number): void {
+    if (this.isSizeOutOfStock(size)) return;
     this.selectedSize.set(size);
+  }
+
+  // CART-04: size hết hàng thì hiện xám, không cho chọn — thay vì để chọn được
+  // rồi mới báo lỗi lúc thêm vào giỏ.
+  isSizeOutOfStock(size: number): boolean {
+    const variant = this.product().variants.find(v => Number(v.size_value) === size);
+    return !variant || variant.status !== 'AVAILABLE' || Number(variant.stock_quantity) <= 0;
   }
 
   private buildCartItem(): Omit<CartItem, 'id'> | null {
     const p = this.product();
     if (!p.id) return null;
     const size = this.selectedSize();
-    const variant = p.variants.find(v => Number(v.size_value) === size)
+    // Sản phẩm có nhiều size để chọn nhưng chưa chọn size nào — chặn thêm vào giỏ
+    // thay vì âm thầm lấy variant đầu tiên (trước đây selectedSize mặc định = 10
+    // nên luôn "trông như đã chọn", giờ mặc định null nên phải chặn rõ ràng ở đây).
+    if (p.sizes?.length && size == null) {
+      this.notify.error('Vui lòng chọn size trước khi thêm vào giỏ hàng.');
+      return null;
+    }
+    const variant = (size != null ? p.variants.find(v => Number(v.size_value) === size) : null)
       ?? p.variants[0];
     if (!variant) return null;
     const spec = size ? `Size ${size}` : (variant.variant_name ?? '');
@@ -265,6 +320,11 @@ export class ProductDetailComponent {
   }
 
   flyToCart(event: MouseEvent): void {
+    const p = this.product();
+    if (p.sizes?.length && this.selectedSize() == null) {
+      this.notify.error('Vui lòng chọn size trước khi thêm vào giỏ hàng.');
+      return;
+    }
     const btn = event.currentTarget as HTMLElement;
     const cartEl = document.getElementById('cart-icon-btn');
     if (!cartEl) { this.addToCart(); return; }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { AdminService, AdminProduct, AdminCategory } from '../admin.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 interface BespokeMaterial {
   name: string;
@@ -49,7 +50,7 @@ export class ProductManagementComponent implements OnInit {
   categories = signal<AdminCategory[]>([]);
 
   get totalPages() { return Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)); }
-  get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
+  get pageNumbers(): number[] { return getPageWindow(this.currentPage(), this.totalPages); }
 
   ngOnInit(): void {
     this.loadCategories();
@@ -70,6 +71,7 @@ export class ProductManagementComponent implements OnInit {
       limit: this.itemsPerPage,
       search: this.searchTerm() || undefined,
       status: this.activeStatus || undefined,
+      category: this.activeCategoryId || undefined,
     }).subscribe({
       next: (res) => {
         this.products.set(res.products);

@@ -133,17 +133,17 @@ export class AuthService {
 
   // ── Quên mật khẩu bước 1: gửi OTP ────────────────────────────────────────
 
-  forgotPasswordSendOtp(phone: string): Observable<MessageResponse> {
+  forgotPasswordSendOtp(email: string): Observable<MessageResponse> {
     return this.http.post<MessageResponse>(
-      `${environment.apiUrl}/auth/forgot-password/send-otp`, { phone }
+      `${environment.apiUrl}/auth/forgot-password/send-otp`, { email }
     );
   }
 
   // ── Quên mật khẩu bước 2: xác thực OTP → nhận reset token ────────────────
 
-  forgotPasswordVerifyOtp(phone: string, otp: string): Observable<ForgotPasswordVerifyOtpResponse> {
+  forgotPasswordVerifyOtp(email: string, otp: string): Observable<ForgotPasswordVerifyOtpResponse> {
     return this.http.post<ForgotPasswordVerifyOtpResponse>(
-      `${environment.apiUrl}/auth/forgot-password/verify-otp`, { phone, otp }
+      `${environment.apiUrl}/auth/forgot-password/verify-otp`, { email, otp }
     );
   }
 

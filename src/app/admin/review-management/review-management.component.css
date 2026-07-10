@@ -1,0 +1,334 @@
+/* Container chính */
+.qa-page {
+  padding: var(--sp-lg) var(--sp-xl);
+  background-color: var(--color-white);
+  min-height: 100vh;
+}
+
+/* Header */
+.qa-page__title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--color-primary);
+  margin-bottom: var(--sp-xs);
+}
+
+.qa-page__subtitle {
+  font-family: var(--font-sans);
+  color: var(--color-primary);
+  font-size: 14px;
+  margin-bottom: var(--sp-lg);
+  padding-bottom: var(--sp-md);
+  border-bottom: 1px solid var(--color-border);
+  font-style: italic;
+}
+
+/* Statistics */
+.qa-page__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-lg);
+}
+
+.stat-card {
+  padding: var(--sp-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.stat-card--warning {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-primary);
+}
+
+.stat-card__label {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-bottom: var(--sp-sm);
+  text-transform: uppercase;
+}
+
+.stat-card__value-group {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--sp-sm);
+}
+
+.stat-card__value {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.stat-card__subtext {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+/* Tabs */
+.qa-page__tabs {
+  display: flex;
+  gap: var(--sp-lg);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--sp-lg);
+}
+
+.qa-page__tab-btn {
+  background: none;
+  border: none;
+  padding: var(--sp-sm) 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  position: relative;
+}
+
+.qa-page__tab-btn--active {
+  color: var(--color-dark);
+}
+
+.qa-page__tab-btn--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-dark);
+}
+
+/* List & Card */
+.qa-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+  margin-bottom: var(--sp-2xl);
+}
+
+.question-card {
+  display: grid;
+  grid-template-columns: 200px 1fr 180px;
+  gap: var(--sp-lg);
+  padding: var(--sp-md);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+}
+
+/* Card: Customer Info */
+.question-card__customer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  justify-content: center;
+  align-items: center;
+}
+
+.question-card__avatar {
+  /* Tái sử dụng var(--sp-xl) (48px) để làm kích thước ảnh avatar, tránh hardcode pixel */
+  width: var(--sp-xl);
+  height: var(--sp-xl);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.question-card__customer-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-dark);
+  margin-bottom: 12px;
+}
+
+.question-card__customer-type {
+  font-size: 10px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.question-card__date {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: auto;
+}
+
+/* Card: Content */
+.question-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+.question-card__product {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+}
+
+.question-card__product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--sp-xs);
+  border: 1px solid var(--color-border);
+
+}
+
+.question-card__tag {
+  font-size: 10px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-xs);
+  display: block;
+}
+
+.question-card__product-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-dark);
+}
+
+.question-card__text {
+  font-size: 14px;
+  color: var(--color-dark);
+  margin-bottom: var(--sp-md);
+}
+
+.question-card__textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--sp-md);
+  border: none;
+  background-color: var(--color-bg-card); /* Tận dụng màu bg-card cho ô input */
+  border-radius: var(--sp-xs);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  resize: vertical;
+}
+
+.question-card__textarea:focus {
+  outline: 1px solid var(--color-border);
+}
+
+/* Card: Actions */
+.question-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  justify-content: flex-end;
+}
+
+.btn {
+  width: 100%;
+  padding: var(--sp-md);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn--primary {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-dark);
+  border: 1px solid var(--color-border);
+}
+
+/* Pagination */
+.qa-page__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.qa-page__pagination-info {
+  font-size: 12px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.qa-page__pagination-controls {
+  display: flex;
+  gap: var(--sp-xs);
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--sp-xs);
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--color-dark);
+}
+
+.pagination-btn--active {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  border-color: var(--color-dark);
+}
+
+/* --- TOAST MESSAGE --- */
+.toast-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary); /* Success */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.toast-message--error {
+  background-color: var(--color-black); /* Error */
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Thêm style cho trạng thái empty */
+.qa-page__empty {
+  text-align: center;
+  padding: var(--sp-2xl);
+  color: var(--color-muted);
+  font-style: italic;
+  border: 1px dashed var(--color-border);
+}

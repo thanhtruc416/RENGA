@@ -106,7 +106,7 @@ export async function reassignAppointmentSlot(appointmentId: string, newSlotId: 
     await conn.beginTransaction();
 
     const [[appt]] = await conn.execute<any[]>(
-      `SELECT appointment_status, slot_id FROM appointment WHERE appointment_id = ? FOR UPDATE`,
+      `SELECT appointment_status, slot_id, reschedule_count FROM appointment WHERE appointment_id = ? FOR UPDATE`,
       [appointmentId],
     );
     if (!appt) throw { status: 404, message: 'Không tìm thấy lịch hẹn.' };
@@ -115,6 +115,11 @@ export async function reassignAppointmentSlot(appointmentId: string, newSlotId: 
     }
     if (appt.slot_id === newSlotId) {
       throw { status: 400, message: 'Vui lòng chọn một khung giờ khác.' };
+    }
+    // APT-04: chỉ được dời lịch tối đa 1 lần (cột reschedule_count có sẵn CHECK
+    // <=1 trong schema nhưng trước đây không có chỗ nào tăng cột này cả).
+    if (appt.reschedule_count >= 1) {
+      throw { status: 409, message: 'Lịch hẹn này đã được dời 1 lần — không thể dời thêm.' };
     }
 
     const [[newSlot]] = await conn.execute<any[]>(
@@ -132,7 +137,7 @@ export async function reassignAppointmentSlot(appointmentId: string, newSlotId: 
     await conn.execute(`UPDATE appointment_slot SET is_available = 1 WHERE slot_id = ?`, [appt.slot_id]);
     await conn.execute(`UPDATE appointment_slot SET is_available = 0 WHERE slot_id = ?`, [newSlotId]);
     await conn.execute(
-      `UPDATE appointment SET slot_id = ?, updated_at = NOW() WHERE appointment_id = ?`,
+      `UPDATE appointment SET slot_id = ?, reschedule_count = reschedule_count + 1, updated_at = NOW() WHERE appointment_id = ?`,
       [newSlotId, appointmentId],
     );
 

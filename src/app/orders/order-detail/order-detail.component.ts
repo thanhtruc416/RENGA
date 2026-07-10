@@ -232,7 +232,7 @@ export class OrderDetailComponent implements OnInit {
       shipping: {
         name: raw.recipient_name,
         phone: raw.recipient_phone,
-        address: [raw.address_line, raw.province].filter(Boolean).join(', '),
+        address: [raw.address_line, raw.ward, raw.province].filter(Boolean).join(', '),
       },
       items: (raw.items ?? []).map((item: any): OrderItem => ({
         id: item.order_item_id,

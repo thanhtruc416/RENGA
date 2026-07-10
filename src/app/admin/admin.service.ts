@@ -60,7 +60,9 @@ export interface AdminOrder {
 }
 
 export interface DashboardStats {
-  totalRevenue: number;
+  // ADM-01: chỉ Super Admin mới thấy doanh số — nhân viên thường thì server không
+  // trả field này về, nên phải optional ở đây thay vì luôn có.
+  totalRevenue?: number;
   orderStatusCounts: Array<{ status: string; count: number }>;
   topProducts: Array<{ productId: string; name: string; totalSold: number }>;
   pendingPayments: number;
@@ -113,7 +115,7 @@ export interface AdminAppointment {
 
 // ── Bảo hành ───────────────────────────────────────────────────────────────
 
-export type WarrantyStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'IN_PROGRESS' | 'COMPLETED';
+export type WarrantyStatus = 'PENDING' | 'QUOTED' | 'ACCEPTED' | 'REJECTED' | 'IN_PROGRESS' | 'COMPLETED';
 
 export interface AdminWarrantyRequest {
   warranty_id: string;
@@ -123,6 +125,8 @@ export interface AdminWarrantyRequest {
   evidence_images: string[];
   warranty_status: WarrantyStatus;
   rejection_reason: string | null;
+  estimated_cost: number | null;
+  estimated_time: string | null;
   handler_id: string | null;
   drop_off_date: string | null;
   received_at: string | null;
@@ -196,6 +200,58 @@ export interface AdminQuestion {
   product_image: string | null;
 }
 
+export type CancellationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface AdminCancellationRequest {
+  cancel_id: string;
+  order_id: string;
+  reason: string;
+  refund_amount: number | null;
+  status: CancellationStatus;
+  order_status: string;
+  total_amount: number;
+  processed_by_admin_id: string | null;
+  handled_at: string | null;
+  created_at: string;
+  customer_name: string;
+  customer_phone: string;
+}
+
+export type FaqTopic = 'PRODUCT' | 'ORDER' | 'PAYMENT' | 'WARRANTY' | 'CUSTOMIZATION' | 'MEMBERSHIP' | 'APPOINTMENT' | 'OTHER';
+
+export interface AdminFaq {
+  faq_id: string;
+  topic: FaqTopic;
+  question: string;
+  answer: string;
+  is_active: 0 | 1;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface AdminFaqInput {
+  topic: FaqTopic;
+  question: string;
+  answer: string;
+  isActive?: boolean;
+}
+
+export type ReviewVisibility = 'VISIBLE' | 'HIDDEN';
+
+export interface AdminReview {
+  review_id: string;
+  rating: number;
+  content: string | null;
+  media_urls: string[];
+  admin_reply: string | null;
+  visibility_status: ReviewVisibility;
+  created_at: string;
+  customer_name: string;
+  product_id: string | null;
+  product_name: string | null;
+  product_image: string | null;
+}
+
 export interface QaStats {
   total: number;
   pendingCount: number;
@@ -222,7 +278,7 @@ export class AdminService {
   }
 
   // Products
-  getProducts(params: { page?: number; limit?: number; search?: string; status?: string } = {}): Observable<{ success: boolean; products: AdminProduct[]; total: number; page: number; limit: number }> {
+  getProducts(params: { page?: number; limit?: number; search?: string; status?: string; category?: string } = {}): Observable<{ success: boolean; products: AdminProduct[]; total: number; page: number; limit: number }> {
     return this.http.get<any>(`${this.base}/products`, { params: toHttpParams(params) });
   }
 
@@ -294,6 +350,10 @@ export class AdminService {
     return this.http.patch<{ success: boolean }>(`${this.base}/warranty-requests/${id}/status`, { status, rejectionReason });
   }
 
+  sendWarrantyQuote(id: string, estimatedCost: number, estimatedTime: string): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/warranty-requests/${id}/quote`, { estimatedCost, estimatedTime });
+  }
+
   // ── Voucher ──────────────────────────────────────────────────────────────
 
   getVouchers(params: { page?: number; limit?: number; status?: string; search?: string } = {}):
@@ -330,5 +390,50 @@ export class AdminService {
 
   setQuestionVisibility(id: string, visibility: 'VISIBLE' | 'HIDDEN'): Observable<{ success: boolean }> {
     return this.http.patch<{ success: boolean }>(`${this.base}/questions/${id}/visibility`, { visibility });
+  }
+
+  // ── Đánh giá sản phẩm ────────────────────────────────────────────────────
+
+  getReviews(params: { page?: number; limit?: number; visibility?: string; search?: string } = {}):
+    Observable<{ success: boolean; reviews: AdminReview[]; total: number; page: number; limit: number }> {
+    return this.http.get<any>(`${this.base}/reviews`, { params: toHttpParams(params) });
+  }
+
+  setReviewVisibility(id: string, visibility: ReviewVisibility): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/reviews/${id}/visibility`, { visibility });
+  }
+
+  replyToReview(id: string, replyContent: string): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/reviews/${id}/reply`, { replyContent });
+  }
+
+  // ── FAQ chatbot ──────────────────────────────────────────────────────────
+
+  getFaqs(params: { page?: number; limit?: number; topic?: string; search?: string } = {}):
+    Observable<{ success: boolean; faqs: AdminFaq[]; total: number; page: number; limit: number }> {
+    return this.http.get<any>(`${this.base}/faqs`, { params: toHttpParams(params) });
+  }
+
+  createFaq(payload: AdminFaqInput): Observable<{ success: boolean; data: { faqId: string } }> {
+    return this.http.post<{ success: boolean; data: { faqId: string } }>(`${this.base}/faqs`, payload);
+  }
+
+  updateFaq(id: string, payload: Partial<AdminFaqInput>): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/faqs/${id}`, payload);
+  }
+
+  // ── Yêu cầu hủy/hoàn đơn hàng ────────────────────────────────────────────
+
+  getCancellationRequests(params: { page?: number; limit?: number; status?: string; search?: string } = {}):
+    Observable<{ success: boolean; requests: AdminCancellationRequest[]; total: number; page: number; limit: number }> {
+    return this.http.get<any>(`${this.base}/cancellation-requests`, { params: toHttpParams(params) });
+  }
+
+  approveCancellation(cancelId: string): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/cancellation-requests/${cancelId}/approve`, {});
+  }
+
+  rejectCancellation(cancelId: string, reason: string): Observable<{ success: boolean }> {
+    return this.http.patch<{ success: boolean }>(`${this.base}/cancellation-requests/${cancelId}/reject`, { reason });
   }
 }

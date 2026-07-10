@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { getProducts, getProductById } from '../services/product.service';
+import { getProducts, getProductById, getProductQuestions, submitQuestion } from '../services/product.service';
+import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -58,6 +59,31 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi server', error: err });
+  }
+});
+
+// GET /api/products/:id/questions — công khai, không cần đăng nhập
+router.get('/:id/questions', async (req: Request, res: Response) => {
+  try {
+    const data = await getProductQuestions(req.params['id'] as string);
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Lỗi server' });
+  }
+});
+
+// POST /api/products/:id/questions — BR-38: chỉ khách hàng đã đăng nhập mới gửi được
+router.post('/:id/questions', authenticate as any, async (req: Request, res: Response) => {
+  if (!req.user!.clientId) {
+    res.status(403).json({ success: false, message: 'Chỉ tài khoản khách hàng mới được gửi câu hỏi.' });
+    return;
+  }
+  try {
+    const data = await submitQuestion(req.params['id'] as string, req.user!.clientId, req.body?.content);
+    res.status(201).json({ success: true, data });
+  } catch (err: any) {
+    const status = typeof err?.status === 'number' ? err.status : 500;
+    res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });
   }
 });
 

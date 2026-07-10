@@ -1,10 +1,12 @@
 import pool from '../db';
+import { notifyWarrantyQuoted } from './notification.service';
 
-const STATUSES = ['PENDING', 'ACCEPTED', 'REJECTED', 'IN_PROGRESS', 'COMPLETED'] as const;
+const STATUSES = ['PENDING', 'QUOTED', 'ACCEPTED', 'REJECTED', 'IN_PROGRESS', 'COMPLETED'] as const;
 type WarrantyStatus = typeof STATUSES[number];
 
 const ALLOWED_TRANSITIONS: Record<WarrantyStatus, WarrantyStatus[]> = {
-  PENDING:     ['ACCEPTED', 'REJECTED'],
+  PENDING:     ['ACCEPTED', 'REJECTED', 'QUOTED'],
+  QUOTED:      ['IN_PROGRESS', 'REJECTED'],
   ACCEPTED:    ['IN_PROGRESS', 'REJECTED'],
   IN_PROGRESS: ['COMPLETED'],
   REJECTED:    [],
@@ -14,7 +16,8 @@ const ALLOWED_TRANSITIONS: Record<WarrantyStatus, WarrantyStatus[]> = {
 // Mỗi order có thể nhiều order_item — chỉ lấy 1 dòng đại diện để hiển thị ảnh/tên sản phẩm.
 const LIST_SELECT = `
   SELECT w.warranty_id, w.order_id, w.request_type, w.issue_description, w.evidence_images,
-         w.warranty_status, w.rejection_reason, w.handler_id, w.drop_off_date, w.received_at,
+         w.warranty_status, w.rejection_reason, w.estimated_cost, w.estimated_time,
+         w.handler_id, w.drop_off_date, w.received_at,
          w.completed_at, w.created_at,
          cu.full_name AS customer_name, cl.phone AS customer_phone, cl.email AS customer_email,
          p.product_id, p.product_name, pv.variant_name, pi.image_url AS product_image
@@ -122,4 +125,34 @@ export async function updateWarrantyStatus(
 
   params.push(warrantyId);
   await pool.execute(`UPDATE warranty_request SET ${sets.join(', ')} WHERE warranty_id = ?`, params);
+}
+
+// WAR-02: nhân viên gửi báo giá sửa chữa (chỉ áp dụng cho yêu cầu đang PENDING) —
+// chuyển sang QUOTED và gửi email báo giá cho khách.
+export async function sendWarrantyQuote(
+  warrantyId: string, adminEmployeeId: string, estimatedCost: number, estimatedTime: string,
+) {
+  if (!(estimatedCost > 0)) throw { status: 400, message: 'Chi phí dự kiến phải lớn hơn 0.' };
+  if (!estimatedTime?.trim()) throw { status: 400, message: 'Vui lòng nhập thời gian hoàn thành dự kiến.' };
+
+  const [[req]] = await pool.execute<any[]>(
+    `SELECT warranty_status FROM warranty_request WHERE warranty_id = ?`,
+    [warrantyId],
+  );
+  if (!req) throw { status: 404, message: 'Không tìm thấy yêu cầu bảo hành.' };
+
+  const current = req.warranty_status as WarrantyStatus;
+  if (!ALLOWED_TRANSITIONS[current].includes('QUOTED')) {
+    throw { status: 409, message: `Không thể gửi báo giá cho yêu cầu ở trạng thái ${current}.` };
+  }
+
+  await pool.execute(
+    `UPDATE warranty_request
+     SET warranty_status = 'QUOTED', handler_id = ?, estimated_cost = ?, estimated_time = ?
+     WHERE warranty_id = ?`,
+    [adminEmployeeId, estimatedCost, estimatedTime.trim(), warrantyId],
+  );
+
+  notifyWarrantyQuoted(warrantyId, estimatedCost, estimatedTime.trim())
+    .catch(err => console.error(`[notification] notifyWarrantyQuoted(${warrantyId}) lỗi:`, err));
 }

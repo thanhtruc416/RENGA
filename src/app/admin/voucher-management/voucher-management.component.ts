@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService, AdminVoucher, AdminVoucherInput, VoucherStatus } from '../admin.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 interface VoucherForm {
   voucherCode: FormControl<string>;
@@ -44,7 +45,7 @@ export class VoucherManagementComponent implements OnInit {
   currentPage = signal(1);
   readonly itemsPerPage = 5;
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.itemsPerPage)));
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  readonly pageNumbers = computed(() => getPageWindow(this.currentPage(), this.totalPages()));
 
   readonly isModalOpen = signal(false);
   readonly editingVoucherId = signal<string | null>(null);

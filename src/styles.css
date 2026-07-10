@@ -37,6 +37,13 @@ img, svg {
   max-width: 100%;
 }
 
+/* Ẩn icon "hiện mật khẩu" mặc định của trình duyệt (Edge/IE) —
+   nếu không sẽ chồng lên nút con mắt tự viết, gây hiện 2 icon con mắt. */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;

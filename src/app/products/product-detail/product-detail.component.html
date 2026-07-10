@@ -4,7 +4,7 @@
   <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
     <a routerLink="/" class="product-detail__breadcrumb-link">DANH MỤC SẢN PHẨM</a>
     <span class="product-detail__breadcrumb-sep">›</span>
-    <a routerLink="/products" class="product-detail__breadcrumb-link">{{ categoryLabel() }}</a>
+    <a routerLink="/products" [queryParams]="{ category: product().category }" class="product-detail__breadcrumb-link">{{ categoryLabel() }}</a>
     <span class="product-detail__breadcrumb-sep">›</span>
     <span class="product-detail__breadcrumb-current">{{ product().name }}</span>
   </nav>
@@ -41,14 +41,16 @@
               <line x1="8" y1="11" x2="14" y2="11"/>
             </svg>
           </button>
-          <button class="product-detail__img-btn" type="button" aria-label="Ướm thử nhẫn AR" (click)="openArPopup()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-              <circle cx="12" cy="13" r="4"/>
-              <line x1="18" y1="5" x2="21" y2="2"/>
-              <line x1="21" y1="5" x2="18" y2="2"/>
-            </svg>
-          </button>
+          @if (product().category === 'nhan') {
+            <button class="product-detail__img-btn" type="button" aria-label="Ướm thử nhẫn AR" (click)="openArPopup()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+                <line x1="18" y1="5" x2="21" y2="2"/>
+                <line x1="21" y1="5" x2="18" y2="2"/>
+              </svg>
+            </button>
+          }
         </div>
       </div>
     </div>
@@ -75,6 +77,9 @@
             <button
               class="product-detail__size-btn"
               [class.product-detail__size-btn--active]="selectedSize() === size"
+              [class.product-detail__size-btn--disabled]="isSizeOutOfStock(size)"
+              [disabled]="isSizeOutOfStock(size)"
+              [attr.title]="isSizeOutOfStock(size) ? 'Hết hàng' : null"
               type="button"
               (click)="selectSize(size)"
             >
@@ -83,6 +88,15 @@
           }
         </div>
         <button class="product-detail__size-guide" type="button" (click)="openSizeGuide()">HƯỚNG DẪN CHỌN SIZE</button>
+        @if (selectedVariantStock() !== null) {
+          <p class="product-detail__stock-qty">
+            @if (selectedVariantStock()! > 0) {
+              Còn lại <strong>{{ selectedVariantStock() }}</strong> sản phẩm
+            } @else {
+              Hết hàng size này
+            }
+          </p>
+        }
       </div>
 
       <!-- CTA Buttons -->

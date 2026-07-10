@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
 import {
-  createWarrantyRequest, getUserWarrantyRequests, createReturnRequest,
+  createWarrantyRequest, getUserWarrantyRequests, createReturnRequest, respondToWarrantyQuote,
 } from '../services/warranty.service';
 
 const router = Router();
@@ -42,6 +42,22 @@ router.post('/return', async (req, res) => {
       orderId, issueDescription, evidenceImages,
     });
     res.status(201).json({ success: true, data: { warranty_id: warrantyId } });
+  } catch (err: any) {
+    const status = typeof err?.status === 'number' ? err.status : 500;
+    res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });
+  }
+});
+
+// WAR-02: khách đồng ý/từ chối báo giá sửa chữa
+router.patch('/:id/respond-quote', async (req, res) => {
+  const { decision } = req.body as { decision?: 'ACCEPT' | 'REJECT' };
+  if (decision !== 'ACCEPT' && decision !== 'REJECT') {
+    res.status(400).json({ success: false, message: 'decision phải là ACCEPT hoặc REJECT' });
+    return;
+  }
+  try {
+    await respondToWarrantyQuote(req.params['id'] as string, req.user!.clientId, decision);
+    res.json({ success: true });
   } catch (err: any) {
     const status = typeof err?.status === 'number' ? err.status : 500;
     res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });

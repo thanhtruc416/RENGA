@@ -33,6 +33,28 @@
           <div class="checkout-section__head">
             <span class="checkout-section__number" aria-hidden="true">01</span>
             <h2 class="checkout-section__title" id="shipping-heading">Thông tin vận chuyển</h2>
+            @if (auth.isLoggedIn()) {
+              <div class="address-picker-wrap">
+                <button class="address-picker-btn" type="button" (click)="loadAndShowAddresses(); $event.stopPropagation()">
+                  {{ addressesLoading() ? 'Đang tải...' : 'CHỌN ĐỊA CHỈ' }}
+                </button>
+                @if (showAddressPicker()) {
+                  <div class="address-picker" (click)="$event.stopPropagation()">
+                    @if (savedAddresses().length === 0) {
+                      <p class="address-picker__empty">Bạn chưa có địa chỉ đã lưu</p>
+                    } @else {
+                      @for (addr of savedAddresses(); track addr.address_id) {
+                        <button class="address-picker__item" type="button" (click)="applyAddress(addr)">
+                          <strong>{{ addr.recipient_name }}</strong>&nbsp;·&nbsp;{{ addr.recipient_phone }}
+                          <span>{{ addr.address_line }}{{ addr.ward ? ', ' + addr.ward : '' }}, {{ addr.province }}</span>
+                        </button>
+                      }
+                    }
+                    <button class="address-picker__close" type="button" (click)="showAddressPicker.set(false)">Đóng</button>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
           <div class="shipping-fields">
@@ -272,6 +294,7 @@
   [isOpen]="showSuccessModal()"
   [isGuest]="false"
   [orderId]="placedOrderId()"
+  [paymentConfirmed]="placedPaymentConfirmed()"
   (closed)="showSuccessModal.set(false)"
 />
 
@@ -279,6 +302,7 @@
   [isOpen]="showSuccessGuestModal()"
   [isGuest]="true"
   [orderId]="placedOrderId()"
+  [paymentConfirmed]="placedPaymentConfirmed()"
   (closed)="showSuccessGuestModal.set(false)"
 />
 

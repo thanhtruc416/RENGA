@@ -14,12 +14,19 @@
       </svg>
     </div>
 
-    <h2 class="payment-modal__title">Thanh toán thành công!</h2>
-
-    <p class="payment-modal__subtitle">
-      Cảm ơn quý khách đã tin tưởng RENGA!<br />
-      Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi
-    </p>
+    @if (paymentConfirmed()) {
+      <h2 class="payment-modal__title">Thanh toán thành công!</h2>
+      <p class="payment-modal__subtitle">
+        Cảm ơn quý khách đã tin tưởng RENGA!<br />
+        Đơn hàng của bạn đang được xử lý bởi các nghệ nhân của chúng tôi
+      </p>
+    } @else {
+      <h2 class="payment-modal__title">Đặt hàng thành công!</h2>
+      <p class="payment-modal__subtitle">
+        Cảm ơn quý khách đã tin tưởng RENGA!<br />
+        Vui lòng hoàn tất chuyển khoản trong 60 phút — đơn sẽ được xác nhận ngay khi chúng tôi nhận được thanh toán.
+      </p>
+    }
 
     @if (orderId()) {
       <div class="order-info-card">
@@ -34,7 +41,7 @@
               <p class="order-info-card__total">{{ amount() | number }}<u>đ</u></p>
             } @else {
               <p class="order-info-card__meta-label">Trạng thái</p>
-              <p class="order-info-card__date">Đang xử lý</p>
+              <p class="order-info-card__date">{{ paymentConfirmed() ? 'Đang xử lý' : 'Chờ xác nhận thanh toán' }}</p>
             }
           </div>
         </div>

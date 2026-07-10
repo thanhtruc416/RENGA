@@ -1,5 +1,7 @@
 ﻿import pool from '../db';
 import { shortenName } from './product.service';
+import { awardReviewPoints } from './loyalty.service';
+import { notifyTierUpgrade } from './notification.service';
 
 export interface HomeReviewRow {
   review_id: string;
@@ -134,35 +136,57 @@ interface SubmitReviewInput {
 }
 
 export async function submitReview({ orderItemId, clientId, rating, content }: SubmitReviewInput) {
-  const [[owned]] = await pool.execute<any[]>(
-    `SELECT oi.order_item_id
-     FROM order_item oi
-     JOIN \`order\` o ON o.order_id = oi.order_id
-     WHERE oi.order_item_id = ? AND o.client_id = ? AND o.order_status = 'COMPLETED'`,
-    [orderItemId, clientId]
-  );
-  if (!owned) {
-    throw { status: 403, message: 'Bạn chưa mua sản phẩm này hoặc đơn hàng chưa hoàn tất.' };
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const [[owned]] = await conn.execute<any[]>(
+      `SELECT oi.order_item_id
+       FROM order_item oi
+       JOIN \`order\` o ON o.order_id = oi.order_id
+       WHERE oi.order_item_id = ? AND o.client_id = ? AND o.order_status = 'COMPLETED'
+       FOR UPDATE`,
+      [orderItemId, clientId]
+    );
+    if (!owned) {
+      throw { status: 403, message: 'Bạn chưa mua sản phẩm này hoặc đơn hàng chưa hoàn tất.' };
+    }
+
+    const [[existing]] = await conn.execute<any[]>(
+      `SELECT review_id FROM review WHERE order_item_id = ?`,
+      [orderItemId]
+    );
+    if (existing) {
+      throw { status: 409, message: 'Bạn đã đánh giá sản phẩm này rồi.' };
+    }
+
+    const [[{ max }]] = await conn.execute<any[]>(
+      `SELECT MAX(CAST(SUBSTRING(review_id, 4) AS UNSIGNED)) AS max FROM review`
+    );
+    const reviewId = `RVW${String((max || 0) + 1).padStart(6, '0')}`;
+
+    await conn.execute(
+      `INSERT INTO review (review_id, order_item_id, rating, content, visibility_status, created_at)
+       VALUES (?,?,?,?,'VISIBLE',NOW())`,
+      [reviewId, orderItemId, rating, content || null]
+    );
+
+    // BR-40/41: cộng điểm thưởng cho việc đánh giá.
+    const tierResult = await awardReviewPoints(conn, clientId, reviewId);
+
+    await conn.commit();
+
+    // LOY-06: điểm từ đánh giá cũng có thể làm lên hạng — báo email sau khi commit.
+    if (tierResult.upgraded && tierResult.newTierName) {
+      notifyTierUpgrade(clientId, tierResult.newTierName)
+        .catch(err => console.error(`[notification] notifyTierUpgrade(${clientId}) lỗi:`, err));
+    }
+
+    return { reviewId };
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  } finally {
+    conn.release();
   }
-
-  const [[existing]] = await pool.execute<any[]>(
-    `SELECT review_id FROM review WHERE order_item_id = ?`,
-    [orderItemId]
-  );
-  if (existing) {
-    throw { status: 409, message: 'Bạn đã đánh giá sản phẩm này rồi.' };
-  }
-
-  const [[{ max }]] = await pool.execute<any[]>(
-    `SELECT MAX(CAST(SUBSTRING(review_id, 4) AS UNSIGNED)) AS max FROM review`
-  );
-  const reviewId = `RVW${String((max || 0) + 1).padStart(6, '0')}`;
-
-  await pool.execute(
-    `INSERT INTO review (review_id, order_item_id, rating, content, visibility_status, created_at)
-     VALUES (?,?,?,?,'VISIBLE',NOW())`,
-    [reviewId, orderItemId, rating, content || null]
-  );
-
-  return { reviewId };
 }

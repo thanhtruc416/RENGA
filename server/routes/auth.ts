@@ -12,6 +12,7 @@ function handleError(err: any, res: Response): void {
     message,
     ...(err?.requireOtp         && { requireOtp:         true }),
     ...(err?.remainingAttempts !== undefined && { remainingAttempts: err.remainingAttempts }),
+    ...(err?.field               && { field:              err.field }),
   });
 }
 
@@ -106,8 +107,8 @@ router.post('/employee/login', async (req: Request, res: Response) => {
 // POST /api/auth/forgot-password/send-otp
 router.post('/forgot-password/send-otp', async (req: Request, res: Response) => {
   try {
-    const { phone } = req.body;
-    const result = await authService.forgotPasswordSendOtp(phone);
+    const { email } = req.body;
+    const result = await authService.forgotPasswordSendOtp(email);
     res.json({ success: true, ...result });
   } catch (err) {
     handleError(err, res);

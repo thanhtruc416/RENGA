@@ -70,7 +70,12 @@ interface CheckoutForm {
 })
 export class StudioComponent implements OnInit {
   // ─── Constants ───────────────────────────────────────────────────────
-  readonly CRAFT_FEE = 5_000_000;
+  // Công chế tác trước đây là phí cố định 5tr bất kể thiết kế — giờ tính theo độ
+  // phức tạp: có gắn đá thì cộng thêm phí gắn đá + phí theo carat (đá lớn khó gắn
+  // hơn). Phải khớp với computeCraftFee() ở server/services/studio.service.ts.
+  readonly CRAFT_FEE_BASE = 3_000_000;
+  readonly STONE_SETTING_FEE = 2_000_000;
+  readonly STONE_SETTING_FEE_PER_CARAT = 300_000;
   readonly ENGRAVE_FEE_PER_CHAR = 50_000;
   readonly ENGRAVE_FREE_CHARS = 10;
   readonly MAX_ENGRAVE_CHARS = 25;
@@ -100,6 +105,15 @@ export class StudioComponent implements OnInit {
 
   onBlankImgError(event: Event): void {
     (event.target as HTMLImageElement).src = 'assets/images/studio-ring.png';
+  }
+
+  // Ảnh phôi/chất liệu trong DB là ảnh gốc từ Shopify CDN (300-450KB/ảnh) — quá nặng
+  // cho lưới chọn phôi/khung preview nhỏ, khiến trang Studio load rất chậm lúc vào lần
+  // đầu. Shopify CDN hỗ trợ resize on-the-fly qua query "?width=" (giảm ~90% dung
+  // lượng), ảnh asset nội bộ (assets/images/...) thì giữ nguyên vì đã nhẹ sẵn.
+  thumbUrl(url: string | undefined | null, width: number): string {
+    if (!url || !url.includes('cdn.shopify.com')) return url ?? '';
+    return url.includes('?') ? `${url}&width=${width}` : `${url}?width=${width}`;
   }
 
   retryLoadBlanks(): void {
@@ -646,11 +660,7 @@ export class StudioComponent implements OnInit {
             })));
           }
           this.blanksLoading.set(false);
-          if (this.pendingBlankId) {
-            const blank = this.allBlanks().find(b => b.id === this.pendingBlankId);
-            if (blank) this.selectedBlank.set(blank);
-            this.pendingBlankId = null;
-          }
+          this.applyPendingBlank();
         },
         error: () => {
           this.blanksLoading.set(false);
@@ -669,7 +679,39 @@ export class StudioComponent implements OnInit {
         if (sub === 1 || sub === 2) {
           this.checkoutSubStep.set(sub);
         }
+        // CART-02: "Tiếp tục thiết kế" từ giỏ hàng — nạp lại đúng thiết kế DRAFT đã
+        // lưu (blank/chất liệu/khắc chữ) thay vì đưa khách vào Studio trống trơn.
+        const resumeId = params['resume'];
+        if (resumeId) this.resumeStudioCartItem(resumeId);
       });
+  }
+
+  private resumeStudioCartItem(customId: string): void {
+    this.http.get<any>(`${environment.apiUrl}/cart/studio-items/${customId}`)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (!res.success) return;
+          const data = res.data;
+          this.pendingBlankId = data.blankId;
+          this.applyPendingBlank();
+          const material = this.materials.find(m => m.id === data.materialId);
+          if (material) this.selectedMaterial.set(material);
+          this.engraveText.set(data.engraveText ?? '');
+          this.currentStep.set(2);
+        },
+        error: () => this.notify.error('Không thể tải lại thiết kế đã lưu. Vui lòng thử chọn lại từ đầu.'),
+      });
+  }
+
+  private applyPendingBlank(): void {
+    if (!this.pendingBlankId) return;
+    // Danh sách blank có thể chưa tải xong (resume chạy song song, độc lập với fetch
+    // blanks) — chờ lần gọi tiếp theo thay vì xoá pendingBlankId quá sớm và mất resume.
+    if (!this.allBlanks().length) return;
+    const blank = this.allBlanks().find(b => b.id === this.pendingBlankId);
+    if (blank) this.selectedBlank.set(blank);
+    this.pendingBlankId = null;
   }
 
   ngOnInit(): void {
@@ -770,35 +812,137 @@ export class StudioComponent implements OnInit {
     this.downloadDesignFile();
   }
 
-  // "Lưu thiết kế" trước đây chỉ hiện toast giả, không lưu gì cả — giờ tải thật 1
-  // file .txt tóm tắt đầy đủ lựa chọn + giá về máy người dùng (không cần server).
+  // "Lưu thiết kế" trước đây tải ra file .txt — QA báo sai định dạng (phải là ẢNH).
+  // Giờ vẽ ảnh preview thiết kế + thông tin lựa chọn lên canvas rồi xuất PNG thật.
   private downloadDesignFile(): void {
+    const imgSrc = this.step2PreviewImage();
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => this.renderDesignImage(img);
+    img.onerror = () => this.renderDesignImage(null);
+    img.src = imgSrc;
+  }
+
+  private renderDesignImage(img: HTMLImageElement | null): void {
     const blank = this.selectedBlank();
     const stone = this.selectedStone();
-    const lines = [
-      'RENGA — THIẾT KẾ TÙY BIẾN CỦA BẠN',
-      '='.repeat(44),
-      `Phôi:        ${blank?.name ?? 'Chưa chọn'}`,
-      `Chất liệu:   ${this.selectedMaterial().label}`,
-      `Đá quý:      ${stone.id === 'none' ? 'Không đá' : `${stone.label} (${this.carat().toFixed(1)} carat)`}`,
-      `Khắc chữ:    ${this.engraveText() || 'Không khắc'}`,
-      '',
-      'CHI TIẾT GIÁ',
-      '-'.repeat(44),
-      ...this.orderItems().map(i => `${i.name.padEnd(30)} ${this.formatVnd(i.price)}đ`),
-      '-'.repeat(44),
-      `TỔNG CỘNG:   ${this.formatVnd(this.totalPrice())}đ`,
-      '',
-      `Lưu lúc: ${new Date().toLocaleString('vi-VN')}`,
+    const accent = '#c4607e';
+    const W = 900;
+    const PAD = 50;
+    const boxW = W - PAD * 2;
+    const boxH = 560;
+
+    const details = [
+      { label: 'PHÔI', value: blank?.name ?? 'Chưa chọn' },
+      { label: 'CHẤT LIỆU', value: this.selectedMaterial().label },
+      { label: 'ĐÁ QUÝ', value: stone.id === 'none' ? 'Không đá' : `${stone.label} (${this.carat().toFixed(1)} carat)` },
+      { label: 'KHẮC CHỮ', value: this.engraveText() || 'Không khắc' },
     ];
 
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `renga-thiet-ke-${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    // Chiều cao canvas tính trước theo đúng các mốc sẽ dùng lúc vẽ bên dưới, để
+    // không phải resize canvas giữa chừng (resize sẽ xoá sạch context đã vẽ).
+    const titleY   = PAD + boxH + 70;
+    const subY     = titleY + 38;
+    const detailsY0 = subY + 50;
+    const detailsH  = details.length * 56;
+    const dividerY  = detailsY0 + detailsH + 6;
+    const totalY    = dividerY + 46;
+    const footerY   = totalY + 50;
+    const H = footerY + PAD;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    canvas.width = W;
+    canvas.height = H;
+
+    // Nền hồng nhạt + khung viền ngoài màu nhấn thương hiệu
+    ctx.fillStyle = '#fdeef2';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(16, 16, W - 32, H - 32);
+
+    // Card ảnh trắng có viền, ảnh được canh giữa + chừa lề trong
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(PAD, PAD, boxW, boxH);
+    ctx.strokeStyle = '#e8cdd4';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(PAD, PAD, boxW, boxH);
+    if (img) {
+      const innerPad = 30;
+      const scale = Math.min((boxW - innerPad * 2) / img.width, (boxH - innerPad * 2) / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      ctx.drawImage(img, PAD + (boxW - w) / 2, PAD + (boxH - h) / 2, w, h);
+    }
+
+    // Tiêu đề + gạch trang trí dưới tên thương hiệu
+    // Georgia không có đủ glyph dấu tiếng Việt trên canvas (dấu bị tách rời khỏi
+    // chữ cái, ví dụ "ế" ra "ê´") — dùng Arial cho toàn bộ chữ để hiển thị đúng.
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#1b1c1c';
+    ctx.font = 'bold 30px Arial';
+    ctx.fillText('RENGA', W / 2, titleY);
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 46, titleY + 14);
+    ctx.lineTo(W / 2 + 46, titleY + 14);
+    ctx.stroke();
+
+    ctx.font = '600 15px Arial';
+    ctx.fillStyle = '#9a6070';
+    ctx.fillText('THIẾT KẾ TÙY BIẾN CỦA BẠN', W / 2, subY);
+
+    // Chi tiết dạng nhãn nhỏ + giá trị đậm, mỗi mục 1 hàng cho thoáng
+    ctx.textAlign = 'left';
+    let y = detailsY0;
+    for (const item of details) {
+      ctx.font = '13px Arial';
+      ctx.fillStyle = '#9a8a8f';
+      ctx.fillText(item.label, PAD, y);
+      ctx.font = '600 19px Arial';
+      ctx.fillStyle = '#1b1c1c';
+      ctx.fillText(item.value, PAD, y + 25);
+      y += 56;
+    }
+
+    // Đường phân cách trước tổng tiền
+    ctx.strokeStyle = '#e8cdd4';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(PAD, dividerY);
+    ctx.lineTo(PAD + boxW, dividerY);
+    ctx.stroke();
+
+    // Tổng tiền nổi bật, canh 2 đầu trái/phải
+    ctx.textAlign = 'left';
+    ctx.font = '15px Arial';
+    ctx.fillStyle = '#9a6070';
+    ctx.fillText('TỔNG CỘNG', PAD, totalY);
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 27px Arial';
+    ctx.fillStyle = accent;
+    ctx.fillText(`${this.formatVnd(this.totalPrice())}đ`, PAD + boxW, totalY);
+
+    ctx.textAlign = 'center';
+    ctx.font = '13px Arial';
+    ctx.fillStyle = '#9a8a8f';
+    ctx.fillText(`Lưu lúc ${new Date().toLocaleString('vi-VN')}`, W / 2, footerY);
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        this.notify.error('Không thể tạo ảnh thiết kế. Vui lòng thử lại.');
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `renga-thiet-ke-${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
   }
 
   openSharePopup(): void {
@@ -905,13 +1049,20 @@ export class StudioComponent implements OnInit {
     return extra * this.ENGRAVE_FEE_PER_CHAR;
   });
 
+  readonly craftFee = computed(() => {
+    const stone = this.selectedStone();
+    if (stone.id === 'none') return this.CRAFT_FEE_BASE;
+    return this.CRAFT_FEE_BASE + this.STONE_SETTING_FEE
+      + Math.round(this.STONE_SETTING_FEE_PER_CARAT * this.carat());
+  });
+
   readonly totalPrice = computed(
     () =>
       (this.selectedBlank()?.basePrice ?? 0) +
       this.selectedMaterial().priceVnd +
       this.stonePrice() +
       this.engraveFee() +
-      this.CRAFT_FEE,
+      this.craftFee(),
   );
 
   private readonly route = inject(ActivatedRoute);
@@ -935,7 +1086,7 @@ export class StudioComponent implements OnInit {
       });
     }
     items.push({ name: blank?.name ?? 'Phôi', price: blank?.basePrice ?? 0 });
-    items.push({ name: 'Công chế tác thủ công', price: this.CRAFT_FEE });
+    items.push({ name: 'Công chế tác thủ công', price: this.craftFee() });
     if (this.engraveFee() > 0) {
       items.push({
         name: `Khắc chữ (${this.engraveText().length} ký tự)`,
@@ -945,16 +1096,6 @@ export class StudioComponent implements OnInit {
     return items;
   });
 
-  readonly priceSummaryVisible = computed(() => this.currentStep() >= 2 && this.currentStep() < 5);
-
-  // totalPrice() đã gồm phôi + chất liệu + đá + khắc chữ + phí chế tác — không tách
-  // riêng theo bước nữa vì trước đây ở bước 2 chỉ hiện giá chất liệu, thiếu giá phôi
-  // + phí chế tác đã chọn từ bước 1, khiến tổng tiền "nhảy" đột ngột khi qua bước 3.
-  readonly priceSummaryAmount = computed(() => this.formatVnd(this.totalPrice()));
-
-  readonly priceSummaryDetail = computed(() =>
-    this.currentStep() >= 3 ? this.selectedStone().label : this.selectedMaterial().label,
-  );
 
   readonly currentGalleryImage = computed(
     () => this.engraveGallery[this.selectedThumbIndex()],
@@ -1015,13 +1156,21 @@ export class StudioComponent implements OnInit {
 
   private addToCartSilent(): void {
     const blank = this.selectedBlank();
+    if (!blank) { this.notify.error('Vui lòng chọn phôi sản phẩm trước khi thêm vào giỏ.'); return; }
     this.cartService.addItem({
       type: 'studio',
-      name: `${blank?.name ?? 'Trang sức'} Studio`,
+      name: `${blank.name} Studio`,
       spec: `${this.selectedMaterial().label} • ${this.selectedStone().label}`,
       price: this.totalPrice(),
-      image: blank?.image ?? 'assets/images/studio-ring.png',
+      image: blank.image,
       quantity: 1,
+      studioConfig: {
+        blankId: blank.id,
+        materialId: this.selectedMaterial().id,
+        stoneId: this.selectedStone().id,
+        carat: this.carat(),
+        engraveText: this.engraveText() || undefined,
+      },
     });
   }
 
@@ -1134,6 +1283,10 @@ export class StudioComponent implements OnInit {
         province:        provinceLabel,
         ward:            wardLabel,
       },
+      // MAIL: ô email (tuỳ chọn) trước đây gõ vào cũng vô ích, không hề gửi lên
+      // server — khách chưa có email trong tài khoản thì không nhận được mail xác
+      // nhận đơn Studio dù đã điền ở đây.
+      email: form.email || undefined,
       note: `Studio - ${this.selectedBlank()?.name ?? ''} - ${this.selectedMaterial().label} - ${this.selectedStone().label}`,
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {

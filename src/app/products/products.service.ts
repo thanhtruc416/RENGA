@@ -84,7 +84,10 @@ export class ProductsService {
           sizes:    (p.variants ?? []).map((v: any) => Number(v.size_value)).filter((s: number) => !isNaN(s) && s > 0),
           images:   imgs,
           variants: p.variants ?? [],
-          inStock:  (p.variants ?? []).length > 0,
+          // Trước đây chỉ check "có variant" (bất kể còn hàng hay không) nên sản
+          // phẩm hết sạch tồn kho vẫn hiện "SẴN CÓ" — giờ phải có ít nhất 1 variant
+          // thật sự còn hàng mới tính là còn hàng.
+          inStock:  (p.variants ?? []).some((v: any) => v.status === 'AVAILABLE' && Number(v.stock_quantity) > 0),
         };
       })
     );

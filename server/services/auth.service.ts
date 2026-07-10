@@ -237,15 +237,24 @@ export async function registerSendOtp(data: {
   const normalizedEmail = email ? email.toLowerCase().trim() : null;
   if (normalizedEmail) validateEmail(normalizedEmail);
 
-  const [existing] = await db.query(
-    `SELECT c.client_id FROM client c
-     WHERE (c.phone = ? OR (c.email IS NOT NULL AND c.email = ?))
-       AND c.client_type = 'CUSTOMER'`,
-    [phone, normalizedEmail],
+  const [phoneExisting] = await db.query(
+    `SELECT client_id FROM client WHERE phone = ? AND client_type = 'CUSTOMER'`,
+    [phone],
   ) as [any[], any];
 
-  if (existing.length > 0) {
-    throw { status: 400, message: 'Số điện thoại hoặc email đã được sử dụng.' };
+  if (phoneExisting.length > 0) {
+    throw { status: 400, message: 'Số điện thoại này đã được sử dụng.', field: 'phone' };
+  }
+
+  if (normalizedEmail) {
+    const [emailExisting] = await db.query(
+      `SELECT client_id FROM client WHERE email = ? AND client_type = 'CUSTOMER'`,
+      [normalizedEmail],
+    ) as [any[], any];
+
+    if (emailExisting.length > 0) {
+      throw { status: 400, message: 'Email này đã được sử dụng.', field: 'email' };
+    }
   }
 
   await checkOtpResendCooldown({ phone, purpose: 'REGISTER' });
@@ -369,7 +378,8 @@ export async function loginCustomer(
   data:  { identifier: string; password: string },
   meta?: { device?: string; ip?: string },
 ): Promise<{ accessToken: string; refreshToken: string; clientId: string; fullName: string }> {
-  const { identifier, password } = data;
+  const { password } = data;
+  const identifier = data.identifier.trim();
 
   const [rows] = await db.query(
     `SELECT a.account_id, a.client_id, a.password_hash,
@@ -379,12 +389,12 @@ export async function loginCustomer(
      JOIN client   c  ON c.client_id  = a.client_id
      JOIN customer cu ON cu.client_id = a.client_id
      WHERE a.provider = 'LOCAL'
-       AND c.phone = ?`,
-    [identifier],
+       AND (c.phone = ? OR c.email = ?)`,
+    [identifier, identifier.toLowerCase()],
   ) as [any[], any];
 
   if (rows.length === 0) {
-    throw { status: 404, message: 'Số điện thoại chưa được đăng ký.' };
+    throw { status: 404, message: 'Số điện thoại hoặc email chưa được đăng ký.' };
   }
 
   const acc = rows[0];
@@ -608,35 +618,23 @@ export async function logout(refreshToken: string): Promise<void> {
 
 // ─── Quên mật khẩu: bước 1 ───────────────────────────────────────────────────
 
-export async function forgotPasswordSendOtp(phone: string): Promise<{ message: string }> {
-  const GENERIC_MSG = 'Nếu số điện thoại tồn tại, mã OTP sẽ được gửi trong vài giây.';
-
-  console.log('[forgotPassword] phone received:', JSON.stringify(phone));
+export async function forgotPasswordSendOtp(email: string): Promise<{ message: string }> {
+  const GENERIC_MSG = 'Nếu email tồn tại, mã OTP sẽ được gửi trong vài giây.';
+  const normalizedEmail = email.toLowerCase().trim();
 
   const [rows] = await db.query(
-    `SELECT a.account_id, c.phone, c.email
+    `SELECT a.account_id, c.email
      FROM account a
      JOIN client c ON c.client_id = a.client_id
-     WHERE a.provider = 'LOCAL' AND c.phone = ?`,
-    [phone],
+     WHERE a.provider = 'LOCAL' AND c.email = ?`,
+    [normalizedEmail],
   ) as [any[], any];
-
-  console.log('[forgotPassword] rows found:', rows.length, rows.map((r: any) => ({ phone: r.phone, email: r.email })));
 
   if (rows.length === 0) return { message: GENERIC_MSG };
 
-  const { email } = rows[0];
-
-  if (!email) {
-    throw {
-      status:  422,
-      message: 'Tài khoản của bạn chưa có địa chỉ email, vui lòng liên hệ hỗ trợ.',
-    };
-  }
-
-  await checkOtpResendCooldown({ phone, purpose: 'RESET_PASSWORD' });
-  const otp = await issueOtp({ phone, email, purpose: 'RESET_PASSWORD' });
-  await sendOtpEmail(email, otp, 'RESET_PASSWORD');
+  await checkOtpResendCooldown({ email: normalizedEmail, purpose: 'RESET_PASSWORD' });
+  const otp = await issueOtp({ email: normalizedEmail, purpose: 'RESET_PASSWORD' });
+  await sendOtpEmail(normalizedEmail, otp, 'RESET_PASSWORD');
 
   return { message: GENERIC_MSG };
 }
@@ -646,25 +644,26 @@ export async function forgotPasswordSendOtp(phone: string): Promise<{ message: s
 const RESET_TOKEN_EXPIRES_MINUTES = 10;
 
 export async function forgotPasswordVerifyOtp(data: {
-  phone: string;
+  email: string;
   otp:   string;
 }): Promise<{ resetToken: string }> {
-  const { phone, otp } = data;
+  const email = data.email.toLowerCase().trim();
+  const { otp } = data;
 
   const [rows] = await db.query(
     `SELECT a.account_id
      FROM account a
      JOIN client c ON c.client_id = a.client_id
-     WHERE a.provider = 'LOCAL' AND c.phone = ?`,
-    [phone],
+     WHERE a.provider = 'LOCAL' AND c.email = ?`,
+    [email],
   ) as [any[], any];
 
   if (rows.length === 0) throw { status: 400, message: 'Tài khoản không tồn tại.' };
 
-  await verifyOtp({ phone, otp, purpose: 'RESET_PASSWORD' });
+  await verifyOtp({ email, otp, purpose: 'RESET_PASSWORD' });
 
   const resetToken = jwt.sign(
-    { phone, purpose: 'RESET_PASSWORD' },
+    { email, purpose: 'RESET_PASSWORD' },
     JWT_SECRET,
     { expiresIn: `${RESET_TOKEN_EXPIRES_MINUTES}m` },
   );
@@ -686,9 +685,9 @@ export async function resetPassword(data: {
   }
   validatePassword(newPassword);
 
-  let decoded: { phone: string; purpose: string };
+  let decoded: { email: string; purpose: string };
   try {
-    decoded = jwt.verify(resetToken, JWT_SECRET) as { phone: string; purpose: string };
+    decoded = jwt.verify(resetToken, JWT_SECRET) as { email: string; purpose: string };
   } catch {
     throw { status: 400, message: 'Phiên đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.' };
   }
@@ -697,14 +696,14 @@ export async function resetPassword(data: {
     throw { status: 400, message: 'Token không hợp lệ.' };
   }
 
-  const { phone } = decoded;
+  const { email } = decoded;
 
   const [rows] = await db.query(
     `SELECT a.account_id
      FROM account a
      JOIN client c ON c.client_id = a.client_id
-     WHERE a.provider = 'LOCAL' AND c.phone = ?`,
-    [phone],
+     WHERE a.provider = 'LOCAL' AND c.email = ?`,
+    [email],
   ) as [any[], any];
 
   if (rows.length === 0) throw { status: 400, message: 'Tài khoản không tồn tại.' };
@@ -758,18 +757,34 @@ function generateGuestPlaceholderPhone(): string {
  * không liên quan gì tới SĐT nhập trong form. SĐT/tên người nhận thật vẫn được lưu đúng chỗ
  * của nó là bảng `address` (order.service.ts) để giao hàng & tra cứu đơn.
  */
-export async function guestCheckout(_data: {
+export async function guestCheckout(data: {
   phone:  string;
   email?: string;
 }): Promise<{ accessToken: string; clientId: string }> {
   const clientId = generateClientId();
+  // ORD-05: email khách nhập lúc checkout trước đây bị bỏ qua hoàn toàn (tham số
+  // không dùng) nên mail xác nhận đặt hàng không có địa chỉ để gửi tới. Lưu email
+  // này vào chính client_id GUEST mới tạo (an toàn, không đụng khách hàng thật vì
+  // luôn là 1 client_id độc lập) để notifyOrderPlaced() có email mà gửi.
+  const guestEmail = data.email?.trim().toLowerCase() || null;
 
   await withTransaction(async (conn) => {
-    await conn.query(
-      `INSERT INTO client (client_id, email, phone, client_type, status, created_at, updated_at)
-       VALUES (?, NULL, ?, 'GUEST', 'ANONYMOUS', NOW(), NOW())`,
-      [clientId, generateGuestPlaceholderPhone()],
-    );
+    try {
+      await conn.query(
+        `INSERT INTO client (client_id, email, phone, client_type, status, created_at, updated_at)
+         VALUES (?, ?, ?, 'GUEST', 'ANONYMOUS', NOW(), NOW())`,
+        [clientId, guestEmail, generateGuestPlaceholderPhone()],
+      );
+    } catch (err: any) {
+      // email đã trùng với 1 tài khoản khác (unique constraint) — bỏ qua email,
+      // không để lỗi này chặn cả luồng đặt hàng của khách.
+      if (err?.code !== 'ER_DUP_ENTRY') throw err;
+      await conn.query(
+        `INSERT INTO client (client_id, email, phone, client_type, status, created_at, updated_at)
+         VALUES (?, NULL, ?, 'GUEST', 'ANONYMOUS', NOW(), NOW())`,
+        [clientId, generateGuestPlaceholderPhone()],
+      );
+    }
     await conn.query('INSERT INTO guest (client_id) VALUES (?)', [clientId]);
   });
 

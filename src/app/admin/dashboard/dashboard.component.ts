@@ -56,9 +56,14 @@ export class DashboardComponent implements OnInit {
     return this.stats()?.orderStatusCounts.find(s => s.status === 'COMPLETED')?.count ?? 0;
   });
 
+  // ADM-01: doanh số chỉ Super Admin thấy — nhân viên thường thì server không trả
+  // totalRevenue về, nên cả doanh thu lẫn giá trị đơn trung bình (suy ra từ đó) đều
+  // không hiển thị được cho họ.
+  readonly canSeeRevenue = computed(() => this.stats()?.totalRevenue !== undefined);
+
   readonly avgOrderValue = computed(() => {
     const s = this.stats();
-    if (!s || this.completedCount() === 0) return 0;
+    if (!s || s.totalRevenue === undefined || this.completedCount() === 0) return 0;
     return Math.round(s.totalRevenue / this.completedCount());
   });
 

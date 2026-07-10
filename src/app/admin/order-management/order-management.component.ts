@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AdminHeaderComponent } from '../admin-layout/admin-header.component';
 import { formatPrice } from '../../shared/utils/currency.util';
 import { AdminService, AdminOrder } from '../admin.service';
+import { getPageWindow } from '../../shared/utils/pagination.util';
 
 type OrderStatus = AdminOrder['order_status'];
 type OrderType = AdminOrder['order_type'];
@@ -153,7 +154,7 @@ export class OrderManagementComponent implements OnInit {
   readonly formatPrice = formatPrice;
 
   get totalPages() { return Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)); }
-  get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
+  get pageNumbers(): number[] { return getPageWindow(this.currentPage(), this.totalPages); }
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage.set(page);

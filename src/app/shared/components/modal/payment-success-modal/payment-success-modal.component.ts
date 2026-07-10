@@ -18,6 +18,9 @@ export class PaymentSuccessModalComponent {
   readonly orderId       = input<string>('');
   readonly isCustomOrder = input<boolean>(false);
   readonly amount        = input<number>(0);
+  // Chuyển khoản/thẻ/ví còn PENDING chờ xác nhận (BR-11) — mặc định true vì các
+  // luồng khác (Studio/lịch tư vấn) đều xác nhận thanh toán ngay khi submit.
+  readonly paymentConfirmed = input<boolean>(true);
   readonly closed        = output<void>();
   readonly scheduleAgain = output<void>();
 
@@ -29,9 +32,19 @@ export class PaymentSuccessModalComponent {
     this.closed.emit();
     if (this.isGuest()) {
       this.router.navigateByUrl('/');
+      return;
+    }
+    if (this.mode() === 'appointment') {
+      this.router.navigateByUrl('/appointment-history');
+      return;
+    }
+    // '/orders' (không kèm id) không phải route hợp lệ — chỉ có '/orders/:id' và
+    // '/orders/custom/:id', nên trước đây bấm X luôn văng ra trang 404.
+    if (this.orderId()) {
+      const base = this.isCustomOrder() ? '/orders/custom' : '/orders';
+      this.router.navigateByUrl(`${base}/${this.orderId()}`);
     } else {
-      const dest = this.mode() === 'appointment' ? '/appointment-history' : '/orders';
-      this.router.navigateByUrl(dest);
+      this.router.navigateByUrl('/');
     }
   }
 

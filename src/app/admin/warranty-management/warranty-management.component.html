@@ -104,6 +104,8 @@
             <div class="table-cell table-cell--actions text-center">
               @if (req.warranty_status === 'PENDING') {
                 <button class="btn-action btn-action--primary" (click)="openModal(req)">XỬ LÝ</button>
+              } @else if (req.warranty_status === 'QUOTED') {
+                <button class="btn-action btn-action--outline" (click)="openViewModal(req)">XEM BÁO GIÁ</button>
               } @else if (req.warranty_status === 'ACCEPTED') {
                 <button class="btn-action btn-action--primary" (click)="advanceStatus(req, 'IN_PROGRESS')">BẮT ĐẦU SỬA</button>
               } @else if (req.warranty_status === 'IN_PROGRESS') {
@@ -184,6 +186,9 @@
         <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'accept'" (click)="switchTab('accept')">
           CHẤP NHẬN BẢO HÀNH
         </button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'quote'" (click)="switchTab('quote')">
+          BÁO GIÁ SỬA CHỮA
+        </button>
         <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'reject'" (click)="switchTab('reject')">
           TỪ CHỐI
         </button>
@@ -192,6 +197,20 @@
       @if (modalTab() === 'accept') {
         <div class="modal-form">
           <p class="modal-info__text">Yêu cầu sẽ được chuyển sang trạng thái <strong>Đã chấp nhận</strong> và ghi nhận ngày nhận hàng hôm nay.</p>
+        </div>
+      }
+
+      @if (modalTab() === 'quote') {
+        <div class="modal-form">
+          <p class="modal-info__text" style="margin-bottom: 12px;">Dùng khi lỗi nằm ngoài phạm vi bảo hành miễn phí — khách sẽ nhận email báo giá và cần Đồng ý/Từ chối trước khi tiến hành sửa.</p>
+          <div class="form-group">
+            <label class="form-label">Chi phí dự kiến (VND)</label>
+            <input type="number" class="form-input" [formControl]="quoteCostCtrl" placeholder="Ví dụ: 500000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Thời gian hoàn thành dự kiến</label>
+            <input type="text" class="form-input" [formControl]="quoteTimeCtrl" placeholder="Ví dụ: 3-5 ngày làm việc">
+          </div>
         </div>
       }
 
@@ -206,7 +225,9 @@
 
       <div class="modal-actions">
         <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
-        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitProcess()">GỬI THÔNG BÁO CHO KHÁCH HÀNG</button>
+        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitProcess()">
+          {{ modalTab() === 'quote' ? 'GỬI BÁO GIÁ CHO KHÁCH' : 'GỬI THÔNG BÁO CHO KHÁCH HÀNG' }}
+        </button>
       </div>
 
     </div>
@@ -258,6 +279,25 @@
           }
         </div>
       </div>
+
+      @if (req.warranty_status === 'QUOTED' || req.estimated_cost) {
+        <div class="modal-section vm-mt-24">
+          <p class="modal-section__title vm-mb-8">Báo giá đã gửi</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr;">
+            <div>
+              <p class="modal-info__label">Chi phí dự kiến</p>
+              <p class="vm-text-pink vm-font-600 vm-text-xl">{{ req.estimated_cost | number:'1.0-0' }} VNĐ</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Thời gian dự kiến</p>
+              <p class="vm-text-pink vm-font-600" style="font-size: 14px; margin-top: 12px;">{{ req.estimated_time }}</p>
+            </div>
+          </div>
+          @if (req.warranty_status === 'QUOTED') {
+            <p class="modal-info__text" style="margin-top: 12px;">Đang chờ khách hàng đồng ý hoặc từ chối báo giá.</p>
+          }
+        </div>
+      }
 
       @if (req.warranty_status === 'REJECTED' && req.rejection_reason) {
         <div class="modal-section vm-mt-24">

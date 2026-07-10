@@ -14,7 +14,11 @@
     <div class="dashboard__kpi-grid">
       <div class="dashboard__kpi-card">
         <span class="dashboard__kpi-label">TỔNG DOANH THU</span>
-        <span class="dashboard__kpi-value">{{ formatPrice(s.totalRevenue) }} VNĐ</span>
+        @if (canSeeRevenue()) {
+          <span class="dashboard__kpi-value">{{ formatPrice(s.totalRevenue!) }} VNĐ</span>
+        } @else {
+          <span class="dashboard__kpi-value" style="font-size: 14px; color: var(--color-muted);">Chỉ Super Admin được xem</span>
+        }
       </div>
       <div class="dashboard__kpi-card">
         <span class="dashboard__kpi-label">ĐƠN HOÀN TẤT</span>
@@ -26,7 +30,11 @@
       </div>
       <div class="dashboard__kpi-card">
         <span class="dashboard__kpi-label">GIÁ TRỊ ĐƠN HÀNG TB</span>
-        <span class="dashboard__kpi-value">{{ formatPrice(avgOrderValue()) }} VNĐ</span>
+        @if (canSeeRevenue()) {
+          <span class="dashboard__kpi-value">{{ formatPrice(avgOrderValue()) }} VNĐ</span>
+        } @else {
+          <span class="dashboard__kpi-value" style="font-size: 14px; color: var(--color-muted);">Chỉ Super Admin được xem</span>
+        }
       </div>
     </div>
 

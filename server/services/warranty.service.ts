@@ -84,7 +84,7 @@ export async function createWarrantyRequest(payload: CreateWarrantyRequestPayloa
 export async function getUserWarrantyRequests(clientId: string) {
   const [rows] = await pool.execute<any[]>(
     `SELECT w.warranty_id, w.order_id, w.request_type, w.issue_description,
-            w.warranty_status, w.rejection_reason, w.created_at
+            w.warranty_status, w.rejection_reason, w.estimated_cost, w.estimated_time, w.created_at
      FROM warranty_request w
      JOIN \`order\` o ON o.order_id = w.order_id
      WHERE o.client_id = ?
@@ -92,6 +92,36 @@ export async function getUserWarrantyRequests(clientId: string) {
     [clientId]
   );
   return rows;
+}
+
+// WAR-02: khách đồng ý hoặc từ chối báo giá sửa chữa mà nhân viên đã gửi (chỉ áp dụng
+// cho yêu cầu đang ở trạng thái QUOTED, và phải đúng chủ đơn).
+export async function respondToWarrantyQuote(
+  warrantyId: string, clientId: string, decision: 'ACCEPT' | 'REJECT',
+) {
+  const [[req]] = await pool.execute<any[]>(
+    `SELECT w.warranty_status
+     FROM warranty_request w
+     JOIN \`order\` o ON o.order_id = w.order_id
+     WHERE w.warranty_id = ? AND o.client_id = ?`,
+    [warrantyId, clientId]
+  );
+  if (!req) throw { status: 404, message: 'Không tìm thấy yêu cầu bảo hành.' };
+  if (req.warranty_status !== 'QUOTED') {
+    throw { status: 409, message: 'Yêu cầu này hiện không có báo giá đang chờ phản hồi.' };
+  }
+
+  if (decision === 'ACCEPT') {
+    await pool.execute(
+      `UPDATE warranty_request SET warranty_status = 'IN_PROGRESS', received_at = CURDATE() WHERE warranty_id = ?`,
+      [warrantyId]
+    );
+  } else {
+    await pool.execute(
+      `UPDATE warranty_request SET warranty_status = 'REJECTED', rejection_reason = 'Khách hàng từ chối báo giá.' WHERE warranty_id = ?`,
+      [warrantyId]
+    );
+  }
 }
 
 export interface CreateReturnRequestPayload {

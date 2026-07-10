@@ -42,18 +42,20 @@ export class LoginComponent {
   login(): void {
     if (this.isSubmitting()) return;
     this.isSubmitting.set(true);
-
-    if (this.isEmail(this.identifier())) {
-      this.loginAsEmployee();
-    } else {
-      this.loginAsCustomer();
-    }
+    this.loginAsCustomer();
   }
 
+  // Khách hàng đăng nhập bằng SĐT hoặc email. Nếu không tìm thấy tài khoản
+  // khách hàng và giá trị nhập vào có dạng email, thử lại như tài khoản
+  // nhân viên/admin (vì admin luôn dùng email) trước khi báo lỗi.
   private loginAsCustomer(): void {
     this.authService.login({ phone: this.identifier(), password: this.password() }).subscribe({
       next: () => this.router.navigate(['/']),
       error: (err: HttpErrorResponse) => {
+        if (err.status === 404 && this.isEmail(this.identifier())) {
+          this.loginAsEmployee();
+          return;
+        }
         this.isSubmitting.set(false);
         if (err.status === 404) {
           this.showPhoneNotFound.set(true);
