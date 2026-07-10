@@ -310,7 +310,7 @@
   [isOpen]="showFailModal()"
   [isGuest]="!auth.isLoggedIn()"
   [orderId]="placedOrderId()"
-  [total]="total()"
+  [total]="placedOrderId() ? placedOrderTotal() : total()"
   (closed)="showFailModal.set(false)"
 />
 

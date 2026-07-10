@@ -59,6 +59,7 @@ export class CheckoutComponent {
   readonly showSuccessGuestModal = signal(false);
   readonly placedOrderId         = signal('');
   readonly placedPaymentConfirmed = signal(true);
+  readonly placedOrderTotal      = signal(0);
 
   readonly orderItems = computed<OrderItem[]>(() => {
     const buyNow = this.cartService.buyNowItem();
@@ -541,13 +542,6 @@ export class CheckoutComponent {
       return;
     }
 
-    // App chưa tích hợp cổng thanh toán thật — cho chọn thử nhưng chặn submit để
-    // tránh khách tưởng đã đặt hàng thành công trong khi đơn chỉ nằm chờ vô thời hạn.
-    if (this.selectedPayment() !== 'cod') {
-      this.notify.error('Phương thức thanh toán này đang được phát triển. Vui lòng chọn "Thanh toán khi nhận hàng (COD)".');
-      return;
-    }
-
     const itemsWithVariant = this.orderItems().filter(i => i.variantId);
     if (!itemsWithVariant.length) {
       this.voucherStatus.set('error');
@@ -592,14 +586,22 @@ export class CheckoutComponent {
           this.isSubmitting.set(false);
           const orderId = res.data?.order_id ?? '';
           this.placedOrderId.set(orderId);
+          this.placedOrderTotal.set(this.total());
           // Chuyển khoản/thẻ/ví còn PENDING chờ xác nhận (có payment_expires_at) —
           // popup không được nói "Thanh toán thành công" trong trường hợp này.
           this.placedPaymentConfirmed.set(!res.data?.payment_expires_at);
           if (res.data?.payment_expires_at) this.startCountdown(res.data.payment_expires_at);
           this.cartService.clearBuyNowItem();
           this.cartService.removeItems(new Set(itemsWithVariant.map(i => i.id)));
-          if (isGuest) {
-            if (guestToken && orderId) this.guestOrderService.save(orderId, guestToken);
+          if (isGuest && guestToken && orderId) this.guestOrderService.save(orderId, guestToken);
+
+          // Chưa có cổng thanh toán thật — mô phỏng kết quả theo phương thức:
+          // chuyển khoản/ví MoMo coi như giao dịch thành công, thẻ coi như bị từ
+          // chối. Đơn hàng vẫn được tạo thật (giữ 60 phút) để khách đổi phương
+          // thức/thử lại, giống hành vi cổng thanh toán thật khi bị từ chối.
+          if (this.selectedPayment() === 'card') {
+            this.showFailModal.set(true);
+          } else if (isGuest) {
             this.showSuccessGuestModal.set(true);
           } else {
             this.showSuccessModal.set(true);
