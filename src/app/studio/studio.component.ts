@@ -955,8 +955,9 @@ export class StudioComponent implements OnInit {
   readonly engraveFont = signal<'serif-italic' | 'classic-sans'>('serif-italic');
   readonly selectedThumbIndex = signal(0);
 
-  // Step 5
-  readonly selectedPaymentMethod = signal('credit-card');
+  // Step 5 — không có phương thức nào an toàn để mặc định sẵn (khác checkout SP
+  // có sẵn có COD) nên để trống, bắt khách tự chọn.
+  readonly selectedPaymentMethod = signal('');
   readonly voucherCode = signal('');
   readonly shippingExpanded = signal(true);
 
@@ -1267,6 +1268,10 @@ export class StudioComponent implements OnInit {
       this.checkoutForm.markAllAsTouched();
       return;
     }
+    if (!this.selectedPaymentMethod()) {
+      this.notify.error('Vui lòng chọn phương thức thanh toán.');
+      return;
+    }
     const form = this.checkoutForm.getRawValue();
     const PROVINCE_MAP = Object.fromEntries(this.PROVINCES.map(p => [p.value, p.label]));
     const provinceLabel = PROVINCE_MAP[form.province] ?? form.province;
@@ -1298,8 +1303,16 @@ export class StudioComponent implements OnInit {
       next: (res) => {
         if (res.success) {
           this.placedOrderId.set(res.data.order_id);
-          this.showSuccessModal.set(true);
           this.clearDraft();
+          // Chưa có cổng thanh toán thật — mô phỏng kết quả theo phương thức
+          // giống checkout sản phẩm có sẵn: chuyển khoản/ví coi như thành công,
+          // thẻ coi như bị từ chối. Đơn vẫn được tạo thật để khách đổi phương
+          // thức/thử lại.
+          if (this.selectedPaymentMethod() === 'credit-card') {
+            this.showFailModal.set(true);
+          } else {
+            this.showSuccessModal.set(true);
+          }
         } else {
           this.showFailModal.set(true);
         }

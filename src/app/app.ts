@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
 import { HeaderComponent } from './shared/components/header/header';
@@ -15,6 +15,7 @@ import { ModalService } from './core/services/modal.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, LoginRequiredModalComponent, GlobalToastComponent],
   templateUrl: './app.html',
+  styleUrl: './app.css',
 })
 export class App {
   readonly modalService = inject(ModalService);
@@ -26,6 +27,18 @@ export class App {
       map(e => (e as NavigationEnd).urlAfterRedirects)
     ),
     { initialValue: this.router.url }
+  );
+
+  // Route lazy-load (vd Studio ~260KB, chunk nặng nhất app) trước đây không có
+  // dấu hiệu nào khi bấm — trông như bị đơ, khách phải bấm lại hoặc đợi mù mờ
+  // mới thấy trang hiện ra. Hiện thanh loading mỏng trong lúc chunk đang tải.
+  readonly isNavigating = toSignal(
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationStart || e instanceof NavigationEnd
+                || e instanceof NavigationCancel || e instanceof NavigationError),
+      map(e => e instanceof NavigationStart)
+    ),
+    { initialValue: false }
   );
 
   readonly isAdminRoute = computed(() =>
