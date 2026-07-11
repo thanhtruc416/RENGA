@@ -16,7 +16,7 @@
     <div class="order-detail-top__inner">
 
       <nav class="order-breadcrumb" aria-label="Điều hướng trang">
-        <a [routerLink]="isGuest() ? '/dang-nhap' : '/orders/theo-doi'" class="order-breadcrumb__item">Đơn hàng</a>
+        <a [routerLink]="isGuest() ? '/dang-nhap' : '/orders/tracking'" class="order-breadcrumb__item">Đơn hàng</a>
         <span class="order-breadcrumb__sep" aria-hidden="true">›</span>
         <span class="order-breadcrumb__item order-breadcrumb__item--current" aria-current="page">
           Tra cứu đơn hàng
@@ -220,8 +220,6 @@
 @if (showWarrantyModal()) {
   <app-warranty-modal
     [orderId]="order().id"
-    [customerName]="order().shipping.name"
-    [customerPhone]="order().shipping.phone"
     [productName]="firstItem().name"
     [productImage]="firstItem().imageUrl"
     (closed)="showWarrantyModal.set(false)"

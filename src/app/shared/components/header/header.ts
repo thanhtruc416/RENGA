@@ -37,7 +37,7 @@ export class HeaderComponent {
   );
 
   private readonly router = inject(Router);
-  private readonly currentUrl = toSignal(
+  readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       map(e => (e as NavigationEnd).urlAfterRedirects),

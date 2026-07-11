@@ -423,3 +423,20 @@
   color: var(--color-primary);
   border: 1.5px solid var(--color-primary);
 }
+
+.login-modal__contact {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #888;
+  margin-top: 20px;
+}
+
+.login-modal__contact a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-modal__contact a:hover {
+  text-decoration: underline;
+}

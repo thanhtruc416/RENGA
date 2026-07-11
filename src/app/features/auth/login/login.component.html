@@ -101,7 +101,7 @@
       </div>
 
       <!-- Social Login -->
-      <button class="login__social" type="button">
+      <button class="login__social" type="button" (click)="showComingSoon.set(true)">
         <img src="assets/icons/ic-social-google.svg" alt="" class="login__social-icon" />
         <span>Tiếp tục với Google/Facebook</span>
       </button>
@@ -142,11 +142,14 @@
         <circle cx="32" cy="40" r="3" fill="var(--color-primary)"/>
       </svg>
       <h2 class="login-modal__title">Tài khoản bị tạm khóa</h2>
-      <p class="login-modal__subtitle">Bạn đã nhập sai mật khẩu quá nhiều lần.<br>Vui lòng xác thực OTP để mở khóa tài khoản.</p>
+      <p class="login-modal__subtitle">Bạn đã nhập sai mật khẩu quá nhiều lần.<br>Vui lòng liên hệ RENGA để được hỗ trợ mở khóa tài khoản.</p>
       <div class="login-modal__actions">
         <button class="login-modal__btn login-modal__btn--outline" type="button" (click)="closeAccountLocked()">Đóng</button>
-        <a routerLink="/mo-khoa-tai-khoan" class="login-modal__btn">Mở khóa ngay</a>
+        <a href="tel:19000607" class="login-modal__btn">Gọi 1900-0607</a>
       </div>
+      <p class="login-modal__contact">
+        Hoặc gửi email tới <a href="mailto:hello@renga.vn">hello@renga.vn</a>
+      </p>
     </div>
   </div>
 }
@@ -162,6 +165,20 @@
       <h2 class="login-modal__title">Tài khoản bị vô hiệu hoá</h2>
       <p class="login-modal__subtitle">Tài khoản của bạn đã bị vô hiệu hoá.<br>Vui lòng liên hệ hỗ trợ để được giải quyết.</p>
       <button class="login-modal__btn" type="button" (click)="closeInactive()">Đã hiểu</button>
+    </div>
+  </div>
+}
+
+@if (showComingSoon()) {
+  <div class="login-modal__backdrop" (click)="showComingSoon.set(false)">
+    <div class="login-modal__card" (click)="$event.stopPropagation()">
+      <svg class="login-modal__icon" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="26" stroke="var(--color-primary)" stroke-width="3.5"/>
+        <path d="M32 20v14l9 6" stroke="var(--color-primary)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2 class="login-modal__title">Tính năng đang phát triển</h2>
+      <p class="login-modal__subtitle">Đăng nhập bằng Google/Facebook đang được RENGA hoàn thiện.<br>Vui lòng đăng nhập bằng SĐT/email và mật khẩu trong lúc này.</p>
+      <button class="login-modal__btn" type="button" (click)="showComingSoon.set(false)">Đã hiểu</button>
     </div>
   </div>
 }

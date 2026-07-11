@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LoginFailModalComponent } from '../../../shared/components/modal/login-fail-modal/login-fail-modal.component';
@@ -18,6 +18,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly notify = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly route  = inject(ActivatedRoute);
 
   readonly identifier = signal('');
   readonly password = signal('');
@@ -28,6 +29,7 @@ export class LoginComponent {
   readonly showPhoneNotFound = signal(false);
   readonly showAccountLocked = signal(false);
   readonly showInactive      = signal(false);
+  readonly showComingSoon    = signal(false);
   readonly remainingAttempts = signal(5);
 
   setIdentifier(value: string): void { this.identifier.set(value); }
@@ -48,9 +50,17 @@ export class LoginComponent {
   // Khách hàng đăng nhập bằng SĐT hoặc email. Nếu không tìm thấy tài khoản
   // khách hàng và giá trị nhập vào có dạng email, thử lại như tài khoản
   // nhân viên/admin (vì admin luôn dùng email) trước khi báo lỗi.
+  // Quay lại đúng trang khách đang định vào trước khi bị đá ra login (vd bấm
+  // "Đăng nhập" từ 1 trang cụ thể, hoặc bị authGuard chặn) — trước đây luôn về
+  // trang chủ bất kể khách xuất phát từ đâu.
+  private returnUrl(): string {
+    const url = this.route.snapshot.queryParamMap.get('returnUrl');
+    return url && url.startsWith('/') && !url.startsWith('/dang-nhap') ? url : '/';
+  }
+
   private loginAsCustomer(): void {
     this.authService.login({ phone: this.identifier(), password: this.password() }).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => this.router.navigateByUrl(this.returnUrl()),
       error: (err: HttpErrorResponse) => {
         if (err.status === 404 && this.isEmail(this.identifier())) {
           this.loginAsEmployee();

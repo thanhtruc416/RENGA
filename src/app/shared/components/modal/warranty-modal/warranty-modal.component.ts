@@ -11,6 +11,7 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AccountService } from '../../../../account/account.service';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -23,15 +24,14 @@ import { environment } from '../../../../../environments/environment';
   styleUrl: './warranty-modal.component.css',
 })
 export class WarrantyModalComponent {
-  private readonly auth = inject(AuthService);
-  private readonly http = inject(HttpClient);
+  private readonly auth           = inject(AuthService);
+  private readonly http           = inject(HttpClient);
+  private readonly accountService = inject(AccountService);
 
   // ── Inputs ──────────────────────────────────────────
   readonly orderId       = input<string>('');
   readonly productName   = input<string>('');
   readonly productImage  = input<string>('');
-  readonly customerName  = input<string>('');
-  readonly customerPhone = input<string>('');
 
   // ── Computed từ auth ────────────────────────────────
   readonly isGuest = computed(() => !this.auth.isLoggedIn());
@@ -57,14 +57,20 @@ export class WarrantyModalComponent {
   readonly imageError = computed(() => false);
 
   constructor() {
-    setTimeout(() => {
-      if (!this.isGuest()) {
-        this.form.controls.name.setValue(this.customerName());
-        this.form.controls.name.disable();
-        this.form.controls.phone.setValue(this.customerPhone());
-        this.form.controls.phone.disable();
-      }
-    });
+    // Trước đây lấy tên/SĐT từ shipping address của ĐƠN HÀNG (order().shipping) —
+    // đây là người NHẬN hàng, có thể khác với chủ tài khoản thật (đơn hộ/seed data),
+    // trong khi dòng hint lại ghi "Thông tin từ tài khoản của bạn" gây sai lệch.
+    // Giờ lấy đúng từ hồ sơ tài khoản đang đăng nhập.
+    if (!this.isGuest()) {
+      this.form.controls.name.disable();
+      this.form.controls.phone.disable();
+      this.accountService.getProfile().subscribe({
+        next: (res) => {
+          this.form.controls.name.setValue(res.data.fullName ?? '');
+          this.form.controls.phone.setValue(res.data.phone ?? '');
+        },
+      });
+    }
   }
 
   onFileChange(event: Event): void {

@@ -1186,6 +1186,12 @@ export class StudioComponent implements OnInit {
     if (!this.BLANK_AVAILABLE_STONES[blank.id]) {
       this.selectedStone.set(this.stones.find(s => s.id === 'none')!);
     }
+    // Đổi sang phôi/sản phẩm khác thì các tuỳ biến riêng của thiết kế cũ (khắc
+    // chữ...) phải reset theo — trước đây engraveText giữ nguyên giá trị cũ nên
+    // phí khắc chữ của thiết kế trước bị tính nhầm sang thiết kế mới dù khách
+    // chưa hề đi tới bước khắc chữ của thiết kế này.
+    this.engraveText.set('');
+    this.engraveFont.set('serif-italic');
     this.goToStep(2);
   }
 

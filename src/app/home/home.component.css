@@ -487,13 +487,18 @@
 }
 
 .home__designer-content {
-  flex: 1;
-  max-width: 843px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* Trước đây max-width: 843px ép khối chữ dồn sát ảnh, để trống 1 khoảng hồng
+     lớn bên phải trên màn hình rộng — giờ cho phép chữ giãn ra chiếm hết phần
+     còn lại của hàng flex. */
+  max-width: 100%;
 }
 
 .home__designer-title {
   font-family: var(--font-serif);
-  font-size: 64px;
+  font-size: clamp(32px, 4.2vw, 64px);
   font-weight: 500;
   color: var(--color-dark);
   letter-spacing: -1.28px;
@@ -504,17 +509,17 @@
 .home__designer-subtitle {
   display: block;
   font-family: var(--font-serif);
-  font-size: 45px;
+  font-size: clamp(22px, 3vw, 45px);
 }
 
 .home__designer-desc {
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: clamp(14px, 1.2vw, 18px);
   font-weight: 500;
   color: var(--color-primary-light);
   line-height: 1.6;
   margin-bottom: 24px;
-  max-width: 739px;
+  max-width: 90%;
 }
 
 .home__designer-fee {

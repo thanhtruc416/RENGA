@@ -638,6 +638,12 @@
   -ms-overflow-style: none;
   flex: 1;
   scroll-snap-type: x mandatory;
+  /* Sản phẩm chỉ có vài đánh giá (không đủ lấp đầy hàng) trước đây luôn dồn về
+     bên trái do flex mặc định justify-content: flex-start — giờ căn giữa khi
+     không tràn, nhưng vẫn cuộn được bình thường (không bị cắt mất thẻ đầu) khi
+     đủ nhiều đánh giá để tràn hàng, nhờ từ khoá "safe". */
+  justify-content: center;
+  justify-content: safe center;
 }
 
 .product-detail__reviews-grid::-webkit-scrollbar {
