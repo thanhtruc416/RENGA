@@ -1,3 +1,141 @@
-<div class="warranty-modal">
-  <p>warranty-modal placeholder</p>
+<div class="warranty-modal-backdrop is-open" role="dialog" aria-modal="true" (click)="onClose()">
+  <div class="warranty-modal is-active" [class.warranty-modal--result]="isSuccess() || isFailure()" (click)="$event.stopPropagation()" [formGroup]="form">
+
+    <button class="warranty-modal__close" type="button" aria-label="Đóng" (click)="onClose()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    @if (isSuccess()) {
+      <div class="warranty-result">
+        <div class="warranty-result__icon warranty-result__icon--success">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2 class="warranty-result__title">Yêu cầu thành công</h2>
+        <div class="warranty-result__divider"></div>
+        <p class="warranty-result__desc">Cảm ơn bạn đã quan tâm. Đội ngũ RENGA sẽ xem xét và liên hệ với bạn trong vòng 1–2 ngày làm việc.</p>
+        <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onClose()">Đóng</button>
+      </div>
+
+    } @else if (isFailure()) {
+      <div class="warranty-result">
+        <div class="warranty-result__icon warranty-result__icon--fail">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h2 class="warranty-result__title">Yêu cầu thất bại</h2>
+        <div class="warranty-result__divider"></div>
+        <p class="warranty-result__desc">{{ failureMessage() || 'Rất tiếc, chúng tôi không thể xử lý yêu cầu của bạn lúc này. Vui lòng thử lại sau.' }}</p>
+        <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onClose()">Đóng</button>
+      </div>
+
+    } @else {
+
+      <div class="warranty-modal__header">
+        <div>
+          <h2 class="warranty-modal__title">Yêu cầu Bảo hành / Sửa chữa</h2>
+          <p class="warranty-modal__order-id">#{{ orderId() }}</p>
+        </div>
+      </div>
+
+      <!-- Thông tin sản phẩm -->
+      @if (productName()) {
+        <div class="warranty-product-row">
+          @if (productImage()) {
+            <img class="warranty-product-row__thumb" [src]="productImage()" [alt]="productName()" />
+          }
+          <span class="warranty-product-row__name">{{ productName() }}</span>
+        </div>
+      }
+
+      <!-- Thông tin khách hàng -->
+      <div class="warranty-form">
+
+        <div class="warranty-form__row">
+          <div class="warranty-form__field">
+            <label class="warranty-form__label">Họ và tên *</label>
+            <input class="warranty-form__input"
+              type="text"
+              formControlName="name"
+              placeholder="Nhập họ và tên"
+              [class.is-error]="submitted() && form.controls.name.invalid" />
+            @if (submitted() && form.controls.name.invalid) {
+              <span class="warranty-form__error">Vui lòng nhập họ và tên</span>
+            }
+            @if (!isGuest()) {
+              <span class="warranty-form__hint">Thông tin từ tài khoản của bạn</span>
+            }
+          </div>
+
+          <div class="warranty-form__field">
+            <label class="warranty-form__label">Số điện thoại *</label>
+            <input class="warranty-form__input"
+              type="tel"
+              formControlName="phone"
+              placeholder="Nhập số điện thoại (10 số)"
+              [class.is-error]="submitted() && form.controls.phone.invalid" />
+            @if (submitted() && form.controls.phone.errors?.['required']) {
+              <span class="warranty-form__error">Vui lòng nhập số điện thoại</span>
+            } @else if (submitted() && form.controls.phone.errors?.['pattern']) {
+              <span class="warranty-form__error">SĐT phải đủ 10 chữ số</span>
+            }
+          </div>
+        </div>
+
+        <div class="warranty-form__field">
+          <label class="warranty-form__label">Mô tả lỗi *</label>
+          <textarea class="warranty-form__input warranty-form__textarea"
+            rows="4"
+            formControlName="issue"
+            placeholder="Mô tả chi tiết vấn đề bạn gặp phải với sản phẩm..."
+            [class.is-error]="submitted() && form.controls.issue.invalid"></textarea>
+          @if (submitted() && form.controls.issue.invalid) {
+            <span class="warranty-form__error">Vui lòng mô tả lỗi sản phẩm</span>
+          }
+        </div>
+
+        <!-- Upload ảnh -->
+        <div class="warranty-form__field">
+          <label class="warranty-form__label">Ảnh minh chứng <span class="warranty-form__hint-inline">(không bắt buộc)</span></label>
+
+          <label class="warranty-upload" [class.is-error]="imageError()">
+            <input type="file" accept="image/*" multiple style="display:none" (change)="onFileChange($event)" />
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>Bấm để chọn ảnh</span>
+          </label>
+          @if (imageError()) {
+            <span class="warranty-form__error">Vui lòng tải lên ít nhất 1 ảnh minh chứng</span>
+          }
+
+          @if (previewUrls().length > 0) {
+            <div class="warranty-preview-grid">
+              @for (url of previewUrls(); track $index) {
+                <div class="warranty-preview-item">
+                  <img [src]="url" alt="Ảnh minh chứng" />
+                  <button class="warranty-preview-item__remove" type="button" (click)="removeImage($index)">✕</button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <div class="warranty-modal__actions">
+        <button class="warranty-modal__btn warranty-modal__btn--outline" type="button" (click)="onClose()">Hủy</button>
+        <button class="warranty-modal__btn warranty-modal__btn--primary" type="button" (click)="onSubmit()" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Đang gửi...' : 'Gửi yêu cầu' }}
+        </button>
+      </div>
+
+    }
+
+  </div>
 </div>

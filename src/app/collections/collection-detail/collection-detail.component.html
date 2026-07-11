@@ -1,0 +1,54 @@
+<main class="coll-detail">
+
+  <!-- ── Hero ── -->
+  <section class="coll-detail__hero">
+    <h1 class="coll-detail__hero-title">{{ collection().title }}</h1>
+    <div class="coll-detail__hero-divider"></div>
+    <p class="coll-detail__hero-subtitle">{{ collection().subtitle }}</p>
+  </section>
+
+  <!-- ── Story ── -->
+  <section class="coll-detail__story">
+    <div class="coll-detail__story-text">
+      <span class="coll-detail__story-tag">{{ collection().storyTag }}</span>
+      <h2 class="coll-detail__story-title">{{ collection().storyTitle }}</h2>
+      <div class="coll-detail__story-divider"></div>
+      <p class="coll-detail__story-body">{{ collection().storyBody1 }}</p>
+      <p class="coll-detail__story-body">{{ collection().storyBody2 }}</p>
+      <div class="coll-detail__story-quote">
+        <p>{{ collection().storyQuote }}</p>
+      </div>
+    </div>
+    <div class="coll-detail__story-image">
+      <img [src]="collection().storyImageUrl" [alt]="collection().storyTitle">
+    </div>
+  </section>
+
+  <!-- ── Products ── -->
+  <section class="coll-detail__products">
+    <div class="coll-detail__products-header">
+      <h2 class="coll-detail__products-title">{{ collection().productsTitle }}</h2>
+      <p class="coll-detail__products-subtitle">{{ collection().productsSubtitle }}</p>
+    </div>
+    <div class="coll-detail__products-grid">
+      @for (product of products(); track product.id) {
+        <a [routerLink]="['/products', product.id]" class="coll-detail__product">
+          <div class="coll-detail__product-img-wrap">
+            <img [src]="product.imageUrl" [alt]="product.name" class="coll-detail__product-img" />
+            <div class="coll-detail__product-overlay">
+              <span class="coll-detail__product-quick-view">XEM CHI TIẾT</span>
+            </div>
+          </div>
+          <div class="coll-detail__product-info">
+            <h3 class="coll-detail__product-name">{{ product.name }}</h3>
+            <p class="coll-detail__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <app-cta-section />
+
+</main>

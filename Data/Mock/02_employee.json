@@ -1,0 +1,172 @@
+{
+  "EMPLOYEE": [
+    {
+      "employee_id": "EMP000001",
+      "full_name": "Phạm Văn Phong",
+      "gender": "MALE",
+      "email": "phamvanphong18@outlook.com",
+      "password_hash": "$2b$12$70ff3e7be2c918d0f2d135c8e046bbbb",
+      "employee_type": "ADMIN",
+      "status": "ACTIVE",
+      "created_at": "2025-07-24T18:38:21",
+      "updated_at": "2025-07-29T13:38:21"
+    },
+    {
+      "employee_id": "EMP000002",
+      "full_name": "Phạm Ánh Thảo",
+      "gender": "FEMALE",
+      "email": "phamanhthao5@gmail.com",
+      "password_hash": "$2b$12$723b0b86d0c2b08de89d7f8349421a10",
+      "employee_type": "ADMIN",
+      "status": "ACTIVE",
+      "created_at": "2025-08-27T07:56:50",
+      "updated_at": "2025-09-05T08:56:50"
+    },
+    {
+      "employee_id": "EMP000003",
+      "full_name": "Lê Đình Hải",
+      "gender": "MALE",
+      "email": "ledinhhai4@outlook.com",
+      "password_hash": "$2b$12$72a408866531a23769cee2c0c3e95d5b",
+      "employee_type": "ADMIN",
+      "status": "ACTIVE",
+      "created_at": "2025-08-19T01:33:47",
+      "updated_at": "2025-08-31T22:33:47"
+    },
+    {
+      "employee_id": "EMP000004",
+      "full_name": "Phan Đức Cường",
+      "gender": "MALE",
+      "email": "phanduccuong76@yahoo.com",
+      "password_hash": "$2b$12$399ed9a2556941551d54a1db42e33765",
+      "employee_type": "DESIGNER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-22T09:39:49",
+      "updated_at": "2025-07-31T23:39:49"
+    },
+    {
+      "employee_id": "EMP000005",
+      "full_name": "Nguyễn Kim Hạnh",
+      "gender": "FEMALE",
+      "email": "nguyenkimhanh20@gmail.com",
+      "password_hash": "$2b$12$df79ed05cfd15da5eabce82daaff66a0",
+      "employee_type": "DESIGNER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-03T00:50:28",
+      "updated_at": "2025-08-08T23:50:28"
+    },
+    {
+      "employee_id": "EMP000006",
+      "full_name": "Bùi Hữu Đức",
+      "gender": "MALE",
+      "email": "buihuuduc46@yahoo.com",
+      "password_hash": "$2b$12$deefa505665eb2f51aa2c106f4efbb35",
+      "employee_type": "DESIGNER",
+      "status": "ACTIVE",
+      "created_at": "2025-08-06T21:17:41",
+      "updated_at": "2025-08-08T23:17:41"
+    },
+    {
+      "employee_id": "EMP000007",
+      "full_name": "Lưu Mỹ Hương",
+      "gender": "FEMALE",
+      "email": "luumyhuong69@gmail.com",
+      "password_hash": "$2b$12$ce1e74d728c582a03dd8b65c3881ca11",
+      "employee_type": "DESIGNER",
+      "status": "ACTIVE",
+      "created_at": "2025-09-09T20:23:53",
+      "updated_at": "2025-09-19T16:23:53"
+    },
+    {
+      "employee_id": "EMP000008",
+      "full_name": "Hồ Hữu Trung",
+      "gender": "MALE",
+      "email": "hohuutrung81@outlook.com",
+      "password_hash": "$2b$12$0a53d9f435f07a74f738a83986a35341",
+      "employee_type": "DESIGNER",
+      "status": "ACTIVE",
+      "created_at": "2025-07-29T11:09:17",
+      "updated_at": "2025-08-16T04:09:17"
+    },
+    {
+      "employee_id": "EMP000009",
+      "full_name": "Cao Thi Thanh Truc",
+      "gender": "FEMALE",
+      "email": "trucctt23416@st.uel.edu.vn",
+      "password_hash": "$2b$12$cabacf876a1476809d23f08fa07fd09b",
+      "employee_type": "ADMIN",
+      "status": "ACTIVE",
+      "created_at": "2025-07-01T08:00:00",
+      "updated_at": "2025-07-01T08:00:00"
+    }
+  ],
+  "ADMIN": [
+    {
+      "employee_id": "EMP000001",
+      "role": "SUPER_ADMIN",
+      "department": "Quản lý hệ thống"
+    },
+    {
+      "employee_id": "EMP000002",
+      "role": "STAFF",
+      "department": "Quản lý nội dung"
+    },
+    {
+      "employee_id": "EMP000003",
+      "role": "STAFF",
+      "department": "Quản lý đơn hàng"
+    },
+    {
+      "employee_id": "EMP000009",
+      "role": "STAFF",
+      "department": "Quản lý đơn hàng"
+    }
+  ],
+  "DESIGNER": [
+    {
+      "employee_id": "EMP000004",
+      "bio": "Nghệ nhân với 4 năm kinh nghiệm trong lĩnh vực thiết kế nhẫn cưới.",
+      "specialty": "Thiết kế nhẫn cưới",
+      "portfolio_url": "https://renga.vn/designers/emp000004",
+      "consultation_fee": 500000,
+      "is_available": true,
+      "avatar": "https://api.dicebear.com/9.x/lorelei/png?seed=phan-duc-cuong&size=300"
+    },
+    {
+      "employee_id": "EMP000005",
+      "bio": "Nghệ nhân với 5 năm kinh nghiệm trong lĩnh vực thiết kế vòng cổ & mặt dây chuyền.",
+      "specialty": "Thiết kế vòng cổ & mặt dây chuyền",
+      "portfolio_url": "https://renga.vn/designers/emp000005",
+      "consultation_fee": 600000,
+      "is_available": true,
+      "avatar": "https://api.dicebear.com/9.x/lorelei/png?seed=nguyen-kim-hanh&size=300"
+    },
+    {
+      "employee_id": "EMP000006",
+      "bio": "Nghệ nhân với 6 năm kinh nghiệm trong lĩnh vực thiết kế lắc tay.",
+      "specialty": "Thiết kế lắc tay",
+      "portfolio_url": "https://renga.vn/designers/emp000006",
+      "consultation_fee": 450000,
+      "is_available": true,
+      "avatar": "https://api.dicebear.com/9.x/lorelei/png?seed=bui-huu-duc&size=300"
+    },
+    {
+      "employee_id": "EMP000007",
+      "bio": "Nghệ nhân với 7 năm kinh nghiệm trong lĩnh vực thiết kế hoa tai.",
+      "specialty": "Thiết kế hoa tai",
+      "portfolio_url": "https://renga.vn/designers/emp000007",
+      "consultation_fee": 550000,
+      "is_available": true,
+      "avatar": "https://api.dicebear.com/9.x/lorelei/png?seed=luu-my-huong&size=300"
+    },
+    {
+      "employee_id": "EMP000008",
+      "bio": "Nghệ nhân với 8 năm kinh nghiệm trong lĩnh vực thiết kế trang sức đính đá.",
+      "specialty": "Thiết kế trang sức đính đá",
+      "portfolio_url": "https://renga.vn/designers/emp000008",
+      "consultation_fee": 700000,
+      "is_available": true,
+      "avatar": "https://api.dicebear.com/9.x/lorelei/png?seed=ho-huu-trung&size=300"
+    }
+  ]
+}

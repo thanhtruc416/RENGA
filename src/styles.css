@@ -1,31 +1,16 @@
-﻿:root {
-  /* Brand colors */
-  --color-primary: #c4607e;
-  --color-primary-light: #f7f0f3;
-  --color-dark: #1a1a1a;
-  --color-muted: #444748;
-  --color-border: #c4c7c7;
-  --color-bg-card: #f3f3f4;
-  --color-white: #ffffff;
-  --color-black: #000000;
+﻿@import './styles/_token.css';
 
-  /* Typography */
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Montserrat', Arial, sans-serif;
-  --font-ui: 'DM Sans', Arial, sans-serif;
+:root {
+  /* Section backgrounds */
+  --color-studio-bg: rgba(26, 26, 26, 0.9);
+  --color-designer-bg: rgba(196, 96, 126, 0.6);
 
-  /* Spacing scale */
-  --sp-xs: 4px;
-  --sp-sm: 8px;
-  --sp-md: 16px;
-  --sp-lg: 24px;
-  --sp-xl: 48px;
-  --sp-2xl: 80px;
-
-  /* Layout */
-  --max-width: 1440px;
-  --header-height: 169px;
-  --container-px: 80px;
+  /* Component-specific */
+  --color-badge-bg: #fff0f5;
+  --color-review-card-bg: #f9f9f9;
+  --color-price: var(--color-primary-dark);
+  --color-product-card-bg: rgba(247, 240, 243, 0.7);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 *, *::before, *::after {
   box-sizing: border-box;
@@ -36,6 +21,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -43,11 +29,19 @@ body {
   color: var(--color-dark);
   background: var(--color-white);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img, svg {
   display: block;
   max-width: 100%;
+}
+
+/* Ẩn icon "hiện mật khẩu" mặc định của trình duyệt (Edge/IE) —
+   nếu không sẽ chồng lên nút con mắt tự viết, gây hiện 2 icon con mắt. */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }
 
 a {
@@ -65,6 +59,7 @@ button {
 ul, ol {
   list-style: none;
 }
+
 h1, h2, h3 {
   font-family: var(--font-serif);
   font-weight: 500;
@@ -77,4 +72,10 @@ h3 { font-size: 24px; }
 
 p, span, a, li, label, input, select, textarea, button {
   font-family: var(--font-sans);
+}
+
+/* Chatbot FAB nhường chỗ khi panel giá Studio xuất hiện */
+body:has(.studio-price-summary) .chatbot__fab {
+  bottom: calc(100px + clamp(20px, 3vh, 40px));
+  transition: bottom 0.25s ease;
 }

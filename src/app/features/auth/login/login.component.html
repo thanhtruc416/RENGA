@@ -1,0 +1,184 @@
+﻿<div class="login">
+
+  <!-- Left Panel: Visual Anchor -->
+  <div class="login__left">
+    <div class="login__left-gradient" aria-hidden="true"></div>
+    <div class="login__left-content">
+      <span class="login__brand-text">RENGA</span>
+    </div>
+  </div>
+
+  <!-- Right Panel: Form -->
+  <div class="login__right">
+
+    <!-- Back Arrow -->
+    <a routerLink="/" class="login__back" aria-label="Quay lại">
+      <img src="assets/icons/ic-back-arrow.png" alt="" />
+    </a>
+
+    <!-- Main Content -->
+    <div class="login__content">
+
+      <!-- Brand Anchor -->
+      <div class="login__brand-anchor">
+        <h1 class="login__title">Chào mừng &nbsp;bạn trở lại</h1>
+        <p class="login__subtitle">
+          Đăng nhập để tiếp tục hành trình sáng tạo của bạn
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login__form" (submit)="$event.preventDefault(); login()">
+
+        <!-- Số điện thoại (khách hàng) hoặc email (nhân viên/admin) -->
+        <div class="login__field">
+          <label class="login__label" for="login-identifier">SỐ ĐIỆN THOẠI HOẶC EMAIL</label>
+          <input
+            id="login-identifier"
+            class="login__input"
+            type="text"
+            placeholder="0881234567 hoặc email@renga.vn"
+            [value]="identifier()"
+            (input)="setIdentifier($any($event.target).value)"
+            autocomplete="username"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="login__field">
+          <div class="login__label-row">
+            <label class="login__label" for="login-password">MẬT KHẨU</label>
+            <a routerLink="/quen-mat-khau" class="login__forgot">Quên mật khẩu?</a>
+          </div>
+          <div class="login__input-wrap">
+            <input
+              id="login-password"
+              class="login__input"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="••••••••"
+              [value]="password()"
+              (input)="setPassword($any($event.target).value)"
+              autocomplete="current-password"
+            />
+            <button
+              class="login__eye-btn"
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+            >
+              @if (showPassword()) {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button
+          class="login__submit"
+          type="submit"
+          [disabled]="isSubmitting()"
+        >
+          ĐĂNG NHẬP
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="login__divider">
+        <div class="login__divider-line"></div>
+        <span class="login__divider-text">HOẶC</span>
+        <div class="login__divider-line"></div>
+      </div>
+
+      <!-- Social Login -->
+      <button class="login__social" type="button" (click)="showComingSoon.set(true)">
+        <img src="assets/icons/ic-social-google.svg" alt="" class="login__social-icon" />
+        <span>Tiếp tục với Google/Facebook</span>
+      </button>
+
+      <!-- Footer Link -->
+      <p class="login__footer">
+        Chưa có tài khoản?&nbsp;<a routerLink="/dang-ki" class="login__register-link">Đăng ký ngay</a>
+      </p>
+
+      <!-- Copyright -->
+      <p class="login__copyright">© 2026 RENGA. All rights reserved.</p>
+
+    </div>
+
+  </div>
+
+</div>
+
+@if (showLoginFail()) {
+  <app-login-fail-modal
+    [remainingAttempts]="remainingAttempts()"
+    (closed)="closeLoginFail()"
+  />
+}
+
+@if (showPhoneNotFound()) {
+  <app-phone-not-found-modal
+    (closed)="closePhoneNotFound()"
+  />
+}
+
+@if (showAccountLocked()) {
+  <div class="login-modal__backdrop" (click)="closeAccountLocked()">
+    <div class="login-modal__card" (click)="$event.stopPropagation()">
+      <svg class="login-modal__icon" viewBox="0 0 64 64" fill="none">
+        <rect x="16" y="28" width="32" height="24" rx="3" stroke="var(--color-primary)" stroke-width="3.5"/>
+        <path d="M22 28V20a10 10 0 0 1 20 0v8" stroke="var(--color-primary)" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="32" cy="40" r="3" fill="var(--color-primary)"/>
+      </svg>
+      <h2 class="login-modal__title">Tài khoản bị tạm khóa</h2>
+      <p class="login-modal__subtitle">Bạn đã nhập sai mật khẩu quá nhiều lần.<br>Vui lòng liên hệ RENGA để được hỗ trợ mở khóa tài khoản.</p>
+      <div class="login-modal__actions">
+        <button class="login-modal__btn login-modal__btn--outline" type="button" (click)="closeAccountLocked()">Đóng</button>
+        <a href="tel:19000607" class="login-modal__btn">Gọi 1900-0607</a>
+      </div>
+      <p class="login-modal__contact">
+        Hoặc gửi email tới <a href="mailto:hello@renga.vn">hello@renga.vn</a>
+      </p>
+    </div>
+  </div>
+}
+
+@if (showInactive()) {
+  <div class="login-modal__backdrop" (click)="closeInactive()">
+    <div class="login-modal__card" (click)="$event.stopPropagation()">
+      <svg class="login-modal__icon" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="26" stroke="var(--color-primary)" stroke-width="3.5"/>
+        <line x1="32" y1="18" x2="32" y2="36" stroke="var(--color-primary)" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="32" cy="45" r="2.5" fill="var(--color-primary)"/>
+      </svg>
+      <h2 class="login-modal__title">Tài khoản bị vô hiệu hoá</h2>
+      <p class="login-modal__subtitle">Tài khoản của bạn đã bị vô hiệu hoá.<br>Vui lòng liên hệ hỗ trợ để được giải quyết.</p>
+      <button class="login-modal__btn" type="button" (click)="closeInactive()">Đã hiểu</button>
+    </div>
+  </div>
+}
+
+@if (showComingSoon()) {
+  <div class="login-modal__backdrop" (click)="showComingSoon.set(false)">
+    <div class="login-modal__card" (click)="$event.stopPropagation()">
+      <svg class="login-modal__icon" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="26" stroke="var(--color-primary)" stroke-width="3.5"/>
+        <path d="M32 20v14l9 6" stroke="var(--color-primary)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2 class="login-modal__title">Tính năng đang phát triển</h2>
+      <p class="login-modal__subtitle">Đăng nhập bằng Google/Facebook đang được RENGA hoàn thiện.<br>Vui lòng đăng nhập bằng SĐT/email và mật khẩu trong lúc này.</p>
+      <button class="login-modal__btn" type="button" (click)="showComingSoon.set(false)">Đã hiểu</button>
+    </div>
+  </div>
+}

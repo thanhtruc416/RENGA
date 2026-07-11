@@ -1,22 +1,72 @@
-<header class="site-header">
+﻿<header class="site-header">
   <div class="site-header__inner">
 
-    <div class="site-header__top">
-      <a routerLink="/" class="site-header__logo-left">
-        <img class="site-header__logo-icon" src="assets/images/logo-icon.png" alt="RENGA" width="44" height="44">
-      </a>
+    <a routerLink="/" class="site-header__logo-left">
+      <img class="site-header__logo-icon" src="assets/images/logo-icon.png" alt="RENGA" width="44" height="44">
+    </a>
 
+    <div class="site-header__top">
       <a routerLink="/" class="site-header__logo-center">
-        <img class="site-header__logo-wordmark" src="assets/images/logo-wordmark.png" alt="RENGA" height="32">
+        <img class="site-header__logo-wordmark" src="assets/images/logo-wordmark.png" alt="RENGA" height="56">
       </a>
 
       <div class="site-header__actions">
-        <a routerLink="/gio-hang" class="site-header__action-btn" aria-label="Giỏ hàng">
+        <!-- Menu (tablet/mobile) -->
+        <button
+          class="site-header__hamburger"
+          [class.is-open]="mobileNavOpen()"
+          type="button"
+          aria-label="Mở menu"
+          [attr.aria-expanded]="mobileNavOpen()"
+          (click)="toggleMobileNav($event)"
+        >
+          <svg class="icon-open" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <!-- Giỏ hàng -->
+        <a routerLink="/cart" id="cart-icon-btn" class="site-header__action-btn" aria-label="Giỏ hàng">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="site-header__tooltip">Giỏ hàng</span>
+          @if (cart.totalCount() > 0) {
+            <span class="site-header__cart-badge" [class.is-bump]="cart.isBumping()">{{ cart.totalCount() }}</span>
+          }
         </a>
-        <a routerLink="/lich-su-don-hang" class="site-header__action-btn" aria-label="Đơn hàng">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </a>
+
+        <!-- Đơn hàng dropdown -->
+        <div class="order-menu" [class.is-open]="openNav() === 'orders'">
+          <button
+            class="site-header__action-btn order-menu__trigger"
+            aria-label="Đơn hàng"
+            [attr.aria-expanded]="openNav() === 'orders'"
+            (click)="toggleNav($event, 'orders')"
+          >
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="site-header__tooltip">Đơn hàng</span>
+          </button>
+          <div class="order-menu__dropdown" (click)="$event.stopPropagation()">
+            <a routerLink="/orders/lookup" class="order-menu__item" (click)="closeAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              Tra cứu đơn hàng
+            </a>
+            <a routerLink="/orders/tracking" class="order-menu__item" (click)="closeAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Danh sách đơn hàng
+            </a>
+            <a routerLink="/orders/reviews" class="order-menu__item" (click)="closeAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              Đánh giá đơn hàng
+            </a>
+          </div>
+        </div>
+
+        <!-- Tài khoản dropdown -->
         <div class="user-menu" [class.is-open]="userMenuOpen()">
           <button
             class="site-header__action-btn user-menu__trigger"
@@ -24,70 +74,123 @@
             [attr.aria-expanded]="userMenuOpen()"
             (click)="toggleUserMenu($event)"
           >
-            <img class="site-header__avatar" src="https://placehold.co/45x45/f3f3f4/444748?text=U" alt="Tài khoản">
+            @if (auth.isLoggedIn()) {
+              <img
+                class="site-header__avatar"
+                [src]="auth.currentUser()?.avatarUrl || 'assets/images/default-avatar.svg'"
+                alt="Tài khoản"
+              >
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            }
+            <span class="site-header__tooltip">Tài khoản</span>
           </button>
-          <div class="user-menu__dropdown">
-            <a routerLink="/auth/dang-nhap" class="user-menu__item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-              Đăng nhập
-            </a>
-            <a routerLink="/auth/dang-nhap" [queryParams]="{register: 1}" class="user-menu__item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-              Đăng ký
-            </a>
+          <div class="user-menu__dropdown" (click)="$event.stopPropagation()">
+            @if (auth.isLoggedIn()) {
+              <a routerLink="/account/thong-tin" class="user-menu__item" (click)="closeAll()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Hồ sơ
+              </a>
+              <button type="button" class="user-menu__item user-menu__item--btn" (click)="auth.logout(); closeAll()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Đăng xuất
+              </button>
+            } @else {
+              <a routerLink="/dang-nhap" [queryParams]="{ returnUrl: currentUrl() }" class="user-menu__item" (click)="closeAll()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Đăng nhập
+              </a>
+              <a routerLink="/dang-ki" class="user-menu__item" (click)="closeAll()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Đăng ký
+              </a>
+            }
           </div>
         </div>
       </div>
     </div>
 
-    <div class="site-header__bottom">
+    <div class="site-header__bottom" [class.is-open]="mobileNavOpen()" (click)="$event.stopPropagation()">
       <nav class="site-header__nav" aria-label="Menu chính">
         <div class="site-header__nav-item">
-          <a routerLink="/" [routerLinkActive]="'is-active'" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link">Trang chủ</a>
+          <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" class="site-header__nav-link" (click)="closeAll()">Trang chủ</a>
         </div>
-        <div class="site-header__nav-item" [class.is-open]="openNav() === 'danh-muc'" (click)="toggleNav($event, 'danh-muc')">
-          <a routerLink="/danh-muc/nhan" [routerLinkActive]="'is-active'" class="site-header__nav-link">Danh mục Sản phẩm</a>
-          <div class="mega-menu" (click)="$event.stopPropagation()">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'danh-muc'" (mouseenter)="openNav.set('danh-muc')" (mouseleave)="openNav.set(null)">
+          <span class="site-header__nav-link" [class.is-active]="isOnProducts()" (click)="toggleNav($event, 'danh-muc')">Danh mục Sản phẩm</span>
+          <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('danh-muc')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Danh mục sản phẩm</p>
-              <a routerLink="/danh-muc/nhan" class="mega-menu__link">Nhẫn</a>
-              <a routerLink="/danh-muc/day-chuyen" class="mega-menu__link">Dây chuyền</a>
-              <a routerLink="/danh-muc/hoa-tai" class="mega-menu__link">Hoa tai</a>
-              <a routerLink="/danh-muc/lac-tay" class="mega-menu__link">Lắc tay &amp; Vòng tay</a>
-              <a routerLink="/danh-muc/charm" class="mega-menu__link">Charm</a>
+              <a routerLink="/products" [queryParams]="{category: 'nhan'}" class="mega-menu__link" (click)="closeAll()">Nhẫn</a>
+              <a routerLink="/products" [queryParams]="{category: 'day-chuyen'}" class="mega-menu__link" (click)="closeAll()">Dây chuyền</a>
+              <a routerLink="/products" [queryParams]="{category: 'hoa-tai'}" class="mega-menu__link" (click)="closeAll()">Hoa tai</a>
+              <a routerLink="/products" [queryParams]="{category: 'lac-tay'}" class="mega-menu__link" (click)="closeAll()">Lắc tay &amp; Vòng tay</a>
+              <a routerLink="/products" [queryParams]="{category: 'charm'}" class="mega-menu__link" (click)="closeAll()">Charm</a>
             </div>
           </div>
         </div>
-        <div class="site-header__nav-item" [class.is-open]="openNav() === 'bo-suu-tap'" (click)="toggleNav($event, 'bo-suu-tap')">
-          <a href="#" class="site-header__nav-link">Bộ sưu tập</a>
-          <div class="mega-menu" (click)="$event.stopPropagation()">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'bo-suu-tap'" (mouseenter)="openNav.set('bo-suu-tap')" (mouseleave)="openNav.set(null)">
+          <a routerLink="/bo-suu-tap" class="site-header__nav-link" [class.is-active]="isOnCollections()" (click)="closeAll()">Bộ sưu tập</a>
+          <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('bo-suu-tap')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">Bộ sưu tập</p>
-              <a href="#" class="mega-menu__link">Bộ trang sức đồng bộ</a>
-              <a href="#" class="mega-menu__link">Bộ trang sức cặp đôi</a>
-              <a href="#" class="mega-menu__link">Bộ sưu tập Hoàng Gia</a>
+              <a routerLink="/bo-suu-tap/bo-trang-suc-dong-bo" class="mega-menu__link" (click)="closeAll()">Bộ trang sức đồng bộ</a>
+              <a routerLink="/bo-suu-tap/bo-trang-suc-cap-doi" class="mega-menu__link" (click)="closeAll()">Bộ trang sức cặp đôi</a>
+              <a routerLink="/bo-suu-tap/hoang-gia" class="mega-menu__link" (click)="closeAll()">Bộ sưu tập Hoàng Gia</a>
             </div>
           </div>
         </div>
+
         <div class="site-header__nav-item">
-          <a routerLink="/studio" [routerLinkActive]="'is-active'" class="site-header__nav-link">The Studio</a>
+          <a routerLink="/studio" routerLinkActive="is-active" class="site-header__nav-link" (click)="closeAll()">The Studio</a>
         </div>
-        <div class="site-header__nav-item" [class.is-open]="openNav() === 'designer'" (click)="toggleNav($event, 'designer')">
-          <a routerLink="/the-designer" [routerLinkActive]="'is-active'" class="site-header__nav-link">The Designer</a>
-          <div class="mega-menu" (click)="$event.stopPropagation()">
+
+        <div class="site-header__nav-item" [class.is-open]="openNav() === 'designer'" (mouseenter)="openNav.set('designer')" (mouseleave)="openNav.set(null)">
+          <span class="site-header__nav-link" [class.is-active]="isOnDesigner()" (click)="toggleNav($event, 'designer')">The Designer</span>
+          <div class="mega-menu" (click)="$event.stopPropagation()" (mouseenter)="openNav.set('designer')" (mouseleave)="openNav.set(null)">
             <div class="mega-menu__col">
               <p class="mega-menu__col-title">The Designer</p>
-              <a routerLink="/the-designer" class="mega-menu__link">Đặt lịch tư vấn</a>
-              <a routerLink="/appointment-history" class="mega-menu__link">Lịch tư vấn của tôi</a>
+              <a routerLink="/consultation" class="mega-menu__link" (click)="closeAll()">Đặt lịch tư vấn</a>
+              <a routerLink="/appointment-history" class="mega-menu__link" (click)="closeAll()">Lịch tư vấn của tôi</a>
             </div>
           </div>
         </div>
       </nav>
-      <div class="site-header__search">
+
+      <div class="site-header__search" (click)="$event.stopPropagation()">
         <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
-        <input class="site-header__search-input" type="text" placeholder="Tìm kiếm...">
+        <input
+          class="site-header__search-input"
+          type="search"
+          placeholder="Tìm nhẫn, dây chuyền..."
+          autocomplete="off"
+          [value]="searchTerm()"
+          (input)="onSearchInput($any($event.target).value)"
+          (focus)="onSearchFocus()">
+
+        @if (showSearchResults()) {
+          <div class="site-header__search-results">
+            @if (searchResults().length) {
+              @for (product of searchResults(); track product.id) {
+                <button type="button" class="site-header__search-result" (click)="selectSearchResult(product, $event)">
+                  <img [src]="product.imageUrl" [alt]="product.name" class="site-header__search-result-img">
+                  <span class="site-header__search-result-info">
+                    <span class="site-header__search-result-name">{{ product.name }}</span>
+                    <span class="site-header__search-result-price">{{ product.price | number }}đ</span>
+                  </span>
+                </button>
+              }
+            } @else {
+              <p class="site-header__search-empty">Không tìm thấy sản phẩm phù hợp</p>
+            }
+          </div>
+        }
       </div>
     </div>
 

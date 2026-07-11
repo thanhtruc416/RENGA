@@ -1,3 +1,176 @@
-<div class="chatbot-widget">
-  <p>chatbot placeholder</p>
-</div>
+﻿<!-- FAB -->
+<button
+  class="chatbot__fab"
+  type="button"
+  (click)="toggle()"
+  [attr.aria-expanded]="isOpen()"
+  aria-label="Mở chatbot REN AI"
+>
+  <img src="assets/icons/ic-chatbot-fab.png" alt="" class="chatbot__fab-icon" />
+</button>
+
+<!-- Popup Window -->
+@if (isOpen()) {
+  <div class="chatbot__window" role="dialog" aria-label="REN AI Chatbot">
+
+    <!-- Header -->
+    <div class="chatbot__header">
+      <div>
+        <div class="chatbot__name">REN AI</div>
+        <div class="chatbot__desc">CHATBOT AI THÔNG MINH CỦA RENGA</div>
+      </div>
+      <button class="chatbot__close" type="button" (click)="close()" aria-label="Đóng chatbot">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1L13 13M13 1L1 13" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chatbot__body" #chatBody>
+
+      @for (msg of messages(); track msg.id) {
+
+        <!-- User message -->
+        @if (msg.sender === 'user') {
+          <div class="chatbot__msg chatbot__msg--user">
+            <div class="chatbot__content chatbot__content--user">
+              <div class="chatbot__bubble chatbot__bubble--user">{{ msg.text }}</div>
+              <span class="chatbot__time">{{ msg.timestamp }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Bot simple text -->
+        @if (msg.sender === 'bot' && msg.text) {
+          <div class="chatbot__msg">
+            <img src="assets/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
+            <div class="chatbot__content">
+              <div class="chatbot__bubble">{{ msg.text }}</div>
+              <span class="chatbot__time">{{ msg.timestamp }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Bot rich card -->
+        @if (msg.sender === 'bot' && msg.card?.type === 'rich') {
+          <div class="chatbot__msg">
+            <div class="chatbot__card">
+              <div class="chatbot__card-header">
+                <span class="chatbot__card-dot chatbot__card-dot--green"></span>
+                <span class="chatbot__card-label">{{ msg.card!.headerLabel }}</span>
+              </div>
+              <p class="chatbot__card-text">{{ msg.card!.text }}</p>
+              @if (msg.card!.bullets?.length) {
+                <ul class="chatbot__card-bullets">
+                  @for (bullet of msg.card!.bullets!; track $index) {
+                    <li class="chatbot__card-bullet">
+                      <svg class="chatbot__bullet-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="9" stroke-width="1.5"/>
+                        <path d="M6.5 10l2.5 2.5 4.5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span [innerHTML]="bullet"></span>
+                    </li>
+                  }
+                </ul>
+              }
+              @if (msg.card!.actions?.length) {
+                <div class="chatbot__card-actions">
+                  @for (btn of msg.card!.actions!; track btn.label) {
+                    <a
+                      class="chatbot__card-btn"
+                      [class.chatbot__card-btn--primary]="btn.style === 'primary'"
+                      [class.chatbot__card-btn--secondary]="btn.style === 'secondary'"
+                      [routerLink]="btn.route ?? null"
+                      [href]="btn.route ? null : btn.href"
+                      (click)="close()"
+                    >{{ btn.label }}</a>
+                  }
+                </div>
+              }
+            </div>
+            <span class="chatbot__time chatbot__time--card">{{ msg.timestamp }}</span>
+          </div>
+        }
+
+        <!-- Bot special card -->
+        @if (msg.sender === 'bot' && msg.card?.type === 'special') {
+          <div class="chatbot__msg">
+            <div class="chatbot__card chatbot__card--special">
+              <div class="chatbot__card-header">
+                <span class="chatbot__card-dot chatbot__card-dot--red"></span>
+                <span class="chatbot__card-label chatbot__card-label--red">{{ msg.card!.headerLabel }}</span>
+              </div>
+              <p class="chatbot__card-text chatbot__card-text--italic">{{ msg.card!.text }}</p>
+              @if (msg.card!.ctaButtons?.length) {
+                <div class="chatbot__cta-wrap">
+                  @for (btn of msg.card!.ctaButtons!; track btn.label) {
+                    <a
+                      class="chatbot__cta-btn"
+                      [class.chatbot__cta-btn--primary]="btn.style === 'primary'"
+                      [class.chatbot__cta-btn--secondary]="btn.style === 'secondary'"
+                      [routerLink]="btn.route ?? null"
+                      [href]="btn.route ? null : btn.href"
+                      (click)="close()"
+                    >
+                      {{ btn.label }}
+                      @if (btn.icon === 'arrow') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                      }
+                      @if (btn.icon === 'mail') {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                      }
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+            <span class="chatbot__time chatbot__time--card">{{ msg.timestamp }}</span>
+          </div>
+        }
+
+      }
+
+      <!-- Typing indicator -->
+      @if (isTyping()) {
+        <div class="chatbot__msg">
+          <img src="assets/icons/ic-chatbot-robot.png" alt="REN AI" class="chatbot__avatar" />
+          <div class="chatbot__typing">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- Footer -->
+    <div class="chatbot__footer">
+      <div class="chatbot__input-row">
+        <input
+          class="chatbot__input"
+          type="text"
+          placeholder="Nhập câu hỏi của bạn..."
+          [value]="inputValue()"
+          (input)="onInput($event)"
+          (keydown.enter)="send()"
+        />
+        <button class="chatbot__send" type="button" (click)="send()" aria-label="Gửi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none"/>
+          </svg>
+        </button>
+      </div>
+      <div class="chatbot__chips">
+        @for (chip of quickChips; track chip) {
+          <button class="chatbot__chip" type="button" (click)="sendChip(chip)">{{ chip }}</button>
+        }
+      </div>
+    </div>
+
+  </div>
+}

@@ -1,0 +1,145 @@
+<div class="voucher-page">
+  <header class="voucher-page__header">
+    <div class="voucher-page__title-group">
+      <h1 class="voucher-page__title">Quản lý Hỏi-Đáp Chatbot</h1>
+      <p class="voucher-page__subtitle">Nội dung ở đây được trợ lý ảo AI dùng trực tiếp để trả lời khách hàng</p>
+    </div>
+  </header>
+
+  <div class="voucher-page__toolbar">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="search-input" placeholder="Tìm theo câu hỏi/câu trả lời"
+        [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
+    </div>
+    <button class="btn btn--black" (click)="openCreateModal()">+ THÊM FAQ MỚI</button>
+  </div>
+
+  <div class="voucher-page__filters-bar">
+    <div class="filter-group">
+      <label class="filter-label">CHỦ ĐỀ</label>
+      <select class="filter-select" [value]="filterTopic()" (change)="filterTopic.set($any($event.target).value)">
+        <option value="">Tất cả</option>
+        @for (t of topicOptions; track t) {
+          <option [value]="t">{{ topicLabel[t] }}</option>
+        }
+      </select>
+    </div>
+    @if (filterApplied()) {
+      <button class="btn vm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="btn vm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
+  </div>
+
+  <!-- Data Table -->
+  <div class="voucher-table">
+    <div class="voucher-table__header" style="grid-template-columns: 120px 1fr 1fr 100px 90px;">
+      <span>CHỦ ĐỀ</span>
+      <span>CÂU HỎI</span>
+      <span>CÂU TRẢ LỜI</span>
+      <span>TRẠNG THÁI</span>
+      <span class="text-right">THAO TÁC</span>
+    </div>
+
+    <div class="voucher-table__body">
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (faqs().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Chưa có FAQ nào.</p>
+      } @else {
+        @for (faq of faqs(); track faq.faq_id) {
+          <div class="voucher-table__row" style="grid-template-columns: 120px 1fr 1fr 100px 90px;" [class.voucher-table__row--hidden]="!faq.is_active">
+
+            <div class="table-cell">
+              <span class="badge-type badge-type--percent">{{ topicLabel[faq.topic] }}</span>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__text" style="max-width: 260px;">{{ faq.question }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__text" style="max-width: 260px;">{{ faq.answer }}</p>
+            </div>
+
+            <div class="table-cell">
+              <div class="badge-status badge-status--{{ faq.is_active ? 'active' : 'expired' }}">
+                <span class="badge-status__dot"></span>
+                {{ faq.is_active ? 'ĐANG DÙNG' : 'ĐÃ ẨN' }}
+              </div>
+            </div>
+
+            <div class="table-cell table-cell--actions text-right">
+              <button class="action-icon-btn" aria-label="Sửa" (click)="openEditModal(faq)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="action-icon-btn" [title]="faq.is_active ? 'Ẩn khỏi chatbot' : 'Kích hoạt lại'" (click)="toggleActive(faq)">
+                @if (!faq.is_active) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                } @else {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                }
+              </button>
+            </div>
+
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="voucher-page__pagination">
+    <p class="voucher-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} FAQ
+    </p>
+    <div class="voucher-page__pagination-controls">
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= MODAL THIẾT LẬP FAQ ================= -->
+@if (isModalOpen()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" [formGroup]="faqForm" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">{{ editingFaqId() ? 'Chỉnh sửa FAQ' : 'Thêm FAQ mới' }}</h2>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group form-group--full">
+          <label class="form-label">CHỦ ĐỀ</label>
+          <select class="form-input" formControlName="topic">
+            @for (t of topicOptions; track t) {
+              <option [value]="t">{{ topicLabel[t] }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">CÂU HỎI</label>
+          <textarea class="form-textarea" formControlName="question" placeholder="Ví dụ: Nhẫn có thể điều chỉnh size sau khi mua không?"></textarea>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">CÂU TRẢ LỜI</label>
+          <textarea class="form-textarea" formControlName="answer" placeholder="Câu trả lời chuẩn — chatbot sẽ dùng nội dung này để trả lời khách."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary-solid" [disabled]="isSubmitting()" (click)="saveFaq()">LƯU THÔNG TIN</button>
+      </div>
+
+    </div>
+  </div>
+}

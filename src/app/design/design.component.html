@@ -35,7 +35,7 @@
       <h1 class="design-step__title">Chọn Designer</h1>
 
       <div class="designer-grid">
-        @for (designer of designers; track designer.id) {
+        @for (designer of designers(); track designer.id) {
           <article
             class="designer-card"
             [class.designer-card--selected]="selectedDesigner()?.id === designer.id"
@@ -65,7 +65,7 @@
               <div class="designer-card__footer">
                 <div class="designer-card__fee">
                   <span class="designer-card__fee-label">PHÍ</span>
-                  <span class="designer-card__fee-amount">{{ formatVnd(designer.fee) }}</span>
+                  <span class="designer-card__fee-amount">{{ formatVnd(designer.fee) }}<u>đ</u></span>
                 </div>
                 <button class="designer-card__select" type="button" (click)="$event.stopPropagation(); selectDesigner(designer)">Chọn</button>
               </div>
@@ -74,9 +74,11 @@
         }
       </div>
 
-      <div class="designer-load-more-wrap">
-        <button class="designer-load-more" type="button">TẢI THÊM</button>
-      </div>
+      @if (hasMoreDesigners()) {
+        <div class="designer-load-more-wrap">
+          <button class="designer-load-more" type="button" (click)="loadMoreDesigners()">TẢI THÊM</button>
+        </div>
+      }
     </div>
   }
 
@@ -128,9 +130,9 @@
         <div class="ds-calendar-panel">
           <div class="ds-calendar">
             <div class="ds-calendar__header">
-              <button class="ds-calendar__nav" type="button" aria-label="Tháng trước" (click)="prevMonth()">&#8249;</button>
-              <span class="ds-calendar__month-label">{{ calendarMonthLabel() }}</span>
-              <button class="ds-calendar__nav" type="button" aria-label="Tháng sau" (click)="nextMonth()">&#8250;</button>
+              <button class="ds-calendar__nav" type="button" aria-label="Tuần trước" (click)="prevPeriod()">&#8249;</button>
+              <span class="ds-calendar__month-label">{{ calendarRangeLabel() }}</span>
+              <button class="ds-calendar__nav" type="button" aria-label="Tuần sau" (click)="nextPeriod()">&#8250;</button>
             </div>
             <div class="ds-calendar__grid" role="grid">
               @for (header of ['T2','T3','T4','T5','T6','T7','CN']; track $index) {
@@ -157,7 +159,7 @@
             <div class="ds-timeslot-section">
               <h3 class="ds-timeslot-section__title">{{ selectedDateLabel() }}</h3>
               <div class="ds-timeslot-grid" role="listbox" aria-label="Chọn giờ tư vấn">
-                @for (slot of timeSlots; track slot) {
+                @for (slot of timeSlots(); track slot) {
                   <button
                     class="ds-timeslot"
                     [class.is-selected]="selectedTime() === slot"
@@ -170,6 +172,10 @@
                   >{{ slot }}</button>
                 }
               </div>
+            </div>
+          } @else {
+            <div class="ds-timeslot-section ds-timeslot-section--empty">
+              <p>Chọn 1 ngày trên lịch để xem giờ tư vấn còn trống.</p>
             </div>
           }
         </div>
@@ -240,7 +246,7 @@
           <div class="ds-form__group">
             <label class="ds-form__label" for="budget">Ngân sách</label>
             <input class="ds-form__input" type="text" id="budget" formControlName="budget"
-              placeholder="VD: 5.000.000 VNĐ" />
+              placeholder="VD: 5.000.000đ" />
           </div>
 
           <div class="ds-form__group">
@@ -249,16 +255,31 @@
           </div>
 
           <div class="ds-form__group ds-form__group--full">
-            <label class="ds-form__label" for="idea-desc">Nhập mô tả ý tưởng chi tiết</label>
+            <div class="ds-form__label-row">
+              <label class="ds-form__label" for="idea-desc">Nhập mô tả ý tưởng chi tiết</label>
+              <button type="button" class="ds-voice-btn" [class.ds-voice-btn--active]="isListening()"
+                (click)="toggleVoice()" [attr.aria-label]="isListening() ? 'Dừng ghi âm' : 'Nhập bằng giọng nói'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="9" y="2" width="6" height="12" rx="3"/>
+                  <path d="M5 10a7 7 0 0 0 14 0"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                  <line x1="9" y1="21" x2="15" y2="21"/>
+                </svg>
+                {{ isListening() ? 'Đang nghe...' : 'Giọng nói' }}
+              </button>
+            </div>
             <textarea class="ds-form__textarea" id="idea-desc" formControlName="ideaDesc" rows="6"
               placeholder="Chia sẻ ý tưởng, cảm hứng và yêu cầu đặc biệt của bạn..."></textarea>
+            @if (voiceError()) {
+              <p class="ds-voice-error">{{ voiceError() }}</p>
+            }
           </div>
 
           <div class="ds-form__group ds-form__group--full">
             <p class="ds-form__label">Tải hình ảnh liên quan</p>
             <label class="ds-upload-zone" for="idea-images" aria-label="Tải ảnh tham khảo">
               <input class="ds-upload-zone__input" type="file" id="idea-images"
-                name="images" accept="image/*" multiple />
+                name="images" accept="image/*" multiple (change)="onImagesChange($event)" />
               <span class="ds-upload-zone__icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -269,6 +290,18 @@
               <span class="ds-upload-zone__text">Kéo hoặc thả tệp vào đây</span>
               <span class="ds-upload-zone__hint">PNG, JPG — Tối đa 10MB/ảnh</span>
             </label>
+
+            @if (attachedImages().length > 0) {
+              <div class="ds-upload-previews">
+                @for (img of attachedImages(); track img.url; let i = $index) {
+                  <div class="ds-upload-preview">
+                    <img class="ds-upload-preview__img" [src]="img.url" [alt]="img.name" />
+                    <button class="ds-upload-preview__remove" type="button"
+                      (click)="removeImage(i)" aria-label="Xóa ảnh">✕</button>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
         </div>
@@ -276,6 +309,7 @@
         <div class="design-step__actions">
           <div class="step3-actions">
             <button class="btn btn--ghost" type="button" (click)="goToStep(2)">← Trước đó</button>
+            <button class="btn btn--ghost" type="button" (click)="goToStep(4)">Bỏ qua</button>
             <button class="ds-cta-btn step3-cta" type="submit">XÁC NHẬN LỊCH HẸN</button>
           </div>
         </div>
@@ -315,82 +349,18 @@
             </div>
           </div>
 
-          <!-- Member card -->
-          <div class="ds-member-card">
-            <div class="ds-member-card__info">
-              <p class="ds-member-card__label">RENGA MEMBER</p>
-              <p class="ds-member-card__name">Nguyễn Thị Trúc</p>
-              <p class="ds-member-card__tier">Gold Member</p>
-            </div>
-            <div class="ds-member-card__benefit">
-              <span class="ds-member-card__discount">Ưu đãi 10%</span>
-            </div>
-          </div>
-
           <!-- Payment methods -->
           <div class="ds-pay-methods">
             <h3 class="ds-pay-methods__title">Phương thức thanh toán</h3>
             @for (method of paymentMethods; track method.id) {
-              <label class="ds-pay-method" [class.is-selected]="selectedPayment() === method.id">
-                <input type="radio" name="payment" [value]="method.id"
+              <label class="ds-pay-method" [class.is-selected]="selectedPayment() === method.id"
+                (click)="selectPayment(method.id)">
+                <input class="ds-pay-method__radio" type="radio" name="payment" [value]="method.id"
                   [checked]="selectedPayment() === method.id"
-                  (change)="selectPayment(method.id)" />
-                <span class="ds-pay-method__icon">
-                  @switch (method.id) {
-                    @case ('momo') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#AE2070"/>
-                        <rect x="8" y="13" width="20" height="13" rx="2.5" fill="white"/>
-                        <rect x="8" y="17" width="20" height="3.5" fill="#AE2070"/>
-                        <rect x="11" y="21.5" width="6" height="2.5" rx="1.25" fill="#AE2070" fill-opacity="0.6"/>
-                        <circle cx="24.5" cy="22.75" r="1.75" fill="#AE2070" fill-opacity="0.6"/>
-                      </svg>
-                    }
-                    @case ('vnpay') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#003087"/>
-                        <rect x="7" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="9" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="12" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="9" y="12" width="2" height="2" fill="#003087"/>
-                        <rect x="20" y="7" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="22" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="25" y="9" width="2" height="2" fill="#003087"/>
-                        <rect x="22" y="12" width="2" height="2" fill="#003087"/>
-                        <rect x="7" y="20" width="9" height="9" rx="1.5" fill="white" fill-opacity="0.9"/>
-                        <rect x="9" y="22" width="2" height="2" fill="#003087"/>
-                        <rect x="9" y="25" width="2" height="2" fill="#003087"/>
-                        <rect x="12" y="22" width="2" height="2" fill="#003087"/>
-                        <rect x="20" y="20" width="2" height="2" fill="white"/>
-                        <rect x="23" y="20" width="2" height="2" fill="white"/>
-                        <rect x="26" y="20" width="2" height="2" fill="white"/>
-                        <rect x="20" y="23" width="2" height="2" fill="white"/>
-                        <rect x="24" y="23" width="4" height="2" fill="white"/>
-                        <rect x="20" y="26" width="2" height="2" fill="white"/>
-                        <rect x="23" y="26" width="2" height="2" fill="white"/>
-                      </svg>
-                    }
-                    @case ('bank') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#1a3c5e"/>
-                        <polygon points="18,8 6.5,15.5 29.5,15.5" fill="white"/>
-                        <rect x="9" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="13.5" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="19.5" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="24" y="16.5" width="3" height="8.5" fill="white"/>
-                        <rect x="7" y="26" width="22" height="2.5" rx="1.25" fill="white"/>
-                      </svg>
-                    }
-                    @case ('card') {
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="36" rx="8" fill="#2c5f8a"/>
-                        <rect x="5" y="11" width="26" height="16" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
-                        <rect x="5" y="15" width="26" height="4.5" fill="white"/>
-                        <rect x="8" y="23" width="8" height="2.5" rx="1.25" fill="white" fill-opacity="0.8"/>
-                        <circle cx="24.5" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.8"/>
-                        <circle cx="27" cy="24.25" r="2.5" fill="#e8c547" fill-opacity="0.5"/>
-                      </svg>
-                    }
+                  (click)="$event.stopPropagation()" />
+                <span class="ds-pay-method__radio-ui" [class.ds-pay-method__radio-ui--empty]="selectedPayment() !== method.id">
+                  @if (selectedPayment() === method.id) {
+                    <span class="ds-pay-method__radio-dot"></span>
                   }
                 </span>
                 <span class="ds-pay-method__label">{{ method.label }}</span>
@@ -402,30 +372,88 @@
 
         <!-- Summary sidebar -->
         <aside class="ds-pay-summary">
+          <!-- Member card -->
+          <div class="ds-member-card">
+            <div class="ds-member-card__info">
+              <p class="ds-member-card__label">RENGA MEMBER</p>
+              <p class="ds-member-card__name">{{ memberName() || 'Thành viên RENGA' }}</p>
+              <p class="ds-member-card__tier">{{ memberTierLabel() }}</p>
+            </div>
+            <div class="ds-member-card__benefit">
+              <span class="ds-member-card__discount">Ưu đãi 10%</span>
+            </div>
+          </div>
+
           <h3 class="ds-pay-summary__title">Tóm tắt thanh toán</h3>
+
+          <!-- Breakdown -->
           <div class="ds-pay-summary__rows">
             <div class="ds-pay-summary__row">
               <span>Phí tư vấn Designer</span>
-              <span>{{ formatVnd(consultationFee()) }}</span>
+              <span>{{ formatVnd(consultationFee()) }}<u>đ</u></span>
             </div>
             <div class="ds-pay-summary__row ds-pay-summary__row--discount">
               <span>Ưu đãi thành viên (10%)</span>
-              <span>- {{ formatVnd(memberDiscount()) }}</span>
+              <span>- {{ formatVnd(memberDiscount()) }}<u>đ</u></span>
             </div>
+            @if (voucherDiscount() > 0) {
+              <div class="ds-pay-summary__row ds-pay-summary__row--discount">
+                <span>Voucher ({{ appliedVoucher() }})</span>
+                <span>- {{ formatVnd(voucherDiscount()) }}<u>đ</u></span>
+              </div>
+            }
+            <div class="ds-pay-summary__row ds-pay-summary__row--subtotal">
+              <span>Tổng phí tư vấn</span>
+              <span>{{ formatVnd(netFee()) }}<u>đ</u></span>
+            </div>
+          </div>
+
+          <!-- BR-18: 100% phí tư vấn thanh toán ngay -->
+          <div class="ds-pay-summary__rows ds-pay-summary__rows--split">
             <div class="ds-pay-summary__row">
-              <span>Đặt cọc (50%)</span>
-              <span>{{ formatVnd(depositAmount()) }}</span>
+              <span>Thanh toán toàn bộ phí tư vấn</span>
+              <span>{{ formatVnd(depositAmount()) }}<u>đ</u></span>
             </div>
           </div>
-          <div class="ds-pay-summary__total">
-            <span class="ds-pay-summary__total-label">Tổng thanh toán</span>
-            <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}</span>
+
+          <!-- Voucher input -->
+          <div class="ds-voucher">
+            @if (appliedVoucher()) {
+              <div class="ds-voucher__applied">
+                <span class="ds-voucher__applied-code">{{ appliedVoucher() }}</span>
+                <button type="button" class="ds-voucher__remove" (click)="removeVoucher()">✕</button>
+              </div>
+            } @else {
+              <div class="ds-voucher__row">
+                <input
+                  class="ds-voucher__input"
+                  [class.ds-voucher__input--error]="voucherError()"
+                  type="text"
+                  placeholder="Nhập mã voucher"
+                  [value]="voucherInput()"
+                  (input)="voucherInput.set($any($event.target).value); voucherError.set(false)"
+                  (keydown.enter)="applyVoucher()"
+                />
+                <button type="button" class="ds-voucher__btn" (click)="applyVoucher()">Áp dụng</button>
+              </div>
+              @if (voucherError()) {
+                <p class="ds-voucher__error">Mã voucher không hợp lệ</p>
+              }
+            }
           </div>
-          <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()">
-            HOÀN TẤT ĐẶT LỊCH
+
+          <div class="ds-pay-summary__total">
+            <span class="ds-pay-summary__total-label">Cần thanh toán ngay</span>
+            <span class="ds-pay-summary__total-val">{{ formatVnd(depositAmount()) }}<u>đ</u></span>
+          </div>
+          <button class="ds-pay-summary__pay-btn" type="button" (click)="completeBooking()" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? 'Đang xử lý...' : 'HOÀN TẤT ĐẶT LỊCH' }}
           </button>
+          @if (bookingError()) {
+            <p class="ds-voucher__error">{{ bookingError() }}</p>
+          }
           <p class="ds-pay-summary__note">
-            Đặt cọc 50% để xác nhận lịch hẹn. Số tiền còn lại sẽ được thanh toán sau buổi tư vấn.
+            Phí tư vấn được thanh toán toàn bộ khi đặt lịch và có thể được khấu trừ vào đơn hàng nếu chốt đơn.
           </p>
         </aside>
 
@@ -438,3 +466,17 @@
   }
 
 </section>
+
+<app-payment-success-modal
+  [isOpen]="showSuccessModal()"
+  [mode]="'appointment'"
+  [isGuest]="false"
+  [orderId]="placedAppointmentId()"
+  (closed)="showSuccessModal.set(false)"
+  (scheduleAgain)="showSuccessModal.set(false); goToStep(1)"
+/>
+
+<app-payment-fail-modal
+  [isOpen]="showFailModal()"
+  (closed)="showFailModal.set(false)"
+/>

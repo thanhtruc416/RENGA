@@ -1,3 +1,200 @@
-<div class="cancel-order-modal">
-  <p>cancel-order-modal placeholder</p>
+<div
+  class="order-modal-backdrop is-open"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Hủy đơn hàng"
+  (click)="onClose()"
+>
+  <div (click)="$event.stopPropagation()">
+
+    <!-- ── STEP: FORM ─────────────────────────────── -->
+    @if (step() === 'form') {
+      <div class="order-modal order-modal--cancel is-active">
+
+        <div class="cancel-modal__header">
+          <div class="cancel-modal__header-text">
+            <h2 class="cancel-modal__title">Hủy đơn hàng</h2>
+            <p class="cancel-modal__order-id">#{{ orderId() }}</p>
+          </div>
+          <button class="omodal-close" aria-label="Đóng" (click)="onClose()">
+            <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+
+        <div class="cancel-modal__policy">
+          <p class="cancel-modal__policy-text">{{ policyText() }}</p>
+        </div>
+
+        <p class="cancel-modal__reason-heading">Lý do hủy đơn hàng</p>
+
+        <div class="cancel-reasons">
+          @for (reason of reasons; track reason.id) {
+            <label class="cancel-reason">
+              <input
+                class="cancel-reason__checkbox"
+                type="radio"
+                name="cancel-order-reason"
+                [checked]="isReasonSelected(reason.id)"
+                (change)="selectReason(reason.id)"
+              />
+              <span class="cancel-reason__label">{{ reason.label }}</span>
+            </label>
+          }
+        </div>
+
+        @if (otherSelected()) {
+          <div class="cancel-other-note-wrap">
+            <textarea
+              class="cancel-other-note"
+              rows="2"
+              maxlength="150"
+              placeholder="Vui lòng mô tả lý do của bạn..."
+              [value]="otherNote()"
+              (input)="updateOtherNote($event)"
+              aria-label="Lý do khác"
+            ></textarea>
+            <span class="cancel-other-note__counter"
+              [class.cancel-other-note__counter--near]="otherNote().length >= 130">
+              {{ otherNote().length }}/150
+            </span>
+          </div>
+        }
+
+        <div class="cancel-modal__actions">
+          <button
+            class="cancel-modal__confirm"
+            [disabled]="!canSubmit() || isSubmitting()"
+            (click)="onSubmit()"
+          >
+            {{ isSubmitting() ? 'Đang xử lý...' : 'Xác nhận' }}
+          </button>
+          <button class="cancel-modal__dismiss" (click)="onClose()">Hủy</button>
+        </div>
+
+      </div>
+    }
+
+    <!-- ── STEP: SUCCESS ──────────────────────────── -->
+    @if (step() === 'success') {
+      <div class="order-modal order-modal--cancel-success is-active">
+
+        <button class="omodal-close omodal-close--abs" aria-label="Đóng" (click)="onClose()">
+          <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+
+        <svg class="cancel-success__icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="26" stroke="var(--color-primary)" stroke-width="2" />
+            <path d="M17 29l7 7 15-16" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h2 class="cancel-success__title">Hủy đơn thành công</h2>
+        <p class="cancel-success__desc">
+          Đơn hàng của bạn <strong>#{{ orderId() }}</strong> đã được hủy thành công.
+          Số tiền hoàn lại là <strong>{{ refundAmountDisplay() }}</strong> sẽ được chuyển lại
+          vào tài khoản thanh toán của bạn và được phép phản ánh trong 5-7 ngày.
+        </p>
+
+        <div class="cancel-success__card">
+          <div class="cancel-success__img-col">
+            <img class="cancel-success__product-img" [src]="productImage()" [alt]="productName()" />
+            <div class="cancel-success__img-overlay" aria-hidden="true"></div>
+            <span class="cancel-success__status-tag">Đã hủy</span>
+          </div>
+          <div class="cancel-success__info-col">
+            <p class="cancel-success__product-label">Sản phẩm</p>
+            <p class="cancel-success__product-name">{{ productName() }}</p>
+            <p class="cancel-success__product-spec">{{ productSpec() }}</p>
+            <div class="cancel-success__card-footer">
+              <div>
+                <span class="cancel-success__refund-label">Tiền hoàn trả</span>
+                <p class="cancel-success__refund-amount">{{ refundAmountDisplay() }}</p>
+              </div>
+              <div>
+                <span class="cancel-success__status-label">Trạng thái</span>
+                <p class="cancel-success__status-value">REFUND PENDING</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cancel-success__actions">
+          <a routerLink="/orders/tracking" class="cancel-success__btn-primary" (click)="onClose()">
+            Quay lại danh sách đơn hàng
+          </a>
+          <a routerLink="/" class="cancel-success__btn-outline" (click)="onClose()">
+            Quay về trang chủ
+          </a>
+        </div>
+
+      </div>
+    }
+
+    <!-- ── STEP: FAIL ─────────────────────────────── -->
+    @if (step() === 'fail') {
+      <div class="order-modal order-modal--cancel-fail is-active">
+
+        <button class="omodal-close omodal-close--abs" aria-label="Đóng" (click)="onClose()">
+          <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+
+        <svg class="cancel-fail__icon" width="80" height="72" viewBox="0 0 80 72" fill="none" aria-hidden="true">
+          <path
+            d="M40 4L77.91 67.5H2.09L40 4Z"
+            stroke="var(--color-primary)"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <text
+            x="40"
+            y="55"
+            text-anchor="middle"
+            font-family="sans-serif"
+            font-size="40"
+            font-weight="bold"
+            fill="var(--color-primary)"
+          >!</text>
+        </svg>
+
+        <h2 class="cancel-fail__title">Hủy đơn không thành công</h2>
+        <p class="cancel-fail__desc">
+          Đơn hàng này hiện đã ở giai đoạn hoàn tất cuối cùng hoặc đã được bàn giao
+          cho đơn vị vận chuyển, vì vậy không thể hủy. Quý khách có thể yêu cầu trả
+          hàng sau khi nhận được sản phẩm, tùy theo Chính sách Đổi trả của chúng tôi.
+        </p>
+
+        <div class="cancel-fail__card">
+          <div class="cancel-fail__img-col">
+            <img class="cancel-fail__product-img" [src]="productImage()" [alt]="productName()" />
+            <div class="cancel-fail__img-overlay" aria-hidden="true"></div>
+            <span class="cancel-fail__status-tag">{{ statusViLabel() }}</span>
+          </div>
+          <div class="cancel-fail__info-col">
+            <p class="cancel-fail__product-label">Sản phẩm</p>
+            <p class="cancel-fail__product-name">{{ productName() }}</p>
+            <p class="cancel-fail__product-spec">{{ productSpec() }}</p>
+            <div class="cancel-fail__card-footer">
+              <div>
+                <span class="cancel-fail__status-label">Trạng thái</span>
+                <p class="cancel-fail__status-value">{{ statusEnLabel() }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cancel-fail__actions">
+          <a [routerLink]="['/orders', orderId()]" class="cancel-fail__btn-primary" (click)="onClose()">
+            Theo dõi trạng thái đơn hàng
+          </a>
+          <button type="button" class="cancel-fail__btn-outline" (click)="onContactRequested()">
+            Liên hệ
+          </button>
+          <a routerLink="/doi-tra-hoan-tien" class="cancel-fail__policy-link" (click)="onClose()">
+            Chính sách Đổi trả
+          </a>
+        </div>
+
+      </div>
+    }
+
+  </div>
 </div>

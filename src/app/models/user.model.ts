@@ -4,6 +4,7 @@ export interface User {
   id: string;
   email: string;
   fullName: string;
+  phone?: string;
   role: UserRole;
   avatarUrl?: string;
   createdAt?: string;
@@ -11,8 +12,11 @@ export interface User {
 
 export interface Customer extends User {
   role: 'customer';
-  phone?: string;
+  birthDate?: string;
   address?: string;
+  tierId?: string;
+  loyaltyPoints?: number;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | '';
 }
 
 export interface Employee extends User {

@@ -1,3 +1,245 @@
-<div class="voucher-management-page">
-  <p>voucher-management placeholder</p>
+<div class="voucher-page">
+  <!-- Page Header -->
+  <header class="voucher-page__header">
+    <div class="voucher-page__title-group">
+      <h1 class="voucher-page__title">Quản lý Voucher</h1>
+      <p class="voucher-page__subtitle">Cấu hình và quản lý các mã giảm giá</p>
+    </div>
+  </header>
+
+  <!-- Top Toolbar (Search & Create) -->
+  <div class="voucher-page__toolbar">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="search-input" placeholder="Tìm theo mã voucher"
+        [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
+    </div>
+    <button class="btn btn--black" (click)="openModal()">+ TẠO VOUCHER MỚI</button>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="voucher-page__filters-bar">
+    <div class="filter-group">
+      <label class="filter-label">TRẠNG THÁI</label>
+      <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+        <option value="">Tất cả</option>
+        <option value="ACTIVE">Active</option>
+        <option value="INACTIVE">Ẩn</option>
+        <option value="EXPIRED">Expired</option>
+      </select>
+    </div>
+    @if (filterApplied()) {
+      <button class="btn vm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="btn vm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
+  </div>
+
+  <!-- Data Table -->
+  <div class="voucher-table">
+    <div class="voucher-table__header">
+      <span>MÃ VOUCHER</span>
+      <span>LOẠI GIẢM GIÁ</span>
+      <span>GIÁ TRỊ</span>
+      <span>LƯỢT SỬ DỤNG</span>
+      <span>NGÀY HẾT HẠN</span>
+      <span>TRẠNG THÁI</span>
+      <span class="text-right">THAO TÁC</span>
+    </div>
+
+    <div class="voucher-table__body">
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (vouchers().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Không có voucher nào.</p>
+      } @else {
+        @for (voucher of vouchers(); track voucher.voucher_id) {
+          <div class="voucher-table__row" [class.voucher-table__row--hidden]="voucher.effective_status === 'INACTIVE'">
+
+            <div class="table-cell">
+              <p class="table-cell__code">{{ voucher.voucher_code }}</p>
+            </div>
+
+            <div class="table-cell">
+              <span class="badge-type badge-type--{{ voucher.discount_type === 'PERCENTAGE' ? 'percent' : 'fixed' }}">
+                {{ voucher.discount_type === 'PERCENTAGE' ? 'PHẦN TRĂM' : 'CỐ ĐỊNH' }}
+              </span>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__usage">{{ discountLabel(voucher) }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__usage">{{ voucher.used_count }} / {{ voucher.usage_limit }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__date">{{ voucher.valid_to | date:'dd/MM/yyyy' }}</p>
+            </div>
+
+            <div class="table-cell">
+              <div class="badge-status badge-status--{{ voucher.effective_status === 'ACTIVE' ? 'active' : 'expired' }}">
+                <span class="badge-status__dot"></span>
+                {{ statusLabel[voucher.effective_status] }}
+              </div>
+            </div>
+
+            <div class="table-cell table-cell--actions text-right">
+
+              <button class="action-icon-btn" aria-label="Sửa" (click)="editVoucher(voucher)" [disabled]="voucher.effective_status === 'INACTIVE'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+
+              <button class="action-icon-btn"
+                      [attr.aria-label]="voucher.effective_status === 'INACTIVE' ? 'Hiện' : 'Ẩn'"
+                      [title]="voucher.effective_status === 'INACTIVE' ? 'Hiện voucher này' : 'Ẩn voucher này'"
+                      (click)="toggleVisibility(voucher)">
+
+                @if (voucher.effective_status === 'INACTIVE') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                } @else {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                }
+
+              </button>
+            </div>
+
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="voucher-page__pagination">
+    <p class="voucher-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} VOUCHERS
+    </p>
+
+    <div class="voucher-page__pagination-controls">
+      <button class="pagination-btn"
+              [disabled]="currentPage() === 1"
+              (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn"
+                [class.pagination-btn--active]="currentPage() === page"
+                (click)="goToPage(page)">
+          {{ page }}
+        </button>
+      }
+
+      <button class="pagination-btn"
+              [disabled]="currentPage() === totalPages()"
+              (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
+
+<!-- ================= MODAL THIẾT LẬP VOUCHER ================= -->
+@if (isModalOpen()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" [formGroup]="voucherForm" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">{{ editingVoucherId() ? 'Chỉnh sửa Voucher' : 'Thiết lập Voucher' }}</h2>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="form-group form-group--full">
+          <label class="form-label">MÃ VOUCHER</label>
+          <div class="form-input-with-btn">
+            <input type="text" class="form-input" formControlName="voucherCode" placeholder="Nhập mã hoặc tự động tạo">
+            <button class="btn btn--black" type="button" (click)="generateCode()">TẠO</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">LOẠI GIẢM GIÁ</label>
+            <select class="form-input" formControlName="discountType">
+              <option value="PERCENTAGE">Phần trăm (%)</option>
+              <option value="FIXED_AMOUNT">Số tiền cố định</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">GIÁ TRỊ GIẢM GIÁ</label>
+            <input type="number" class="form-input" formControlName="discountValue" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ĐƠN HÀNG TỐI THIỂU (VND)</label>
+            <input type="number" class="form-input" formControlName="minOrderValue" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GIẢM TỐI ĐA (VND)</label>
+            <input type="number" class="form-input" formControlName="maxDiscountAmount" placeholder="Không giới hạn">
+          </div>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">GIỚI HẠN LƯỢT DÙNG</label>
+          <input type="number" class="form-input" formControlName="usageLimit" placeholder="Số lượng mã phát hành">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">NGÀY BẮT ĐẦU</label>
+            <input type="date" class="form-input" formControlName="validFrom">
+          </div>
+          <div class="form-group">
+            <label class="form-label">NGÀY HẾT HẠN</label>
+            <input type="date" class="form-input" formControlName="validTo">
+          </div>
+        </div>
+
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-label">Trạng thái hoạt động</p>
+            <p class="form-toggle-sub">Kích hoạt Voucher ngay sau khi lưu</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" formControlName="isActive">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary-solid" [disabled]="isSubmitting()" (click)="saveVoucher()">LƯU THÔNG TIN</button>
+      </div>
+
+    </div>
+  </div>
+}
+
+@if (toastConfig().show) {
+  <div class="toast-message" [class.toast-message--error]="toastConfig().type === 'error'">
+    @if (toastConfig().type === 'success') {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    } @else {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    }
+    <span>{{ toastConfig().message }}</span>
+  </div>
+}

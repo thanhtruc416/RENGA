@@ -1,0 +1,414 @@
+.profile-rewards {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 65px 80px;
+}
+
+/* ── Welcome Hero ── */
+.profile-rewards__hero {
+  padding: 48px 0 24px;
+}
+
+.profile-rewards__hero-title {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  max-width: 894px;
+}
+
+.profile-rewards__hero-subtitle {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* ── Section Title (shared) ── */
+.profile-rewards__section-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+/* ── Redeem Section ── */
+.profile-rewards__redeem {
+  border: 1px solid #2c2c2c;
+  background-color: var(--color-white);
+  padding: 40px 41px;
+  margin-bottom: 32px;
+}
+
+.profile-rewards__redeem-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 0;
+}
+
+.profile-rewards__redeem-header .profile-rewards__section-title {
+  margin-bottom: 0;
+}
+
+.profile-rewards__balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-bottom: 32px;
+}
+
+.profile-rewards__balance-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.profile-rewards__balance-val {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.profile-rewards__vouchers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.profile-rewards__voucher-card {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-black);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 327px;
+  position: relative;
+}
+
+.profile-rewards__voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.profile-rewards__voucher-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.profile-rewards__voucher-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--color-primary);
+}
+
+.profile-rewards__voucher-pts {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.profile-rewards__voucher-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: #1a1c1c;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.profile-rewards__voucher-desc {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  flex: 1;
+}
+
+.profile-rewards__voucher-btn {
+  width: 100%;
+  border: 1px solid var(--color-black);
+  background: none;
+  padding: 13px 1px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-black);
+  text-align: center;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.profile-rewards__voucher-btn:hover:not(:disabled) {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.profile-rewards__voucher-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--color-muted);
+  color: var(--color-muted);
+}
+
+.profile-rewards__voucher-card--locked {
+  opacity: 0.75;
+}
+
+.profile-rewards__voucher-locked-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ── Bottom Layout ── */
+.profile-rewards__bottom {
+  display: block;
+}
+
+/* ── Back Nav ── */
+.profile-rewards__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.profile-rewards__back-btn:hover {
+  opacity: 0.75;
+}
+
+.profile-rewards__back-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ── Points History ── */
+.profile-rewards__history {
+  border: 1px solid #2c2c2c;
+  background-color: var(--color-white);
+  padding: 40px 41px;
+}
+
+.profile-rewards__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.profile-rewards__table-head-row {
+  border-bottom: 1px solid var(--color-black);
+}
+
+.profile-rewards__th {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1c1c;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 1px 1px 16px;
+  text-align: left;
+}
+
+.profile-rewards__th--right {
+  text-align: right;
+}
+
+.profile-rewards__table-row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-rewards__table-row:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-rewards__td {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: #1a1c1c;
+  padding: 24px 1px;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.profile-rewards__td--right {
+  text-align: right;
+}
+
+/* ── Type Badges ── */
+.profile-rewards__type-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2.5px 12px;
+}
+
+.profile-rewards__type-badge--earned,
+.profile-rewards__type-badge--bonus {
+  background-color: #eee;
+  color: #1a1c1c;
+}
+
+.profile-rewards__type-badge--redeemed {
+  background-color: #ffdad6;
+  color: #93000a;
+}
+
+.profile-rewards__td--empty {
+  text-align: center;
+  color: var(--color-muted);
+  font-style: italic;
+  padding: 40px 1px;
+}
+
+.profile-rewards__loading {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 32px 0;
+}
+
+/* ── Points Colors ── */
+.profile-rewards__points--positive {
+  font-weight: 700;
+  color: var(--color-price);
+}
+
+.profile-rewards__points--negative {
+  font-weight: 700;
+  color: #ba1a1a;
+}
+
+/* -- Redeem modal -------------------------------- */
+.redeem-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.redeem-modal {
+  background: #fff;
+  width: 420px;
+  max-width: 100%;
+  padding: 48px 40px 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.25);
+}
+
+.redeem-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  color: #000;
+  line-height: 0;
+  padding: 4px;
+}
+.redeem-modal__close:hover { opacity: 1; }
+
+.redeem-modal__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.redeem-modal__icon--success {
+  background: #fdf0f3;
+  color: var(--color-primary);
+}
+.redeem-modal__icon--fail {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.redeem-modal__title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 12px;
+}
+
+.redeem-modal__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.redeem-modal__btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 13px 48px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.redeem-modal__btn:hover { background: var(--color-primary-dark); }

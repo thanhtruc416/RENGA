@@ -1,3 +1,219 @@
-<div class="design-order-create-page">
-  <p>design-order-create placeholder</p>
+<div class="design-page" [formGroup]="orderForm">
+  
+  <!-- Page Header -->
+  <header class="design-page__header">
+    <h1 class="design-page__title">Tạo đơn thiết kế</h1>
+    <p class="design-page__subtitle">Kiến tạo kiệt tác cá nhân hóa cho khách hàng.</p>
+  </header>
+
+  <!-- Layout 2 cột (Grid) -->
+  <div class="design-layout">
+    
+    <!-- CỘT TRÁI: FORM NHẬP LIỆU -->
+    <div class="design-main-col">
+      
+      <!-- Box 1: Thông tin khách hàng -->
+      <section class="form-box">
+        <h2 class="form-box__title">
+          <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          1. Thông tin khách hàng
+        </h2>
+        
+        <div class="form-group form-group--full">
+          <label class="form-label">SỐ ĐIỆN THOẠI HOẶC EMAIL</label>
+          <div class="form-input-group">
+            <input type="text" class="form-input" [class.form-input--error]="searchError()" formControlName="searchQuery" placeholder="Nhập SĐT/Email để bắt đầu...">
+            <button class="btn btn--black" (click)="searchCustomer()">TÌM KIẾM KHÁCH HÀNG</button>
+          </div>
+          @if (searchError()) {
+            <p class="search-error">{{ searchError() }}</p>
+          }
+        </div>
+
+        <!-- Thẻ khách hàng hiện ra khi tìm thấy -->
+        @if (customerFound()) {
+          <div class="customer-verified-card">
+            <img class="customer-avatar" src="https://i.pravatar.cc/150?img=5" alt="Avatar">
+            <div class="customer-info">
+              <p class="customer-status">KHÁCH HÀNG ĐÃ XÁC NHẬN</p>
+              <p class="customer-name">Lê Phương Thảo</p>
+              <p class="customer-meta">ID: JM-9921 &nbsp;&nbsp;<span>♚ Hạng Vàng (Diamond Tier)</span></p>
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- Box 2: Thông số thiết kế -->
+      <section class="form-box">
+        <h2 class="form-box__title">
+          
+          2. Thông số thiết kế
+        </h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CHẤT LIỆU (MATERIAL)</label>
+            <select class="form-input" formControlName="material">
+              <option value="Vàng Trắng 18K (White Gold)">Vàng Trắng 18K (White Gold)</option>
+              <option value="Vàng Hồng 18K (Rose Gold)">Vàng Hồng 18K (Rose Gold)</option>
+              <option value="Platinum">Platinum (Bạch Kim)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ĐÁ QUÝ (GEMSTONE)</label>
+            <input type="text" class="form-input" formControlName="gemstone" placeholder="Vd: Kim cương Moissanite 2ct,...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">KÍCH THƯỚC (SIZE)</label>
+            <input type="text" class="form-input" formControlName="size" placeholder="Nhập size nhẫn/chuỗi...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">MÃ BUỔI TƯ VẤN LIÊN QUAN</label>
+            <input type="text" class="form-input" formControlName="consultationCode" placeholder="Vd: CNS-8821">
+          </div>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">HÌNH ẢNH BẢN VẼ / PHÁC THẢO</label>
+          <div class="upload-zone" (click)="fileInput.click()">
+            <input type="file" #fileInput accept="image/png, image/jpeg, application/pdf" class="hidden-file-input" (change)="onFileSelected($event)">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p class="upload-text">Kéo thả hoặc nhấp để tải lên các bản vẽ kỹ thuật (JPG, PDF, PNG)</p>
+            <p class="upload-sub">DUNG LƯỢNG TỐI ĐA 10MB</p>
+          </div>
+          
+          <div class="uploaded-list">
+            @for (img of uploadedImages(); track $index) {
+              <div class="uploaded-item">
+                <img [src]="img" alt="Bản vẽ" class="uploaded-img">
+                <button class="remove-img-btn" (click)="removeImage($index)" aria-label="Xóa">✕</button>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Box 3: Địa chỉ -->
+      <section class="form-box">
+        <h2 class="form-box__title">
+          <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          3. Địa chỉ
+        </h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">THỜI GIAN CHẾ TÁC DỰ KIẾN</label>
+            <input type="text" class="form-input" formControlName="estTime" placeholder="VD: 21 ngày">
+            <p class="form-hint">TIÊU CHUẨN BESPOKE: 14-30 NGÀY LÀM VIỆC.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ĐỊA CHỈ GIAO HÀNG</label>
+            <input type="text" class="form-input" formControlName="address" placeholder="Số nhà, tên đường,...">
+          </div>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">GHI CHÚ</label>
+          <textarea class="form-textarea" formControlName="notes" placeholder="Các điều khoản đặc biệt, yêu cầu khắc tên, bảo hành..."></textarea>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- CỘT PHẢI: BÁO GIÁ & TỔNG KẾT -->
+    <aside class="design-side-col">
+      
+      <!-- Quote Card -->
+      <div class="quote-card">
+        <h3 class="quote-card__title">
+          Báo giá & Đặt cọc
+        </h3>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">GIÁ THỐNG NHẤT (₫)</label>
+          <input type="text" inputmode="numeric" class="form-input input-giant-price"
+            [value]="priceDisplay()" (input)="onPriceInput($event)">
+        </div>
+
+        <div class="deposit-row">
+          <div class="form-group">
+            <label class="form-label">TỶ LỆ CỌC</label>
+            <div class="input-with-suffix">
+              <input type="number" class="form-input input-center" formControlName="depositPercent">
+              <span>%</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">TIỀN CỌC TỐI THIỂU</label>
+            <!-- Tự động tính toán bằng Signal computed() -->
+            <p class="calculated-price">{{ minDepositAmount() | number:'1.0-0' }}₫</p>
+          </div>
+        </div>
+
+        <div class="quote-details">
+          <div class="quote-details__row">
+            <span class="quote-details__label">Giá trị sản phẩm</span>
+            <span class="quote-details__value">{{ orderForm.controls.totalPrice.value | number:'1.0-0' }}₫</span>
+          </div>
+          <div class="quote-details__row">
+            <span class="quote-details__label">Phí thiết kế</span>
+            <span class="quote-details__value text-success">Miễn phí</span>
+          </div>
+          <div class="quote-details__row">
+            <span class="quote-details__label">Bảo hiểm vận chuyển</span>
+            <span class="quote-details__value">Đã bao gồm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Card (Dark) -->
+      <div class="summary-card">
+        <p class="summary-card__label">TỔNG KẾT ĐƠN HÀNG</p>
+        <p class="summary-card__product">Nhẫn Kim Cương Bespoke 18K</p>
+        <div class="summary-card__meta">
+          <span class="summary-badge">CHỜ XÁC NHẬN</span>
+          <span class="summary-date">Ngày tạo: 24/05/2024</span>
+        </div>
+        <p class="summary-card__note">
+          Lưu ý: Đơn hàng chỉ chính thức bắt đầu chế tác sau khi khách hàng hoàn tất thanh toán tiền đặt cọc và xác nhận bản vẽ kỹ thuật cuối cùng.
+        </p>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- STICKY FOOTER (Thanh cố định dưới cùng) -->
+  <footer class="sticky-action-bar">
+    <div class="sticky-action-bar__left">
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span>Dữ liệu được lưu tự động lúc 14:30</span>
+    </div>
+    <div class="sticky-action-bar__right">
+      <button class="btn btn--outline-white"  (click)="cancelOrder()">HỦY BỎ</button>
+      <button class="btn btn--primary" (click)="submitOrder()">XÁC NHẬN TẠO ĐƠN</button>
+    </div>
+  </footer>
+
 </div>
+
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    @if (toastType() === 'success') {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    } @else {
+      <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    }
+    <span>{{ toastMessage() }}</span>
+  </div>
+}

@@ -1,0 +1,254 @@
+/* ===== NOT FOUND PAGE ===== */
+
+/* ── Page shell ───────────────────────────────── */
+.nf-page {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  overflow: hidden;
+  padding: 80px var(--container-px);
+}
+
+.nf-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 50%,
+    rgba(var(--color-primary-rgb), 0.055) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+/* ── Large background "404" ───────────────────── */
+.nf-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  font-family: var(--font-serif);
+  font-size: clamp(200px, 30vw, 440px);
+  font-weight: 700;
+  color: var(--color-primary);
+  opacity: 0.038;
+  line-height: 1;
+  user-select: none;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: -0.05em;
+}
+
+/* ── Corner frame accents ─────────────────────── */
+.nf-corner {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-color: rgba(var(--color-primary-rgb), 0.18);
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0;
+  animation: nf-fade-in 1.2s ease 0.6s forwards;
+}
+
+.nf-corner--tl { top: 40px;    left: 40px;   border-width: 1px 0 0 1px; }
+.nf-corner--tr { top: 40px;    right: 40px;  border-width: 1px 1px 0 0; }
+.nf-corner--bl { bottom: 40px; left: 40px;   border-width: 0 0 1px 1px; }
+.nf-corner--br { bottom: 40px; right: 40px;  border-width: 0 1px 1px 0; }
+
+/* ── Scattered micro diamonds ─────────────────── */
+.nf-dot {
+  position: absolute;
+  display: block;
+  background: var(--color-primary);
+  transform: rotate(45deg);
+  pointer-events: none;
+  opacity: 0;
+  animation: nf-dot-in 0.8s ease forwards;
+}
+
+.nf-dot--1 { width: 5px; height: 5px; top: 17%;  left: 9%;   animation-delay: 0.25s; }
+.nf-dot--2 { width: 4px; height: 4px; top: 72%;  left: 7%;   animation-delay: 0.45s; }
+.nf-dot--3 { width: 5px; height: 5px; top: 26%;  right: 8%;  animation-delay: 0.35s; }
+.nf-dot--4 { width: 4px; height: 4px; top: 65%;  right: 11%; animation-delay: 0.55s; }
+.nf-dot--5 { width: 3px; height: 3px; top: 84%;  left: 22%;  animation-delay: 0.65s; }
+.nf-dot--6 { width: 3px; height: 3px; top: 12%;  right: 22%; animation-delay: 0.70s; }
+.nf-dot--7 { width: 5px; height: 5px; top: 48%;  left: 5%;   animation-delay: 0.30s; }
+
+@keyframes nf-dot-in {
+  to { opacity: 0.14; }
+}
+
+/* ── Main content block ───────────────────────── */
+.nf-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 620px;
+  opacity: 0;
+  animation: nf-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes nf-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Gem icon ─────────────────────────────────── */
+.nf-gem {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 36px;
+  animation: nf-float 5s ease-in-out 1.2s infinite;
+}
+
+@keyframes nf-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Draw animation for gem strokes */
+.nf-gem__outline {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: nf-draw 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+.nf-gem__girdle {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: nf-draw 0.8s ease 0.9s forwards;
+}
+
+.nf-gem__facet {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: nf-draw 0.7s ease 1.0s forwards;
+}
+
+@keyframes nf-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Brand divider ────────────────────────────── */
+.nf-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.nf-divider__line {
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: rgba(var(--color-primary-rgb), 0.28);
+}
+
+.nf-divider__text {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 4.5px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  opacity: 0.65;
+}
+
+/* ── Error code ───────────────────────────────── */
+.nf-code {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0 0 20px;
+}
+
+/* ── Main heading ─────────────────────────────── */
+.nf-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+/* ── Thin rule ────────────────────────────────── */
+.nf-rule {
+  width: 36px;
+  height: 1px;
+  background: var(--color-border);
+  margin: 24px auto 20px;
+}
+
+/* ── Description ──────────────────────────────── */
+.nf-desc {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--color-muted);
+  margin: 0 0 48px;
+}
+
+/* ── CTA buttons ──────────────────────────────── */
+.nf-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 16px 40px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nf-btn--primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: 1.5px solid var(--color-primary);
+}
+
+.nf-btn--primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.nf-btn--ghost {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid rgba(var(--color-primary-rgb), 0.45);
+}
+
+.nf-btn--ghost:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+/* ── Fade-in helper (corners) ─────────────────── */
+@keyframes nf-fade-in {
+  to { opacity: 1; }
+}

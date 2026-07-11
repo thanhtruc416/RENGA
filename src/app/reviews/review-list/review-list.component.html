@@ -1,0 +1,145 @@
+<main class="rl">
+
+  <!-- ══ BREADCRUMB ══ -->
+  <nav class="rl__breadcrumb" aria-label="Đường dẫn">
+    <a routerLink="/orders/tracking" class="rl__breadcrumb-link rl__breadcrumb-link--parent">Đơn hàng</a>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="rl__breadcrumb-arrow"><polyline points="9 6 15 12 9 18"/></svg>
+    <span class="rl__breadcrumb-current">Danh sách đánh giá</span>
+  </nav>
+
+  <!-- ══ TITLE ══ -->
+  <h1 class="rl__title">Danh sách đánh giá đơn hàng</h1>
+
+  <!-- ══ FILTERS ══ -->
+  <section class="rl__filters" aria-label="Bộ lọc">
+    <div class="rl__filter-group">
+      <label class="rl__filter-label" for="filter-type">LOẠI ĐƠN HÀNG</label>
+      <div class="rl__select-wrap">
+        <select id="filter-type" class="rl__select" [value]="pendingType()" (change)="onOrderTypeChange($event)">
+          <option value="">Tất cả</option>
+          <option value="STANDARD">Sản phẩm có sẵn</option>
+          <option value="STUDIO">Tùy biến (The Studio)</option>
+          <option value="DESIGN">Thiết kế riêng</option>
+        </select>
+        <svg class="rl__select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="rl__filter-group">
+      <label class="rl__filter-label" for="filter-status">TRẠNG THÁI</label>
+      <div class="rl__select-wrap">
+        <select id="filter-status" class="rl__select" [value]="pendingStatus()" (change)="onStatusChange($event)">
+          <option value="">Tất cả</option>
+          <option value="unreviewed">Chưa đánh giá</option>
+          <option value="reviewed">Đã đánh giá</option>
+        </select>
+        <svg class="rl__select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="rl__filter-group">
+      <label class="rl__filter-label" for="filter-time">THỜI GIAN</label>
+      <div class="rl__select-wrap">
+        <select id="filter-time" class="rl__select" [value]="pendingTime()" (change)="onTimeChange($event)">
+          <option value="3months">3 tháng gần nhất</option>
+          <option value="6months">6 tháng gần nhất</option>
+          <option value="1year">1 năm gần nhất</option>
+          <option value="all">Tất cả</option>
+        </select>
+        <svg class="rl__select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="rl__filter-actions">
+      @if (hasActiveFilters()) {
+        <button type="button" class="rl__filter-clear" (click)="clearFilters()">XÓA BỘ LỌC</button>
+      }
+      <button type="button" class="rl__filter-btn" [disabled]="!hasDraftChanges()" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    </div>
+  </section>
+
+  <!-- ══ TABLE ══ -->
+  <div class="rl__table-wrap">
+    <table class="rl__table" aria-label="Danh sách đơn hàng cần đánh giá">
+      <thead>
+        <tr class="rl__thead-row">
+          <th class="rl__th rl__th--id">MÃ ĐƠN HÀNG</th>
+          <th class="rl__th rl__th--date">NGÀY ĐẶT</th>
+          <th class="rl__th rl__th--product">LOẠI SẢN PHẨM</th>
+          <th class="rl__th rl__th--price">TỔNG GIÁ TRỊ</th>
+          <th class="rl__th rl__th--status">TRẠNG THÁI</th>
+          <th class="rl__th rl__th--action"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of pageItems(); track order.orderItemId) {
+          <tr class="rl__row" (dblclick)="navigateToReview(order.orderItemId)">
+            <td class="rl__td rl__td--id">
+              <span class="rl__order-id">{{ order.id }}</span>
+              <span class="rl__order-type">{{ orderTypeLabel[order.type] ?? order.type }}</span>
+            </td>
+            <td class="rl__td rl__td--date">{{ order.date }}</td>
+            <td class="rl__td rl__td--product">{{ order.product }}</td>
+            <td class="rl__td rl__td--price">{{ order.total }}</td>
+            <td class="rl__td rl__td--status">
+              @if (!order.reviewed) {
+                <span class="rl__badge rl__badge--pending">CHƯA ĐÁNH GIÁ</span>
+              } @else {
+                <span class="rl__badge rl__badge--done">ĐÃ ĐÁNH GIÁ</span>
+              }
+            </td>
+            <td class="rl__td rl__td--action">
+              @if (!order.reviewed) {
+                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderItemId: order.orderItemId }" class="rl__action-link">Đánh giá</a>
+              } @else {
+                <a [routerLink]="['/orders/reviews/write']" [queryParams]="{ orderItemId: order.orderItemId }" class="rl__action-link">Chi tiết</a>
+              }
+            </td>
+          </tr>
+        }
+        @if (!isLoading() && pageItems().length === 0) {
+          <tr class="rl__row"><td class="rl__td" colspan="6">Bạn chưa có đơn hàng nào đã hoàn tất để đánh giá.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ PAGINATION ══ -->
+  <footer class="rl__pagination">
+    <span class="rl__pagination-info">
+      Hiển thị {{ pageItems().length }} trên tổng số {{ filtered().length }} đơn hàng
+    </span>
+    <div class="rl__pagination-btns" role="navigation" aria-label="Phân trang">
+      <button
+        type="button"
+        class="rl__page-btn rl__page-btn--arrow"
+        [disabled]="currentPage() === 1"
+        (click)="goTo(currentPage() - 1)"
+        aria-label="Trang trước"
+      >
+        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 1 1 6 6 11"/></svg>
+      </button>
+
+      @for (p of pageNumbers(); track p) {
+        <button
+          type="button"
+          class="rl__page-btn"
+          [class.rl__page-btn--active]="p === currentPage()"
+          (click)="goTo(p)"
+          [attr.aria-current]="p === currentPage() ? 'page' : null"
+        >{{ p }}</button>
+      }
+
+      <button
+        type="button"
+        class="rl__page-btn rl__page-btn--arrow"
+        [disabled]="currentPage() === totalPages()"
+        (click)="goTo(currentPage() + 1)"
+        aria-label="Trang sau"
+      >
+        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 1 7 6 2 11"/></svg>
+      </button>
+    </div>
+  </footer>
+
+</main>

@@ -1,4 +1,4 @@
-<section class="studio">
+﻿<section class="studio">
 
   <!-- ── Step Progress ─────────────────────────────── -->
   <nav class="step-progress" aria-label="Các bước tạo trang sức">
@@ -38,22 +38,33 @@
         <p class="studio-card__desc">Bắt đầu hành trình tạo nên kiệt tác của riêng bạn.</p>
       </div>
 
-      <div class="category-grid">
-        @for (cat of categories; track cat.id) {
-          <button class="category-card" (click)="selectCategory(cat.id)" type="button">
-            <div class="category-card__img-wrap">
-              <img class="category-card__img" [src]="cat.image" [alt]="cat.name" loading="lazy" />
-            </div>
-            <div class="category-card__footer">
-              <div class="category-card__info">
-                <span class="category-card__eyebrow">Danh mục</span>
-                <span class="category-card__name">{{ cat.name }}</span>
+      @if (blanksLoading()) {
+        <p class="blank-loading">Đang tải phôi sản phẩm...</p>
+      } @else if (blanksError()) {
+        <div class="blank-empty">
+          <p class="blank-empty__msg">Không thể tải danh sách phôi. Vui lòng kiểm tra server đang chạy.</p>
+          <button class="blank-empty__retry" type="button" (click)="retryLoadBlanks()">Thử lại</button>
+        </div>
+      } @else if (allBlanks().length === 0) {
+        <div class="blank-empty">
+          <p class="blank-empty__msg">Chưa có phôi sản phẩm nào. Vui lòng quay lại sau.</p>
+        </div>
+      } @else {
+        <div class="blank-grid">
+          @for (blank of allBlanks(); track blank.id) {
+            <button class="blank-card" (click)="selectBlank(blank)" type="button">
+              <div class="blank-card__img-wrap">
+                <img class="blank-card__img" [src]="thumbUrl(blank.image, 500)" [alt]="blank.name"
+                     loading="lazy" (error)="onBlankImgError($event)" />
               </div>
-              <span class="category-card__cta">CHỌN</span>
-            </div>
-          </button>
-        }
-      </div>
+              <div class="blank-card__body">
+                <span class="blank-card__eyebrow">BY RENGA</span>
+                <p class="blank-card__name">{{ blank.name }}</p>
+              </div>
+            </button>
+          }
+        </div>
+      }
     </div>
   }
 
@@ -65,10 +76,11 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/644d2dc6-de4c-49c0-96b9-5f97e1095c9e"
-          alt="Nhẫn vàng Heritage"
+          [src]="thumbUrl(step2PreviewImage(), 800)"
+          [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
+          style="transition: opacity 0.3s ease; object-fit: contain; background: #f9f6f2"
         />
         <div class="studio-card__preview-foot">
           <span class="studio-card__preview-label">Góc nhìn 01</span>
@@ -100,15 +112,20 @@
             <button
               class="material-option"
               [class.material-option--selected]="selectedMaterial().id === mat.id"
+              [class.material-option--disabled]="!isMaterialAvailableForBlank(mat.id)"
+              [disabled]="!isMaterialAvailableForBlank(mat.id) || null"
               (click)="selectMaterial(mat)"
               type="button"
             >
               <span class="material-option__swatch" [style.background]="mat.color"></span>
               <span class="material-option__info">
                 <span class="material-option__name">{{ mat.label }}</span>
-                <span class="material-option__tag">{{ mat.tag }}</span>
+                <span class="material-option__tag">{{ isMaterialAvailableForBlank(mat.id) ? mat.tag : 'Không có với phôi này' }}</span>
               </span>
-              <span class="material-option__price">{{ mat.price }}</span>
+              <span class="material-option__price">
+                @if (isMaterialAvailableForBlank(mat.id)) { {{ mat.priceVnd | number:'1.0-0' }}<u>đ</u> }
+                @else { <span class="material-option__out">Không có</span> }
+              </span>
             </button>
           }
         </div>
@@ -129,14 +146,15 @@
 
       <div class="studio-card__preview">
         <img
-          src="https://www.figma.com/api/mcp/asset/9668872f-01b4-4e57-9ebc-2b65b8ac1203"
-          alt="Nhẫn kim cương Heritage"
+          [src]="thumbUrl(step2PreviewImage(), 800)"
+          [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
           class="studio-card__preview-img"
           loading="eager"
+          style="transition: opacity 0.3s ease; object-fit: contain; background: #f9f6f2"
         />
         <div class="studio-card__preview-name">
-          <p class="studio-card__preview-name-title">Phôi Solitaire Heritage</p>
-          <p class="studio-card__preview-name-desc">Thiết kế đặc trưng chúng tôi được chế tác chính xác để làm tăng độ sáng và tôn vinh vẻ đẹp tự nhiên của viên đá trung tâm mà bạn đã chọn.</p>
+          <p class="studio-card__preview-name-title">{{ selectedBlank()?.name ?? 'Phôi sản phẩm' }}</p>
+          <p class="studio-card__preview-name-desc">{{ selectedBlank()?.description || 'Chọn loại đá quý để hoàn thiện kiệt tác của bạn.' }}</p>
         </div>
         <div class="studio-card__preview-foot">
           <div class="studio-card__preview-btns">
@@ -160,7 +178,7 @@
         <div class="studio-card__head studio-card__head--row">
           <div>
             <h2 class="studio-card__title">Tùy biến đá</h2>
-            <p class="studio-card__desc">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn.</p>
+            <p class="studio-card__desc">Hãy chọn loại phụ kiện phù hợp với thiết kế của bạn</p>
           </div>
           <button class="btn btn--primary btn--skip" (click)="goToStep(4)" type="button">BỎ QUA</button>
         </div>
@@ -170,12 +188,21 @@
           <span class="studio-section-chip">{{ selectedStone().label }}</span>
         </div>
 
+        @if (!blankSupportsStones()) {
+          <div class="stone-unavail-notice">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Phôi <strong>{{ selectedBlank()?.name }}</strong> không có chỗ gắn đá quý
+          </div>
+        }
+
         <div class="stone-grid">
           @for (stone of stones; track stone.id) {
             <button
               class="stone-option"
               [class.stone-option--selected]="selectedStone().id === stone.id"
               [class.stone-option--muted]="stone.muted"
+              [class.stone-option--disabled]="!isStoneAvailableForBlank(stone.id)"
+              [disabled]="!isStoneAvailableForBlank(stone.id) || null"
               (click)="selectStone(stone)"
               type="button"
             >
@@ -195,45 +222,57 @@
             <input
               class="carat-slider"
               type="range"
-              min="0.5"
-              max="3.0"
+              min="0"
+              max="5"
               step="0.1"
               [value]="carat()"
               (input)="onCaratChange($event)"
               aria-label="Kích thước đá tính bằng carat"
             />
             <div class="carat-control__range-labels">
-              <span>0.5ct</span>
-              <span>1ct</span>
-              <span>5.0ct</span>
-              <span>6.0ct</span>
+              <span>0</span>
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
             </div>
           </div>
 
           <div class="price-breakdown">
             <div class="price-breakdown__row">
-              <span>Phôi Di Sản</span>
-              <span>{{ formatVnd(MOUNT_FEE) }}</span>
+              <span>{{ selectedBlank()?.name ?? 'Phôi' }}</span>
+              <span>{{ formatVnd(selectedBlank()?.basePrice ?? 0) }}<u>đ</u></span>
             </div>
             <div class="price-breakdown__row">
               <span>{{ selectedMaterial().label }}</span>
-              <span>{{ formatVnd(selectedMaterial().priceVnd) }}</span>
+              <span>{{ formatVnd(selectedMaterial().priceVnd) }}<u>đ</u></span>
             </div>
             <div class="price-breakdown__row">
               <span>{{ selectedStone().label }} ({{ carat() }}ct)</span>
-              <span>{{ formatVnd(stonePrice()) }}</span>
+              <span>{{ formatVnd(stonePrice()) }}<u>đ</u></span>
             </div>
+            <div class="price-breakdown__row">
+              <span>Công chế tác thủ công</span>
+              <span>{{ formatVnd(craftFee()) }}<u>đ</u></span>
+            </div>
+            @if (engraveFee() > 0) {
+              <div class="price-breakdown__row">
+                <span>Khắc chữ ({{ engraveCharCount() }} ký tự)</span>
+                <span>{{ formatVnd(engraveFee()) }}<u>đ</u></span>
+              </div>
+            }
             <div class="price-breakdown__divider"></div>
             <div class="price-breakdown__total">
               <span>TỔNG GIÁ TRỊ</span>
-              <strong>{{ formatVnd(MOUNT_FEE + selectedMaterial().priceVnd + stonePrice()) }}</strong>
+              <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
             </div>
           </div>
         }
 
         <div class="studio-card__actions">
           <button class="btn btn--ghost" (click)="goToStep(2)" type="button">← Trước đó</button>
-          <button class="btn btn--primary" (click)="goToStep(4)" type="button">XÁC NHẬN THIẾT KẾ</button>
+          <button class="btn btn--primary" (click)="goToStep(4)" type="button">TIẾP THEO</button>
         </div>
       </div>
     </div>
@@ -243,37 +282,36 @@
        STEP 4 — Khắc chữ
   ══════════════════════════════════════════════════ -->
   @if (currentStep() === 4) {
-    <div class="studio-card studio-card--split">
+    <div class="studio-card studio-card--split studio-card--engrave">
 
       <div class="engrave-gallery">
         <div class="engrave-gallery__main">
           <img
-            [src]="currentGalleryImage().src"
-            [alt]="currentGalleryImage().alt"
+            [src]="thumbUrl(step2PreviewImage(), 800)"
+            [alt]="selectedBlank()?.name || 'Phôi sản phẩm'"
             class="engrave-gallery__main-img"
             loading="eager"
+            style="transition: opacity 0.3s ease"
           />
-          @if (engraveText()) {
-            <div
-              class="engrave-gallery__overlay"
-              [class.engrave-gallery__overlay--serif]="engraveFont() === 'serif-italic'"
-            >
-              {{ engraveText() }}
+        </div>
+
+        <!-- Inner band strip — chỉ hiện cho RING -->
+        @if (selectedBlank()?.type === 'RING') {
+          <div class="ring-inner-preview">
+            <span class="ring-inner-preview__label">Mặt trong nhẫn</span>
+            <div class="ring-inner-preview__band" [style.background]="innerBandGradient()">
+              @if (engraveText()) {
+                <span
+                  class="ring-inner-preview__text"
+                  [class.ring-inner-preview__text--serif]="engraveFont() === 'serif-italic'"
+                  [style.color]="innerBandTextColor()"
+                >{{ engraveText() }}</span>
+              } @else {
+                <span class="ring-inner-preview__placeholder">Nhập chữ để xem trước</span>
+              }
             </div>
-          }
-        </div>
-        <div class="engrave-gallery__thumbs">
-          @for (thumb of engraveGallery; track thumb.src; let i = $index) {
-            <button
-              class="engrave-gallery__thumb"
-              [class.engrave-gallery__thumb--active]="selectedThumbIndex() === i"
-              (click)="selectThumb(i)"
-              type="button"
-            >
-              <img [src]="thumb.src" [alt]="thumb.alt" loading="lazy" />
-            </button>
-          }
-        </div>
+          </div>
+        }
       </div>
 
       <div class="studio-card__options">
@@ -335,7 +373,7 @@
 
         <div class="engrave-fee-row">
           <span class="engrave-fee-row__label">PHÍ TRẢ THÊM:</span>
-          <span class="engrave-fee-row__value">{{ engraveFee() > 0 ? formatVnd(engraveFee()) : '0₫' }}</span>
+          <span class="engrave-fee-row__value">{{ engraveFee() > 0 ? formatVnd(engraveFee()) : '0' }}<u>đ</u></span>
         </div>
 
         <div class="studio-card__actions">
@@ -357,10 +395,11 @@
 
         <div class="studio-card__preview">
           <img
-            src="https://www.figma.com/api/mcp/asset/a1f97ec8-6265-4ed5-9229-df98077a79c5"
-            alt="Trang sức tùy chỉnh của bạn"
+            [src]="thumbUrl(step2PreviewImage(), 800)"
+            [alt]="selectedBlank()?.name || 'Trang sức tùy chỉnh'"
             class="studio-card__preview-img"
             loading="eager"
+            style="object-fit: contain; background: #f9f6f2"
           />
         </div>
 
@@ -374,20 +413,15 @@
             <ul class="order-card__list">
               @for (item of orderItems(); track item.name) {
                 <li class="order-card__item">
-                  <span class="order-card__item-name">
-                    {{ item.name }}
-                    @if (item.subName) {
-                      <span class="order-card__item-sub">({{ item.subName }})</span>
-                    }
-                  </span>
-                  <span class="order-card__item-price">{{ formatVnd(item.price) }}</span>
+                  <span class="order-card__item-name">{{ item.name }}</span>
+                  <span class="order-card__item-price">{{ formatVnd(item.price) }}<u>đ</u></span>
                 </li>
               }
             </ul>
             <div class="order-card__divider"></div>
             <div class="order-card__total">
               <span>TỔNG CỘNG</span>
-              <strong>{{ formatVnd(totalPrice()) }}</strong>
+              <strong>{{ formatVnd(totalPrice()) }}<u>đ</u></strong>
             </div>
           </div>
 
@@ -395,20 +429,20 @@
             <button class="btn btn--primary btn--full" (click)="goToCheckout()" type="button">
               ĐẶT HÀNG NGAY →
             </button>
-            <button class="btn btn--secondary btn--full" type="button">
+            <button class="btn btn--secondary btn--full" type="button" (click)="flyToCart($event)">
               THÊM VÀO GIỎ
             </button>
           </div>
 
           <div class="order-card__links">
-            <button class="btn-link" type="button">
+            <button class="btn-link" type="button" (click)="saveDesign()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                 <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
               </svg>
               LƯU THIẾT KẾ
             </button>
-            <button class="btn-link" type="button">
+            <button class="btn-link" type="button" (click)="openSharePopup()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
@@ -438,10 +472,27 @@
 
             <div class="checkout-section">
               <div class="checkout-section__header">
-                <h3 class="checkout-section__title">① THÔNG TIN VẬN CHUYỂN</h3>
-                <button class="btn btn--ghost btn--sm" type="button" (click)="shippingExpanded.set(!shippingExpanded())">
-                  CHỌN ĐỊA CHỈ {{ shippingExpanded() ? '∧' : '∨' }}
-                </button>
+                <h3 class="checkout-section__title"><span class="checkout-section__num">1</span>THÔNG TIN VẬN CHUYỂN</h3>
+                <div class="address-picker-wrap">
+                  <button class="btn btn--ghost btn--sm" type="button" (click)="loadAndShowAddresses(); $event.stopPropagation()">
+                    {{ addressesLoading() ? 'Đang tải...' : 'CHỌN ĐỊA CHỈ' }}
+                  </button>
+                  @if (showAddressPicker()) {
+                    <div class="address-picker" (click)="$event.stopPropagation()">
+                      @if (savedAddresses().length === 0) {
+                        <p class="address-picker__empty">Bạn chưa có địa chỉ đã lưu</p>
+                      } @else {
+                        @for (addr of savedAddresses(); track addr.address_id) {
+                          <button class="address-picker__item" type="button" (click)="applyAddress(addr)">
+                            <strong>{{ addr.recipient_name }}</strong>&nbsp;·&nbsp;{{ addr.recipient_phone }}
+                            <span>{{ addr.address_line }}{{ addr.ward ? ', ' + addr.ward : '' }}, {{ addr.province }}</span>
+                          </button>
+                        }
+                      }
+                      <button class="address-picker__close" type="button" (click)="showAddressPicker.set(false)">Đóng</button>
+                    </div>
+                  }
+                </div>
               </div>
               @if (shippingExpanded()) {
               <div class="checkout-form-grid">
@@ -469,19 +520,33 @@
 
                 <div class="form-field">
                   <label class="form-field__label" for="checkout-province">TỈNH/THÀNH *</label>
-                  <select id="checkout-province" class="form-field__input form-field__select" formControlName="province">
-                    <option value="">Chọn Tỉnh/Thành</option>
-                    <option value="hcm">TP. Hồ Chí Minh</option>
-                    <option value="hn">Hà Nội</option>
-                    <option value="dn">Đà Nẵng</option>
-                  </select>
+                  <input id="checkout-province" class="form-field__input" type="text"
+                         formControlName="province" list="studio-province-options" autocomplete="address-level1"
+                         placeholder="Chọn hoặc tự nhập Tỉnh/Thành"
+                         (change)="onProvinceChange()" (blur)="onProvinceChange()" />
+                  <datalist id="studio-province-options">
+                    @for (p of PROVINCES; track p.value) {
+                      <option [value]="p.label"></option>
+                    }
+                  </datalist>
+                  @if (checkoutForm.controls.province.invalid && checkoutForm.controls.province.touched) {
+                    <span class="form-field__error">Vui lòng nhập tỉnh/thành</span>
+                  }
                 </div>
 
                 <div class="form-field">
-                  <label class="form-field__label" for="checkout-ward">PHƯỜNG/XÃ *</label>
-                  <select id="checkout-ward" class="form-field__input form-field__select" formControlName="ward">
-                    <option value="">Chọn Phường/Xã</option>
-                  </select>
+                  <label class="form-field__label" for="checkout-ward">{{ wardLabel() }} *</label>
+                  <input id="checkout-ward" class="form-field__input" type="text"
+                         formControlName="ward" list="studio-ward-options" autocomplete="address-level2"
+                         [placeholder]="'Chọn hoặc tự nhập ' + wardPlaceholder()" />
+                  <datalist id="studio-ward-options">
+                    @for (d of availableDistricts(); track d.value) {
+                      <option [value]="d.label"></option>
+                    }
+                  </datalist>
+                  @if (checkoutForm.controls.ward.invalid && checkoutForm.controls.ward.touched) {
+                    <span class="form-field__error">Vui lòng nhập {{ wardLabel().toLowerCase() }}</span>
+                  }
                 </div>
 
                 <div class="form-field form-field--full">
@@ -497,7 +562,7 @@
             </div>
 
             <div class="checkout-section">
-              <h3 class="checkout-section__title">② PHƯƠNG THỨC THANH TOÁN</h3>
+              <h3 class="checkout-section__title"><span class="checkout-section__num">2</span>PHƯƠNG THỨC THANH TOÁN</h3>
               <div class="payment-methods">
                 @for (method of paymentMethods; track method.id) {
                   <button
@@ -525,18 +590,20 @@
 
               <div class="checkout-summary__product">
                 <img
-                  src="https://www.figma.com/api/mcp/asset/48641a6f-72f5-4524-8109-67072e259627"
-                  alt="Sản phẩm tùy chỉnh"
+                  [src]="thumbUrl(step2PreviewImage(), 800)"
+                  [alt]="selectedBlank()?.name || 'Sản phẩm tùy chỉnh'"
                   class="checkout-summary__product-img"
                   loading="lazy"
+                  style="object-fit: contain; background: #f9f6f2"
                 />
                 <div class="checkout-summary__product-info">
-                  <p class="checkout-summary__product-name">Tùy chỉnh Di Sản</p>
+                  <p class="checkout-summary__product-name">{{ selectedBlank()?.name ?? 'Trang sức tùy chỉnh' }}</p>
                   <p class="checkout-summary__product-config">
-                    Kích cỡ M | {{ selectedMaterial().label }}
+                    {{ typeLabel(selectedBlank()?.type ?? '') }} | {{ selectedMaterial().label }}
                     @if (selectedStone().id !== 'none') { | {{ selectedStone().label }} {{ carat() }}ct }
+                    @if (engraveText()) { | Khắc chữ }
                   </p>
-                  <p class="checkout-summary__product-price">SL: {{ formatVnd(totalPrice()) }}</p>
+                  <p class="checkout-summary__product-price">SL: 1</p>
                 </div>
               </div>
 
@@ -544,7 +611,7 @@
 
               <div class="checkout-summary__line">
                 <span>Tạm tính</span>
-                <span>{{ formatVnd(totalPrice()) }}</span>
+                <span>{{ formatVnd(totalPrice()) }}<u>đ</u></span>
               </div>
               <div class="checkout-summary__line">
                 <span>Phí vận chuyển</span>
@@ -565,22 +632,35 @@
                 />
                 <button class="voucher-row__btn" (click)="applyVoucher()" type="button">ÁP DỤNG</button>
               </div>
+              @if (voucherMsg()) {
+                <p class="voucher-row__msg"
+                   [class.voucher-row__msg--success]="voucherStatus() === 'success'"
+                   [class.voucher-row__msg--error]="voucherStatus() === 'error'">
+                  {{ voucherMsg() }}
+                </p>
+              }
 
               <div class="checkout-summary__divider"></div>
 
+              @if (voucherDiscount() > 0) {
+                <div class="checkout-summary__line">
+                  <span>Giảm giá voucher</span>
+                  <span style="color: var(--color-primary)">-{{ formatVnd(voucherDiscount()) }}<u>đ</u></span>
+                </div>
+              }
               <div class="checkout-summary__total">
                 <span>TỔNG CỘNG</span>
-                <strong>{{ formatVnd(totalPrice()) }}</strong>
+                <strong>{{ formatVnd(finalTotal()) }}<u>đ</u></strong>
               </div>
 
               <div class="checkout-summary__deposit-block">
                 <div class="checkout-summary__deposit-row">
                   <span>50% ĐẶT CỌC BÂY GIỜ</span>
-                  <strong>{{ formatVnd(depositAmount()) }}</strong>
+                  <strong>{{ formatVnd(depositAmount()) }}<u>đ</u></strong>
                 </div>
                 <div class="checkout-summary__deposit-row checkout-summary__deposit-row--remain">
                   <span>SỐ TIỀN CÒN LẠI</span>
-                  <strong>{{ formatVnd(depositAmount()) }}</strong>
+                  <strong>{{ formatVnd(finalTotal() - depositAmount()) }}<u>đ</u></strong>
                 </div>
               </div>
 
@@ -591,8 +671,9 @@
               <button
                 class="btn btn--primary btn--full checkout-summary__submit"
                 type="submit"
+                [disabled]="isSubmitting()"
               >
-                THANH TOÁN →
+                {{ isSubmitting() ? 'Đang xử lý...' : 'THANH TOÁN →' }}
               </button>
             </div>
           </aside>
@@ -608,12 +689,48 @@
   }
 
 </section>
+<app-payment-success-modal
+  [isOpen]="showSuccessModal()"
+  [isGuest]="false"
+  [orderId]="placedOrderId()"
+  [isCustomOrder]="true"
+  [amount]="depositAmount()"
+  (closed)="showSuccessModal.set(false)"
+/>
 
-<!-- Floating price summary (steps 2–5) -->
-@if (priceSummaryVisible()) {
-  <div class="studio-price-summary" aria-live="polite">
-    <p class="studio-price-summary__label">Tổng giá trị hiện tại</p>
-    <p class="studio-price-summary__amount">{{ priceSummaryAmount() }}</p>
-    <p class="studio-price-summary__detail">{{ priceSummaryDetail() }}</p>
+<app-payment-fail-modal
+  [isOpen]="showFailModal()"
+  [total]="depositAmount()"
+  (closed)="showFailModal.set(false)"
+/>
+@if (savedToast()) {
+  <div class="studio-save-backdrop" (click)="savedToast.set(false)">
+    <div class="studio-save-popup" (click)="$event.stopPropagation()">
+      <div class="studio-save-popup__icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h3 class="studio-save-popup__title">Đã tải thiết kế về máy!</h3>
+      <p class="studio-save-popup__desc">File tóm tắt thiết kế của bạn đã được tải xuống. Bạn có thể tiếp tục chỉnh sửa hoặc đặt hàng ngay trên trang này.</p>
+      <button class="studio-save-popup__btn" type="button" (click)="savedToast.set(false)">Đóng</button>
+    </div>
+  </div>
+}
+
+@if (sharePopupOpen()) {
+  <div class="studio-save-backdrop" (click)="sharePopupOpen.set(false)">
+    <div class="studio-save-popup" (click)="$event.stopPropagation()">
+      <div class="studio-save-popup__icon studio-save-popup__icon--dev">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h3 class="studio-save-popup__title">Tính năng đang phát triển</h3>
+      <p class="studio-save-popup__desc">Tính năng chia sẻ thiết kế đang được xây dựng. Vui lòng quay lại sau!</p>
+      <button class="studio-save-popup__btn" type="button" (click)="sharePopupOpen.set(false)">Đã hiểu</button>
+    </div>
   </div>
 }

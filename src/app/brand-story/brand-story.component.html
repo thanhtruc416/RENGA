@@ -1,0 +1,139 @@
+﻿<main class="brand-story">
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="brand-story__hero">
+    <div class="brand-story__hero-inner">
+      <span class="brand-story__hero-tag">VỀ RENGA</span>
+      <h1 class="brand-story__hero-title">Câu Chuyện<br>Thương Hiệu</h1>
+      <div class="brand-story__hero-divider"></div>
+      <p class="brand-story__hero-sub">
+        Từ một xưởng chế tác nhỏ, RENGA lớn lên cùng niềm tin rằng<br>
+        mỗi món trang sức là một tác phẩm nghệ thuật mang linh hồn của người đeo.
+      </p>
+    </div>
+    <div class="brand-story__hero-watermark" aria-hidden="true">RENGA</div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ORIGIN — Khởi nguồn
+  ══════════════════════════════════════ -->
+  <section class="brand-story__origin">
+    <div class="brand-story__origin-text">
+      <span class="brand-story__section-tag">KHỞI NGUỒN</span>
+      <h2 class="brand-story__section-title">Từ một tình yêu<br>với nghệ thuật</h2>
+      <div class="brand-story__section-divider"></div>
+      <p class="brand-story__section-body">
+        RENGA được thành lập vào năm 2020 bởi những người đam mê nghệ thuật kim hoàn, với khát vọng mang đến những tác phẩm trang sức vừa tinh xảo về kỹ thuật, vừa chứa đựng chiều sâu cảm xúc.
+      </p>
+      <p class="brand-story__section-body">
+        Cái tên RENGA — lấy cảm hứng từ thể thơ liên ca truyền thống Nhật Bản, nơi nhiều tâm hồn cùng dệt nên một bài thơ — thể hiện triết lý sáng tác: mỗi tác phẩm là sự hội tụ của nghệ nhân, người đặt hàng và câu chuyện riêng tư của họ.
+      </p>
+      <a routerLink="/bo-suu-tap" class="brand-story__origin-cta">
+        Khám phá bộ sưu tập<span class="brand-story__origin-cta-line"></span>
+      </a>
+    </div>
+    <div class="brand-story__origin-image">
+      <img src="assets/images/collection-story-cap-doi.png" alt="Nghệ nhân RENGA chế tác trang sức thủ công">
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       VALUES — Triết lý
+  ══════════════════════════════════════ -->
+  <section class="brand-story__values">
+    <div class="brand-story__values-header">
+      <span class="brand-story__section-tag">TRIẾT LÝ</span>
+      <h2 class="brand-story__section-title brand-story__section-title--center">Những gì<br>chúng tôi tin tưởng</h2>
+    </div>
+    <div class="brand-story__values-grid">
+      @for (v of values; track v.title) {
+        <div class="brand-story__value-card">
+          <div class="brand-story__value-icon" [innerHTML]="v.icon"></div>
+          <h3 class="brand-story__value-title">{{ v.title }}</h3>
+          <p class="brand-story__value-desc">{{ v.desc }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CRAFT — Quy trình chế tác
+  ══════════════════════════════════════ -->
+  <section class="brand-story__craft">
+    <div class="brand-story__craft-image">
+      <img src="assets/images/collection-dong-bo.png" alt="Trang sức RENGA — vẻ đẹp thủ công">
+    </div>
+    <div class="brand-story__craft-text">
+      <span class="brand-story__section-tag brand-story__section-tag--light">QUY TRÌNH</span>
+      <h2 class="brand-story__craft-title">Từ ý tưởng<br>đến tác phẩm</h2>
+      <div class="brand-story__section-divider brand-story__section-divider--light"></div>
+      <ul class="brand-story__craft-steps">
+        <li class="brand-story__craft-step">
+          <span class="brand-story__craft-step-num">01</span>
+          <div>
+            <strong>Tư vấn & Thiết kế</strong>
+            <p>Khách hàng cùng designer phác thảo ý tưởng, lựa chọn vật liệu và phong cách.</p>
+          </div>
+        </li>
+        <li class="brand-story__craft-step">
+          <span class="brand-story__craft-step-num">02</span>
+          <div>
+            <strong>Mô hình & Phê duyệt</strong>
+            <p>Bản mô hình 3D được dựng để khách hàng xem xét trước khi đúc chính thức.</p>
+          </div>
+        </li>
+        <li class="brand-story__craft-step">
+          <span class="brand-story__craft-step-num">03</span>
+          <div>
+            <strong>Chế tác & Hoàn thiện</strong>
+            <p>Nghệ nhân thủ công đúc, giũa, đánh bóng và đính đá với sự tỉ mỉ tuyệt đối.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       TIMELINE — Hành trình
+  ══════════════════════════════════════ -->
+  <section class="brand-story__timeline">
+    <div class="brand-story__timeline-header">
+      <span class="brand-story__section-tag">HÀNH TRÌNH</span>
+      <h2 class="brand-story__section-title brand-story__section-title--center brand-story__section-title--light">
+        Những dấu mốc<br>đáng nhớ
+      </h2>
+    </div>
+    <div class="brand-story__timeline-track">
+      @for (m of milestones; track m.year; let last = $last) {
+        <div class="brand-story__milestone">
+          <div class="brand-story__milestone-year">{{ m.year }}</div>
+          <div class="brand-story__milestone-dot"></div>
+          <p class="brand-story__milestone-event">{{ m.event }}</p>
+        </div>
+        @if (!last) {
+          <div class="brand-story__timeline-connector"></div>
+        }
+      }
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CTA
+  ══════════════════════════════════════ -->
+  <section class="brand-story__cta">
+    <div class="brand-story__cta-inner">
+      <h2 class="brand-story__cta-title">Hãy để RENGA<br>kể câu chuyện của bạn</h2>
+      <p class="brand-story__cta-desc">
+        Mỗi món đồ trang sức tại RENGA đều có thể được tùy chỉnh để<br>
+        phản ánh câu chuyện của riêng bạn.
+      </p>
+      <div class="brand-story__cta-actions">
+        <a routerLink="/bo-suu-tap" class="brand-story__cta-btn brand-story__cta-btn--primary">Xem Bộ sưu tập</a>
+        <a routerLink="/the-designer" class="brand-story__cta-btn brand-story__cta-btn--outline">Đặt lịch tư vấn</a>
+      </div>
+    </div>
+  </section>
+
+</main>

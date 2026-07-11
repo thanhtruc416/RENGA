@@ -1,6 +1,3 @@
-﻿/* ===== PAYMENT RESULT MODALS ===== */
-
-/* â”€â”€ Backdrop overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -14,127 +11,103 @@
   overflow-y: auto;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.25s, visibility 0.25s;
 }
 
 .modal-backdrop.is-open {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
 }
 
-/* â”€â”€ Modal card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Card ─────────────────────────────────────────── */
 .payment-modal {
   background: var(--color-white);
-  border-radius: 30px;
-  width: 950px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 580px;
   position: relative;
   overflow: hidden;
   display: none;
   flex-shrink: 0;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
 }
 
 .payment-modal.is-active {
   display: block;
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* SUCCESS VARIANT                                       */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .payment-modal--success {
-  padding: 66px 138px;
+  padding: 40px 32px 40px;
   text-align: center;
 }
 
-.payment-modal--success .payment-modal__icon {
-  width: 205px;
-  height: 148px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 32px;
+/* ── Close button ─────────────────────────────────── */
+.payment-modal__close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+  z-index: 2;
 }
 
+.payment-modal__close:hover {
+  opacity: 0.6;
+}
+
+/* ── Icon ─────────────────────────────────────────── */
+.payment-modal__icon-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* ── Title / subtitle ─────────────────────────────── */
 .payment-modal--success .payment-modal__title {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 64px;
-  line-height: 70.4px;
-  letter-spacing: -1.28px;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: 0;
   color: var(--color-black);
   text-align: center;
-  margin-bottom: 24px;
+  margin: 8px 0 16px;
 }
 
 .payment-modal--success .payment-modal__subtitle {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 18px;
-  line-height: 28.8px;
+  font-size: 14px;
+  line-height: 1.6;
   color: #444748;
   text-align: center;
-  margin-bottom: 40px;
-}
-
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* FAILURE VARIANT                                       */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.payment-modal--failure {
-  padding: 35px 0 66px;
-}
-
-.payment-modal--failure .payment-modal__icon-area {
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.payment-modal--failure .payment-modal__icon {
-  width: 140px;
-  height: 132px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-
-.payment-modal--failure .payment-modal__title {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 64px;
-  line-height: 64px;
-  letter-spacing: 0;
-  color: var(--color-black);
-  padding: 0 46px;
-  text-align: left;
-  margin-bottom: 8px;
-}
-
-.payment-modal--failure .payment-modal__inner {
-  padding: 0 138px;
-}
-
-.payment-modal--failure .payment-modal__subtitle {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 28.8px;
-  color: #444748;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* ORDER INFO CARD (shared by all 4 modals)             */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.order-info-card {
-  border: 1px solid var(--color-black);
-  padding: 33px;
   margin-bottom: 24px;
+}
+
+/* ── Order info card ──────────────────────────────── */
+.order-info-card {
+  border: 1px solid var(--color-border);
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
 }
 
 .order-info-card__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .order-info-card__header-right {
@@ -144,45 +117,44 @@
 .order-info-card__meta-label {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 1.8px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   color: #444748;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .order-info-card__meta-label--sm {
-  font-size: 15px;
+  font-size: 12px;
 }
 
 .order-info-card__meta-value {
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
+  color: var(--color-black);
+}
+
+.order-info-card__total {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
   color: var(--color-black);
 }
 
 .order-info-card__date {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 24px;
-  color: #9a3f5c;
-}
-
-.order-info-card__total {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 24px;
-  color: var(--color-black);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-primary-dark);
 }
 
 .order-info-card__sep {
   border: none;
-  border-top: 1px solid rgba(196, 199, 199, 0.3);
-  margin: 0 0 24px;
+  border-top: 1px solid rgba(196, 199, 199, 0.4);
+  margin: 0 0 18px;
 }
 
-/* Product row â€” success modals */
 .order-info-card__product {
   display: flex;
   align-items: flex-start;
@@ -190,82 +162,48 @@
 }
 
 .order-info-card__thumb {
-  width: 96px;
-  height: 96px;
+  width: 72px;
+  height: 72px;
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .order-info-card__product-info {
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .order-info-card__product-name {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 0.2px;
   color: var(--color-black);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .order-info-card__product-spec {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   color: #444748;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .order-info-card__product-qty {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--color-primary);
 }
 
-/* Hold / countdown row â€” failure modals */
-.order-info-card__hold {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.order-info-card__clock {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-.order-info-card__hold-desc {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: #444748;
-  margin-bottom: 12px;
-}
-
-.order-info-card__timer {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: 24px;
-  letter-spacing: 2.4px;
-  color: #9a3f5c;
-}
-
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* ACTION BUTTONS â€” failure modals                      */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Action buttons ───────────────────────────────── */
 .modal-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: var(--sp-md, 16px);
+  margin-bottom: var(--sp-lg, 24px);
 }
 
 .modal-actions__primary {
@@ -273,17 +211,20 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 20px 32px;
+  padding: 18px 32px;
   background: var(--color-black);
   color: var(--color-white);
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
+  text-decoration: none;
   border: none;
   cursor: pointer;
   transition: background 0.15s;
+  flex: 1;
+  text-align: center;
 }
 
 .modal-actions__primary:hover {
@@ -291,111 +232,104 @@
 }
 
 .modal-actions__row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md, 16px);
+  width: 100%;
 }
 
 .modal-actions__outline {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 12px;
+  padding: 16px 12px;
   border: 1px solid var(--color-black);
   background: transparent;
   color: var(--color-black);
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s;
+  flex: 1;
 }
 
 .modal-actions__outline:hover {
   background: #f5f5f5;
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* REGISTER CTA BANNER â€” guest variants                 */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Modal register (Guest only) ──────────────────── */
 .modal-register {
-  background: #ffd9e1;
-  padding: 32px;
-  margin-bottom: 40px;
+  background: var(--color-primary-light);
+  padding: 20px;
   text-align: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .modal-register__title {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 31.2px;
-  color: #3f001a;
-  margin-bottom: 16px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-dark);
+  margin: 0 0 6px;
 }
 
 .modal-register__desc {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: #7d2745;
-  margin-bottom: 24px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #444748;
+  margin: 0 0 16px;
 }
 
 .modal-register__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 40px;
-  background: var(--color-black);
+  padding: 12px 32px;
+  background: var(--color-primary);
   color: var(--color-white);
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   text-decoration: none;
-  cursor: pointer;
   transition: background 0.15s;
 }
 
 .modal-register__btn:hover {
-  background: #2c2c2c;
+  background: var(--color-primary-dark);
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* BACK LINK                                            */
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Back link ─────────────────────────────────────── */
 .modal-back {
   text-align: center;
+  padding-top: 16px;
+  margin-top: 16px;
 }
 
 .modal-back__link {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--color-black);
   text-decoration: none;
   transition: opacity 0.15s;
+  padding: 8px;
 }
 
 .modal-back__link:hover {
   opacity: 0.65;
-}
-
-.modal-back__arrow {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  flex-shrink: 0;
 }

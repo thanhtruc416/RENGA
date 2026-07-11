@@ -1,0 +1,47 @@
+/* ===== DESIGN TOKENS (Quy tắc số 7) ===== */
+:root {
+  /* ── Brand colors ── */
+  --color-primary: #c4607e;
+  --color-primary-rgb: 196, 96, 126;
+  --color-primary-dark: #9a3f5c;
+  --color-primary-light: #f7f0f3;
+  --color-error: #e53935;
+  --color-dark: #1a1a1a;
+  --color-muted: #444748;
+  --color-border: #c4c7c7;
+  --color-bg-card: #f3f3f4;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Alias cho component dùng tên dài hơn */
+  --color-bg: var(--color-white);
+  --color-surface: var(--color-bg-card);
+  --color-text: var(--color-dark);
+  --color-text-muted: var(--color-muted);
+
+  /* ── Typography ── */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Montserrat', Arial, sans-serif;
+  --font-ui: 'Montserrat', Arial, sans-serif;
+
+  /* ── Spacing scale ── */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 48px;
+  --sp-2xl: 80px;
+
+  /* Alias spacing cho component */
+  --space-1: var(--sp-xs);
+  --space-2: var(--sp-sm);
+  --space-3: 12px;
+  --space-4: var(--sp-md);
+  --space-6: var(--sp-lg);
+  --space-8: 32px;
+
+  /* ── Layout ── */
+  --max-width: 1920px;
+  --header-height: 169px;
+  --container-px: clamp(20px, 5.5vw, 80px);
+}

@@ -1,0 +1,237 @@
+.ltv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ltv-cancel-modal {
+  background: var(--color-white);
+  width: min(540px, 100%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ltv-cancel-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ltv-cancel-modal__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ltv-cancel-modal__title {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  color: var(--color-dark);
+  line-height: 1.15;
+}
+
+.ltv-cancel-modal__ref {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.ltv-cancel-modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.ltv-cancel-modal__close:hover {
+  opacity: 1;
+}
+
+.ltv-cancel-modal__refund-notice {
+  background: #f3f3f4;
+  border-left: 2px solid var(--color-primary-dark);
+  padding: 14px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-dark);
+  line-height: 1.6;
+}
+
+.ltv-cancel-modal__refund-notice strong {
+  font-weight: 700;
+}
+
+.ltv-cancel-modal__reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ltv-cancel-modal__reason-heading {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 2px;
+}
+
+.ltv-cancel-modal__reason {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.ltv-cancel-modal__reason input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ltv-cancel-modal__reason-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-dark);
+}
+
+.ltv-cancel-modal__other-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.ltv-cancel-modal__other-input {
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 0;
+  padding: 14px 16px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-dark);
+  line-height: 1.6;
+  background: #faf7f8;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.ltv-cancel-modal__other-input:focus {
+  border-color: var(--color-primary);
+}
+
+.ltv-cancel-modal__other-input::placeholder {
+  color: #bbb;
+}
+
+.ltv-cancel-modal__other-count {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-muted);
+  text-align: right;
+}
+
+.ltv-cancel-modal__other-count--warn {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.ltv-cancel-modal__actions {
+  display: flex;
+  gap: 16px;
+}
+
+.ltv-cancel-modal__btn {
+  flex: 1;
+  padding: 18px 24px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ltv-cancel-modal__btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.ltv-cancel-modal__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ltv-cancel-modal__btn--primary {
+  background: #c4607e;
+  color: var(--color-white);
+}
+
+.ltv-cancel-modal__btn--secondary {
+  background: var(--color-primary-light);
+  color: var(--color-dark);
+  border: 1px solid #c4607e;
+}
+
+.ltv-cancel-modal__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0 4px;
+  text-align: center;
+}
+
+.ltv-cancel-modal__result-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ltv-cancel-modal__result-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+.ltv-cancel-modal__result-desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+.ltv-cancel-modal__result .ltv-cancel-modal__btn {
+  flex: none;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 8px;
+}

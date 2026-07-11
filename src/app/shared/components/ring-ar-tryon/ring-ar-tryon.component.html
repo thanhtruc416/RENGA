@@ -1,0 +1,76 @@
+<div class="art">
+  <div class="art__camera-wrap">
+    <video #videoEl class="art__video" autoplay muted playsinline></video>
+    <canvas #canvasEl class="art__canvas"></canvas>
+
+    <div class="art__hud">
+      <span class="art__chip">✦ RENGA AR</span>
+      @if (cameraStarted()) {
+        <span class="art__chip" [class.art__chip--green]="handDetected()">
+          {{ handDetected() ? '◉ Phát hiện tay ✓' : '◉ Chưa phát hiện tay' }}
+        </span>
+      }
+    </div>
+
+    @if (cameraStarted() && !handDetected()) {
+      <div class="art__instruction">✋ Đưa bàn tay vào khung hình</div>
+    }
+    @if (fingerHint(); as hint) {
+      <div class="art__instruction">{{ hint }}</div>
+    }
+
+    @if (!cameraStarted()) {
+      <div class="art__start-overlay">
+        <div class="art__start-icon">💍</div>
+        <h3 class="art__start-title">Ướm thử nhẫn AR</h3>
+        <p class="art__start-sub">Dùng camera để xem nhẫn trên tay bạn theo thời gian thực</p>
+        @if (cameraError()) {
+          <p class="art__error">{{ cameraError() }}</p>
+        }
+        <button class="art__start-btn" type="button" (click)="startCamera()" [disabled]="isStarting()">
+          {{ isStarting() ? 'Đang mở camera...' : '📷 Bật Camera' }}
+        </button>
+      </div>
+    }
+
+    @if (cameraStarted()) {
+      <div class="art__controls">
+        <button class="art__ctrl-btn" type="button" (click)="adjustSize(-5)" aria-label="Giảm size">−</button>
+        <button class="art__ctrl-capture" type="button" (click)="capturePhoto()" aria-label="Chụp ảnh">📸</button>
+        <button class="art__ctrl-btn" type="button" (click)="adjustSize(5)" aria-label="Tăng size">+</button>
+      </div>
+    }
+  </div>
+
+  @if (cameraStarted()) {
+    <div class="art__sidebar">
+      <div class="art__panel">
+        <p class="art__panel-label">NGÓN TAY</p>
+        <div class="art__finger-options">
+          @for (name of fingerNames; track name; let i = $index) {
+            <button
+              class="art__finger-opt"
+              [class.art__finger-opt--active]="fingerIdx() === i"
+              type="button"
+              (click)="selectFinger(i)">{{ name }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="art__panel">
+        <p class="art__panel-label">KÍCH CỠ</p>
+        <input
+          class="art__size-slider"
+          type="range" min="30" max="100"
+          [value]="ringSize()"
+          (input)="ringSize.set(+$any($event.target).value)">
+      </div>
+    </div>
+  }
+
+  <button class="art__close" type="button" (click)="close()" aria-label="Đóng">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</div>

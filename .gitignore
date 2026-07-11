@@ -1,0 +1,85 @@
+# ========================
+# Angular / Node
+# ========================
+node_modules/
+dist/
+.angular/
+out-tsc/
+tmp/
+*.tsbuildinfo
+src/environments/*.local.ts
+
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# ========================
+# VS Code
+# ========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ========================
+# OS
+# ========================
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+desktop.ini
+**/desktop.ini
+ehthumbs.db
+
+# ========================
+# Logs
+# ========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========================
+# Test / Vitest
+# ========================
+coverage/
+.vitest-cache/
+vitest-results/
+test-results/
+
+# ========================
+# IDE
+# ========================
+.idea/
+
+# ========================
+# Python (Data/scripts)
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ========================
+# Data pipeline (crawl output — không cần cho BE)
+# ========================
+Data/product/Raw/
+Data/product/Clean/
+Data/config.json
+
+# ========================
+# Misc
+# ========================
+.claude/
+*.code-workspace
+*.orig
+*.bak

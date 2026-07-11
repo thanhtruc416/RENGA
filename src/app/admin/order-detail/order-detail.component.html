@@ -1,3 +1,148 @@
-<div class="admin-order-detail-page">
-  <p>admin-order-detail placeholder</p>
+<div class="od">
+  <!-- ── Page Header ── -->
+  <app-admin-header
+    title="Chi tiết đơn hàng"
+    subtitle="Xem và cập nhật trạng thái đơn hàng của khách hàng">
+  </app-admin-header>
+
+  @if (isLoading()) {
+    <p style="padding: 24px;">Đang tải...</p>
+  } @else if (!order()) {
+    <p style="padding: 24px;">Không tìm thấy đơn hàng.</p>
+  } @else {
+    <!-- ── Order Meta bar ── -->
+    <div class="od__meta-bar">
+      <div class="od__meta-left">
+        <h2 class="od__order-id">Đơn {{ order().order_id }}</h2>
+        <span class="od__status-badge od__status--crafting">{{ statusLabel(order().order_status) }}</span>
+        <span class="od__meta-date">{{ order().created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="od__meta-actions">
+        <a class="od__action-btn od__action-btn--outline" routerLink="/admin/don-hang">QUAY LẠI</a>
+        @if (canCancel(order().order_status)) {
+          <button class="od__action-btn od__action-btn--danger" type="button" (click)="cancelOrder()">HỦY ĐƠN</button>
+        }
+        @if (canAdvance(order().order_status)) {
+          <button class="od__action-btn od__action-btn--primary" type="button" (click)="advanceStatus()">
+            {{ nextActionLabel(order().order_status) }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- ── Main layout ── -->
+    <div class="od__layout">
+
+      <!-- ── Left column ── -->
+      <div class="od__main">
+
+        <!-- Product detail card -->
+        <div class="od__card">
+          <div class="od__card-header">
+            <h3 class="od__card-title">Chi tiết sản phẩm ({{ order().items.length }})</h3>
+          </div>
+
+          @for (item of order().items; track item.order_item_id) {
+            <div class="od__product-item">
+              <div class="od__product-info">
+                <div class="od__product-header">
+                  <h4 class="od__product-name">{{ item.product_name ?? 'Trang sức tùy chỉnh' }}</h4>
+                  <span class="od__product-price">{{ formatPrice(item.unit_price) }}₫</span>
+                </div>
+                <div class="od__product-specs">
+                  @if (item.variant_name) {
+                    <div class="od__spec-row">
+                      <span class="od__spec-label">PHIÊN BẢN:</span>
+                      <span class="od__spec-value">{{ item.variant_name }}</span>
+                    </div>
+                  }
+                  @if (item.size_value) {
+                    <div class="od__spec-row">
+                      <span class="od__spec-label">SIZE:</span>
+                      <span class="od__spec-value">{{ item.size_value }}</span>
+                    </div>
+                  }
+                  <div class="od__spec-row">
+                    <span class="od__spec-label">SỐ LƯỢNG:</span>
+                    <span class="od__spec-value">{{ item.quantity }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @if (!$last) { <div class="od__product-divider"></div> }
+          }
+        </div>
+      </div>
+
+      <!-- ── Right sidebar ── -->
+      <aside class="od__sidebar">
+
+        <!-- Customer info -->
+        <div class="od__card od__card--sidebar">
+          <div class="od__card-header">
+            <h3 class="od__card-title od__card-title--sm">THÔNG TIN KHÁCH HÀNG</h3>
+          </div>
+          <div class="od__customer">
+            <div class="od__customer-avatar">{{ (order().customer_name ?? order().phone).charAt(0) }}</div>
+            <div>
+              <p class="od__customer-name">{{ order().customer_name ?? 'Khách vãng lai' }}</p>
+            </div>
+          </div>
+          <div class="od__customer-details">
+            <div class="od__detail-group">
+              <p class="od__detail-label">THÔNG TIN LIÊN HỆ</p>
+              <p class="od__detail-value">{{ order().phone }}</p>
+            </div>
+            <div class="od__detail-group">
+              <p class="od__detail-label">ĐỊA CHỈ GIAO HÀNG</p>
+              <p class="od__detail-value">{{ order().recipient_name }} — {{ order().recipient_phone }}</p>
+              <p class="od__detail-value">{{ order().address_line }}</p>
+              <p class="od__detail-value">{{ order().ward ? order().ward + ', ' : '' }}{{ order().province }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice card -->
+        <div class="od__card od__card--invoice">
+          <div class="od__card-header">
+            <h3 class="od__card-title od__card-title--sm od__card-title--light">HÓA ĐƠN THANH TOÁN</h3>
+          </div>
+          <div class="od__invoice-rows">
+            @if (order().discount_amount > 0) {
+              <div class="od__invoice-row">
+                <span>Giảm giá</span>
+                <span class="od__invoice-discount">-{{ formatPrice(order().discount_amount) }}₫</span>
+              </div>
+            }
+          </div>
+          <div class="od__invoice-total">
+            <span>Tổng đơn</span>
+            <span>{{ formatPrice(order().total_amount) }}₫</span>
+          </div>
+        </div>
+
+        <!-- Notes card -->
+        @if (order().note) {
+          <div class="od__card od__card--sidebar">
+            <div class="od__card-header">
+              <h3 class="od__card-title od__card-title--sm">GHI CHÚ</h3>
+            </div>
+            <div class="od__note">
+              <p class="od__note-text">{{ order().note }}</p>
+            </div>
+          </div>
+        }
+      </aside>
+    </div>
+  }
 </div>
+
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    {{ toastMessage() }}
+  </div>
+}

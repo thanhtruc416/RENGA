@@ -1,0 +1,609 @@
+{
+  "BLANK_FORM": [
+    {
+      "blank_id": "BLK000001",
+      "blank_name": "Nhẫn tròn trơn",
+      "blank_type": "RING",
+      "base_price": 800000,
+      "description": "Nhẫn tròn cơ bản không họa tiết",
+      "image_url": "https://renga.vn/images/blank/ring_plain.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000002",
+      "blank_name": "Nhẫn đai ngang",
+      "blank_type": "RING",
+      "base_price": 950000,
+      "description": "Nhẫn có đai ngang phong cách",
+      "image_url": "https://renga.vn/images/blank/ring_band.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000003",
+      "blank_name": "Nhẫn đính đá solo",
+      "blank_type": "RING",
+      "base_price": 1100000,
+      "description": "Nhẫn đính một viên đá trung tâm",
+      "image_url": "https://renga.vn/images/blank/ring_solitaire.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000004",
+      "blank_name": "Vòng cổ dây mảnh",
+      "blank_type": "NECKLACE",
+      "base_price": 700000,
+      "description": "Dây chuyền mảnh thanh lịch",
+      "image_url": "https://renga.vn/images/blank/necklace_thin.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000005",
+      "blank_name": "Vòng cổ dây xích",
+      "blank_type": "NECKLACE",
+      "base_price": 1200000,
+      "description": "Dây chuyền xích đậm chất",
+      "image_url": "https://renga.vn/images/blank/necklace_chain.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000006",
+      "blank_name": "Lắc tay tròn trơn",
+      "blank_type": "BRACELET",
+      "base_price": 1000000,
+      "description": "Lắc tay tròn cổ điển",
+      "image_url": "https://renga.vn/images/blank/bracelet_round.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000007",
+      "blank_name": "Hoa tai thả tròn",
+      "blank_type": "EARRING",
+      "base_price": 600000,
+      "description": "Hoa tai thả kiểu tròn",
+      "image_url": "https://renga.vn/images/blank/earring_drop.jpg",
+      "is_active": true
+    },
+    {
+      "blank_id": "BLK000008",
+      "blank_name": "Mặt dây chuyền oval",
+      "blank_type": "NECKLACE",
+      "base_price": 850000,
+      "description": "Mặt dây chuyền hình oval",
+      "image_url": "https://renga.vn/images/blank/pendant_oval.jpg",
+      "is_active": true
+    }
+  ],
+  "MATERIAL": [
+    {
+      "material_id": "MAT000001",
+      "material_name": "Bạc 925",
+      "material_type": "SILVER",
+      "price_modifier": 500000,
+      "description": "Bạc nguyên chất 92.5%",
+      "is_active": true
+    },
+    {
+      "material_id": "MAT000002",
+      "material_name": "Vàng 18K",
+      "material_type": "GOLD",
+      "price_modifier": 3500000,
+      "description": "Vàng 18 karat",
+      "is_active": true
+    },
+    {
+      "material_id": "MAT000003",
+      "material_name": "Vàng 14K",
+      "material_type": "GOLD",
+      "price_modifier": 2700000,
+      "description": "Vàng 14 karat",
+      "is_active": true
+    },
+    {
+      "material_id": "MAT000004",
+      "material_name": "Bạch kim",
+      "material_type": "PLATINUM",
+      "price_modifier": 4200000,
+      "description": "Platinum 950",
+      "is_active": true
+    },
+    {
+      "material_id": "MAT000005",
+      "material_name": "Rose Gold",
+      "material_type": "ROSE_GOLD",
+      "price_modifier": 3200000,
+      "description": "Vàng hồng 18K",
+      "is_active": true
+    }
+  ],
+  "STONE": [
+    {
+      "stone_id": "STN000001",
+      "stone_name": "Kim cương tự nhiên",
+      "stone_type": "DIAMOND",
+      "base_price": 8000000,
+      "description": "Kim cương GIA certified",
+      "is_active": true
+    },
+    {
+      "stone_id": "STN000002",
+      "stone_name": "Ruby Miến Điện",
+      "stone_type": "RUBY",
+      "base_price": 2500000,
+      "description": "Ruby đỏ pigeon blood",
+      "is_active": true
+    },
+    {
+      "stone_id": "STN000003",
+      "stone_name": "Sapphire xanh",
+      "stone_type": "SAPPHIRE",
+      "base_price": 1800000,
+      "description": "Sapphire xanh hoàng gia",
+      "is_active": true
+    },
+    {
+      "stone_id": "STN000004",
+      "stone_name": "Ngọc lục bảo",
+      "stone_type": "EMERALD",
+      "base_price": 2000000,
+      "description": "Emerald xanh lá đậm",
+      "is_active": true
+    },
+    {
+      "stone_id": "STN000005",
+      "stone_name": "Ngọc trai",
+      "stone_type": "PEARL",
+      "base_price": 800000,
+      "description": "Ngọc trai Akoya",
+      "is_active": true
+    },
+    {
+      "stone_id": "STN000006",
+      "stone_name": "Moissanite",
+      "stone_type": "OTHER",
+      "base_price": 600000,
+      "description": "Moissanite cao cấp lấp lánh",
+      "is_active": true
+    }
+  ],
+  "STONE_SIZE": [
+    {
+      "stone_size_id": "SSZ000001",
+      "stone_id": "STN000001",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    },
+    {
+      "stone_size_id": "SSZ000002",
+      "stone_id": "STN000001",
+      "size_label": "0.50ct",
+      "carat_weight": 0.5,
+      "price_modifier": 1000000
+    },
+    {
+      "stone_size_id": "SSZ000003",
+      "stone_id": "STN000002",
+      "size_label": "0.75ct",
+      "carat_weight": 0.75,
+      "price_modifier": 1500000
+    },
+    {
+      "stone_size_id": "SSZ000004",
+      "stone_id": "STN000002",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    },
+    {
+      "stone_size_id": "SSZ000005",
+      "stone_id": "STN000002",
+      "size_label": "1.50ct",
+      "carat_weight": 1.5,
+      "price_modifier": 3000000
+    },
+    {
+      "stone_size_id": "SSZ000006",
+      "stone_id": "STN000003",
+      "size_label": "2.00ct",
+      "carat_weight": 2.0,
+      "price_modifier": 4000000
+    },
+    {
+      "stone_size_id": "SSZ000007",
+      "stone_id": "STN000003",
+      "size_label": "1.00ct",
+      "carat_weight": 1.0,
+      "price_modifier": 2000000
+    },
+    {
+      "stone_size_id": "SSZ000008",
+      "stone_id": "STN000003",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    },
+    {
+      "stone_size_id": "SSZ000009",
+      "stone_id": "STN000004",
+      "size_label": "1.50ct",
+      "carat_weight": 1.5,
+      "price_modifier": 3000000
+    },
+    {
+      "stone_size_id": "SSZ000010",
+      "stone_id": "STN000004",
+      "size_label": "1.50ct",
+      "carat_weight": 1.5,
+      "price_modifier": 3000000
+    },
+    {
+      "stone_size_id": "SSZ000011",
+      "stone_id": "STN000005",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    },
+    {
+      "stone_size_id": "SSZ000012",
+      "stone_id": "STN000005",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    },
+    {
+      "stone_size_id": "SSZ000013",
+      "stone_id": "STN000005",
+      "size_label": "1.50ct",
+      "carat_weight": 1.5,
+      "price_modifier": 3000000
+    },
+    {
+      "stone_size_id": "SSZ000014",
+      "stone_id": "STN000006",
+      "size_label": "1.50ct",
+      "carat_weight": 1.5,
+      "price_modifier": 3000000
+    },
+    {
+      "stone_size_id": "SSZ000015",
+      "stone_id": "STN000006",
+      "size_label": "0.75ct",
+      "carat_weight": 0.75,
+      "price_modifier": 1500000
+    },
+    {
+      "stone_size_id": "SSZ000016",
+      "stone_id": "STN000006",
+      "size_label": "0.25ct",
+      "carat_weight": 0.25,
+      "price_modifier": 500000
+    }
+  ],
+  "BLANK_STONE": [
+    {
+      "blank_id": "BLK000007",
+      "stone_size_id": "SSZ000006"
+    },
+    {
+      "blank_id": "BLK000002",
+      "stone_size_id": "SSZ000004"
+    },
+    {
+      "blank_id": "BLK000003",
+      "stone_size_id": "SSZ000008"
+    },
+    {
+      "blank_id": "BLK000004",
+      "stone_size_id": "SSZ000009"
+    },
+    {
+      "blank_id": "BLK000006",
+      "stone_size_id": "SSZ000009"
+    },
+    {
+      "blank_id": "BLK000007",
+      "stone_size_id": "SSZ000003"
+    },
+    {
+      "blank_id": "BLK000006",
+      "stone_size_id": "SSZ000013"
+    },
+    {
+      "blank_id": "BLK000008",
+      "stone_size_id": "SSZ000008"
+    },
+    {
+      "blank_id": "BLK000004",
+      "stone_size_id": "SSZ000010"
+    },
+    {
+      "blank_id": "BLK000002",
+      "stone_size_id": "SSZ000002"
+    },
+    {
+      "blank_id": "BLK000002",
+      "stone_size_id": "SSZ000013"
+    },
+    {
+      "blank_id": "BLK000007",
+      "stone_size_id": "SSZ000013"
+    },
+    {
+      "blank_id": "BLK000008",
+      "stone_size_id": "SSZ000002"
+    },
+    {
+      "blank_id": "BLK000001",
+      "stone_size_id": "SSZ000006"
+    },
+    {
+      "blank_id": "BLK000002",
+      "stone_size_id": "SSZ000016"
+    },
+    {
+      "blank_id": "BLK000007",
+      "stone_size_id": "SSZ000011"
+    },
+    {
+      "blank_id": "BLK000004",
+      "stone_size_id": "SSZ000007"
+    },
+    {
+      "blank_id": "BLK000008",
+      "stone_size_id": "SSZ000009"
+    },
+    {
+      "blank_id": "BLK000001",
+      "stone_size_id": "SSZ000003"
+    }
+  ],
+  "ENGRAVING_CONFIG": [
+    {
+      "config_id": "ENG000001",
+      "free_char_limit": 10,
+      "price_per_extra_char": 5000,
+      "is_active": true,
+      "updated_by_admin_id": "EMP000001",
+      "updated_at": "2025-10-01T10:00:00"
+    }
+  ],
+  "PROCESSING_FEE": [
+    {
+      "fee_id": "PFE000001",
+      "fee_name": "Gia công tiêu chuẩn",
+      "fee_type": "COMPLEX_DESIGN",
+      "description": "Gia công thiết kế phức tạp tiêu chuẩn",
+      "fee_amount": 350000,
+      "is_active": true,
+      "created_by_admin_id": "EMP000001",
+      "updated_by_admin_id": null,
+      "created_at": "2025-10-01T08:00:00",
+      "updated_at": "2025-10-01T08:00:00"
+    },
+    {
+      "fee_id": "PFE000002",
+      "fee_name": "Gia công độc bản",
+      "fee_type": "UNIQUE_PIECE",
+      "description": "Phí cho sản phẩm độc bản số lượng 1",
+      "fee_amount": 650000,
+      "is_active": true,
+      "created_by_admin_id": "EMP000001",
+      "updated_by_admin_id": null,
+      "created_at": "2025-10-01T08:00:00",
+      "updated_at": "2025-10-01T08:00:00"
+    },
+    {
+      "fee_id": "PFE000003",
+      "fee_name": "Gia công chất liệu đặc biệt",
+      "fee_type": "SPECIAL_MATERIAL",
+      "description": "Phí gia công chất liệu yêu cầu kỹ thuật cao",
+      "fee_amount": 500000,
+      "is_active": true,
+      "created_by_admin_id": "EMP000002",
+      "updated_by_admin_id": null,
+      "created_at": "2025-11-01T08:00:00",
+      "updated_at": "2025-11-01T08:00:00"
+    },
+    {
+      "fee_id": "PFE000004",
+      "fee_name": "Phí khác",
+      "fee_type": "OTHER",
+      "description": "Phí gia công không thuộc danh mục trên",
+      "fee_amount": 200000,
+      "is_active": true,
+      "created_by_admin_id": "EMP000002",
+      "updated_by_admin_id": null,
+      "created_at": "2025-11-01T08:00:00",
+      "updated_at": "2025-11-01T08:00:00"
+    }
+  ],
+  "CUSTOMIZATION": [
+    {
+      "custom_id": "CTM000001",
+      "client_id": "CLT000003",
+      "blank_id": "BLK000005",
+      "material_id": "MAT000005",
+      "stone_size_id": "SSZ000002",
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000002",
+      "calculated_price": 5750000,
+      "status": "ORDERED",
+      "created_at": "2026-06-15T03:16:47",
+      "updated_at": "2026-06-15T14:16:47"
+    },
+    {
+      "custom_id": "CTM000002",
+      "client_id": "CLT000050",
+      "blank_id": "BLK000003",
+      "material_id": "MAT000004",
+      "stone_size_id": "SSZ000010",
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000003",
+      "calculated_price": 8650000,
+      "status": "DRAFT",
+      "created_at": "2026-02-16T16:40:53",
+      "updated_at": "2026-02-17T11:40:53"
+    },
+    {
+      "custom_id": "CTM000003",
+      "client_id": "CLT000010",
+      "blank_id": "BLK000003",
+      "material_id": "MAT000001",
+      "stone_size_id": "SSZ000012",
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000003",
+      "calculated_price": 2450000,
+      "status": "ORDERED",
+      "created_at": "2026-03-26T20:58:44",
+      "updated_at": "2026-03-27T04:58:44"
+    },
+    {
+      "custom_id": "CTM000004",
+      "client_id": "CLT000030",
+      "blank_id": "BLK000007",
+      "material_id": "MAT000003",
+      "stone_size_id": null,
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000003",
+      "calculated_price": 3650000,
+      "status": "ORDERED",
+      "created_at": "2026-03-29T11:42:57",
+      "updated_at": "2026-03-30T03:42:57"
+    },
+    {
+      "custom_id": "CTM000005",
+      "client_id": "CLT000099",
+      "blank_id": "BLK000007",
+      "material_id": "MAT000004",
+      "stone_size_id": null,
+      "config_id": "ENG000001",
+      "engraving_text": null,
+      "processing_fee_id": "PFE000003",
+      "calculated_price": 5150000,
+      "status": "DRAFT",
+      "created_at": "2026-03-15T19:16:02",
+      "updated_at": "2026-03-15T22:16:02"
+    },
+    {
+      "custom_id": "CTM000006",
+      "client_id": "CLT000020",
+      "blank_id": "BLK000002",
+      "material_id": "MAT000001",
+      "stone_size_id": null,
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000004",
+      "calculated_price": 1800000,
+      "status": "DRAFT",
+      "created_at": "2026-06-02T05:11:36",
+      "updated_at": "2026-06-03T02:11:36"
+    },
+    {
+      "custom_id": "CTM000007",
+      "client_id": "CLT000098",
+      "blank_id": "BLK000006",
+      "material_id": "MAT000001",
+      "stone_size_id": null,
+      "config_id": "ENG000001",
+      "engraving_text": "Love",
+      "processing_fee_id": "PFE000001",
+      "calculated_price": 1850000,
+      "status": "DRAFT",
+      "created_at": "2026-03-28T08:37:09",
+      "updated_at": "2026-03-28T20:37:09"
+    },
+    {
+      "custom_id": "CTM000008",
+      "client_id": "CLT000071",
+      "blank_id": "BLK000002",
+      "material_id": "MAT000002",
+      "stone_size_id": "SSZ000014",
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000001",
+      "calculated_price": 7800000,
+      "status": "ORDERED",
+      "created_at": "2026-01-18T09:39:14",
+      "updated_at": "2026-01-18T21:39:14"
+    },
+    {
+      "custom_id": "CTM000009",
+      "client_id": "CLT000093",
+      "blank_id": "BLK000006",
+      "material_id": "MAT000004",
+      "stone_size_id": null,
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000002",
+      "calculated_price": 5550000,
+      "status": "ORDERED",
+      "created_at": "2026-06-01T07:11:28",
+      "updated_at": "2026-06-01T10:11:28"
+    },
+    {
+      "custom_id": "CTM000010",
+      "client_id": "CLT000019",
+      "blank_id": "BLK000003",
+      "material_id": "MAT000004",
+      "stone_size_id": null,
+      "config_id": null,
+      "engraving_text": null,
+      "processing_fee_id": "PFE000001",
+      "calculated_price": 5650000,
+      "status": "DRAFT",
+      "created_at": "2026-02-22T02:51:58",
+      "updated_at": "2026-02-22T18:51:58"
+    }
+  ],
+  "SAVED_CUSTOM": [
+    {
+      "saved_id": "SAV000001",
+      "custom_id": "CTM000007",
+      "custom_name": "Quà tặng người yêu",
+      "is_shared": true,
+      "shared_at": "2026-03-29T11:37:09",
+      "created_at": "2026-03-28T08:37:09",
+      "points_awarded": true
+    },
+    {
+      "saved_id": "SAV000002",
+      "custom_id": "CTM000005",
+      "custom_name": "Lắc sinh nhật",
+      "is_shared": true,
+      "shared_at": "2026-03-16T00:16:02",
+      "created_at": "2026-03-15T19:16:02",
+      "points_awarded": true
+    },
+    {
+      "saved_id": "SAV000003",
+      "custom_id": "CTM000006",
+      "custom_name": "Quà tặng người yêu",
+      "is_shared": false,
+      "shared_at": null,
+      "created_at": "2026-06-02T05:11:36",
+      "points_awarded": false
+    },
+    {
+      "saved_id": "SAV000004",
+      "custom_id": "CTM000004",
+      "custom_name": "Lắc sinh nhật",
+      "is_shared": false,
+      "shared_at": null,
+      "created_at": "2026-03-29T11:42:57",
+      "points_awarded": false
+    },
+    {
+      "saved_id": "SAV000005",
+      "custom_id": "CTM000010",
+      "custom_name": "Vòng cổ kỷ niệm",
+      "is_shared": false,
+      "shared_at": null,
+      "created_at": "2026-02-22T02:51:58",
+      "points_awarded": false
+    }
+  ]
+}

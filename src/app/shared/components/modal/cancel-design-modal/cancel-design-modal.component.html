@@ -1,3 +1,109 @@
-<div class="cancel-design-modal">
-  <p>cancel-design-modal placeholder</p>
+<div
+  class="order-modal-backdrop is-open"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Yêu cầu hủy đơn thiết kế"
+  (click)="onClose()"
+>
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    @if (!submitted()) {
+      <div class="order-modal order-modal--cancel-bespoke is-active">
+
+        <div class="cancel-bespoke__close-row">
+          <button type="button" class="omodal-close" aria-label="Đóng" (click)="onClose()">
+            <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+
+        <h2 class="cancel-bespoke__title">Yêu cầu hủy đơn thiết kế/tùy biến</h2>
+        <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+        <p class="cancel-bespoke__desc">{{ policyText() }}</p>
+
+        <label class="cancel-bespoke__reason-label" for="design-cancel-reason">
+          Lý do hủy đơn
+        </label>
+        <textarea
+          id="design-cancel-reason"
+          class="cancel-bespoke__textarea"
+          [class.cancel-bespoke__textarea--error]="showValidation() && !reason().trim()"
+          placeholder="Vui lòng cung cấp chi tiết lý do cho yêu cầu hủy đơn của quý khách. Đội ngũ RENGA sẽ xem xét từng trường hợp cụ thể để đánh giá khả năng dừng quá trình sản xuất và chuẩn bị nguyên vật liệu."
+          [value]="reason()"
+          (input)="onReasonInput($event)"
+        ></textarea>
+        @if (showValidation() && !reason().trim()) {
+          <span class="cancel-bespoke__error">Vui lòng nhập lý do hủy đơn</span>
+        }
+
+        <div class="cancel-bespoke__ack">
+          <label class="cancel-bespoke__ack-label" for="design-cancel-ack">
+            <input
+              id="design-cancel-ack"
+              class="cancel-bespoke__ack-checkbox"
+              type="checkbox"
+              [checked]="acknowledged()"
+              (change)="toggleAck()"
+            />
+            <span class="cancel-bespoke__ack-text">
+              Tôi hiểu rằng yêu cầu này sẽ được gửi đến đội ngũ RENGA để xem xét chính thức và khoản đặt cọc của tôi có thể không được hoàn lại do sản phẩm đã bước vào giai đoạn thiết kế và chuẩn bị nguyên vật liệu
+            </span>
+          </label>
+        </div>
+        @if (showValidation() && !acknowledged()) {
+          <span class="cancel-bespoke__error">Vui lòng xác nhận bạn đã đọc và hiểu điều khoản</span>
+        }
+
+        <div class="cancel-bespoke__actions">
+          <button
+            type="button"
+            class="cancel-bespoke__submit"
+            [disabled]="isSubmitting()"
+            (click)="onSubmit()"
+          >
+            {{ isSubmitting() ? 'Đang gửi...' : 'Gửi yêu cầu đến Quản trị viên' }}
+          </button>
+          <button type="button" class="cancel-bespoke__keep" (click)="onClose()">
+            Tiếp tục giữ đơn hàng
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="order-modal order-modal--cancel-bespoke is-active">
+        <div class="cancel-bespoke__close-row">
+          <button type="button" class="omodal-close" aria-label="Đóng" (click)="onClose()">
+            <svg class="omodal-close__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+
+        @if (isSuccess()) {
+          <div class="cancel-bespoke__result-icon cancel-bespoke__result-icon--success">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h2 class="cancel-bespoke__title">Hủy đơn thành công</h2>
+          <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+          <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
+            Đơn hàng của bạn đã được hủy thành công. Nếu đã đặt cọc, khoản tiền sẽ được hoàn lại theo chính sách của RENGA.
+          </p>
+        } @else {
+          <div class="cancel-bespoke__result-icon cancel-bespoke__result-icon--fail">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <h2 class="cancel-bespoke__title">Gửi thất bại</h2>
+          <div class="cancel-bespoke__divider" aria-hidden="true"></div>
+          <p class="cancel-bespoke__desc" style="margin-bottom: 48px;">
+            Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại hoặc liên hệ trực tiếp với đội ngũ RENGA để được hỗ trợ.
+          </p>
+        }
+
+        <div class="cancel-bespoke__actions" style="grid-template-columns: 1fr;">
+          <button type="button" class="cancel-bespoke__submit" (click)="onClose()">Đóng</button>
+        </div>
+      </div>
+    }
+
+  </div>
 </div>

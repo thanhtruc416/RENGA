@@ -1,3 +1,318 @@
-<div class="warranty-management-page">
-  <p>warranty-management placeholder</p>
+<div class="warranty-page">
+  <!-- Page Header -->
+  <header class="warranty-page__header">
+    <div class="warranty-page__title-group">
+      <h1 class="warranty-page__title">Xử lý yêu cầu sửa chữa và bảo hành</h1>
+      <p class="warranty-page__subtitle">Duyệt các yêu cầu bảo hành hợp lệ hoặc từ chối kèm lý do</p>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="warranty-page__toolbar">
+    <div class="warranty-page__filters">
+      <div class="filter-group">
+        <label class="filter-label">TÌM KIẾM</label>
+        <input type="text" class="filter-select" placeholder="Mã, khách hàng, sản phẩm..."
+          [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">TRẠNG THÁI</label>
+        <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          @for (s of statusOptions; track s) {
+            <option [value]="s">{{ statusLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      <div class="filter-group" style="justify-content:flex-end">
+        @if (filterApplied()) {
+          <button class="wm-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+        } @else {
+          <button class="wm-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  @if (stats(); as s) {
+    <div class="warranty-page__stats">
+      <div class="stat-card">
+        <p class="stat-card__label">TỔNG YÊU CẦU</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.total }}</span></div>
+      </div>
+      <div class="stat-card">
+        <p class="stat-card__label">CHỜ XỬ LÝ</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.pendingCount }}</span></div>
+      </div>
+      <div class="stat-card">
+        <p class="stat-card__label">ĐANG XỬ LÝ / SỬA CHỮA</p>
+        <div class="stat-card__value-group"><span class="stat-card__value">{{ s.inProgressCount }}</span></div>
+      </div>
+      <div class="stat-card">
+        <p class="stat-card__label">THỜI GIAN SỬA CHỮA TB</p>
+        <div class="stat-card__value-group">
+          <span class="stat-card__value">{{ s.avgRepairDays !== null ? (s.avgRepairDays | number:'1.1-1') + ' ngày' : '—' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Data Table -->
+  <div class="warranty-table">
+    <div class="warranty-table__header">
+      <span>SẢN PHẨM</span>
+      <span>ID</span>
+      <span>KHÁCH HÀNG</span>
+      <span>MÔ TẢ</span>
+      <span class="text-center">TRẠNG THÁI</span>
+      <span class="text-center">THAO TÁC</span>
+    </div>
+
+    <div class="warranty-table__body">
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (requests().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Không có yêu cầu nào.</p>
+      } @else {
+        @for (req of requests(); track req.warranty_id) {
+          <div class="warranty-table__row">
+
+            <div class="table-cell table-cell--product">
+              <img class="table-cell__img" [src]="req.product_image || 'assets/images/collection-prod-diamond-ring.png'" [alt]="req.product_name || ''" loading="lazy">
+              <div class="table-cell__info">
+                <p class="table-cell__title">{{ req.product_name || 'Sản phẩm #' + req.order_id }}</p>
+                <p class="table-cell__sub">{{ req.variant_name || req.order_id }}</p>
+              </div>
+            </div>
+
+            <div class="table-cell"><p class="table-cell__text">{{ req.warranty_id }}</p></div>
+
+            <div class="table-cell">
+              <p class="table-cell__title">{{ req.customer_name }}</p>
+              <p class="table-cell__sub">{{ req.customer_phone }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__text table-cell__text--truncate">{{ req.issue_description }}</p>
+            </div>
+
+            <div class="table-cell text-center">
+              <span class="status-badge" [ngClass]="statusBadgeClass[req.warranty_status]">{{ statusLabel[req.warranty_status] }}</span>
+            </div>
+
+            <div class="table-cell table-cell--actions text-center">
+              @if (req.warranty_status === 'PENDING') {
+                <button class="btn-action btn-action--primary" (click)="openModal(req)">XỬ LÝ</button>
+              } @else if (req.warranty_status === 'QUOTED') {
+                <button class="btn-action btn-action--outline" (click)="openViewModal(req)">XEM BÁO GIÁ</button>
+              } @else if (req.warranty_status === 'ACCEPTED') {
+                <button class="btn-action btn-action--primary" (click)="advanceStatus(req, 'IN_PROGRESS')">BẮT ĐẦU SỬA</button>
+              } @else if (req.warranty_status === 'IN_PROGRESS') {
+                <button class="btn-action btn-action--primary" (click)="advanceStatus(req, 'COMPLETED')">HOÀN TẤT</button>
+              } @else {
+                <button class="btn-action btn-action--outline" (click)="openViewModal(req)">XEM CHI TIẾT</button>
+              }
+            </div>
+
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="warranty-page__pagination">
+    <p class="warranty-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} YÊU CẦU BẢO HÀNH
+    </p>
+    <div class="warranty-page__pagination-controls">
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
+
+<!-- ================= MODAL XỬ LÝ BẢO HÀNH ================= -->
+@if (selectedRequest(); as req) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Xử lý yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="modal-subtitle">Thiết lập phương án xử lý cho yêu cầu số {{ req.warranty_id }}</p>
+        </div>
+        <button class="modal-close" (click)="closeModal()" aria-label="Đóng">✕</button>
+      </div>
+
+      <div class="modal-info-card">
+        <img class="modal-info__img" [src]="req.product_image || 'assets/images/collection-prod-diamond-ring.png'" [alt]="req.product_name || ''">
+        <div class="modal-info__details">
+          <p class="modal-info__label">Sản phẩm</p>
+          <p class="modal-info__product-name">{{ req.product_name || 'Đơn hàng ' + req.order_id }}</p>
+
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Mã đơn hàng</p>
+              <p class="modal-info__text">{{ req.order_id }}</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">{{ req.customer_name }}</p>
+            </div>
+          </div>
+
+          <p class="modal-info__label">Mô tả lỗi</p>
+          <p class="modal-info__text">{{ req.issue_description }}</p>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section__title">ẢNH MINH CHỨNG</p>
+        <div class="modal-evidence-grid">
+          @for (img of req.evidence_images; track $index) {
+            <img class="modal-evidence__img" [src]="img" alt="Ảnh minh chứng">
+          } @empty {
+            <p class="modal-info__text">Khách hàng không đính kèm ảnh.</p>
+          }
+        </div>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'accept'" (click)="switchTab('accept')">
+          CHẤP NHẬN BẢO HÀNH
+        </button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'quote'" (click)="switchTab('quote')">
+          BÁO GIÁ SỬA CHỮA
+        </button>
+        <button class="modal-tab-btn" [class.modal-tab-btn--active]="modalTab() === 'reject'" (click)="switchTab('reject')">
+          TỪ CHỐI
+        </button>
+      </div>
+
+      @if (modalTab() === 'accept') {
+        <div class="modal-form">
+          <p class="modal-info__text">Yêu cầu sẽ được chuyển sang trạng thái <strong>Đã chấp nhận</strong> và ghi nhận ngày nhận hàng hôm nay.</p>
+        </div>
+      }
+
+      @if (modalTab() === 'quote') {
+        <div class="modal-form">
+          <p class="modal-info__text" style="margin-bottom: 12px;">Dùng khi lỗi nằm ngoài phạm vi bảo hành miễn phí — khách sẽ nhận email báo giá và cần Đồng ý/Từ chối trước khi tiến hành sửa.</p>
+          <div class="form-group">
+            <label class="form-label">Chi phí dự kiến (VND)</label>
+            <input type="number" class="form-input" [formControl]="quoteCostCtrl" placeholder="Ví dụ: 500000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Thời gian hoàn thành dự kiến</label>
+            <input type="text" class="form-input" [formControl]="quoteTimeCtrl" placeholder="Ví dụ: 3-5 ngày làm việc">
+          </div>
+        </div>
+      }
+
+      @if (modalTab() === 'reject') {
+        <div class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Lý do từ chối</label>
+            <textarea class="form-textarea" [formControl]="rejectReasonCtrl" placeholder="Nhập lý do từ chối yêu cầu bảo hành..."></textarea>
+          </div>
+        </div>
+      }
+
+      <div class="modal-actions">
+        <button class="btn btn--outline" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitProcess()">
+          {{ modalTab() === 'quote' ? 'GỬI BÁO GIÁ CHO KHÁCH' : 'GỬI THÔNG BÁO CHO KHÁCH HÀNG' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- ================= MODAL XEM CHI TIẾT ================= -->
+@if (viewingRequest(); as req) {
+  <div class="modal-overlay" (click)="closeViewModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title vm-text-pink vm-title">Yêu cầu Bảo hành/Sửa chữa</h2>
+          <p class="modal-subtitle vm-text-pink">Thông tin yêu cầu số {{ req.warranty_id }}</p>
+        </div>
+        <button class="modal-close vm-text-pink" (click)="closeViewModal()">✕</button>
+      </div>
+
+      <div class="modal-info-card">
+        <img class="modal-info__img" [src]="req.product_image || 'assets/images/collection-prod-diamond-ring.png'" [alt]="req.product_name || ''">
+        <div class="modal-info__details">
+          <p class="modal-info__label">Sản phẩm</p>
+          <p class="modal-info__product-name">{{ req.product_name || 'Đơn hàng ' + req.order_id }}</p>
+
+          <div class="modal-info__grid">
+            <div>
+              <p class="modal-info__label">Mã đơn hàng</p>
+              <p class="modal-info__text">{{ req.order_id }}</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Khách hàng</p>
+              <p class="modal-info__text">{{ req.customer_name }}</p>
+            </div>
+          </div>
+
+          <p class="modal-info__label">Mô tả lỗi</p>
+          <p class="modal-info__text">{{ req.issue_description }}</p>
+        </div>
+      </div>
+
+      <div class="modal-section vm-border-bottom">
+        <p class="modal-section__title">ẢNH MINH CHỨNG</p>
+        <div class="modal-evidence-grid">
+          @for (img of req.evidence_images; track $index) {
+            <img class="modal-evidence__img" [src]="img" alt="Ảnh minh chứng">
+          } @empty {
+            <p class="modal-info__text">Khách hàng không đính kèm ảnh.</p>
+          }
+        </div>
+      </div>
+
+      @if (req.warranty_status === 'QUOTED' || req.estimated_cost) {
+        <div class="modal-section vm-mt-24">
+          <p class="modal-section__title vm-mb-8">Báo giá đã gửi</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr;">
+            <div>
+              <p class="modal-info__label">Chi phí dự kiến</p>
+              <p class="vm-text-pink vm-font-600 vm-text-xl">{{ req.estimated_cost | number:'1.0-0' }} VNĐ</p>
+            </div>
+            <div>
+              <p class="modal-info__label">Thời gian dự kiến</p>
+              <p class="vm-text-pink vm-font-600" style="font-size: 14px; margin-top: 12px;">{{ req.estimated_time }}</p>
+            </div>
+          </div>
+          @if (req.warranty_status === 'QUOTED') {
+            <p class="modal-info__text" style="margin-top: 12px;">Đang chờ khách hàng đồng ý hoặc từ chối báo giá.</p>
+          }
+        </div>
+      }
+
+      @if (req.warranty_status === 'REJECTED' && req.rejection_reason) {
+        <div class="modal-section vm-mt-24">
+          <p class="modal-section__title vm-mb-8">Lý do từ chối</p>
+          <p class="vm-text-pink vm-font-600" style="font-size: 14px;">{{ req.rejection_reason }}</p>
+        </div>
+      }
+
+      @if (req.warranty_status === 'COMPLETED') {
+        <div class="modal-section vm-mt-24">
+          <p class="modal-section__title vm-mb-8">Hoàn tất</p>
+          <p class="vm-text-pink vm-font-600" style="font-size: 14px;">Đã hoàn thành ngày {{ req.completed_at | date:'dd/MM/yyyy' }}</p>
+        </div>
+      }
+
+    </div>
+  </div>
+}

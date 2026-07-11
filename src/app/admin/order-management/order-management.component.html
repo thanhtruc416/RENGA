@@ -1,3 +1,150 @@
-<div class="order-management-page">
-  <p>order-management placeholder</p>
+<div class="om">
+  <!-- ── Header ── -->
+  <app-admin-header
+    title="Quản lý đơn hàng"
+    subtitle="Cập nhật và quản lý lịch hẹn của khách hàng với nhà thiết kế">
+  </app-admin-header>
+
+  <!-- ── Toolbar ── -->
+  <div class="om__toolbar">
+    <div class="om__search-wrap">
+      <svg class="om__search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="om__search" type="text" placeholder="TÌM KIẾM MÃ ĐƠN HOẶC KHÁCH HÀNG..." aria-label="Tìm kiếm đơn hàng"
+        [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" (keyup.enter)="onSearch()">
+    </div>
+
+    <div class="om__filter-group">
+      <label class="om__filter-label">LOẠI ĐƠN</label>
+      <div class="om__select-wrap">
+        <select class="om__select" [value]="filterType()" (change)="filterType.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          <option value="STANDARD">Có sẵn</option>
+          <option value="STUDIO">Tùy biến</option>
+          <option value="DESIGN">Thiết kế</option>
+        </select>
+        <svg class="om__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="om__filter-group">
+      <label class="om__filter-label">TRẠNG THÁI</label>
+      <div class="om__select-wrap">
+        <select class="om__select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          <option value="PENDING">Chờ thanh toán</option>
+          <option value="PAYMENT_CONFIRMED">Đã thanh toán</option>
+          <option value="PACKED">Đang đóng gói</option>
+          <option value="SHIPPED">Đang giao</option>
+          <option value="COMPLETED">Hoàn tất</option>
+          <option value="CANCELLED">Đã hủy</option>
+        </select>
+        <svg class="om__select-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    @if (filterApplied()) {
+      <button class="om__clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="om__apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+    }
+
+    <button class="om__export-btn" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      XUẤT BÁO CÁO
+    </button>
+  </div>
+
+  <!-- ── Table ── -->
+  <div class="om__table-wrap">
+    <table class="om__table">
+      <thead>
+        <tr>
+          <th class="om__th">MÃ ĐƠN</th>
+          <th class="om__th">KHÁCH HÀNG</th>
+          <th class="om__th">NGÀY ĐẶT</th>
+          <th class="om__th om__th--center">LOẠI ĐƠN</th>
+          <th class="om__th om__th--num">TỔNG TIỀN (₫)</th>
+          <th class="om__th om__th--center">TRẠNG THÁI</th>
+          <th class="om__th om__th--center">THAO TÁC</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders(); track order.order_id) {
+          <tr class="om__tr om__tr--clickable" (click)="goToDetail(order.order_id)">
+            <td class="om__td om__td--id">{{ order.order_id }}</td>
+            <td class="om__td">
+              <span class="om__customer-name">{{ order.customer_name ?? order.phone }}</span>
+              <span class="om__customer-product">{{ order.item_count }} sản phẩm</span>
+            </td>
+            <td class="om__td om__td--date">{{ order.created_at | date: 'dd/MM/yyyy' }}</td>
+            <td class="om__td om__td--center">
+              <span class="om__type-badge"
+                [class.om__type-badge--available]="order.order_type === 'STANDARD'"
+                [class.om__type-badge--bespoke]="order.order_type === 'STUDIO'"
+                [class.om__type-badge--design]="order.order_type === 'DESIGN'">
+                @if (order.order_type === 'STUDIO' || order.order_type === 'DESIGN') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                }
+                {{ typeLabel(order.order_type) }}
+              </span>
+            </td>
+            <td class="om__td om__td--num">{{ formatPrice(order.total_amount) }}</td>
+            <td class="om__td om__td--center">
+              <span class="om__status-badge"
+                [class.om__status--waiting]="order.order_status === 'PENDING'"
+                [class.om__status--crafting]="order.order_status === 'PACKED' || order.order_status === 'SHIPPED'"
+                [class.om__status--paid]="order.order_status === 'PAYMENT_CONFIRMED'"
+                [class.om__status--cancelled]="order.order_status === 'CANCELLED'"
+                [class.om__status--completed]="order.order_status === 'COMPLETED'">
+                {{ statusLabel(order.order_status) }}
+              </span>
+            </td>
+            <td class="om__td om__td--center">
+              <div class="om__actions">
+                @if (isPrimaryAction(order.order_status)) {
+                  <button class="om__action-primary" type="button"
+                    (click)="handleAction(order, $event)">
+                    {{ actionLabel(order.order_status) }}
+                  </button>
+                } @else {
+                  <button class="om__action-outline" type="button"
+                    (click)="handleAction(order, $event)">
+                    {{ actionLabel(order.order_status) }}
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Pagination ── -->
+  <div class="om__pagination">
+    <span class="om__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * 5 + 1 }}-{{ currentPage() * 5 > totalItems() ? totalItems() : currentPage() * 5 }} TRÊN {{ totalItems() }} ĐƠN HÀNG
+    </span>
+    <div class="om__pagination-pages">
+      <button class="om__page-btn om__page-btn--nav" type="button" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" aria-label="Trang trước">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      @for (page of pageNumbers; track page) {
+        <button class="om__page-btn" [class.om__page-btn--active]="currentPage() === page" type="button" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="om__page-btn om__page-btn--nav" type="button" [disabled]="currentPage() === totalPages" (click)="goToPage(currentPage() + 1)" aria-label="Trang sau">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
+
+<!-- TOAST MESSAGE ĐỘC LẬP TƯƠNG TỰ NHƯ TRANG CHI TIẾT -->
+@if (showToast()) {
+  <div class="toast-message" [class.toast-message--error]="toastType() === 'error'">
+    <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    {{ toastMessage() }}
+  </div>
+}

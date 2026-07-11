@@ -1,15 +1,10 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   DESIGN PAGE â€” The Designer flow (4 steps)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-.design-page {
+﻿.design-page {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-px) 120px;
   font-family: var(--font-sans);
 }
 
-/* â”€â”€ Step Progress â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .step-progress {
   display: flex;
   align-items: center;
@@ -83,7 +78,6 @@
   background: var(--color-primary);
 }
 
-/* â”€â”€ Step wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .design-step {
   padding-bottom: 40px;
 }
@@ -115,9 +109,6 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 1 â€” Designer Grid
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .designer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -159,7 +150,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center 25%;
   display: block;
   filter: grayscale(30%);
   transition: filter 0.3s, transform 0.4s;
@@ -319,17 +310,15 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 2 â€” Schedule
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ds-time-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 48px;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
   align-items: start;
+  max-width: 740px;
+  margin: 0 auto;
 }
 
-/* Designer panel */
 .ds-designer-panel {
   border: 1px solid var(--color-border);
   background: var(--color-white);
@@ -340,16 +329,17 @@
 
 .ds-designer-panel__photo {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  width: 370px;
+  height: 270px;
+  margin: 0 auto;
   overflow: hidden;
 }
 
 .ds-designer-panel__photo-img {
-  width: 100%;
-  height: 100%;
+  width: 370px;
+  height: 270px;
   object-fit: cover;
-  object-position: top;
+  object-position: center 25%;
   filter: grayscale(20%);
 }
 
@@ -369,9 +359,9 @@
 
 .ds-designer-panel__role {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--color-primary);
   margin: 0 20px 8px;
@@ -420,7 +410,7 @@
   font-size: 13px;
   color: var(--color-dark);
   font-weight: 500;
-  max-width: 140px;
+  max-width: 200px;
   text-align: right;
 }
 
@@ -451,16 +441,15 @@
   }
 }
 
-/* Calendar */
 .ds-calendar-panel {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .ds-calendar {
   border: 1px solid var(--color-border);
-  padding: 24px;
+  padding: 20px;
   background: var(--color-white);
 }
 
@@ -499,28 +488,32 @@
 .ds-calendar__grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 6px;
 }
 
 .ds-calendar__day-header {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
   text-align: center;
   color: var(--color-muted);
-  padding: 6px 0;
+  padding: 4px 0 10px;
 }
 
 .ds-calendar__date {
   aspect-ratio: 1;
+  width: 100%;
+  max-width: 88px;
+  max-height: 88px;
+  margin: 0 auto;
   border: none;
   background: transparent;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 16px;
   color: var(--color-dark);
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -534,6 +527,7 @@
   &.is-selected {
     background: var(--color-primary) !important;
     color: var(--color-white) !important;
+    border-radius: 6px;
   }
 
   &.is-disabled,
@@ -548,11 +542,26 @@
   cursor: default;
 }
 
-/* Timeslots */
 .ds-timeslot-section {
   border: 1px solid var(--color-border);
-  padding: 24px;
+  padding: 16px;
   background: var(--color-white);
+}
+
+.ds-timeslot-section--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  text-align: center;
+  padding: 32px;
+}
+
+.ds-timeslot-section--empty p {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  max-width: 260px;
 }
 
 .ds-timeslot-section__title {
@@ -572,7 +581,7 @@
 }
 
 .ds-timeslot {
-  padding: 12px 8px;
+  padding: 9px 8px;
   border: 1px solid var(--color-border);
   background: var(--color-white);
   font-family: var(--font-sans);
@@ -583,8 +592,9 @@
   transition: border-color 0.15s, background 0.15s, color 0.15s;
   text-align: center;
 
-  &:hover:not(:disabled):not(.is-unavailable) {
+  &:hover:not(:disabled):not(.is-unavailable):not(.is-selected) {
     border-color: var(--color-primary);
+    background: var(--color-white);
     color: var(--color-primary);
   }
 
@@ -604,9 +614,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 3 â€” Idea Form
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ds-idea-form {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -629,6 +636,13 @@
   grid-column: 1 / -1;
 }
 
+.ds-form__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
 .ds-form__label {
   font-family: var(--font-sans);
   font-size: 11px;
@@ -637,6 +651,46 @@
   text-transform: uppercase;
   color: var(--color-dark);
   margin: 0;
+}
+
+.ds-voice-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.ds-voice-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.ds-voice-btn--active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
+  animation: pulse-border 1s ease-in-out infinite;
+}
+
+.ds-voice-error {
+  margin-top: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #b3261e;
+}
+
+@keyframes pulse-border {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.75; }
 }
 
 .ds-form__input,
@@ -665,13 +719,13 @@
   position: relative;
 
   &::after {
-    content: 'âˆ¨';
+    content: '\203A';
     position: absolute;
     right: 14px;
     top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: var(--color-muted);
+    transform: translateY(-50%) rotate(90deg);
+    font-size: 16px;
+    color: var(--color-primary);
     pointer-events: none;
   }
 }
@@ -682,7 +736,6 @@
   cursor: pointer;
 }
 
-/* Toggle buttons */
 .ds-toggle-group {
   display: flex;
   gap: 10px;
@@ -714,7 +767,6 @@
   }
 }
 
-/* Upload zone */
 .ds-upload-zone {
   display: flex;
   flex-direction: column;
@@ -752,14 +804,54 @@
   color: var(--color-muted);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 4 â€” Payment
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.ds-upload-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ds-upload-preview {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+}
+
+.ds-upload-preview__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--color-border);
+}
+
+.ds-upload-preview__remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
 .ds-payment-layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 620px) 340px;
   gap: 48px;
   align-items: start;
+  max-width: 1020px;
+  margin: 0 auto;
 }
 
 .ds-payment-left {
@@ -768,7 +860,6 @@
   gap: 32px;
 }
 
-/* Appointment details */
 .ds-appt-detail {
   border: 1px solid var(--color-border);
   padding: 28px;
@@ -814,7 +905,6 @@
   text-align: right;
 }
 
-/* Member card */
 .ds-member-card {
   border: 1px solid var(--color-primary);
   padding: 20px 24px;
@@ -858,7 +948,6 @@
   padding: 8px 16px;
 }
 
-/* Payment methods */
 .ds-pay-methods {
   border: 1px solid var(--color-border);
   padding: 28px;
@@ -880,52 +969,80 @@
 .ds-pay-method {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
+  gap: 16px;
+  padding: 18px 20px;
   border: 1px solid var(--color-border);
   margin-bottom: 10px;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s;
 
   &:last-child { margin-bottom: 0; }
 
   &.is-selected {
-    border-color: var(--color-primary);
-    background: var(--color-primary-light);
+    border-color: var(--color-primary-dark);
+    background: var(--color-bg-card);
   }
 
-  input[type='radio'] {
-    accent-color: var(--color-primary);
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+  &:hover:not(.is-selected) {
+    border-color: var(--color-primary);
   }
 }
 
-.ds-pay-method__icon {
+.ds-pay-method__radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ds-pay-method__radio-ui {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
   flex-shrink: 0;
+  background: var(--color-primary-dark);
 }
 
-.ds-pay-method__icon svg {
-  display: block;
-  border-radius: 6px;
+.ds-pay-method__radio-ui--empty {
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+}
+
+.ds-pay-method__radio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-white);
 }
 
 .ds-pay-method__label {
   font-family: var(--font-sans);
   font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
   color: var(--color-dark);
+  flex: 1;
 }
 
-/* Payment summary */
 .ds-pay-summary {
   border: 1px solid var(--color-border);
   padding: 28px;
   background: var(--color-white);
   position: sticky;
   top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ds-pay-summary .ds-member-card {
+  margin: -28px -28px 0;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .ds-pay-summary__title {
@@ -956,8 +1073,104 @@
   color: var(--color-dark);
 }
 
+
 .ds-pay-summary__row--discount {
   color: #27ae60;
+}
+
+.ds-pay-summary__row--subtotal {
+  font-weight: 700;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 4px;
+}
+
+.ds-pay-summary__rows--split {
+  border-top: 1px solid var(--color-border);
+  padding-top: 12px;
+  margin-top: 0;
+}
+
+.ds-pay-summary__row--muted {
+  color: var(--color-text-muted, #888);
+  font-size: 12px;
+}
+
+.ds-voucher {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 12px;
+}
+
+.ds-voucher__row {
+  display: flex;
+  gap: 8px;
+}
+
+.ds-voucher__input {
+  flex: 1;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-dark);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ds-voucher__input:focus { border-color: var(--color-primary); }
+
+.ds-voucher__input--error { border-color: #d32f2f; }
+
+.ds-voucher__btn {
+  height: 36px;
+  padding: 0 14px;
+  background: var(--color-dark);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.ds-voucher__btn:hover { background: var(--color-primary); }
+
+.ds-voucher__error {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: #d32f2f;
+  margin: 6px 0 0;
+}
+
+.ds-voucher__applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-primary-light);
+  padding: 8px 12px;
+}
+
+.ds-voucher__applied-code {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.08em;
+}
+
+.ds-voucher__remove {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
 }
 
 .ds-pay-summary__total {
@@ -973,16 +1186,16 @@
 .ds-pay-summary__total-label {
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--color-dark);
 }
 
 .ds-pay-summary__total-val {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 500;
   color: var(--color-primary);
 }
 
@@ -1013,7 +1226,6 @@
   margin: 0;
 }
 
-/* â”€â”€ Shared button styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn {
   font-family: var(--font-sans);
   font-size: 11px;
@@ -1033,15 +1245,15 @@
   &:hover { border-color: var(--color-dark); }
 }
 
-/* â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 1024px) {
   .designer-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .ds-time-layout {
-    grid-template-columns: 240px 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 700px;
   }
 
   .ds-payment-layout {

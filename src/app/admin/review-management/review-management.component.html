@@ -1,0 +1,92 @@
+<div class="qa-page">
+  <header>
+    <h1 class="qa-page__title">Quản lý đánh giá sản phẩm</h1>
+    <p class="qa-page__subtitle">Kiểm duyệt đánh giá của khách hàng — phản hồi hoặc ẩn nội dung không phù hợp</p>
+  </header>
+
+  <!-- Filters -->
+  <div class="qa-page__tabs" style="border-bottom:none; align-items:flex-end; gap: var(--sp-md);">
+    <div>
+      <label style="font-size:11px; color:var(--color-muted); text-transform:uppercase; display:block; margin-bottom:4px;">Tìm kiếm</label>
+      <input type="text" placeholder="Khách hàng, sản phẩm, nội dung..."
+        style="padding:8px 12px; border:1px solid var(--color-border); font-size:13px; min-width:220px;"
+        [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
+    </div>
+    <div>
+      <label style="font-size:11px; color:var(--color-muted); text-transform:uppercase; display:block; margin-bottom:4px;">Trạng thái</label>
+      <select style="padding:8px 12px; border:1px solid var(--color-border); font-size:13px;"
+        [value]="filterVisibility()" (change)="filterVisibility.set($any($event.target).value)">
+        <option value="">Tất cả</option>
+        <option value="VISIBLE">Đang hiện</option>
+        <option value="HIDDEN">Đã ẩn</option>
+      </select>
+    </div>
+    @if (filterApplied()) {
+      <button class="btn btn--outline" style="width:auto; padding:8px 16px;" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+    } @else {
+      <button class="btn btn--primary" style="width:auto; padding:8px 16px;" type="button" (click)="applyFilters()">ÁP DỤNG</button>
+    }
+  </div>
+
+  <!-- List -->
+  <div class="qa-page__list" [formGroup]="replyForm" style="margin-top: var(--sp-lg);">
+    @if (isLoading()) {
+      <p class="qa-page__empty">Đang tải...</p>
+    } @else {
+      @for (r of reviews(); track r.review_id) {
+        <article class="question-card" [style.opacity]="r.visibility_status === 'HIDDEN' ? 0.55 : 1">
+
+          <div class="question-card__customer">
+            <div class="question-card__avatar" style="background:var(--color-bg-card); display:flex; align-items:center; justify-content:center; font-weight:600;">
+              {{ r.customer_name.charAt(0).toUpperCase() }}
+            </div>
+            <p class="question-card__customer-name">{{ r.customer_name }}</p>
+            <p class="question-card__date">{{ r.created_at | date:'dd/MM/yyyy' }}</p>
+          </div>
+
+          <div class="question-card__content">
+            <div class="question-card__product">
+              <img class="question-card__product-img" [src]="r.product_image || 'assets/images/collection-prod-diamond-ring.png'" [alt]="r.product_name || ''" loading="lazy">
+              <div>
+                <span class="question-card__tag">SẢN PHẨM</span>
+                <p class="question-card__product-name">{{ r.product_name || 'Đơn hàng tùy biến' }}</p>
+              </div>
+            </div>
+
+            <div>
+              <span class="question-card__tag">ĐÁNH GIÁ ({{ r.rating }}/5)</span>
+              <p class="question-card__text">
+                @for (s of starsArray(r.rating); track s) { ★ }{{ ' ' }}{{ r.content }}
+              </p>
+              <span class="question-card__tag">PHẢN HỒI CỦA ADMIN</span>
+              <textarea class="question-card__textarea" [formControlName]="r.review_id" placeholder="Nhập phản hồi cho khách hàng..."></textarea>
+            </div>
+          </div>
+
+          <div class="question-card__actions">
+            <button class="btn btn--primary" (click)="submitReply(r.review_id)">GỬI PHẢN HỒI</button>
+            <button class="btn btn--outline" (click)="toggleVisibility(r)">
+              {{ r.visibility_status === 'VISIBLE' ? 'ẨN ĐÁNH GIÁ' : 'BỎ ẨN' }}
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <p class="qa-page__empty">Không có đánh giá nào.</p>
+      }
+    }
+  </div>
+
+  <!-- Pagination -->
+  <footer class="qa-page__pagination">
+    <p class="qa-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} ĐÁNH GIÁ
+    </p>
+    <div class="qa-page__pagination-controls">
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
+</div>

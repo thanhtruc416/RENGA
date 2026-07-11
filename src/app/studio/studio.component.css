@@ -1,17 +1,9 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STUDIO PAGE â€” RENGA Bespoke
-   Matches Figma frames: 197-5, 197-127, 197-811,
-   197-240, 197-404, 197-582
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-/* â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-*,
+﻿*,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -19,7 +11,6 @@
   font-family: var(--font-sans);
 }
 
-/* â”€â”€ Studio header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio__header {
   text-align: center;
   padding: 64px 0 40px;
@@ -54,9 +45,6 @@
   margin: 0 auto;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP PROGRESS BAR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .step-progress {
   display: flex;
   align-items: center;
@@ -122,7 +110,7 @@
   max-width: 160px;
   height: 1px;
   background: var(--color-border);
-  margin-bottom: 22px; /* align with circle center */
+  margin-bottom: 22px;
   transition: background 0.2s;
 }
 
@@ -130,9 +118,6 @@
   background: var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STUDIO CARD â€” main content wrapper
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -149,6 +134,13 @@
   gap: 0;
 
   > .studio-card__preview {
+    border-right: 1px solid var(--color-border);
+  }
+}
+
+.studio-card--engrave {
+  > .engrave-gallery {
+    height: 100%;
     border-right: 1px solid var(--color-border);
   }
 }
@@ -174,7 +166,6 @@
   margin: 0;
 }
 
-/* â”€â”€ Split card: left preview pane â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio-card__preview {
   position: relative;
   background: #f5f0f2;
@@ -220,7 +211,6 @@
   opacity: 0.75;
 }
 
-/* â”€â”€ Split card: right options pane â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .studio-card__options {
   padding: 48px;
   display: flex;
@@ -243,9 +233,6 @@
   margin-top: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   BUTTONS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -307,9 +294,6 @@
   &:hover { color: var(--color-dark); }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 1 â€” Category grid
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -402,9 +386,6 @@
   .category-card:hover & { background: #333; }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 2 â€” Material options
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .material-list {
   display: flex;
   flex-direction: column;
@@ -431,6 +412,20 @@
   border: 2px solid var(--color-black);
 }
 
+.material-option--disabled {
+  opacity: 0.4;
+  filter: grayscale(1);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.material-option__out {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #999;
+  text-transform: uppercase;
+}
+
 .material-option__swatch {
   width: 44px;
   height: 44px;
@@ -447,7 +442,7 @@
 }
 
 .material-option__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 400;
   color: var(--color-black);
@@ -462,16 +457,13 @@
 }
 
 .material-option__price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 3 â€” Stone customization
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .stone-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -495,15 +487,35 @@
 }
 
 .stone-option--selected {
-  background: var(--color-black);
-  border-color: var(--color-black);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
 
-  .stone-option__label { color: var(--color-white); }
-  .stone-option__icon { filter: invert(1); }
+  .stone-option__label { color: var(--color-primary); }
+  .stone-option__icon { filter: none; }
 }
 
 .stone-option--muted {
   opacity: 0.6;
+}
+
+.stone-option--disabled {
+  opacity: 0.35;
+  filter: grayscale(1);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.stone-unavail-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff8f0;
+  border: 1px solid #f0d8b0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #a06020;
+  margin-bottom: 16px;
 }
 
 .stone-option__icon {
@@ -512,6 +524,7 @@
   object-fit: contain;
   display: block;
 }
+
 
 .stone-option__label {
   font-family: var(--font-sans);
@@ -523,7 +536,6 @@
   text-align: center;
 }
 
-/* Carat slider */
 .carat-control {
   margin-bottom: 20px;
 }
@@ -563,8 +575,8 @@
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--color-primary);
     cursor: pointer;
@@ -573,8 +585,8 @@
   }
 
   &::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--color-primary);
     border: none;
@@ -587,15 +599,15 @@
 .carat-control__range-labels {
   display: flex;
   justify-content: space-between;
+  padding: 0 8px;
+  margin-top: 6px;
   font-family: var(--font-sans);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-muted);
-  margin-top: 6px;
 }
 
-/* Stone price breakdown */
 .stone-details {
   background: #faf5f7;
   border: 1px solid var(--color-border);
@@ -630,9 +642,6 @@
   font-weight: 700;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 4 â€” Engrave gallery + controls
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .engrave-gallery {
   display: flex;
   flex-direction: column;
@@ -641,19 +650,102 @@
 
 .engrave-gallery__main {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: var(--color-bg-card);
   flex: 1;
+  min-height: 480px;
+  width: 100%;
+  overflow: hidden;
+  background: #f5f0f2;
 }
 
 .engrave-gallery__main-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
+}
+
+.ring-inner-preview {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px 20px;
+  width: 100%;
+  background: #f5f0f2;
+  border-top: 1px solid var(--color-border);
+}
+
+.ring-inner-preview__label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  align-self: flex-start;
+}
+
+.ring-inner-preview__band {
+  width: 78%;
+  height: 60px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+/* top-edge highlight line */
+.ring-inner-preview__band::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.55);
+}
+
+/* bottom-edge shadow line */
+.ring-inner-preview__band::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.25);
+}
+
+.ring-inner-preview__text {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  /* subtle engraved look */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.ring-inner-preview__text--serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: none;
+}
+
+.ring-inner-preview__placeholder {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  position: relative;
+  z-index: 1;
 }
 
 .engrave-gallery__overlay {
@@ -711,7 +803,6 @@
   box-shadow: inset 0 0 0 2px var(--color-black);
 }
 
-/* Font selector */
 .font-selector {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -744,7 +835,6 @@
   color: var(--color-white);
 }
 
-/* Engrave text input */
 .engrave-input-wrap {
   display: flex;
   flex-direction: column;
@@ -765,14 +855,14 @@
   width: 100%;
   border: 1px solid var(--color-black);
   padding: 16px;
-  font-family: var(--font-serif);
+  font-family: 'Montserrat', Arial, sans-serif;
   font-size: 22px;
   color: var(--color-dark);
   background: var(--color-white);
   outline: none;
   transition: box-shadow 0.15s;
 
-  &::placeholder { color: #ccc; }
+  &::placeholder { color: #ccc; font-family: 'Montserrat', Arial, sans-serif; }
   &:focus { box-shadow: 0 0 0 2px rgba(196, 96, 126, 0.20); }
 }
 
@@ -813,9 +903,6 @@
   border-left: 3px solid var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 5A â€” Order confirmation card
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-card {
   background: var(--color-white);
   border: 1px solid var(--color-border);
@@ -861,7 +948,7 @@
 }
 
 .order-card__item-price {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   white-space: nowrap;
@@ -891,10 +978,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
-    font-size: 28px;
-    color: #9a3f5c;
-    font-weight: 400;
+    font-family: var(--font-sans);
+    font-size: 24px;
+    color: var(--color-primary-dark);
+    font-weight: 500;
   }
 }
 
@@ -914,10 +1001,10 @@
 }
 
 .order-card__deposit-amount {
-  font-family: var(--font-serif);
-  font-size: 22px;
+  font-family: var(--font-sans);
+  font-size: 20px;
   color: var(--color-primary);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .order-card__actions {
@@ -934,9 +1021,6 @@
   padding-top: 8px;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   STEP 5B â€” Checkout form layout
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .checkout-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -952,6 +1036,9 @@
 }
 
 .checkout-section__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
@@ -963,7 +1050,20 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-/* Form grid */
+.checkout-section__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--color-dark);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  flex-shrink: 0;
+}
+
 .checkout-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1014,7 +1114,6 @@
   color: #c0392b;
 }
 
-/* Payment methods */
 .payment-methods {
   display: flex;
   flex-direction: column;
@@ -1071,7 +1170,6 @@
   color: var(--color-dark);
 }
 
-/* â”€â”€ Checkout aside: order summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .checkout-layout__aside {
   position: sticky;
   top: 24px;
@@ -1110,7 +1208,7 @@
 }
 
 .checkout-summary__product-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--color-black);
   margin: 0 0 4px;
@@ -1153,7 +1251,6 @@
   }
 }
 
-/* Voucher row */
 .voucher-row {
   display: flex;
   gap: 8px;
@@ -1190,6 +1287,14 @@
   &:hover { background: #333; }
 }
 
+.voucher-row__msg {
+  font-size: 12px;
+  margin-top: 6px;
+  padding: 0 2px;
+  &.voucher-row__msg--success { color: #2a8a4b; }
+  &.voucher-row__msg--error   { color: #c0392b; }
+}
+
 .checkout-summary__total {
   display: flex;
   justify-content: space-between;
@@ -1206,10 +1311,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 24px;
     color: var(--color-black);
-    font-weight: 400;
+    font-weight: 500;
   }
 }
 
@@ -1228,10 +1333,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 20px;
     color: var(--color-primary);
-    font-weight: 400;
+    font-weight: 500;
   }
 }
 
@@ -1248,9 +1353,6 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   FLOATING PRICE SUMMARY
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-price-summary {
   position: fixed;
   bottom: 0;
@@ -1276,7 +1378,7 @@
 }
 
 .studio-price-summary__amount {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 700;
   color: var(--color-white);
@@ -1291,9 +1393,86 @@
   margin: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PREVIEW FOOT (label + icon buttons)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.studio-save-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.studio-save-popup {
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 48px 40px 40px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  animation: popup-in 0.25s ease;
+}
+
+@keyframes popup-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.studio-save-popup__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.studio-save-popup__icon--dev {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.studio-save-popup__title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.studio-save-popup__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.studio-save-popup__btn {
+  margin-top: 8px;
+  padding: 12px 40px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.studio-save-popup__btn:hover {
+  opacity: 0.88;
+}
+
 .studio-card__preview-foot {
   position: absolute;
   bottom: 0;
@@ -1341,9 +1520,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PREVIEW NAME OVERLAY (step 3)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card__preview-name {
   position: absolute;
   bottom: 48px;
@@ -1355,7 +1531,7 @@
 }
 
 .studio-card__preview-name-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 6px;
@@ -1368,9 +1544,6 @@
   opacity: 0.85;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CARD HEAD ROW (title + skip button)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-card__head--row {
   display: flex;
   align-items: flex-start;
@@ -1385,9 +1558,6 @@
   flex-shrink: 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   SECTION HEADERS (01. label + chip)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .studio-section-header {
   display: flex;
   align-items: center;
@@ -1414,9 +1584,6 @@
   color: var(--color-primary);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PRICE BREAKDOWN (step 3)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .price-breakdown {
   background: #faf5f7;
   border: 1px solid var(--color-border);
@@ -1462,16 +1629,13 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 22px;
-    color: #9a3f5c;
+    color: var(--color-primary-dark);
     font-weight: 400;
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ENGRAVE â€” input meta + fee row
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .engrave-input-wrap__free {
   font-family: var(--font-sans);
   font-size: 10px;
@@ -1501,14 +1665,11 @@
 }
 
 .engrave-fee-row__value {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 20px;
   color: var(--color-black);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ORDER CARD â€” step 5a
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .order-card__heading {
   font-family: var(--font-sans);
   font-size: 12px;
@@ -1534,9 +1695,6 @@
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CHECKOUT SECTION â€” step 5b header row
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .checkout-section__header {
   display: flex;
   align-items: center;
@@ -1559,12 +1717,216 @@
   }
 }
 
+.blank-loading {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  padding: 40px 0;
+}
+
+.material-card--selected {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.blank-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 0;
+}
+
+.blank-empty__msg {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  text-align: center;
+  margin: 0;
+}
+
+.blank-empty__retry {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: none;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.blank-empty__retry:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.blank-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 680px)  { grid-template-columns: repeat(2, 1fr); }
+}
+
+.blank-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 0;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(196,96,126,0.14);
+  }
+}
+
+.blank-card__img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #f5f0ed;
+}
+
+.blank-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+
+  .blank-card:hover & { transform: scale(1.05); }
+}
+
+.blank-card__body {
+  padding: 18px 18px 22px;
+  background: #fdf5f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.blank-card__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  opacity: 0.65;
+  margin: 0;
+}
+
+.blank-card__name {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.blank-card__price {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-primary);
+  margin: 4px 0 0;
+}
+
+.address-picker-wrap {
+  position: relative;
+}
+
+.address-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: 320px;
+  background: #fff;
+  border: 1px solid #e8e0d8;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  padding: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.address-picker__empty {
+  font-size: 13px;
+  color: #888;
+  padding: 12px 8px;
+  text-align: center;
+  margin: 0;
+}
+
+.address-picker__item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  transition: background 0.15s;
+
+  &:hover { background: #fdf5f7; }
+
+  strong {
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+}
+
+.address-picker__close {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  border: none;
+  border-top: 1px solid #f0ebe6;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  letter-spacing: 1px;
+
+  &:hover { color: var(--color-primary); }
+}
+
 .btn--sm {
   padding: 8px 16px;
   font-size: 10px;
 }
 
-/* Select field */
 .form-field__select {
   cursor: pointer;
   appearance: auto;
@@ -1572,7 +1934,6 @@
   position: relative;
 }
 
-/* Checkout summary additions */
 .checkout-summary__line {
   display: flex;
   justify-content: space-between;
@@ -1625,10 +1986,10 @@
   }
 
   strong {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 18px;
     color: var(--color-primary);
-    font-weight: 400;
+    font-weight: 500;
   }
 
 }
@@ -1651,9 +2012,6 @@
   margin: 2px 0 0;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   RESPONSIVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 1024px) {
   .studio {
     padding: 0 40px 100px;

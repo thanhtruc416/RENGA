@@ -1,3 +1,169 @@
-<div class="home-page">
-  <p>home placeholder</p>
+﻿<div class="home">
+
+  <!-- Hero Section -->
+  <section class="home__hero">
+    <div class="home__hero-content">
+      <h1 class="home__hero-title">Kể Câu Chuyện Của Riêng Bạn</h1>
+      <p class="home__hero-subtitle">
+        Tự tay thiết kế chiếc nhẫn trong mơ hoặc làm việc trực tiếp cùng Nhà thiết kế của RENGA
+      </p>
+      <div class="home__hero-actions">
+        <a class="home__hero-btn" (click)="scrollToCategories()">Đặt hàng có sẵn</a>
+        <a class="home__hero-btn" (click)="guardedNav('/studio')">THE STUDIO</a>
+        <a class="home__hero-btn" (click)="guardedNav('/the-designer')">THE DESIGNER</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Bar -->
+  <section class="home__features">
+    @for (feature of features; track feature.label) {
+      <div class="home__features-item">
+        <img [src]="feature.icon" [alt]="feature.label" class="home__features-icon" />
+        <span class="home__features-label">{{ feature.label }}</span>
+      </div>
+    }
+  </section>
+
+  <!-- Product Categories -->
+  <section id="categories" class="home__categories">
+    <h2 class="home__categories-title">Khám phá Danh mục sản phẩm</h2>
+    <div class="home__categories-track-wrap">
+      <div class="home__categories-track">
+        @for (cat of categories(); track cat.slug) {
+          <a [routerLink]="['/products']" [queryParams]="{ category: cat.slug }" class="home__category-item">
+            <div class="home__category-arch">
+              <img [src]="cat.imageUrl" [alt]="cat.name" class="home__category-img" />
+            </div>
+            <span class="home__category-name">{{ cat.name }}</span>
+          </a>
+        }
+        @for (cat of categories(); track 'dup-' + cat.slug) {
+          <a [routerLink]="['/products']" [queryParams]="{ category: cat.slug }" class="home__category-item" aria-hidden="true">
+            <div class="home__category-arch">
+              <img [src]="cat.imageUrl" [alt]="cat.name" class="home__category-img" />
+            </div>
+            <span class="home__category-name">{{ cat.name }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Sellers -->
+  <section class="home__bestsellers">
+    <div class="home__bestsellers-header">
+      <h3 class="home__bestsellers-title">Best Sellers</h3>
+
+    </div>
+    <div class="home__bestsellers-track-wrap">
+      <div class="home__bestsellers-track">
+        @for (product of bestSellers(); track product.id) {
+          <a [routerLink]="['/products', product.id]" class="home__product-card">
+            <span class="home__product-badge">BEST SELLER</span>
+            <div class="home__product-img-wrap">
+              <img [src]="product.imageUrl" [alt]="product.name" class="home__product-img" />
+            </div>
+            <div class="home__product-info">
+              <p class="home__product-name">{{ product.name }}</p>
+              <p class="home__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
+            </div>
+          </a>
+        }
+        @for (product of bestSellers(); track 'dup-' + product.id) {
+          <a [routerLink]="['/products', product.id]" class="home__product-card" aria-hidden="true">
+            <span class="home__product-badge">BEST SELLER</span>
+            <div class="home__product-img-wrap">
+              <img [src]="product.imageUrl" [alt]="product.name" class="home__product-img" />
+            </div>
+            <div class="home__product-info">
+              <p class="home__product-name">{{ product.name }}</p>
+              <p class="home__product-price">{{ formatPrice(product.price) }}<u>đ</u></p>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- The Studio -->
+  <section class="home__studio">
+    <div class="home__studio-content">
+      <h2 class="home__studio-title">
+        The Studio<br />
+        Sáng tạo không giới hạn
+      </h2>
+      <ol class="home__studio-steps">
+        @for (step of studioSteps; track $index) {
+          <li class="home__studio-step">
+            <span class="home__studio-step-num">0{{ $index + 1 }}</span>
+            <span class="home__studio-step-text">{{ step }}</span>
+          </li>
+        }
+      </ol>
+      <a class="home__studio-btn" (click)="guardedNav('/studio')">BẮT ĐẦU THIẾT KẾ NGAY</a>
+    </div>
+    <div class="home__studio-visual">
+      <img src="assets/images/product-detail-nhan-aeterna-1.png" alt="Studio Ring" class="home__studio-img" />
+      <div class="home__studio-callout home__studio-callout--right">Đính đá Moissanite</div>
+      <div class="home__studio-callout home__studio-callout--left">Chọn Vàng 14K</div>
+    </div>
+  </section>
+
+  <!-- The Designer -->
+  <section class="home__designer">
+    <div class="home__designer-visual">
+      <img src="assets/images/designer-photo.png" alt="The Designer" class="home__designer-img" />
+    </div>
+    <div class="home__designer-content">
+      <h2 class="home__designer-title">
+        The Designer<br />
+        <span class="home__designer-subtitle">Hiện thực hóa ý tưởng cùng Chuyên gia</span>
+      </h2>
+      <p class="home__designer-desc">
+        Trải nghiệm dịch vụ tư vấn cá nhân hóa cao cấp nhất. Với phí dịch vụ 500.000₫, bạn sẽ được
+        trao đổi trực tiếp cùng các chuyên gia hàng đầu của RENGA để phác thảo và chế tác món trang
+        sức độc bản của riêng bạn
+      </p>
+      <div class="home__designer-fee">
+        <svg class="home__designer-fee-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <polygon points="10,2 18,7.5 10,18 2,7.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="2" y1="7.5" x2="18" y2="7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <strong>Phí tư vấn: 500.000₫ (Trừ trực tiếp vào đơn hàng)</strong>
+      </div>
+      <a class="home__designer-btn" (click)="guardedNav('/the-designer')">ĐẶT LỊCH HẸN NGAY</a>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="home__reviews">
+    <h2 class="home__reviews-title">ĐÁNH GIÁ VỀ RENGA</h2>
+    <div class="home__reviews-track-wrap">
+      <div class="home__reviews-track">
+        @for (review of reviews(); track review.id) {
+          <div class="home__review-card">
+            <div class="home__review-stars">
+              @for (star of starsArray(review.rating); track star) {
+                <img src="assets/icons/ic-star.svg" alt="★" class="home__review-star" />
+              }
+            </div>
+            <p class="home__review-quote">{{ review.quote }} - {{ review.author }}</p>
+          </div>
+        }
+        @for (review of reviews(); track 'dup-' + review.id) {
+          <div class="home__review-card" aria-hidden="true">
+            <div class="home__review-stars">
+              @for (star of starsArray(review.rating); track star) {
+                <img src="assets/icons/ic-star.svg" alt="★" class="home__review-star" />
+              }
+            </div>
+            <p class="home__review-quote">{{ review.quote }} - {{ review.author }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
 </div>
+

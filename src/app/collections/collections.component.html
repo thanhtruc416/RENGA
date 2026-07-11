@@ -1,0 +1,35 @@
+<main class="collections">
+
+  <!-- ── Hero ── -->
+  <section class="collections__hero">
+    <h1 class="collections__hero-title">Bộ Sưu Tập</h1>
+    <div class="collections__hero-divider"></div>
+    <p class="collections__hero-subtitle">
+      Khám phá nghệ thuật chế tác thủ công tinh xảo qua những bộ sưu tập trang sức<br>
+      cao cấp, nơi truyền thống hòa quyện cùng sự sang trọng hiện đại.
+    </p>
+  </section>
+
+  <!-- ── Collections Grid ── -->
+  <section class="collections__grid">
+    @for (col of collections; track col.id) {
+      <a class="collections__card" [class.collections__card--reversed]="col.reversed" [routerLink]="['/bo-suu-tap', col.slug]">
+        <div class="collections__card-image">
+          <img [src]="col.imageUrl" [alt]="col.titleLine1 + ' ' + col.titleLine2">
+        </div>
+        <div class="collections__card-info">
+          <span class="collections__card-tag">{{ col.tag }}</span>
+          <h2 class="collections__card-title">{{ col.titleLine1 }}<br>{{ col.titleLine2 }}</h2>
+          <p class="collections__card-desc">{{ col.description }}</p>
+          <span class="collections__card-cta">
+            KHÁM PHÁ<span class="collections__card-cta-line"></span>
+          </span>
+        </div>
+      </a>
+    }
+  </section>
+
+  <!-- ── Secondary CTA ── -->
+  <app-cta-section />
+
+</main>

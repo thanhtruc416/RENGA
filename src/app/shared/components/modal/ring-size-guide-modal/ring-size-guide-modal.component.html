@@ -1,0 +1,34 @@
+<div class="rsg-backdrop" (click)="close()">
+  <div class="rsg-modal" (click)="$event.stopPropagation()">
+
+    <button class="rsg-modal__close" type="button" (click)="close()" aria-label="Đóng">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <h2 class="rsg-modal__title">Hướng dẫn đo size nhẫn</h2>
+
+    <ol class="rsg-modal__steps">
+      <li class="rsg-modal__step">
+        Lấy một sợi dây hoặc giấy mỏng quấn quanh gốc ngón tay cần đo
+        (đo vào buổi tối, khi ngón tay nở nhất).
+      </li>
+      <li class="rsg-modal__step">
+        Đánh dấu điểm giao nhau, đo chiều dài bằng thước.
+      </li>
+      <li class="rsg-modal__step">
+        Đối chiếu số đo với bảng size nhẫn tiêu chuẩn để chọn size phù hợp.
+      </li>
+    </ol>
+
+    <div class="rsg-modal__note">
+      <em><u>Lưu ý</u></em>: nên đo <strong>2–3 lần</strong> vào các thời điểm khác nhau
+      trong ngày để có kết quả chính xác nhất. Nếu chưa chắc chắn,
+      <strong>RENGA hỗ trợ resize miễn phí trong 30 ngày đầu.</strong>
+    </div>
+
+    <button class="rsg-modal__btn" type="button" (click)="close()">ĐÓNG</button>
+
+  </div>
+</div>

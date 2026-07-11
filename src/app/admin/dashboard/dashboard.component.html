@@ -1,3 +1,123 @@
-<div class="admin-dashboard-page">
-  <p>admin-dashboard placeholder</p>
+<div class="dashboard">
+  <!-- Header -->
+  <div class="dashboard__header">
+    <div class="dashboard__header-left">
+      <h1 class="dashboard__title">Mừng trở lại, Quản trị viên</h1>
+      <p class="dashboard__subtitle">Đây là những thông tin mới nhất của cửa hàng RENGA</p>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <p style="padding: 24px;">Đang tải...</p>
+  } @else if (stats(); as s) {
+    <!-- KPI cards -->
+    <div class="dashboard__kpi-grid">
+      <div class="dashboard__kpi-card">
+        <span class="dashboard__kpi-label">TỔNG DOANH THU</span>
+        @if (canSeeRevenue()) {
+          <span class="dashboard__kpi-value">{{ formatPrice(s.totalRevenue!) }} VNĐ</span>
+        } @else {
+          <span class="dashboard__kpi-value" style="font-size: 14px; color: var(--color-muted);">Chỉ Super Admin được xem</span>
+        }
+      </div>
+      <div class="dashboard__kpi-card">
+        <span class="dashboard__kpi-label">ĐƠN HOÀN TẤT</span>
+        <span class="dashboard__kpi-value">{{ completedCount() }}</span>
+      </div>
+      <div class="dashboard__kpi-card">
+        <span class="dashboard__kpi-label">ĐƠN CHỜ THANH TOÁN</span>
+        <span class="dashboard__kpi-value">{{ s.pendingPayments }}</span>
+      </div>
+      <div class="dashboard__kpi-card">
+        <span class="dashboard__kpi-label">GIÁ TRỊ ĐƠN HÀNG TB</span>
+        @if (canSeeRevenue()) {
+          <span class="dashboard__kpi-value">{{ formatPrice(avgOrderValue()) }} VNĐ</span>
+        } @else {
+          <span class="dashboard__kpi-value" style="font-size: 14px; color: var(--color-muted);">Chỉ Super Admin được xem</span>
+        }
+      </div>
+    </div>
+
+    <!-- Analysis row -->
+    <div class="dashboard__analysis-row">
+      <!-- Order status -->
+      <div class="dashboard__card dashboard__order-status">
+        <div class="dashboard__card-header">
+          <span class="dashboard__card-title">Phân tích trạng thái đơn hàng</span>
+          <a class="dashboard__card-link" routerLink="/admin/don-hang">Xem tất cả</a>
+        </div>
+        <div class="dashboard__order-status-grid">
+          @for (status of orderStatusBars(); track status.status) {
+            <div class="dashboard__order-status-item">
+              <span class="dashboard__order-status-count">{{ status.count }}</span>
+              <span class="dashboard__order-status-label">{{ status.label }}</span>
+              <div class="dashboard__order-status-bar-track">
+                <div
+                  class="dashboard__order-status-bar-fill"
+                  [style.width.%]="status.barWidthPct"
+                  [style.background]="status.barColor">
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Top products chart -->
+      <div class="dashboard__card dashboard__top-products">
+        <div class="dashboard__card-header">
+          <span class="dashboard__card-title">Top 5 sản phẩm bán chạy</span>
+        </div>
+        @if (topProductBars().length) {
+          <div class="dashboard__bar-chart">
+            @for (product of topProductBars(); track product.name) {
+              <div class="dashboard__bar-col">
+                <div class="dashboard__bar-fill"
+                     [style.height.px]="product.heightPx"
+                     [style.background]="product.color">
+                </div>
+                <span class="dashboard__bar-label">{{ product.name }}<br>{{ product.totalSold }} đã bán</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <p style="padding: 16px; color: var(--color-muted);">Chưa có dữ liệu bán hàng.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Pending section -->
+    <div class="dashboard__pending-section">
+      <h2 class="dashboard__section-title">Các đơn hàng và yêu cầu đang chờ xử lý</h2>
+
+      <div class="dashboard__pending-grid">
+        <a class="dashboard__pending-card" routerLink="/admin/don-hang" style="text-decoration: none; display: block;">
+          <div class="dashboard__pending-card-header">
+            <div class="dashboard__pending-card-title-row">
+              <span class="dashboard__pending-card-title">Xác nhận thanh toán</span>
+              <span class="dashboard__pending-badge">{{ s.pendingPayments }} ĐƠN CHỜ</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="dashboard__pending-card" routerLink="/admin/lich-hen" style="text-decoration: none; display: block;">
+          <div class="dashboard__pending-card-header">
+            <div class="dashboard__pending-card-title-row">
+              <span class="dashboard__pending-card-title">Đơn đặt lịch tư vấn</span>
+              <span class="dashboard__pending-badge">{{ s.pendingAppointments }} YÊU CẦU</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="dashboard__pending-card" routerLink="/admin/bao-hanh" style="text-decoration: none; display: block;">
+          <div class="dashboard__pending-card-header">
+            <div class="dashboard__pending-card-title-row">
+              <span class="dashboard__pending-card-title">Yêu cầu bảo hành/sửa chữa</span>
+              <span class="dashboard__pending-badge">{{ s.pendingWarranties }} YÊU CẦU</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  }
 </div>

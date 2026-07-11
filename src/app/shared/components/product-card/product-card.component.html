@@ -1,3 +1,14 @@
-<div class="product-card">
-  <p>product-card placeholder</p>
-</div>
+<a class="product-card" [routerLink]="['/products', id]">
+  <div class="product-card__img-wrap">
+    <img
+      class="product-card__img"
+      [src]="imageUrl || 'assets/images/placeholder.png'"
+      [alt]="name"
+      loading="lazy"
+    />
+  </div>
+  <div class="product-card__info">
+    <p class="product-card__name">{{ name }}</p>
+    <p class="product-card__price">{{ price | number:'1.0-0' }}₫</p>
+  </div>
+</a>

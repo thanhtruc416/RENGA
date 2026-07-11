@@ -1,3 +1,200 @@
-<div class="appointment-management-page">
-  <p>appointment-management placeholder</p>
+<div class="appt-page">
+  <!-- Header -->
+  <header class="appt-page__header">
+    <h1 class="appt-page__title">Quản lý lịch hẹn</h1>
+    <p class="appt-page__subtitle">Cập nhật và quản lý lịch hẹn của khách hàng với nhà thiết kế</p>
+  </header>
+
+  <!-- Toolbar & Filters -->
+  <div class="appt-page__toolbar">
+    <div class="appt-page__filters">
+      <div class="filter-group">
+        <label class="filter-label">THỜI GIAN</label>
+        <div class="filter-input-wrap">
+          <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <input type="text" class="filter-input filter-input--date" readonly
+            [value]="filterDateDisplay()"
+            placeholder="Chọn khoảng ngày"
+            (click)="showDatePicker.set(!showDatePicker())">
+          @if (showDatePicker()) {
+            <div class="date-picker-panel">
+              <div class="date-picker-field">
+                <label class="date-picker-label">TỪ NGÀY</label>
+                <input type="date" class="date-picker-input" [value]="filterDateFrom()"
+                  (change)="onDateFromChange($any($event.target).value)">
+              </div>
+              <span class="date-picker-sep">→</span>
+              <div class="date-picker-field">
+                <label class="date-picker-label">ĐẾN NGÀY</label>
+                <input type="date" class="date-picker-input" [value]="filterDateTo()"
+                  (change)="onDateToChange($any($event.target).value)">
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">NHÀ THIẾT KẾ</label>
+        <select class="filter-select" [value]="filterDesigner()" (change)="filterDesigner.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          @for (d of designersList(); track d.employee_id) {
+            <option [value]="d.employee_id">{{ d.full_name }}</option>
+          }
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">TRẠNG THÁI</label>
+        <select class="filter-select" [value]="filterStatus()" (change)="filterStatus.set($any($event.target).value)">
+          <option value="">Tất cả</option>
+          @for (s of statusOptions; track s) {
+            <option [value]="s">{{ statusLabel[s] }}</option>
+          }
+        </select>
+      </div>
+      <div class="filter-group" style="justify-content:flex-end">
+        @if (filterApplied()) {
+          <button class="appt-clear-btn" type="button" (click)="clearFilters()">XÓA BỘ LỌC</button>
+        } @else {
+          <button class="appt-apply-btn" type="button" (click)="applyFilters()">ÁP DỤNG BỘ LỌC</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="appt-table">
+    <div class="appt-table__header">
+      <span>KHÁCH HÀNG</span>
+      <span>NHÀ THIẾT KẾ</span>
+      <span>THỜI GIAN</span>
+      <span class="text-center">TRẠNG THÁI</span>
+      <span class="text-center">THAO TÁC</span>
+    </div>
+
+    <div class="appt-table__body">
+      @if (isLoading()) {
+        <p class="table-cell__text" style="padding:24px;">Đang tải...</p>
+      } @else if (appointments().length === 0) {
+        <p class="table-cell__text" style="padding:24px;">Không có lịch hẹn nào.</p>
+      } @else {
+        @for (appt of appointments(); track appt.appointment_id) {
+          <div class="appt-table__row">
+
+            <div class="table-cell table-cell--customer">
+              <div class="customer-avatar" style="background-color:#f6d6d6">
+                {{ appt.customer_name.slice(0,2).toUpperCase() }}
+              </div>
+              <div>
+                <p class="table-cell__title">{{ appt.customer_name }}</p>
+                <p class="table-cell__sub">{{ appt.customer_tier || '' }} · {{ appt.customer_phone }}</p>
+              </div>
+            </div>
+
+            <div class="table-cell table-cell--designer">
+              <img class="designer-avatar" [src]="appt.designer_avatar || 'https://i.pravatar.cc/150'" [alt]="appt.designer_name">
+              <p class="table-cell__text">{{ appt.designer_name }}</p>
+            </div>
+
+            <div class="table-cell">
+              <p class="table-cell__text">{{ formatDate(appt.slot_date) }}</p>
+              <p class="table-cell__sub">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</p>
+            </div>
+
+            <div class="table-cell text-center">
+              <span class="badge" [class.badge--booked]="appt.appointment_status === 'PENDING' || appt.appointment_status === 'CONFIRMED'"
+                    [class.badge--completed]="appt.appointment_status === 'COMPLETED'">
+                {{ statusLabel[appt.appointment_status] }}
+              </span>
+            </div>
+
+            <div class="table-cell table-cell--actions text-right">
+              @if (nextActions[appt.appointment_status].length) {
+                @for (action of nextActions[appt.appointment_status]; track action.status) {
+                  <button class="btn-action btn-action--outline" (click)="changeStatus(appt, action.status)">{{ action.label }}</button>
+                }
+                @if (appt.appointment_status === 'PENDING' || appt.appointment_status === 'CONFIRMED') {
+                  <button class="action-btn" aria-label="Đổi nhà thiết kế / khung giờ" title="Đổi nhà thiết kế / khung giờ" (click)="openReassignModal(appt)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                  </button>
+                }
+              } @else {
+                <span class="text-completed">—</span>
+              }
+            </div>
+
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <footer class="appt-page__pagination">
+    <p class="appt-page__pagination-info">
+      HIỂN THỊ {{ (currentPage() - 1) * itemsPerPage + 1 }}-{{ currentPage() * itemsPerPage > total() ? total() : currentPage() * itemsPerPage }} TRÊN {{ total() }} LỊCH HẸN
+    </p>
+    <div class="appt-page__pagination-controls">
+      <button class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">&lsaquo;</button>
+      @for (page of pageNumbers(); track page) {
+        <button class="pagination-btn" [class.pagination-btn--active]="currentPage() === page" (click)="goToPage(page)">{{ page }}</button>
+      }
+      <button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">&rsaquo;</button>
+    </div>
+  </footer>
 </div>
+
+
+<!-- ================= MODAL: ĐỔI NHÀ THIẾT KẾ / KHUNG GIỜ ================= -->
+@if (activeModal() === 'reassign' && selectedAppointment(); as appt) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container modal-container--sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Đổi nhà thiết kế / khung giờ</h2>
+          <p class="modal-subtitle">Lịch hẹn của {{ appt.customer_name }}</p>
+        </div>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body modal-body--no-pad-bottom">
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Nhà thiết kế</label>
+          <div class="form-input-wrap">
+            <select class="form-input" [value]="reassignDesignerId()" (change)="onReassignDesignerChange($any($event.target).value)">
+              <option value="">Chọn nhà thiết kế</option>
+              @for (d of designersList(); track d.employee_id) {
+                <option [value]="d.employee_id">{{ d.full_name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Ngày hẹn mới</label>
+          <div class="form-input-wrap">
+            <input type="date" class="form-input" [value]="reassignDate()" (change)="onReassignDateChange($any($event.target).value)">
+          </div>
+        </div>
+
+        <div class="form-group form-group--full" style="margin-bottom: 16px;">
+          <label class="form-label">Khung giờ trống</label>
+          <div class="form-input-wrap">
+            <select class="form-input" [value]="reassignSlotId()" (change)="reassignSlotId.set($any($event.target).value)">
+              <option value="">Chọn khung giờ</option>
+              @for (s of reassignSlots(); track s.slot_id) {
+                <option [value]="s.slot_id">{{ formatTime(s.start_time) }} - {{ formatTime(s.end_time) }}</option>
+              } @empty {
+                <option value="" disabled>Không có khung giờ trống</option>
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--black" (click)="closeModal()">HỦY BỎ</button>
+        <button class="btn btn--primary" [disabled]="isSubmitting()" (click)="submitReassign()">CẬP NHẬT</button>
+      </div>
+    </div>
+  </div>
+}

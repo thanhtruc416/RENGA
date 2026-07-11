@@ -1,11 +1,10 @@
-﻿/* ===== TRA Cá»¨U ÄÆ N HÃ€NG (ORDER LOOKUP) PAGE ===== */
+/* ===== TRA CỨU ĐƠN HÀNG (ORDER LOOKUP) PAGE ===== */
 
-/* â”€â”€ Page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .order-lookup-page {
   background: var(--color-white);
 }
 
-/* â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Breadcrumb ── */
 .lookup-breadcrumb-wrap {
   padding: 0 var(--container-px);
 }
@@ -25,10 +24,10 @@
 .lookup-breadcrumb__item {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 1.8px;
+  font-size: 14px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-muted);
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -44,22 +43,19 @@
 }
 
 .lookup-breadcrumb__sep {
-  width: 27px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
-  flex-shrink: 0;
-  opacity: 0.4;
+  font-size: 14px;
+  color: var(--color-border);
+  line-height: 1;
 }
 
-/* â”€â”€ Centered content column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Centered column ── */
 .lookup-center {
-  max-width: 540px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 56px var(--container-px) 80px;
+  padding: 56px 40px 80px;
 }
 
-/* â”€â”€ Hero: title + subtitle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Hero ── */
 .lookup-hero {
   text-align: center;
   margin-bottom: 40px;
@@ -69,10 +65,11 @@
   font-family: var(--font-serif);
   font-weight: 500;
   font-size: 64px;
-  line-height: 80px;
+  line-height: 1.2;
   letter-spacing: -1.28px;
   color: var(--color-primary);
   margin-bottom: 20px;
+  white-space: nowrap;
 }
 
 .lookup-hero__sub {
@@ -81,11 +78,11 @@
   font-size: 16px;
   line-height: 24px;
   font-style: italic;
-  color: #444748;
+  color: var(--color-muted);
   opacity: 0.8;
 }
 
-/* â”€â”€ Form card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Form card ── */
 .lookup-card {
   background: var(--color-primary-light);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -96,7 +93,6 @@
   margin-bottom: 64px;
 }
 
-/* Atmospheric blur decoration (top-right corner) */
 .lookup-card::before {
   content: '';
   position: absolute;
@@ -110,7 +106,7 @@
   pointer-events: none;
 }
 
-/* â”€â”€ Lookup form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Form ── */
 .lookup-form {
   display: flex;
   flex-direction: column;
@@ -125,7 +121,7 @@
   gap: 40px;
 }
 
-/* â”€â”€ Field group â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Field ── */
 .lookup-field {
   display: flex;
   flex-direction: column;
@@ -139,14 +135,13 @@
   letter-spacing: 1.8px;
   color: var(--color-black);
   opacity: 0.6;
-  pointer-events: none;
 }
 
 .lookup-field__input {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 20px;
-  color: #1a1c1c;
+  font-size: 16px;
+  color: var(--color-dark);
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--color-black);
@@ -164,7 +159,23 @@
   border-bottom-color: var(--color-primary);
 }
 
-/* â”€â”€ Submit button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.lookup-field__error {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #c0392b;
+  letter-spacing: 0.5px;
+}
+
+/* ── Error message ── */
+.lookup-form__error-msg {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #c0392b;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ── Submit button ── */
 .lookup-form__submit {
   display: flex;
   align-items: center;
@@ -181,21 +192,19 @@
   text-transform: uppercase;
   border: none;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, opacity 0.15s;
 }
 
-.lookup-form__submit:hover {
-  background: #9a3f5c;
+.lookup-form__submit:hover:not(:disabled) {
+  background: var(--color-primary-dark);
 }
 
-.lookup-form__submit-arrow {
-  width: 12.5px;
-  height: 12.5px;
-  object-fit: contain;
-  flex-shrink: 0;
+.lookup-form__submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-/* â”€â”€ Help link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Help link ── */
 .lookup-card__help {
   text-align: center;
 }
@@ -206,7 +215,7 @@
   font-size: 10px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: #444748;
+  color: var(--color-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.15s;
@@ -216,7 +225,7 @@
   color: var(--color-primary);
 }
 
-/* â”€â”€ Decorative images â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Decorative images ── */
 .lookup-images {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -227,7 +236,7 @@
 .lookup-image {
   position: relative;
   overflow: hidden;
-  background: #e8e8e8;
+  background: var(--color-bg-card);
 }
 
 .lookup-image img {
@@ -246,28 +255,4 @@
   background: var(--color-white);
   mix-blend-mode: saturation;
   pointer-events: none;
-}
-
-/* â”€â”€ Chat FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.chat-fab {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 900;
-}
-
-.chat-fab img {
-  width: 75px;
-  height: 75px;
-  object-fit: contain;
-  display: block;
 }
