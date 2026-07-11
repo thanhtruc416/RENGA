@@ -2,7 +2,7 @@
 
 > Đồ án nhóm — website thương mại điện tử trang sức với thiết kế tuỳ biến (The Studio), đặt lịch tư vấn nghệ nhân (The Designer), thử trang sức bằng AR, và một hệ thống quản trị (Admin) đầy đủ.
 
-**Stack:** Angular 21+ (Standalone + Signals) · Express 5 + TypeScript · MySQL · JWT Auth
+**Stack:** Angular 22 (Standalone + Signals) · Express 5 + TypeScript · MySQL · JWT Auth
 
 ---
 
@@ -38,7 +38,7 @@ RENGA là nền tảng thương mại điện tử trang sức cao cấp, xoay q
 
 Dự án gồm 2 phần triển khai riêng biệt trong cùng repo:
 
-- **Frontend** — Angular 21+ SPA (`src/`), gọi API qua `HttpClient`
+- **Frontend** — Angular 22 SPA (`src/`), gọi API qua `HttpClient`
 - **Backend** — Express 5 + TypeScript (`server/`, entry point `server.ts`), kết nối MySQL qua `mysql2/promise`
 
 ---
@@ -74,7 +74,7 @@ Dự án gồm 2 phần triển khai riêng biệt trong cùng repo:
 
 | Thành phần | Công nghệ |
 |---|---|
-| Frontend framework | Angular 21+ (Standalone API, Signals) |
+| Frontend framework | Angular 22 (Standalone API, Signals) |
 | Ngôn ngữ | TypeScript |
 | HTTP | Angular HttpClient + Interceptors |
 | Style | CSS thuần + CSS Custom Properties |
