@@ -268,4 +268,8 @@ export class ProductManagementComponent implements OnInit {
   }
 
   readonly formatPrice = formatPrice;
+
+  onImgError(event: Event): void {
+    (event.target as HTMLImageElement).style.display = 'none';
+  }
 }

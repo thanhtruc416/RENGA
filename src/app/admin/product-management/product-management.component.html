@@ -85,7 +85,7 @@
         @for (product of products(); track product.product_id) {
           <tr class="pm__tr" [class.pm__tr--hidden]="product.status === 'INACTIVE'">
             <td class="pm__td pm__td--img">
-              <img class="pm__product-img" [src]="product.image_url" [alt]="product.product_name">
+              <img class="pm__product-img" [src]="product.image_url" [alt]="product.product_name" (error)="onImgError($event)">
             </td>
             <td class="pm__td">
               <span class="pm__product-name">{{ product.product_name }}</span>
