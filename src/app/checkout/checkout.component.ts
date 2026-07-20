@@ -20,6 +20,7 @@ interface OrderItem {
   readonly price: number;
   readonly image: string;
   readonly variantId?: string;
+  readonly customId?: string;
 }
 
 type PaymentMethod = 'cod' | 'bank' | 'ewallet' | 'card';
@@ -61,10 +62,17 @@ export class CheckoutComponent {
   readonly placedPaymentConfirmed = signal(true);
   readonly placedOrderTotal      = signal(0);
 
+  // Trước đây chỉ lấy item type='available' — sản phẩm tùy biến (type='studio',
+  // gắn customId) trong giỏ bị bỏ qua hoàn toàn khi checkout chung với giỏ hàng.
+  // Nếu khách tick chọn 1 phần giỏ hàng rồi bấm Thanh toán (checkoutSelection có
+  // giá trị) thì chỉ tính đúng những món đã chọn — trước đây luôn tính cả giỏ dù
+  // khách chỉ chọn 1 phần.
   readonly orderItems = computed<OrderItem[]>(() => {
     const buyNow = this.cartService.buyNowItem();
-    const source = buyNow ? [buyNow] : this.cartService.items().filter(i => i.type === 'available');
-    return source.map(i => ({ id: i.id, name: i.name, spec: i.spec, qty: i.quantity ?? 1, price: i.price, image: i.image, variantId: i.variantId }));
+    const selection = this.cartService.checkoutSelection();
+    let source = buyNow ? [buyNow] : this.cartService.items().filter(i => i.type === 'available' || i.type === 'studio');
+    if (!buyNow && selection) source = source.filter(i => selection.has(i.id));
+    return source.map(i => ({ id: i.id, name: i.name, spec: i.spec, qty: i.quantity ?? 1, price: i.price, image: i.image, variantId: i.variantId, customId: i.customId }));
   });
 
   readonly orderCount = computed(() => this.orderItems().length);
@@ -542,8 +550,11 @@ export class CheckoutComponent {
       return;
     }
 
-    const itemsWithVariant = this.orderItems().filter(i => i.variantId);
-    if (!itemsWithVariant.length) {
+    // Sản phẩm có sẵn (variantId) và sản phẩm tùy biến Studio (customId) đều hợp
+    // lệ để đặt chung 1 đơn — trước đây chỉ nhận variantId nên món tùy biến trong
+    // giỏ bị âm thầm rớt khỏi đơn hàng.
+    const itemsToOrder = this.orderItems().filter(i => i.variantId || i.customId);
+    if (!itemsToOrder.length) {
       this.voucherStatus.set('error');
       this.voucherMsg.set('Không có sản phẩm hợp lệ để đặt hàng. Vui lòng thêm sản phẩm từ trang chi tiết.');
       return;
@@ -557,7 +568,9 @@ export class CheckoutComponent {
     const districtLabel = this.availableDistricts().find(d => d.value === form.district)?.label ?? form.district;
 
     const orderPayload = {
-      items: itemsWithVariant.map(i => ({ variant_id: i.variantId, quantity: i.qty, unit_price: i.price })),
+      items: itemsToOrder.map(i => i.customId
+        ? { custom_id: i.customId, quantity: i.qty, unit_price: i.price }
+        : { variant_id: i.variantId, quantity: i.qty, unit_price: i.price }),
       address: {
         recipient_name: form.fullName,
         recipient_phone: form.phone,
@@ -592,7 +605,8 @@ export class CheckoutComponent {
           this.placedPaymentConfirmed.set(!res.data?.payment_expires_at);
           if (res.data?.payment_expires_at) this.startCountdown(res.data.payment_expires_at);
           this.cartService.clearBuyNowItem();
-          this.cartService.removeItems(new Set(itemsWithVariant.map(i => i.id)));
+          this.cartService.clearCheckoutSelection();
+          this.cartService.removeItems(new Set(itemsToOrder.map(i => i.id)));
           if (isGuest && guestToken && orderId) this.guestOrderService.save(orderId, guestToken);
 
           // Chưa có cổng thanh toán thật — mô phỏng kết quả theo phương thức:

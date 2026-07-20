@@ -66,7 +66,9 @@ export class RegisterComponent {
 
   readonly form = new FormGroup({
     fullName:        new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email:           new FormControl('', { nonNullable: true }),
+    // Email không bắt buộc nhưng nếu có nhập thì phải đúng định dạng — trước đây
+    // field này không có validator nào nên gõ sai kiểu gì cũng được coi là hợp lệ.
+    email:           new FormControl('', { nonNullable: true, validators: [Validators.email] }),
     phone:           new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^[0-9]{10}$/)] }),
     password:        new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/)] }),
     confirmPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),

@@ -70,6 +70,14 @@ export async function approveCancellationRequest(cancelId: string, adminEmployee
        WHERE oi.order_id = ? AND oi.item_type = 'PRODUCT'`,
       [cr.order_id]
     );
+    // Tương tự cho thiết kế tùy biến — trả về DRAFT.
+    await conn.execute(
+      `UPDATE customization c
+       JOIN order_item oi ON oi.custom_id = c.custom_id
+       SET c.status = 'DRAFT', c.updated_at = NOW()
+       WHERE oi.order_id = ? AND oi.item_type = 'CUSTOMIZATION'`,
+      [cr.order_id]
+    );
     if (cr.voucher_customer_id) {
       await conn.execute(
         `UPDATE customer_voucher SET status='AVAILABLE', used_at=NULL, order_id=NULL WHERE customer_voucher_id = ?`,

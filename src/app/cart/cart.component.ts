@@ -18,10 +18,20 @@ export class CartComponent {
 
   readonly isGuest = computed(() => !this.authService.isLoggedIn());
 
-  // Đi checkout từ giỏ hàng luôn thanh toán toàn bộ/đã chọn — bỏ item "mua ngay" còn sót
-  // lại từ trang chi tiết sản phẩm (nếu trước đó khách bỏ dở), tránh checkout chỉ hiện 1 món.
+  // Đi checkout từ giỏ hàng — bỏ item "mua ngay" còn sót lại từ trang chi tiết sản
+  // phẩm (nếu trước đó khách bỏ dở), tránh checkout chỉ hiện 1 món không liên quan.
+  // Không tick chọn gì (selectedCount()===0) → coi như mua hết giỏ, xoá lựa chọn cũ.
   clearBuyNow(): void {
     this.cartService.clearBuyNowItem();
+    this.cartService.clearCheckoutSelection();
+  }
+
+  // CART: trước đây bấm "Thanh toán" sau khi tick chọn 1 phần vẫn tính TOÀN BỘ giỏ,
+  // không lọc theo đúng những món khách chọn. Giờ truyền đúng danh sách đã chọn
+  // sang trang Checkout qua CartService.
+  goToCheckoutWithSelection(): void {
+    this.cartService.clearBuyNowItem();
+    this.cartService.setCheckoutSelection(this.selectedIds());
   }
 
   readonly activeTab = signal<'available' | 'studio'>('available');

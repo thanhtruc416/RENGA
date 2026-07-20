@@ -1,5 +1,5 @@
 ﻿import { DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, signal, DestroyRef, inject, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, signal, DestroyRef, inject, Injector, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -721,6 +721,9 @@ export class StudioComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.saveDraft());
 
+    // effect() gọi trong ngOnInit (không phải constructor/field initializer) cần
+    // truyền injector tường minh — thiếu chỗ này ném lỗi runtime NG0203 làm hỏng
+    // toàn bộ init của component, khiến trang Studio hiện trắng khi vào lần đầu.
     effect(() => {
       // Đọc mọi signal cần lưu để effect tự chạy lại khi bất kỳ cái nào đổi
       this.selectedMaterial(); this.selectedStone(); this.carat();
@@ -729,7 +732,7 @@ export class StudioComponent implements OnInit {
       this.selectedProvince(); this.currentStep(); this.checkoutSubStep();
       this.selectedBlank();
       this.saveDraft();
-    });
+    }, { injector: this.injector });
   }
 
   private restoreDraft(): void {
@@ -964,7 +967,9 @@ export class StudioComponent implements OnInit {
   readonly checkoutForm = new FormGroup<CheckoutForm>({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     phone: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true }),
+    // Email không bắt buộc nhưng nếu có nhập thì phải đúng định dạng — trước đây
+    // field này không có validator nào nên gõ sai kiểu gì cũng được coi là hợp lệ.
+    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
     province: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     ward: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     address: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -1071,6 +1076,7 @@ export class StudioComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly notify = inject(NotificationService);
   private readonly http = inject(HttpClient);
+  private readonly injector = inject(Injector);
 
   readonly finalTotal = computed(() => Math.max(this.totalPrice() - this.voucherDiscount(), 0));
   readonly depositAmount = computed(() => Math.round(this.finalTotal() / 2));

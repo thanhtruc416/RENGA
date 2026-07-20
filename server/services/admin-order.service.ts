@@ -114,5 +114,13 @@ export async function updateAdminOrderStatus(orderId: string, newStatus: string,
        WHERE oi.order_id = ? AND oi.item_type = 'PRODUCT'`,
       [orderId],
     );
+    // Tương tự cho thiết kế tùy biến — trả về DRAFT.
+    await pool.execute(
+      `UPDATE customization c
+       JOIN order_item oi ON oi.custom_id = c.custom_id
+       SET c.status = 'DRAFT', c.updated_at = NOW()
+       WHERE oi.order_id = ? AND oi.item_type = 'CUSTOMIZATION'`,
+      [orderId],
+    );
   }
 }
