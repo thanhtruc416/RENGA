@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatbotService } from '../../core/services/chatbot.service';
+import { GuestOrderService } from '../../core/services/guest-order.service';
+import { environment } from '../../../environments/environment';
 
 interface LookupForm {
   orderId: FormControl<string>;
@@ -19,6 +23,9 @@ interface LookupForm {
 export class OrderLookupComponent {
   private readonly router = inject(Router);
   private readonly chatbotService = inject(ChatbotService);
+  private readonly http = inject(HttpClient);
+  private readonly guestOrderService = inject(GuestOrderService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly lookupForm = new FormGroup<LookupForm>({
     orderId: new FormControl('', {
@@ -46,30 +53,28 @@ export class OrderLookupComponent {
     this.isLoading.set(true);
     this.errorMsg.set('');
 
-    const { orderId } = this.lookupForm.getRawValue();
+    const { orderId, phone } = this.lookupForm.getRawValue();
+    const trimmedId = orderId.trim();
 
-    // TODO: thay bằng gọi API thật — kiểm tra orderId + phone, trả về orderType
-    setTimeout(() => {
-      this.isLoading.set(false);
-
-      const trimmedId = orderId.trim();
-      const prefix = trimmedId.toUpperCase();
-
-      if (!prefix) {
-        this.errorMsg.set('Không tìm thấy đơn hàng. Vui lòng kiểm tra lại thông tin.');
-        return;
-      }
-
-      const isCustom = prefix.startsWith('C') || prefix.startsWith('TB');
-
-      // Khớp đúng thứ tự segment đã khai báo trong app.routes.ts:
-      // { path: 'orders/custom/:id' } và { path: 'orders/:id' }
-      if (isCustom) {
-        this.router.navigate(['/orders', 'custom', trimmedId]);
-      } else {
-        this.router.navigate(['/orders', trimmedId]);
-      }
-    }, 600);
+    this.http.post<{ success: boolean; accessToken: string; orderType: 'STANDARD' | 'STUDIO' | 'DESIGN' }>(
+      `${environment.apiUrl}/orders/lookup`, { orderId: trimmedId, phone: phone.trim() },
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        this.guestOrderService.save(trimmedId, res.accessToken);
+        // Khớp đúng thứ tự segment đã khai báo trong app.routes.ts:
+        // { path: 'orders/custom/:id' } và { path: 'orders/:id' }
+        if (res.orderType === 'STUDIO' || res.orderType === 'DESIGN') {
+          this.router.navigate(['/orders', 'custom', trimmedId]);
+        } else {
+          this.router.navigate(['/orders', trimmedId]);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        this.errorMsg.set(err.error?.message ?? 'Không tìm thấy đơn hàng. Vui lòng kiểm tra lại thông tin.');
+      },
+    });
   }
 
   get orderIdCtrl() {

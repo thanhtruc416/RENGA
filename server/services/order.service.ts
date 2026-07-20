@@ -3,17 +3,22 @@ import { clearCart } from './cart.service';
 import { shortenName } from './product.service';
 import { awardPurchasePoints, revokePurchasePoints } from './loyalty.service';
 import { notifyOrderPlaced, notifyOrderCancelled, notifyTierUpgrade } from './notification.service';
+import { signAccessToken } from './auth.service';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type DbPaymentMethod = 'CASH' | 'BANK_TRANSFER' | 'CREDIT_CARD' | 'VOUCHER';
 type OrderType       = 'STANDARD' | 'STUDIO' | 'DESIGN';
 
+type CreateOrderItem =
+  | { variant_id: string; custom_id?: undefined; quantity: number; unit_price: number }
+  | { custom_id: string; variant_id?: undefined; quantity: number; unit_price: number };
+
 interface CreateOrderPayload {
   clientId:            string;
   order_type?:         OrderType;
   payment_method:      DbPaymentMethod;
-  items:               Array<{ variant_id: string; quantity: number; unit_price: number }>;
+  items:               CreateOrderItem[];
   address:             { recipient_name: string; recipient_phone: string; address_line: string; province: string; ward?: string };
   email?:              string;
   discount_amount?:    number;
@@ -23,8 +28,15 @@ interface CreateOrderPayload {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-async function nextId(prefix: string, table: string, col: string): Promise<string> {
-  const [[{ max }]] = await pool.execute<any[]>(
+// BUG NGHIÊM TRỌNG đã sửa: trước đây luôn dùng `pool.execute` (kết nối MỚI, ngoài
+// transaction) để tính ID kế tiếp — khi tạo đơn có ≥2 sản phẩm, vòng lặp gọi
+// nextId() nhiều lần liên tiếp trong CÙNG 1 transaction chưa commit, nhưng vì
+// pool.execute không thấy được dòng vừa INSERT (chưa commit) của chính transaction
+// đó, lần gọi sau vẫn tính ra ĐÚNG ID cũ → trùng khoá chính → lỗi 500 cho MỌI đơn
+// hàng từ 2 sản phẩm trở lên. Giờ bắt buộc truyền đúng connection (conn khi đang
+// trong transaction, pool nếu không) để nextId() thấy được thay đổi chưa commit.
+async function nextId(executor: Pick<typeof pool, 'execute'>, prefix: string, table: string, col: string): Promise<string> {
+  const [[{ max }]] = await executor.execute<any[]>(
     `SELECT MAX(CAST(SUBSTRING(${col}, ${prefix.length + 1}) AS UNSIGNED)) as max FROM \`${table}\``
   );
   return `${prefix}${String((max || 0) + 1).padStart(6, '0')}`;
@@ -49,7 +61,7 @@ export async function logOrderStatusChange(
   changedByAdminId?: string | null,
   note?: string | null,
 ): Promise<void> {
-  const historyId = await nextId('OSH', 'order_status_history', 'history_id');
+  const historyId = await nextId(conn, 'OSH', 'order_status_history', 'history_id');
   await conn.execute(
     `INSERT INTO order_status_history
        (history_id, order_id, status_before, status_after, changed_by_admin_id, note, changed_at)
@@ -76,6 +88,7 @@ export async function createOrder(payload: CreateOrderPayload) {
     // ORD-04: khoá + kiểm tra tồn kho từng variant trước khi trừ, tránh bán vượt
     // tồn khi nhiều khách đặt cùng lúc (FOR UPDATE khoá row tới khi transaction xong).
     for (const item of payload.items) {
+      if (!item.variant_id) continue;
       const [[variant]] = await conn.execute<any[]>(
         'SELECT stock_quantity, status FROM product_variant WHERE variant_id = ? FOR UPDATE',
         [item.variant_id]
@@ -87,6 +100,26 @@ export async function createOrder(payload: CreateOrderPayload) {
       await conn.execute(
         'UPDATE product_variant SET stock_quantity = stock_quantity - ? WHERE variant_id = ?',
         [item.quantity, item.variant_id]
+      );
+    }
+
+    // Sản phẩm tùy biến (Studio) đã lưu sẵn trong giỏ — trước đây route /api/orders
+    // chỉ hiểu variant_id nên các món tùy biến trong giỏ bị bỏ qua hoàn toàn khi
+    // checkout chung. Xác thực đúng customization này là của khách, còn ở trạng
+    // thái DRAFT (chưa dùng cho đơn nào khác), rồi đánh dấu ORDERED.
+    for (const item of payload.items) {
+      if (!item.custom_id) continue;
+      const [[custom]] = await conn.execute<any[]>(
+        'SELECT status FROM customization WHERE custom_id = ? AND client_id = ? FOR UPDATE',
+        [item.custom_id, payload.clientId]
+      );
+      if (!custom) throw { status: 404, message: 'Không tìm thấy thiết kế tùy biến trong đơn hàng.' };
+      if (custom.status !== 'DRAFT') {
+        throw { status: 409, message: 'Thiết kế tùy biến này đã được sử dụng cho 1 đơn hàng khác.' };
+      }
+      await conn.execute(
+        "UPDATE customization SET status = 'ORDERED', updated_at = NOW() WHERE custom_id = ?",
+        [item.custom_id]
       );
     }
 
@@ -109,7 +142,7 @@ export async function createOrder(payload: CreateOrderPayload) {
     }
 
     // 1. Lưu địa chỉ
-    const addressId = await nextId('ADR', 'address', 'address_id');
+    const addressId = await nextId(conn, 'ADR', 'address', 'address_id');
     await conn.execute(
       `INSERT INTO address (address_id, client_id, recipient_name, recipient_phone, contact_email, address_line, ward, province, is_default, created_at)
        VALUES (?,?,?,?,?,?,?,?,0,NOW())`,
@@ -118,7 +151,7 @@ export async function createOrder(payload: CreateOrderPayload) {
     );
 
     // 2. Tạo order
-    const orderId    = await nextId('ORD', 'order', 'order_id');
+    const orderId    = await nextId(conn, 'ORD', 'order', 'order_id');
     const total      = payload.items.reduce((s, i) => s + i.unit_price * i.quantity, 0);
     const finalTotal = Math.max(total - (payload.discount_amount ?? 0), 0);
     const orderStatus = isInstantConfirm ? 'PAYMENT_CONFIRMED' : 'PENDING';
@@ -136,16 +169,24 @@ export async function createOrder(payload: CreateOrderPayload) {
 
     // 3. Tạo order items
     for (const item of payload.items) {
-      const itemId = await nextId('ORI', 'order_item', 'order_item_id');
-      await conn.execute(
-        `INSERT INTO order_item (order_item_id, order_id, item_type, variant_id, quantity, unit_price, subtotal)
-         VALUES (?,?,'PRODUCT',?,?,?,?)`,
-        [itemId, orderId, item.variant_id, item.quantity, item.unit_price, item.unit_price * item.quantity]
-      );
+      const itemId = await nextId(conn, 'ORI', 'order_item', 'order_item_id');
+      if (item.custom_id) {
+        await conn.execute(
+          `INSERT INTO order_item (order_item_id, order_id, item_type, custom_id, quantity, unit_price, subtotal)
+           VALUES (?,?,'CUSTOMIZATION',?,?,?,?)`,
+          [itemId, orderId, item.custom_id, item.quantity, item.unit_price, item.unit_price * item.quantity]
+        );
+      } else {
+        await conn.execute(
+          `INSERT INTO order_item (order_item_id, order_id, item_type, variant_id, quantity, unit_price, subtotal)
+           VALUES (?,?,'PRODUCT',?,?,?,?)`,
+          [itemId, orderId, item.variant_id, item.quantity, item.unit_price, item.unit_price * item.quantity]
+        );
+      }
     }
 
     // 4. Tạo payment record — COD thì SUCCESS ngay, còn lại PENDING chờ xác nhận
-    const paymentId   = await nextId('PAY', 'payment', 'payment_id');
+    const paymentId   = await nextId(conn, 'PAY', 'payment', 'payment_id');
     const transType   = orderType === 'STANDARD' ? 'PAYMENT' : 'DEPOSIT';
     const paymentStatus = isInstantConfirm ? 'SUCCESS' : 'PENDING';
     await conn.execute(
@@ -255,6 +296,15 @@ export async function cancelExpiredOrders(): Promise<void> {
       orderIds
     );
 
+    // Tương tự cho thiết kế tùy biến trong các đơn hết hạn — trả về DRAFT.
+    await conn.execute(
+      `UPDATE customization c
+       JOIN order_item oi ON oi.custom_id = c.custom_id
+       SET c.status = 'DRAFT', c.updated_at = NOW()
+       WHERE oi.order_id IN (${ph(orderIds.length)}) AND oi.item_type = 'CUSTOMIZATION'`,
+      orderIds
+    );
+
     await conn.commit();
     console.log(`[AUTO-CANCEL] Hủy ${orderIds.length} đơn hết hạn:`, orderIds.join(', '));
   } catch (err) {
@@ -322,13 +372,23 @@ export async function cancelOrder(orderId: string, clientId: string, reason: str
       [orderId]
     );
 
+    // Tương tự cho thiết kế tùy biến — trả về DRAFT để khách có thể dùng lại cho
+    // đơn khác thay vì bị "khoá cứng" ở ORDERED của 1 đơn đã huỷ.
+    await conn.execute(
+      `UPDATE customization c
+       JOIN order_item oi ON oi.custom_id = c.custom_id
+       SET c.status = 'DRAFT', c.updated_at = NOW()
+       WHERE oi.order_id = ? AND oi.item_type = 'CUSTOMIZATION'`,
+      [orderId]
+    );
+
     // COD chưa hề thu tiền (trả khi nhận hàng, đơn bị huỷ trước khi giao) nên không
     // có gì để "hoàn tiền" — trước đây luôn ghi refund_amount = total_amount bất kể
     // phương thức, khiến đơn COD cũng báo hoàn tiền dù khách chưa trả đồng nào.
     const wasPaidUpfront = order.payment_method !== 'CASH';
     const refundAmount = wasPaidUpfront ? Number(order.total_amount) : 0;
 
-    const cancelId = await nextId('CAN', 'cancellation_request', 'cancel_id');
+    const cancelId = await nextId(conn, 'CAN', 'cancellation_request', 'cancel_id');
     await conn.execute(
       `INSERT INTO cancellation_request (cancel_id, order_id, reason, refund_amount, status, handled_at, created_at)
        VALUES (?,?,?,?,'APPROVED',NOW(),NOW())`,
@@ -374,13 +434,45 @@ export async function requestOrderCancellation(orderId: string, clientId: string
   );
   if (existing) throw { status: 409, message: 'Đơn hàng này đã có yêu cầu hủy trước đó.' };
 
-  const cancelId = await nextId('CAN', 'cancellation_request', 'cancel_id');
+  const cancelId = await nextId(pool, 'CAN', 'cancellation_request', 'cancel_id');
   await pool.execute(
     `INSERT INTO cancellation_request (cancel_id, order_id, reason, status, created_at)
      VALUES (?,?,?,'PENDING',NOW())`,
     [cancelId, orderId, reason]
   );
   return cancelId;
+}
+
+// ─── Tra cứu đơn hàng (khách vãng lai, không cần đăng nhập) ──────────────────
+//
+// Trước đây order-lookup.component.ts chỉ là giao diện mẫu — hễ gõ đúng ĐỊNH
+// DẠNG mã đơn/SĐT là tự điều hướng sang trang chi tiết, không hề kiểm tra mã
+// đơn có tồn tại thật hay SĐT có khớp đơn đó không. Hàm này xác thực thật:
+// khớp order_id với đúng SĐT người nhận đã lưu trên đơn, rồi cấp 1 access
+// token phạm vi hẹp (dùng chung cơ chế guestOrderService đã có sẵn cho
+// order-detail.component.ts) để trang chi tiết load được mà không cần đăng nhập.
+export async function lookupOrder(
+  orderId: string, phone: string,
+): Promise<{ accessToken: string; orderType: OrderType }> {
+  const [[order]] = await pool.execute<any[]>(
+    `SELECT o.order_id, o.client_id, o.order_type, a.recipient_phone
+     FROM \`order\` o
+     JOIN address a ON a.address_id = o.address_id
+     WHERE o.order_id = ?`,
+    [orderId]
+  );
+
+  if (!order || order.recipient_phone !== phone) {
+    throw { status: 404, message: 'Không tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn và số điện thoại.' };
+  }
+
+  const accessToken = signAccessToken({
+    accountId: `LOOKUP-${order.client_id}`,
+    clientId:  order.client_id,
+    role:      'GUEST',
+  });
+
+  return { accessToken, orderType: order.order_type };
 }
 
 // ─── Danh sách đơn hàng ───────────────────────────────────────────────────────

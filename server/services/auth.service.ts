@@ -83,7 +83,7 @@ async function sendOtpEmail(to: string, otp: string, purpose: OtpPurpose): Promi
 
 // ─── Token helpers ────────────────────────────────────────────────────────────
 
-function signAccessToken(payload: AuthPayload): string {
+export function signAccessToken(payload: AuthPayload): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES });
 }
 
@@ -261,7 +261,11 @@ export async function registerSendOtp(data: {
   const otp = await issueOtp({ phone, email: normalizedEmail ?? undefined, purpose: 'REGISTER' });
 
   if (normalizedEmail) {
-    await sendOtpEmail(normalizedEmail, otp, 'REGISTER');
+    // Gmail SMTP mất vài giây (đo thật ~4s, có lúc lâu hơn khi bị giới hạn tốc
+    // độ) — trước đây await ở đây khiến cả API bị treo chờ theo, giao diện như
+    // đứng im. Gửi nền, trả kết quả cho khách ngay khi OTP đã lưu xong.
+    sendOtpEmail(normalizedEmail, otp, 'REGISTER')
+      .catch(err => console.error(`[auth] Gửi OTP đăng ký tới ${normalizedEmail} lỗi:`, err));
   } else {
     // Không có email → log OTP ra console để test (xóa khi có SMS)
     console.log(`[DEV] OTP cho ${phone}: ${otp}`);
@@ -484,7 +488,7 @@ export async function sendLoginLockOtp(identifier: string): Promise<{ message: s
   await checkOtpResendCooldown({ phone, purpose: 'LOGIN_LOCK' });
   const otp = await issueOtp({ phone, email: email ?? undefined, purpose: 'LOGIN_LOCK' });
 
-  if (email) await sendOtpEmail(email, otp, 'LOGIN_LOCK');
+  if (email) sendOtpEmail(email, otp, 'LOGIN_LOCK').catch(err => console.error(`[auth] Gửi OTP mở khoá tới ${email} lỗi:`, err));
   else       console.log(`[DEV] OTP mở khoá cho ${phone}: ${otp}`);
 
   return { message: GENERIC_MSG };
@@ -634,7 +638,8 @@ export async function forgotPasswordSendOtp(email: string): Promise<{ message: s
 
   await checkOtpResendCooldown({ email: normalizedEmail, purpose: 'RESET_PASSWORD' });
   const otp = await issueOtp({ email: normalizedEmail, purpose: 'RESET_PASSWORD' });
-  await sendOtpEmail(normalizedEmail, otp, 'RESET_PASSWORD');
+  sendOtpEmail(normalizedEmail, otp, 'RESET_PASSWORD')
+    .catch(err => console.error(`[auth] Gửi OTP đặt lại mật khẩu tới ${normalizedEmail} lỗi:`, err));
 
   return { message: GENERIC_MSG };
 }

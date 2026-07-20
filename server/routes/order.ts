@@ -1,8 +1,26 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
-import { createOrder, getUserOrders, getOrderDetail, getUserAddresses, cancelOrder, requestOrderCancellation } from '../services/order.service';
+import { createOrder, getUserOrders, getOrderDetail, getUserAddresses, cancelOrder, requestOrderCancellation, lookupOrder } from '../services/order.service';
 
 const router = Router();
+
+// Công khai, không cần đăng nhập — phải khai báo TRƯỚC router.use(authenticate)
+// bên dưới, vì middleware đó áp dụng cho mọi route đăng ký sau nó trên router này.
+router.post('/lookup', async (req, res) => {
+  try {
+    const { orderId, phone } = req.body as { orderId?: string; phone?: string };
+    if (!orderId || !phone) {
+      res.status(400).json({ success: false, message: 'Thiếu mã đơn hoặc số điện thoại.' });
+      return;
+    }
+    const result = await lookupOrder(orderId.trim(), phone.trim());
+    res.json({ success: true, ...result });
+  } catch (err: any) {
+    const status = typeof err?.status === 'number' ? err.status : 500;
+    res.status(status).json({ success: false, message: err?.message ?? 'Lỗi máy chủ nội bộ.' });
+  }
+});
+
 router.use(authenticate as any);
 
 router.get('/', async (req, res) => {

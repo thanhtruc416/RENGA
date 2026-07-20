@@ -124,6 +124,16 @@ export class CartService {
 
   clearBuyNowItem(): void { this._buyNowItem.set(null); }
 
+  // ── Lựa chọn tick-chọn ở trang giỏ hàng — trước đây trang Checkout luôn tính
+  // TOÀN BỘ giỏ (theo type), bỏ qua việc khách chỉ tick chọn 1 phần để mua, khiến
+  // "Thanh toán" tính nhầm cả những món khách chưa muốn mua. null = không có lựa
+  // chọn nào (checkout dùng toàn bộ giỏ như trước).
+  private readonly _checkoutSelection = signal<Set<string> | null>(null);
+  readonly checkoutSelection = this._checkoutSelection.asReadonly();
+
+  setCheckoutSelection(ids: Set<string>): void { this._checkoutSelection.set(ids); }
+  clearCheckoutSelection(): void { this._checkoutSelection.set(null); }
+
   readonly isBumping = signal(false);
 
   triggerBump(): void {

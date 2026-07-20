@@ -150,9 +150,7 @@
         <span class="cart-summary__label">Tạm tính ({{ totalCount() }} sản phẩm)</span>
         <div class="cart-summary__right">
           <span class="cart-summary__amount">{{ totalPrice() | number: '1.0-0' }}<u>đ</u></span>
-          @if (activeTab() === 'available') {
-            <a routerLink="/checkout" (click)="clearBuyNow()" class="cart-summary__checkout-btn">Đặt hàng</a>
-          }
+          <a routerLink="/checkout" (click)="clearBuyNow()" class="cart-summary__checkout-btn">Đặt hàng</a>
         </div>
       </div>
     </div>
@@ -172,21 +170,12 @@
             [class.is-disabled]="selectedCount() === 0"
             (click)="deleteSelected()"
           >Xóa</button>
-          @if (activeTab() === 'available') {
-            <a
-              routerLink="/checkout"
-              (click)="clearBuyNow()"
-              class="cart-action-bar__btn cart-action-bar__btn--pay"
-              [class.is-disabled]="selectedCount() === 0"
-            >Thanh toán</a>
-          } @else {
-            <a
-              routerLink="/studio"
-              [queryParams]="{ step: 5, sub: 2 }"
-              class="cart-action-bar__btn cart-action-bar__btn--pay"
-              [class.is-disabled]="selectedCount() === 0"
-            >Thanh toán</a>
-          }
+          <a
+            routerLink="/checkout"
+            (click)="goToCheckoutWithSelection()"
+            class="cart-action-bar__btn cart-action-bar__btn--pay"
+            [class.is-disabled]="selectedCount() === 0"
+          >Thanh toán</a>
         </div>
       </div>
     </div>
